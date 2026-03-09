@@ -704,7 +704,7 @@
     </div>
 
     <script>
-        const API_BASE = "http://localhost:5000";
+        const API_BASE = "https://hijazi-apartments-backend.onrender.com";
 
         const apartmentData = {
             1: {
@@ -1232,7 +1232,7 @@
                 updatePrice();
             } catch (err) {
                 console.error(err);
-                showMessage("تعذر الاتصال بالسيرفر. تأكد أن الباك اند شغال على 5000", "error");
+                showMessage("تعذر الاتصال بالسيرفر. حاول مرة أخرى بعد قليل.", "error");
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = "تأكيد الحجز";
