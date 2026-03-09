@@ -17,11 +17,47 @@ if (currencySelect) {
 
 // نموذج الحجز
 const bookingForm = document.getElementById("bookingForm");
+
 if (bookingForm) {
-    bookingForm.addEventListener("submit", e => {
+    bookingForm.addEventListener("submit", async e => {
         e.preventDefault();
-        alert("تم إرسال الحجز! سيتم التأكيد لاحقاً.");
-        bookingForm.reset();
+
+        const formData = new FormData(bookingForm);
+
+        const data = {
+            apartmentId: Number(formData.get("apartmentId") || 1),
+            apartmentLabel: formData.get("apartmentLabel") || "",
+            fullName: formData.get("fullName"),
+            email: formData.get("email"),
+            phone: formData.get("phone"),
+            checkIn: formData.get("checkIn"),
+            checkOut: formData.get("checkOut"),
+            adults: Number(formData.get("adults") || 1),
+            children: Number(formData.get("children") || 0),
+            currency: formData.get("currency") || "JOD",
+            totalPrice: Number(formData.get("totalPrice") || 0),
+            totalPriceText: formData.get("totalPriceText") || ""
+        };
+
+        try {
+            const res = await fetch("https://hijazi-apartments-backend.onrender.com/bookings", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+
+            const result = await res.json();
+
+            if (result.success) {
+                alert("✅ تم إرسال الحجز بنجاح!");
+                bookingForm.reset();
+            } else {
+                alert(result.message || "حدث خطأ");
+            }
+        } catch (err) {
+            alert("فشل الاتصال بالسيرفر");
+            console.error(err);
+        }
     });
 }
 
