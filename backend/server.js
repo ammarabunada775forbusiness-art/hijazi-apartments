@@ -179,7 +179,12 @@ app.get("/calendar", async (req, res) => {
 
         res.json({ success: true, bookings });
     } catch (error) {
-        res.status(500).json({ success: false, message: "Error fetching calendar" });
+        console.error("CALENDAR ERROR:", error);
+        res.status(500).json({
+            success: false,
+            message: "Error fetching calendar",
+            error: error.message
+        });
     }
 });
 
