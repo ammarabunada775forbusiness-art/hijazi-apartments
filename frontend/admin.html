@@ -440,7 +440,7 @@
     </div>
 
     <script>
-        const API_BASE = "http://localhost:5000";
+        const API_BASE = "https://hijazi-apartments-backend.onrender.com";
 
         let ADMIN_USER = "";
         let ADMIN_PASS = "";
@@ -564,7 +564,7 @@
                 render();
             } catch (e) {
                 console.error(e);
-                statusEl.textContent = "تعذر تحميل الحجوزات. تأكد أن السيرفر شغال على 5000.";
+                statusEl.textContent = "تعذر تحميل الحجوزات. حاول مرة أخرى بعد قليل.";
             }
         }
 

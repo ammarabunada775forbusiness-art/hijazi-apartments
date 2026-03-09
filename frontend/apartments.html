@@ -505,7 +505,7 @@
     </div>
 
     <script>
-        const API_BASE = "http://localhost:5000";
+        const API_BASE = "https://hijazi-apartments-backend.onrender.com";
 
         const checkInEl = document.getElementById("checkIn");
         const checkOutEl = document.getElementById("checkOut");
@@ -741,7 +741,7 @@
                 gridEl.innerHTML = available.map(id => cardHtml(id, checkIn, checkOut)).join("");
             } catch (e) {
                 console.error(e);
-                statusEl.textContent = "تعذر الاتصال بالسيرفر. تأكد أنه شغال على 5000.";
+                statusEl.textContent = "تعذر الاتصال بخادم الحجوزات. حاول مرة أخرى بعد قليل.";
             }
         }
 
