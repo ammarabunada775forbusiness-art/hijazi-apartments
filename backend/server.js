@@ -9,7 +9,11 @@ require("dotenv").config();
 const app = express();
 
 // ✅ CORS محلياً
-app.use(cors());
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+}));
 app.use(express.json());
 
 // ✅ اتصال DB
@@ -330,5 +334,5 @@ app.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
