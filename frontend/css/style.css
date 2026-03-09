@@ -1,0 +1,81 @@
+body {
+    background-color: #111;
+    color: white;
+    font-family: Tahoma;
+}
+
+.gold {
+    color: #c89116;
+}
+
+.gold-btn {
+    background: linear-gradient(90deg, #c89116, #000000);
+    color: white;
+    border: none;
+}
+
+.navbar .gold {
+    font-weight: bold;
+}
+
+.hero {
+    position: relative;
+    height: 80vh;
+    overflow: hidden;
+}
+
+.hero video {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.overlay {
+    position: relative;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.6);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    background: #222;
+    color: rgb(0, 0, 0);
+}
+
+.price {
+    color: #c89116;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+
+
+
+
+
+
+
+.currency-box {
+    margin-top: 20px;
+    display: inline-block;
+}
+
+.currency-box select {
+    background: linear-gradient(90deg, #c89116, #000000);
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 8px 12px;
+    font-weight: bold;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.currency-box select:focus {
+    outline: none;
+    box-shadow: 0 0 5px #c89116;
+}

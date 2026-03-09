@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HIJAZI Apartments - الحجز</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f7f7f7;
+        }
+
+        header {
+            text-align: center;
+            padding: 26px 16px;
+            background: linear-gradient(90deg, #c89116, #000);
+            color: #fff;
+        }
+
+        .wrap {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 16px 30px;
+        }
+
+        .top-bar {
+            background: #111;
+            color: #fff;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 18px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .top-bar-right,
+        .top-bar-left {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .top-bar label {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .top-bar select {
+            width: auto;
+            min-width: 150px;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        .back-btn {
+            background: #fff;
+            color: #000;
+            padding: 10px 14px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            background: #c89116;
+            color: #fff;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+            border: 1px solid #eee;
+        }
+
+        .card-body {
+            padding: 18px;
+        }
+
+        .card h2,
+        .card h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .muted {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            background: #f2f2f2;
+            margin-bottom: 10px;
+        }
+
+        .features {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 12px 0 14px;
+        }
+
+        .features li {
+            background: #f2f2f2;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+        }
+
+        .summary-box {
+            background: linear-gradient(90deg, #c89116, #000);
+            color: #fff;
+            border-radius: 14px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .summary-box p {
+            margin: 8px 0;
+            font-size: 15px;
+        }
+
+        .form-section {
+            padding: 18px;
+        }
+
+        .form-section label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .form-section input,
+        .form-section select {
+            width: 100%;
+            padding: 11px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            box-sizing: border-box;
+            background: #fff;
+        }
+
+        .form-section button {
+            margin-top: 16px;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #c89116;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            font-size: 15px;
+        }
+
+        .form-section button:hover {
+            background: #000;
+        }
+
+        .form-section button:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #c89116;
+            font-size: 18px;
+        }
+
+        .hint {
+            margin-top: 6px;
+            color: #666;
+            font-size: 13px;
+        }
+
+        #calendar {
+            background: linear-gradient(90deg, #c89116, #000);
+            border-radius: 14px;
+            padding: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+            border: 1px solid #eee;
+            margin-top: 20px;
+        }
+
+        .calendar-title {
+            margin: 25px 0 10px;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .slider-box {
+            position: relative;
+            width: 100%;
+            height: 340px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .slider-box img {
+            width: 100%;
+            height: 340px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, .55);
+            color: #fff;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 2;
+        }
+
+        .slider-btn:hover {
+            background: #c89116;
+        }
+
+        .slider-prev {
+            left: 12px;
+        }
+
+        .slider-next {
+            right: 12px;
+        }
+
+        .thumbs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .thumbs img {
+            width: 90px;
+            height: 65px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .thumbs img.active {
+            border-color: #c89116;
+        }
+
+        .video-box {
+            margin-top: 16px;
+        }
+
+        .video-box video {
+            width: 100%;
+            max-height: 300px;
+            border-radius: 14px;
+            background: #000;
+            display: block;
+        }
+
+        .video-title {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .message-box {
+            display: none;
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 14px;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .message-error {
+            background: #fff2f2;
+            color: #b42318;
+            border: 1px solid #f5c2c7;
+        }
+
+        .message-success {
+            background: #effdf3;
+            color: #027a48;
+            border: 1px solid #abefc6;
+        }
+
+        .success-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .65);
+            z-index: 9999;
+            padding: 20px;
+        }
+
+        .success-content {
+            max-width: 520px;
+            margin: 8% auto;
+            background: #fff;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+            text-align: center;
+        }
+
+        .success-head {
+            background: linear-gradient(90deg, #c89116, #000);
+            color: #fff;
+            padding: 18px;
+        }
+
+        .success-body {
+            padding: 24px;
+        }
+
+        .success-body h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+        }
+
+        .success-body p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 18px;
+        }
+
+        .success-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: #c89116;
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .success-btn:hover {
+            background: #000;
+        }
+
+        .placeholder-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 340px;
+            color: #fff;
+            background: linear-gradient(90deg, #333, #111);
+            font-size: 20px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Footer */
+        .site-footer {
+            background: linear-gradient(90deg, #111, #000);
+            color: #fff;
+            margin-top: 40px;
+            padding-top: 35px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 0 20px 25px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .footer-box h3,
+        .footer-box h4 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            color: #c89116;
+        }
+
+        .footer-box p {
+            margin: 8px 0;
+            line-height: 1.8;
+            color: #ddd;
+        }
+
+        .footer-box a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .footer-box a:hover {
+            color: #c89116;
+        }
+
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #bbb;
+            font-size: 14px;
+        }
+
+        /* WhatsApp */
+        .whatsapp-widget {
+            position: fixed;
+            bottom: 22px;
+            right: 22px;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .whatsapp-label {
+            background: rgba(0, 0, 0, 0.78);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 700;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+            white-space: nowrap;
+        }
+
+        .whatsapp-float {
+            position: relative;
+            width: 64px;
+            height: 64px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28);
+            transition: transform 0.25s ease;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.08);
+        }
+
+        .whatsapp-pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(37, 211, 102, 0.45);
+            animation: whatsappPulse 1.8s infinite;
+            z-index: -1;
+        }
+
+        @keyframes whatsappPulse {
+            0% {
+                transform: scale(1);
+                opacity: .9;
+            }
+
+            70% {
+                transform: scale(1.6);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1.6);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .slider-box,
+            .slider-box img,
+            .placeholder-box {
+                height: 240px;
+            }
+
+            .top-bar {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>HIJAZI Apartments</h1>
+        <p>أكمل بيانات الحجز لشقتك المختارة في الشميساني - عمّان</p>
+    </header>
+
+    <div class="wrap">
+
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <a id="backBtn" class="back-btn" href="#">← الرجوع إلى الشقق</a>
+            </div>
+
+            <div class="top-bar-right">
+                <label for="currencySelect">اختر العملة:</label>
+                <select id="currencySelect">
+                    <option value="JOD" selected>دينار أردني</option>
+                    <option value="USD">دولار أمريكي</option>
+                    <option value="SAR">ريال سعودي</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layout">
+
+            <div class="card">
+                <div class="slider-box" id="sliderBox">
+                    <button class="slider-btn slider-prev" id="prevSlide">❮</button>
+                    <img id="aptImage" src="" alt="Apartment Image">
+                    <button class="slider-btn slider-next" id="nextSlide">❯</button>
+                </div>
+
+                <div class="card-body">
+                    <div class="thumbs" id="thumbs"></div>
+
+                    <div class="video-box">
+                        <div class="video-title">فيديو الشقة</div>
+                        <video id="aptVideo" controls muted>
+                            <source id="aptVideoSource" src="" type="video/mp4">
+                        </video>
+                    </div>
+
+                    <div class="pill">متاح للحجز ✅</div>
+                    <h2 id="aptName">اختر الشقة أولاً</h2>
+                    <p id="aptDesc" class="muted">من صفحة الحجز يمكنك اختيار أي شقة تريدها، وسيتم تحديث الصور والفيديو
+                        والسعر والتقويم تلقائيًا.</p>
+
+                    <ul class="features" id="aptFeatures"></ul>
+
+                    <div class="summary-box">
+                        <p><strong>رقم الشقة:</strong> <span id="summaryAptId">—</span></p>
+                        <p><strong>سعر الليلة:</strong> <span id="nightPrice">—</span></p>
+                        <p><strong>عدد الليالي:</strong> <span id="nightsCount">0</span></p>
+                        <p><strong>البالغين:</strong> <span id="summaryAdults">1</span></p>
+                        <p><strong>الأطفال:</strong> <span id="summaryChildren">0</span></p>
+                        <p><strong>السعر الإجمالي:</strong> <span id="summaryTotal">—</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="form-section">
+                    <h3>نموذج الحجز</h3>
+
+                    <div id="formMessage" class="message-box"></div>
+
+                    <form id="bookingForm">
+
+                        <label>الشقة المختارة:</label>
+                        <select id="aptId" required>
+                            <option value="">-- اختر الشقة --</option>
+                            <option value="1">شقة رقم 1</option>
+                            <option value="2">شقة رقم 2</option>
+                            <option value="3">شقة رقم 3</option>
+                            <option value="4">شقة رقم 4</option>
+                            <option value="5">شقة رقم 5</option>
+                            <option value="6">شقة رقم 6</option>
+                        </select>
+
+                        <label>الاسم الكامل:</label>
+                        <input type="text" id="fullName" placeholder="أدخل اسمك الكامل" required>
+
+                        <label>البريد الإلكتروني:</label>
+                        <input type="email" id="email" placeholder="example@email.com" required>
+
+                        <label>رقم الهاتف:</label>
+                        <input type="tel" id="phone" placeholder="059xxxxxxx" required>
+
+                        <label>تاريخ الوصول:</label>
+                        <input type="date" id="checkIn" required>
+
+                        <label>تاريخ المغادرة:</label>
+                        <input type="date" id="checkOut" required>
+                        <div class="hint">لا يمكن اختيار فترة متداخلة مع الحجوزات الموجودة.</div>
+
+                        <label>عدد البالغين:</label>
+                        <input type="number" id="adults" min="1" value="1" required>
+
+                        <label>عدد الأطفال:</label>
+                        <input type="number" id="children" min="1" value="1">
+
+                        <p>السعر النهائي: <span class="price" id="totalPrice">—</span></p>
+
+                        <button id="submitBtn" type="submit">تأكيد الحجز</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="calendar-title">تقويم الشقة</div>
+        <div id="calendar"></div>
+
+    </div>
+
+    <div class="success-modal" id="successModal">
+        <div class="success-content">
+            <div class="success-head">
+                <h2 style="margin:0;">✅ تم الحجز بنجاح</h2>
+            </div>
+            <div class="success-body">
+                <h3>شكراً لك</h3>
+                <p>
+                    تم حفظ الحجز بنجاح، وتم إرسال رسالة تأكيد إلى بريدك الإلكتروني.<br>
+                    سنتواصل معك قريبًا إذا احتجنا أي تفاصيل إضافية.
+                </p>
+                <button class="success-btn" id="closeSuccessModal">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-box">
+                <h3>HIJAZI Apartments</h3>
+                <p>شقق مفروشة مريحة في الشميساني - عمّان، الأردن</p>
+            </div>
+
+            <div class="footer-box">
+                <h4>معلومات التواصل</h4>
+                <p>الهاتف: <a href="tel:+962789000444">+962789000444</a></p>
+                <p>البريد: <a
+                        href="mailto:ammarabunada775forbusiness@gmail.com">ammarabunada775forbusiness@gmail.com</a></p>
+                <p>العنوان: عمان، الأردن، الشميساني</p>
+            </div>
+
+            <div class="footer-box">
+                <h4>السوشال ميديا</h4>
+                <div class="social-links">
+                    <a href="https://www.instagram.com/j_ibrahim_j/" target="_blank">Instagram</a>
+                    <a href="https://web.facebook.com/abrahem.hjaze.71?locale=ar_AR" target="_blank">Facebook</a>
+                    <a href="https://www.google.com/search?q=%D8%AA%D8%B1%D8%AC%D9%85%D9%87&rlz=1C1GCEA_enJO1134JO1134&oq=&ie=UTF-8"
+                        target="_blank">Snapchat</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            © 2026 HIJAZI Apartments - جميع الحقوق محفوظة
+        </div>
+    </footer>
+
+    <div class="whatsapp-widget">
+        <div class="whatsapp-label">تواصل معنا</div>
+        <a href="https://wa.me/962789000444?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%B4%D9%82%D9%82%20%D8%A7%D9%84%D9%85%D8%AA%D8%A7%D8%AD%D8%A9"
+            class="whatsapp-float" target="_blank" aria-label="WhatsApp" title="تواصل معنا عبر واتساب">
+            <span class="whatsapp-pulse"></span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="30" height="30" fill="white">
+                <path
+                    d="M19.11 17.27c-.27-.13-1.58-.78-1.82-.87-.24-.09-.41-.13-.59.14-.18.27-.68.87-.84 1.04-.15.18-.31.2-.58.07-.27-.13-1.12-.41-2.13-1.3-.79-.7-1.32-1.57-1.47-1.84-.15-.27-.02-.42.11-.55.11-.11.27-.29.41-.43.14-.15.18-.25.27-.43.09-.18.05-.34-.02-.48-.07-.13-.59-1.43-.81-1.96-.21-.5-.43-.43-.59-.44h-.5c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.29s.98 2.65 1.11 2.83c.14.18 1.92 2.93 4.65 4.11.65.28 1.16.45 1.56.58.66.21 1.26.18 1.73.11.53-.08 1.58-.65 1.8-1.27.22-.63.22-1.16.15-1.27-.06-.12-.24-.18-.5-.31z" />
+                <path
+                    d="M16.02 3.2c-7.07 0-12.8 5.72-12.8 12.77 0 2.25.59 4.45 1.71 6.39L3.1 28.8l6.63-1.73a12.8 12.8 0 0 0 6.29 1.69h.01c7.06 0 12.79-5.72 12.79-12.77 0-3.42-1.34-6.63-3.79-9.04A12.76 12.76 0 0 0 16.02 3.2zm0 23.39h-.01a10.62 10.62 0 0 1-5.41-1.49l-.39-.23-3.94 1.03 1.05-3.84-.25-.4a10.55 10.55 0 0 1-1.63-5.61c0-5.84 4.76-10.59 10.6-10.59 2.82 0 5.47 1.09 7.47 3.08a10.5 10.5 0 0 1 3.11 7.51c0 5.84-4.76 10.59-10.6 10.59z" />
+            </svg>
+        </a>
+    </div>
+
+    <script>
+        const API_BASE = "http://localhost:5000";
+
+        const apartmentData = {
+            1: {
+                name: "شقة رقم 1",
+                price: 50,
+                desc: "شقة مريحة مناسبة للعائلات الصغيرة، بتصميم أنيق وموقع مميز في الشميساني.",
+                features: ["غرفة نوم", "صالون", "مطبخ", "واي فاي", "مكيف", "حمام"],
+                images: [
+                    "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80"
+                ],
+                video: "https://www.w3schools.com/html/mov_bbb.mp4"
+            },
+            2: {
+                name: "شقة رقم 2",
+                price: 35,
+                desc: "شقة اقتصادية وأنيقة مناسبة للإقامة القصيرة مع كل الخدمات الأساسية.",
+                features: ["ستوديو", "مطبخ صغير", "واي فاي", "تلفاز"],
+                images: [
+                    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1505693431205-36e7f9307d05?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80"
+                ],
+                video: "https://www.w3schools.com/html/mov_bbb.mp4"
+            },
+            3: {
+                name: "شقة رقم 3",
+                price: 70,
+                desc: "شقة واسعة وفاخرة مناسبة للعائلات الكبيرة أو الضيوف الباحثين عن راحة أعلى.",
+                features: ["غرفتا نوم", "صالون كبير", "مطبخ", "واي فاي", "مكيف", "شرفة"],
+                images: [
+                    "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1464890100898-a385f744067f?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=1200&q=80"
+                ],
+                video: "https://www.w3schools.com/html/mov_bbb.mp4"
+            },
+            4: {
+                name: "شقة رقم 4",
+                price: 30,
+                desc: "شقة صغيرة وعملية جدًا، مناسبة لفرد أو زوجين.",
+                features: ["غرفة", "مطبخ", "حمام", "واي فاي"],
+                images: [
+                    "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80"
+                ],
+                video: "https://www.w3schools.com/html/mov_bbb.mp4"
+            },
+            5: {
+                name: "شقة رقم 5",
+                price: 55,
+                desc: "شقة حديثة بتشطيب جميل، مناسبة للضيوف الباحثين عن مستوى أعلى.",
+                features: ["غرفة نوم", "صالون", "تلفاز", "واي فاي", "مكيف"],
+                images: [
+                    "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1505693431205-36e7f9307d05?auto=format&fit=crop&w=1200&q=80"
+                ],
+                video: "https://www.w3schools.com/html/mov_bbb.mp4"
+            },
+            6: {
+                name: "شقة رقم 6",
+                price: 35,
+                desc: "خيار جيد ومريح، مناسب للإقامة المرنة بسعر مناسب.",
+                features: ["غرفة", "حمام", "مطبخ صغير", "واي فاي"],
+                images: [
+                    "https://images.unsplash.com/photo-1464890100898-a385f744067f?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80",
+                    "https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=1200&q=80"
+                ],
+                video: "https://www.w3schools.com/html/mov_bbb.mp4"
+            }
+        };
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialAptId = Number(urlParams.get("apt")) || "";
+        const qCheckIn = urlParams.get("checkIn");
+        const qCheckOut = urlParams.get("checkOut");
+
+        const aptSelect = document.getElementById("aptId");
+        const aptNameEl = document.getElementById("aptName");
+        const aptDescEl = document.getElementById("aptDesc");
+        const summaryAptIdEl = document.getElementById("summaryAptId");
+        const featuresEl = document.getElementById("aptFeatures");
+        const aptImage = document.getElementById("aptImage");
+        const thumbsEl = document.getElementById("thumbs");
+        const aptVideo = document.getElementById("aptVideo");
+        const aptVideoSource = document.getElementById("aptVideoSource");
+        const sliderBox = document.getElementById("sliderBox");
+
+        const backBtn = document.getElementById("backBtn");
+        backBtn.href = `apartments.html?checkIn=${encodeURIComponent(qCheckIn || "")}&checkOut=${encodeURIComponent(qCheckOut || "")}`;
+
+        const prices = { 1: 50, 2: 35, 3: 70, 4: 30, 5: 55, 6: 35 };
+        const currencyRates = { JOD: 1, USD: 0.71, SAR: 2.66 };
+        const currencySymbols = { JOD: "دينار", USD: "$", SAR: "ر.س" };
+
+        const currencySelect = document.getElementById("currencySelect");
+        const totalPriceEl = document.getElementById("totalPrice");
+        const nightPriceEl = document.getElementById("nightPrice");
+        const nightsCountEl = document.getElementById("nightsCount");
+        const summaryTotalEl = document.getElementById("summaryTotal");
+        const summaryAdultsEl = document.getElementById("summaryAdults");
+        const summaryChildrenEl = document.getElementById("summaryChildren");
+
+        const checkInEl = document.getElementById("checkIn");
+        const checkOutEl = document.getElementById("checkOut");
+        const adultsEl = document.getElementById("adults");
+        const childrenEl = document.getElementById("children");
+
+        const successModal = document.getElementById("successModal");
+        const closeSuccessModal = document.getElementById("closeSuccessModal");
+        const formMessage = document.getElementById("formMessage");
+
+        let currentSlide = 0;
+        let bookedRanges = [];
+        let bookedDaysSet = new Set();
+        let calendar = null;
+
+        if (initialAptId) {
+            aptSelect.value = String(initialAptId);
+        }
+
+        if (qCheckIn) checkInEl.value = qCheckIn;
+        if (qCheckOut) checkOutEl.value = qCheckOut;
+
+        function showMessage(text, type = "error") {
+            formMessage.style.display = "block";
+            formMessage.className = `message-box ${type === "success" ? "message-success" : "message-error"}`;
+            formMessage.textContent = text;
+        }
+
+        function clearMessage() {
+            formMessage.style.display = "none";
+            formMessage.textContent = "";
+            formMessage.className = "message-box";
+        }
+
+        function todayISO() {
+            const d = new Date();
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, "0");
+            const dd = String(d.getDate()).padStart(2, "0");
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        function parseISODateOnly(s) {
+            const [y, m, d] = (s || "").slice(0, 10).split("-").map(Number);
+            if (!y || !m || !d) return null;
+            return new Date(y, m - 1, d, 0, 0, 0, 0);
+        }
+
+        function addDays(date, days) {
+            const d = new Date(date);
+            d.setDate(d.getDate() + days);
+            return d;
+        }
+
+        function toISODateOnly(d) {
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, "0");
+            const dd = String(d.getDate()).padStart(2, "0");
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        function calcNights(checkIn, checkOut) {
+            if (!checkIn || !checkOut) return 0;
+            const start = new Date(checkIn);
+            const end = new Date(checkOut);
+            const diff = end - start;
+            return diff > 0 ? Math.ceil(diff / (1000 * 60 * 60 * 24)) : 0;
+        }
+
+        function getSelectedAptId() {
+            return Number(aptSelect.value) || null;
+        }
+
+        function getSelectedApartment() {
+            const id = getSelectedAptId();
+            return id ? apartmentData[id] : null;
+        }
+
+        function renderPlaceholder() {
+            aptNameEl.textContent = "اختر الشقة أولاً";
+            aptDescEl.textContent = "من صفحة الحجز يمكنك اختيار أي شقة تريدها، وسيتم تحديث الصور والفيديو والسعر والتقويم تلقائيًا.";
+            summaryAptIdEl.textContent = "—";
+            featuresEl.innerHTML = "";
+            thumbsEl.innerHTML = "";
+            sliderBox.innerHTML = `<div class="placeholder-box">اختر الشقة لعرض الصور والتفاصيل</div>`;
+            aptVideoSource.src = "";
+            aptVideo.load();
+            nightPriceEl.textContent = "—";
+            summaryTotalEl.textContent = "—";
+            totalPriceEl.textContent = "—";
+        }
+
+        function renderSlider() {
+            const apt = getSelectedApartment();
+            if (!apt) return;
+
+            sliderBox.innerHTML = `
+                <button class="slider-btn slider-prev" id="prevSlide">❮</button>
+                <img id="aptImage" src="${apt.images[currentSlide]}" alt="Apartment Image">
+                <button class="slider-btn slider-next" id="nextSlide">❯</button>
+            `;
+
+            document.getElementById("prevSlide").addEventListener("click", prevSlide);
+            document.getElementById("nextSlide").addEventListener("click", nextSlide);
+
+            thumbsEl.innerHTML = apt.images.map((img, index) => `
+                <img src="${img}" class="${index === currentSlide ? "active" : ""}" onclick="goToSlide(${index})">
+            `).join("");
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            renderSlider();
+        }
+
+        function nextSlide() {
+            const apt = getSelectedApartment();
+            if (!apt) return;
+            currentSlide = (currentSlide + 1) % apt.images.length;
+            renderSlider();
+        }
+
+        function prevSlide() {
+            const apt = getSelectedApartment();
+            if (!apt) return;
+            currentSlide = (currentSlide - 1 + apt.images.length) % apt.images.length;
+            renderSlider();
+        }
+
+        window.goToSlide = goToSlide;
+
+        function renderApartmentDetails() {
+            const id = getSelectedAptId();
+            const apt = getSelectedApartment();
+
+            if (!id || !apt) {
+                renderPlaceholder();
+                return;
+            }
+
+            currentSlide = 0;
+            aptNameEl.textContent = apt.name;
+            aptDescEl.textContent = apt.desc;
+            summaryAptIdEl.textContent = id;
+            featuresEl.innerHTML = apt.features.map(f => `<li>${f}</li>`).join("");
+
+            renderSlider();
+
+            aptVideoSource.src = apt.video;
+            aptVideo.load();
+
+            updatePrice();
+        }
+
+        function updatePrice() {
+            const id = getSelectedAptId();
+            if (!id) {
+                nightsCountEl.textContent = "0";
+                summaryAdultsEl.textContent = adultsEl.value || 1;
+                summaryChildrenEl.textContent = childrenEl.value || 0;
+                nightPriceEl.textContent = "—";
+                summaryTotalEl.textContent = "—";
+                totalPriceEl.textContent = "—";
+                return;
+            }
+
+            const basePrice = prices[id] || 50;
+            const nights = calcNights(checkInEl.value, checkOutEl.value) || 1;
+
+            const perNightConverted = basePrice * currencyRates[currencySelect.value];
+            const total = basePrice * nights * currencyRates[currencySelect.value];
+
+            nightPriceEl.textContent = `${perNightConverted.toFixed(2)} ${currencySymbols[currencySelect.value]}`;
+            nightsCountEl.textContent = nights;
+            summaryTotalEl.textContent = `${total.toFixed(2)} ${currencySymbols[currencySelect.value]}`;
+            totalPriceEl.textContent = `${total.toFixed(2)} ${currencySymbols[currencySelect.value]}`;
+
+            summaryAdultsEl.textContent = adultsEl.value || 1;
+            summaryChildrenEl.textContent = childrenEl.value || 0;
+        }
+
+        function getTotalPriceNumber() {
+            const text = totalPriceEl.textContent || "";
+            const num = parseFloat(text.replace(/[^\d.]/g, ""));
+            return isNaN(num) ? 0 : num;
+        }
+
+        function buildBookedDaysSet() {
+            bookedDaysSet = new Set();
+            for (const r of bookedRanges) {
+                let cur = new Date(r.start);
+                const end = new Date(r.end);
+                cur.setHours(0, 0, 0, 0);
+                end.setHours(0, 0, 0, 0);
+
+                while (cur < end) {
+                    bookedDaysSet.add(toISODateOnly(cur));
+                    cur = addDays(cur, 1);
+                }
+            }
+        }
+
+        function rangesOverlap(startA, endA, startB, endB) {
+            return startA < endB && endA > startB;
+        }
+
+        function selectionConflicts(checkInDate, checkOutDateExclusive) {
+            for (const r of bookedRanges) {
+                if (rangesOverlap(checkInDate, checkOutDateExclusive, r.start, r.end)) return true;
+            }
+            return false;
+        }
+
+        async function fetchBookedRanges() {
+            const id = getSelectedAptId();
+            if (!id) {
+                bookedRanges = [];
+                bookedDaysSet = new Set();
+                return [];
+            }
+
+            const res = await fetch(`${API_BASE}/calendar?aptId=${id}`);
+            const data = await res.json();
+            const arr = (data && data.bookings) ? data.bookings : [];
+
+            bookedRanges = arr
+                .map(b => ({ start: new Date(b.checkIn), end: new Date(b.checkOut) }))
+                .filter(r => !isNaN(r.start.getTime()) && !isNaN(r.end.getTime()));
+
+            buildBookedDaysSet();
+            return bookedRanges;
+        }
+
+        function validateDates() {
+            clearMessage();
+
+            const id = getSelectedAptId();
+            if (!id) {
+                showMessage("اختر الشقة أولاً.", "error");
+                return false;
+            }
+
+            const inVal = checkInEl.value;
+            const outVal = checkOutEl.value;
+            if (!inVal || !outVal) return true;
+
+            const inDate = parseISODateOnly(inVal);
+            const outDate = parseISODateOnly(outVal);
+            if (!inDate || !outDate) return false;
+
+            if (outDate <= inDate) {
+                showMessage("تاريخ المغادرة لازم يكون بعد تاريخ الوصول.", "error");
+                checkOutEl.value = "";
+                updatePrice();
+                return false;
+            }
+
+            const outExclusive = addDays(outDate, 1);
+
+            if (selectionConflicts(inDate, outExclusive)) {
+                showMessage("❌ هذه الفترة متداخلة مع حجز موجود. اختر تواريخ أخرى.", "error");
+                checkInEl.value = "";
+                checkOutEl.value = "";
+                updatePrice();
+                return false;
+            }
+
+            return true;
+        }
+
+        async function refreshCalendar() {
+            await fetchBookedRanges();
+            if (calendar) {
+                calendar.refetchEvents();
+            }
+        }
+
+        checkInEl.min = todayISO();
+        checkOutEl.min = todayISO();
+
+        currencySelect.addEventListener("change", updatePrice);
+        adultsEl.addEventListener("input", updatePrice);
+        childrenEl.addEventListener("input", updatePrice);
+        checkInEl.addEventListener("change", updatePrice);
+        checkOutEl.addEventListener("change", updatePrice);
+
+        checkInEl.addEventListener("change", validateDates);
+        checkOutEl.addEventListener("change", validateDates);
+
+        aptSelect.addEventListener("change", async () => {
+            clearMessage();
+            renderApartmentDetails();
+            await refreshCalendar();
+        });
+
+        const form = document.getElementById("bookingForm");
+        const submitBtn = document.getElementById("submitBtn");
+
+        document.addEventListener("DOMContentLoaded", async function () {
+            const calendarEl = document.getElementById("calendar");
+
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: "dayGridMonth",
+                height: 520,
+                locale: "ar",
+                direction: "rtl",
+                events: async (fetchInfo, successCallback, failureCallback) => {
+                    try {
+                        await fetchBookedRanges();
+                        const events = bookedRanges.map(r => ({
+                            title: "محجوز",
+                            start: r.start,
+                            end: r.end,
+                            allDay: true
+                        }));
+                        successCallback(events);
+                    } catch (e) {
+                        failureCallback(e);
+                    }
+                },
+                dayCellDidMount: (info) => {
+                    const dayISO = toISODateOnly(info.date);
+                    if (bookedDaysSet.has(dayISO)) {
+                        info.el.style.background = "rgba(200,145,22,0.35)";
+                        info.el.style.borderRadius = "6px";
+                        info.el.title = "محجوز";
+                    }
+                },
+                selectable: true,
+                selectMirror: true,
+                selectAllow: (selectInfo) => {
+                    const id = getSelectedAptId();
+                    if (!id) return false;
+
+                    const start = new Date(selectInfo.start);
+                    const end = new Date(selectInfo.end);
+                    const today = parseISODateOnly(todayISO());
+                    if (start < today) return false;
+                    return !selectionConflicts(start, end);
+                },
+                select: (info) => {
+                    if (!getSelectedAptId()) {
+                        showMessage("اختر الشقة أولاً قبل التحديد من التقويم.", "error");
+                        return;
+                    }
+
+                    const start = info.start;
+                    const endExclusive = info.end;
+                    const end = addDays(endExclusive, -1);
+
+                    checkInEl.value = toISODateOnly(start);
+                    checkOutEl.value = toISODateOnly(end);
+                    validateDates();
+                    updatePrice();
+                }
+            });
+
+            calendar.render();
+
+            renderApartmentDetails();
+            await refreshCalendar();
+            updatePrice();
+        });
+
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault();
+            clearMessage();
+
+            const id = getSelectedAptId();
+            if (!id) {
+                showMessage("اختر الشقة أولاً.", "error");
+                return;
+            }
+
+            const isValid = validateDates();
+            if (!isValid || !checkInEl.value || !checkOutEl.value) return;
+
+            const payload = {
+                apartmentId: id,
+                apartmentLabel: `شقة رقم ${id}`,
+                fullName: document.getElementById("fullName").value,
+                email: document.getElementById("email").value,
+                phone: document.getElementById("phone").value,
+                checkIn: checkInEl.value,
+                checkOut: checkOutEl.value,
+                adults: Number(adultsEl.value),
+                children: Number(childrenEl.value),
+                currency: currencySelect.value,
+                totalPrice: getTotalPriceNumber(),
+                totalPriceText: totalPriceEl.textContent
+            };
+
+            try {
+                submitBtn.disabled = true;
+                submitBtn.textContent = "جاري الحفظ...";
+
+                const res = await fetch(`${API_BASE}/bookings`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await res.json().catch(() => ({}));
+
+                if (!res.ok) {
+                    showMessage(result.message || "صار خطأ أثناء الحجز", "error");
+                    return;
+                }
+
+                successModal.style.display = "block";
+
+                form.reset();
+                aptSelect.value = String(id);
+                if (qCheckIn) checkInEl.value = qCheckIn;
+                if (qCheckOut) checkOutEl.value = qCheckOut;
+
+                renderApartmentDetails();
+                await refreshCalendar();
+                updatePrice();
+            } catch (err) {
+                console.error(err);
+                showMessage("تعذر الاتصال بالسيرفر. تأكد أن الباك اند شغال على 5000", "error");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "تأكيد الحجز";
+            }
+        });
+
+        closeSuccessModal.addEventListener("click", () => {
+            successModal.style.display = "none";
+        });
+
+        successModal.addEventListener("click", (e) => {
+            if (e.target === successModal) {
+                successModal.style.display = "none";
+            }
+        });
+    </script>
+
+</body>
+
+</html>
