@@ -3,20 +3,21 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const Booking = require("./models/Booking");
 const basicAuth = require("basic-auth");
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 require("dotenv").config();
 
 const app = express();
 
-// ✅ CORS محلياً
-app.use(cors({
-    origin: "*",
-    methods: ["GET", "POST", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-}));
+app.use(
+    cors({
+        origin: "*",
+        methods: ["GET", "POST", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+    })
+);
 app.use(express.json());
 
-// ✅ اتصال DB
+// ===================== DB =====================
 mongoose
     .connect(process.env.MONGO_URI)
     .then(() => console.log("MongoDB Connected Successfully"))
@@ -43,14 +44,8 @@ function requireAdmin(req, res, next) {
     next();
 }
 
-// ===================== Mail Transporter (Gmail) =====================
-const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS, // App Password
-    },
-});
+// ===================== Resend =====================
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // ===================== Helpers =====================
 function formatDate(d) {
@@ -113,9 +108,62 @@ function bookingHtml(booking, forCustomer = false) {
   `;
 }
 
-// ===================== ✅ Availability API =====================
-// GET /availability?checkIn=2026-03-06&checkOut=2026-03-08
-// يرجّع الشقق المتاحة بهالتواريخ (بدون تداخل)
+async function sendBookingEmails(booking) {
+    const from = process.env.RESEND_FROM;
+    const adminTo = process.env.ADMIN_EMAIL;
+    const enableCustomerEmail = process.env.ENABLE_CUSTOMER_EMAIL === "true";
+
+    if (!process.env.RESEND_API_KEY || !from || !adminTo) {
+        console.log("Email skipped: missing RESEND_API_KEY / RESEND_FROM / ADMIN_EMAIL");
+        return;
+    }
+
+    // 1) Email to admin
+    try {
+        const adminResult = await resend.emails.send({
+            from,
+            to: [adminTo],
+            subject: `حجز جديد ✅ - ${booking.apartmentLabel} (${formatDate(
+                booking.checkIn
+            )} → ${formatDate(booking.checkOut)})`,
+            text: bookingText(booking),
+            html: bookingHtml(booking, false),
+        });
+
+        if (adminResult.error) {
+            console.log("Admin email error:", adminResult.error);
+        } else {
+            console.log("Admin email sent:", adminResult.data?.id || adminResult.id);
+        }
+    } catch (e) {
+        console.log("Admin email exception:", e.message);
+    }
+
+    // 2) Email to customer
+    if (enableCustomerEmail) {
+        try {
+            const customerResult = await resend.emails.send({
+                from,
+                to: [booking.email],
+                subject: `تم استلام طلب حجزك ✅ - HIJAZI Apartments`,
+                text: `مرحباً ${booking.fullName}\n\nتم استلام طلب حجزك بنجاح.\n${bookingText(
+                    booking
+                )}\n\nشكراً لك.`,
+                html: bookingHtml(booking, true),
+            });
+
+            if (customerResult.error) {
+                console.log("Customer email error:", customerResult.error);
+            } else {
+                console.log("Customer email sent:", customerResult.data?.id || customerResult.id);
+            }
+        } catch (e) {
+            console.log("Customer email exception:", e.message);
+        }
+    }
+}
+
+// ===================== Availability API =====================
 const APARTMENT_IDS = [1, 2, 3, 4, 5, 6];
 
 app.get("/availability", async (req, res) => {
@@ -143,7 +191,6 @@ app.get("/availability", async (req, res) => {
             });
         }
 
-        // كل الحجوزات المتداخلة مع الفترة المطلوبة
         const conflicts = await Booking.find({
             checkIn: { $lt: checkOutDate },
             checkOut: { $gt: checkInDate },
@@ -183,7 +230,7 @@ app.get("/calendar", async (req, res) => {
         res.status(500).json({
             success: false,
             message: "Error fetching calendar",
-            error: error.message
+            error: error.message,
         });
     }
 });
@@ -246,7 +293,6 @@ app.post("/bookings", async (req, res) => {
             });
         }
 
-        // ✅ منع التداخل لنفس الشقة
         const conflict = await Booking.findOne({
             apartmentId: Number(apartmentId),
             checkIn: { $lt: checkOutDate },
@@ -276,38 +322,9 @@ app.post("/bookings", async (req, res) => {
         });
 
         await booking.save();
+        await sendBookingEmails(booking);
 
-        // ===================== Send Emails =====================
-        const adminTo = process.env.ADMIN_EMAIL || process.env.MAIL_USER;
-
-        const adminMail = {
-            from: `HIJAZI Apartments <${process.env.MAIL_USER}>`,
-            to: adminTo,
-            subject: `حجز جديد ✅ - ${booking.apartmentLabel} (${formatDate(
-                booking.checkIn
-            )} → ${formatDate(booking.checkOut)})`,
-            text: bookingText(booking),
-            html: bookingHtml(booking, false),
-        };
-
-        const customerMail = {
-            from: `HIJAZI Apartments <${process.env.MAIL_USER}>`,
-            to: booking.email,
-            subject: `تم استلام طلب حجزك ✅ - HIJAZI Apartments`,
-            text: `مرحباً ${booking.fullName}\n\nتم استلام طلب حجزك بنجاح.\n${bookingText(
-                booking
-            )}\n\nشكراً لك.`,
-            html: bookingHtml(booking, true),
-        };
-
-        transporter
-            .sendMail(adminMail)
-            .catch((e) => console.log("Admin email error:", e.message));
-        transporter
-            .sendMail(customerMail)
-            .catch((e) => console.log("Customer email error:", e.message));
-
-        res.json({ success: true, message: "✅ تم حفظ الحجز بنجاح (وتم إرسال الإيميل)" });
+        res.json({ success: true, message: "✅ تم حفظ الحجز بنجاح" });
     } catch (error) {
         console.log(error);
         res.status(500).json({ success: false, message: "Error saving booking" });
