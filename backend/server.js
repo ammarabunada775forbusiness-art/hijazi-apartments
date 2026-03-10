@@ -8,6 +8,7 @@ require("dotenv").config();
 
 const app = express();
 
+// ===================== App Middleware =====================
 app.use(
     cors({
         origin: "*",
@@ -23,6 +24,10 @@ mongoose
     .then(() => console.log("MongoDB Connected Successfully"))
     .catch((err) => console.log("MongoDB Connection Error:", err));
 
+// ===================== Resend =====================
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+// ===================== Root =====================
 app.get("/", (req, res) => {
     res.send("HIJAZI Apartments API Running");
 });
@@ -43,9 +48,6 @@ function requireAdmin(req, res, next) {
 
     next();
 }
-
-// ===================== Resend =====================
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 // ===================== Helpers =====================
 function formatDate(d) {
@@ -118,11 +120,11 @@ async function sendBookingEmails(booking) {
         return;
     }
 
-    // 1) Email to admin
+    // Email to admin
     try {
         const adminResult = await resend.emails.send({
             from,
-            to: [adminTo],
+            to: adminTo,
             subject: `حجز جديد ✅ - ${booking.apartmentLabel} (${formatDate(
                 booking.checkIn
             )} → ${formatDate(booking.checkOut)})`,
@@ -130,33 +132,25 @@ async function sendBookingEmails(booking) {
             html: bookingHtml(booking, false),
         });
 
-        if (adminResult.error) {
-            console.log("Admin email error:", adminResult.error);
-        } else {
-            console.log("Admin email sent:", adminResult.data?.id || adminResult.id);
-        }
+        console.log("Admin email result:", adminResult);
     } catch (e) {
         console.log("Admin email exception:", e.message);
     }
 
-    // 2) Email to customer
+    // Email to customer
     if (enableCustomerEmail) {
         try {
             const customerResult = await resend.emails.send({
                 from,
-                to: [booking.email],
-                subject: `تم استلام طلب حجزك ✅ - HIJAZI Apartments`,
+                to: booking.email,
+                subject: "تم استلام طلب حجزك ✅ - HIJAZI Apartments",
                 text: `مرحباً ${booking.fullName}\n\nتم استلام طلب حجزك بنجاح.\n${bookingText(
                     booking
                 )}\n\nشكراً لك.`,
                 html: bookingHtml(booking, true),
             });
 
-            if (customerResult.error) {
-                console.log("Customer email error:", customerResult.error);
-            } else {
-                console.log("Customer email sent:", customerResult.data?.id || customerResult.id);
-            }
+            console.log("Customer email result:", customerResult);
         } catch (e) {
             console.log("Customer email exception:", e.message);
         }
@@ -181,7 +175,10 @@ app.get("/availability", async (req, res) => {
         const checkOutDate = new Date(checkOut);
 
         if (isNaN(checkInDate.getTime()) || isNaN(checkOutDate.getTime())) {
-            return res.status(400).json({ success: false, message: "تواريخ غير صحيحة." });
+            return res.status(400).json({
+                success: false,
+                message: "تواريخ غير صحيحة.",
+            });
         }
 
         if (checkOutDate <= checkInDate) {
@@ -207,8 +204,11 @@ app.get("/availability", async (req, res) => {
             bookedApartments: Array.from(bookedSet),
         });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ success: false, message: "Error checking availability" });
+        console.log("AVAILABILITY ERROR:", error);
+        res.status(500).json({
+            success: false,
+            message: "Error checking availability",
+        });
     }
 });
 
@@ -216,8 +216,12 @@ app.get("/availability", async (req, res) => {
 app.get("/calendar", async (req, res) => {
     try {
         const aptId = Number(req.query.aptId);
+
         if (!aptId) {
-            return res.status(400).json({ success: false, message: "aptId is required" });
+            return res.status(400).json({
+                success: false,
+                message: "aptId is required",
+            });
         }
 
         const bookings = await Booking.find({ apartmentId: aptId })
@@ -240,10 +244,16 @@ app.get("/bookings", async (req, res) => {
     try {
         const aptId = req.query.aptId ? Number(req.query.aptId) : null;
         const filter = aptId ? { apartmentId: aptId } : {};
+
         const bookings = await Booking.find(filter).sort({ checkIn: 1 });
+
         res.json({ success: true, bookings });
     } catch (error) {
-        res.status(500).json({ success: false, message: "Error fetching bookings" });
+        console.log("GET BOOKINGS ERROR:", error);
+        res.status(500).json({
+            success: false,
+            message: "Error fetching bookings",
+        });
     }
 });
 
@@ -284,8 +294,12 @@ app.post("/bookings", async (req, res) => {
         const checkOutDate = new Date(checkOut);
 
         if (isNaN(checkInDate.getTime()) || isNaN(checkOutDate.getTime())) {
-            return res.status(400).json({ success: false, message: "تواريخ غير صحيحة." });
+            return res.status(400).json({
+                success: false,
+                message: "تواريخ غير صحيحة.",
+            });
         }
+
         if (checkOutDate <= checkInDate) {
             return res.status(400).json({
                 success: false,
@@ -322,12 +336,22 @@ app.post("/bookings", async (req, res) => {
         });
 
         await booking.save();
-        await sendBookingEmails(booking);
 
-        res.json({ success: true, message: "✅ تم حفظ الحجز بنجاح" });
+        // لا نخلي فشل الإيميل يخرب الحجز
+        sendBookingEmails(booking).catch((e) => {
+            console.log("SEND EMAILS ERROR:", e.message);
+        });
+
+        res.json({
+            success: true,
+            message: "✅ تم حفظ الحجز بنجاح",
+        });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ success: false, message: "Error saving booking" });
+        console.log("SAVE BOOKING ERROR:", error);
+        res.status(500).json({
+            success: false,
+            message: "Error saving booking",
+        });
     }
 });
 
@@ -337,7 +361,11 @@ app.get("/admin/bookings", requireAdmin, async (req, res) => {
         const bookings = await Booking.find().sort({ createdAt: -1 });
         res.json({ success: true, bookings });
     } catch (error) {
-        res.status(500).json({ success: false, message: "Error fetching bookings" });
+        console.log("ADMIN GET BOOKINGS ERROR:", error);
+        res.status(500).json({
+            success: false,
+            message: "Error fetching bookings",
+        });
     }
 });
 
@@ -347,12 +375,22 @@ app.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
         const deleted = await Booking.findByIdAndDelete(id);
 
         if (!deleted) {
-            return res.status(404).json({ success: false, message: "Booking not found" });
+            return res.status(404).json({
+                success: false,
+                message: "Booking not found",
+            });
         }
 
-        res.json({ success: true, message: "✅ Booking deleted" });
+        res.json({
+            success: true,
+            message: "✅ Booking deleted",
+        });
     } catch (error) {
-        res.status(500).json({ success: false, message: "Error deleting booking" });
+        console.log("DELETE BOOKING ERROR:", error);
+        res.status(500).json({
+            success: false,
+            message: "Error deleting booking",
+        });
     }
 });
 
