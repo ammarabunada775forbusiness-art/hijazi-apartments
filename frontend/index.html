@@ -254,7 +254,7 @@
     <!-- ===== Navbar ===== -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand gold" href="#">HIJAZI Apartments</a>
+            <a class="navbar-brand gold admin-trigger" href="javascript:void(0)">HIJAZI Apartments</a>
             <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -275,9 +275,8 @@
         </video>
 
         <div class="overlay">
-            <h1>مرحباً بكم في HIJAZI Apartments</h1>
+            <h1 class="admin-trigger">مرحباً بكم في HIJAZI Apartments</h1>
             <p>شقق مفروشة فاخرة للإيجار في الشميساني - عمّان</p>
-
 
             <div class="availability-box">
                 <div class="availability-row">
@@ -388,7 +387,34 @@
         });
     </script>
 
+    <script>
+        let adminTapCount = 0;
+        let adminTapTimer = null;
+        const adminTriggers = document.querySelectorAll(".admin-trigger");
+
+        adminTriggers.forEach((trigger) => {
+            trigger.style.cursor = "pointer";
+
+            trigger.addEventListener("click", function (e) {
+                e.preventDefault();
+                adminTapCount++;
+
+                if (!adminTapTimer) {
+                    adminTapTimer = setTimeout(() => {
+                        adminTapCount = 0;
+                        adminTapTimer = null;
+                    }, 3000);
+                }
+
+                if (adminTapCount >= 5) {
+                    window.location.href = "admin.html";
+                }
+            });
+        });
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>
