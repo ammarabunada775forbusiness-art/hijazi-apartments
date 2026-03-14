@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HIJAZI Apartments - الحجز</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.css" />
@@ -393,6 +394,55 @@
             padding: 20px;
         }
 
+
+        .room-description {
+            margin-top: 14px;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .room-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .room-card {
+            border: 1px solid #eee;
+            border-radius: 14px;
+            padding: 14px;
+            background: #fafafa;
+            cursor: pointer;
+            transition: .25s;
+            text-align: center;
+            color: #111;
+            font-weight: 700;
+        }
+
+        .room-card:hover,
+        .room-card.active {
+            border-color: #c89116;
+            box-shadow: 0 8px 20px rgba(200, 145, 22, .16);
+        }
+
+        .room-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .room-gallery-grid img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 14px;
+        }
+
+
+
         @media (max-width: 900px) {
             .layout {
                 grid-template-columns: 1fr;
@@ -466,7 +516,13 @@
                     <p class="muted"><strong id="locationText">الموقع:</strong> <span id="aptLocation">—</span></p>
 
                     <ul class="features" id="aptFeatures"></ul>
-
+                    <!-- قسم تفاصيل الغرف والمرافق مثل صفحة الشقق -->
+                    <div style="margin-top:22px;">
+                        <h3 id="roomsTitle">تفاصيل الغرف والمرافق</h3>
+                        <div class="room-cards-grid" id="roomCards"></div>
+                        <div class="room-description" id="roomDescription"></div>
+                        <div class="room-gallery-grid" id="roomGallery"></div>
+                    </div>
                     <div class="summary-box">
                         <p><strong id="summaryAptLabel">رقم الشقة:</strong> <span id="summaryAptId">—</span></p>
                         <p><strong id="summaryNightLabel">سعر الليلة:</strong> <span id="nightPrice">—</span></p>
@@ -662,6 +718,8 @@
 
                 document.getElementById("fullName").placeholder = "أدخل اسمك الكامل";
                 document.getElementById("phone").placeholder = "059xxxxxxx";
+                const roomsTitleEl = document.getElementById("roomsTitle");
+                if (roomsTitleEl) roomsTitleEl.textContent = "تفاصيل الغرف والمرافق";
             } else {
                 document.getElementById("pageTitle").textContent = "HIJAZI Apartments";
                 document.getElementById("pageSubtitle").textContent = "Complete your booking details for your selected apartment in Shmeisani, Amman";
@@ -701,6 +759,8 @@
 
                 document.getElementById("fullName").placeholder = "Enter your full name";
                 document.getElementById("phone").placeholder = "Phone number";
+                const roomsTitleEl = document.getElementById("roomsTitle");
+                if (roomsTitleEl) roomsTitleEl.textContent = "Rooms & facilities";
             }
         }
 
@@ -821,6 +881,71 @@
 
         window.goToSlide = goToSlide;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // عرض كروت تفاصيل الغرف والمرافق في صفحة الحجز
+        function renderRoomCards(apt, selectedKey = "master") {
+            const lang = getCurrentLang();
+            const roomCards = document.getElementById("roomCards");
+            const roomDescription = document.getElementById("roomDescription");
+            const roomGallery = document.getElementById("roomGallery");
+
+            if (!roomCards || !roomDescription || !roomGallery) return;
+
+            roomCards.innerHTML = apt.rooms.map(room => {
+                const title = lang === "ar" ? room.titleAr : room.titleEn;
+                return `
+            <div class="room-card ${room.key === selectedKey ? "active" : ""}" onclick="selectRoomCard(${apt.id}, '${room.key}')">
+                ${title}
+            </div>
+        `;
+            }).join("");
+
+            const selectedRoom = apt.rooms.find(r => r.key === selectedKey) || apt.rooms[0];
+            roomDescription.textContent = lang === "ar" ? selectedRoom.noteAr : selectedRoom.noteEn;
+
+            roomGallery.innerHTML = selectedRoom.images.map(img => `
+        <img src="${img}" alt="Room image">
+    `).join("");
+        }
+
+        // تغيير الكرت المحدد
+        window.selectRoomCard = function (aptId, roomKey) {
+            const apt = HIJAZI_APARTMENTS[aptId];
+            renderRoomCards(apt, roomKey);
+        };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         // عرض تفاصيل الشقة المختارة
         function renderApartmentDetails() {
             const id = getSelectedAptId();
@@ -843,6 +968,9 @@
 
             aptVideoSource.src = apt.video;
             aptVideo.load();
+
+            /* عرض كروت تفاصيل الغرف والمرافق */
+            renderRoomCards(apt, "master");
 
             updatePrice();
         }
@@ -1160,6 +1288,7 @@
         });
     </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

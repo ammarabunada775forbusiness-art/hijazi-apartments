@@ -237,28 +237,33 @@ function renderSharedHeader(activePage, showAdminTrigger = false) {
     if (!headerHost) return;
 
     const brandClass = showAdminTrigger ? "admin-trigger" : "";
+
     headerHost.innerHTML = `
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top custom-navbar">
             <div class="container">
                 <a class="navbar-brand gold ${brandClass}" href="${showAdminTrigger ? "javascript:void(0)" : "index.html"}">HIJAZI Apartments</a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="nav">
-                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <ul class="navbar-nav mx-auto align-items-lg-center">
                         <li class="nav-item"><a class="nav-link ${activePage === "index" ? "active" : ""}" href="index.html">${t.home}</a></li>
                         <li class="nav-item"><a class="nav-link ${activePage === "apartments" ? "active" : ""}" href="apartments.html">${t.apartments}</a></li>
                         <li class="nav-item"><a class="nav-link ${activePage === "booking" ? "active" : ""}" href="booking.html">${t.booking}</a></li>
                         <li class="nav-item"><a class="nav-link ${activePage === "about" ? "active" : ""}" href="about.html">${t.about}</a></li>
                         <li class="nav-item"><a class="nav-link ${activePage === "faq" ? "active" : ""}" href="faq.html">${t.faq}</a></li>
                         <li class="nav-item"><a class="nav-link ${activePage === "reviews" ? "active" : ""}" href="reviews.html">${t.reviews}</a></li>
-                        <li class="nav-item lang-switcher">
+                    </ul>
+
+                    <!-- زر تغيير اللغة على الطرف -->
+                    <div class="lang-switcher-wrapper">
+                        <div class="lang-switcher">
                             <button class="lang-btn ${lang === "ar" ? "active" : ""}" onclick="switchLanguage('ar')">${t.langArabic}</button>
                             <button class="lang-btn ${lang === "en" ? "active" : ""}" onclick="switchLanguage('en')">${t.langEnglish}</button>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>

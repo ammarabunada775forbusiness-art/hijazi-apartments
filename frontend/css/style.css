@@ -81,10 +81,16 @@ body {
 }
 
 /* أزرار اللغة في الهيدر */
+.lang-switcher-wrapper {
+    margin-inline-start: auto;
+    display: flex;
+    justify-content: flex-end;
+}
+
 .lang-switcher {
     display: flex;
     gap: 8px;
-    margin-inline-start: 12px;
+    align-items: center;
 }
 
 .lang-btn {
@@ -409,9 +415,9 @@ body.ltr-mode {
     text-align: left;
 }
 
-body.ltr-mode .lang-switcher {
-    margin-inline-start: 0;
-    margin-inline-end: 12px;
+body.ltr-mode .lang-switcher-wrapper {
+    margin-inline-start: auto;
+    margin-inline-end: 0;
 }
 
 @media (max-width: 768px) {
