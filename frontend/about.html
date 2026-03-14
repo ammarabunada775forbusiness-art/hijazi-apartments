@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIJAZI Apartments - About Us</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div id="sharedHeader"></div>
+
+    <section class="page-hero">
+        <h1 id="pageTitle">من نحن</h1>
+        <p id="pageSubtitle">شقق مفروشة راقية في قلب عمان الشميساني</p>
+    </section>
+
+    <section class="page-content">
+        <div class="white-card">
+            <h2 id="aboutTitle1">إقامة راقية مناسبة للإقامة الطبية والتنفيذية</h2>
+            <p id="aboutText1">HIJAZI Apartments توفر شقق مفروشة راقية في قلب عمان الشميساني، وهي مناسبة للإقامة الطبية
+                والتنفيذية والعائلية، مع موقع مميز قريب من مستشفى الأردن والمستشفى الإسلامي والعبدلي وباقي المستشفيات
+                والمراكز الطبية المهمة في عمان.</p>
+        </div>
+
+        <div class="white-card">
+            <h2 id="aboutTitle2">موقع قريب من المطاعم والكافيهات والخدمات</h2>
+            <p id="aboutText2">نوفّر موقعاً مثالياً قريباً من المطاعم والكافيهات ومحلات السوبرماركت والخدمات اليومية،
+                مما يجعل الإقامة أكثر راحة ومرونة للزوار والمرضى والمرافقين والعائلات.</p>
+        </div>
+
+        <div class="white-card">
+            <h2 id="aboutTitle3">خيارات ممتازة لمن يبحث عن شقق مفروشة في عمان</h2>
+            <p id="aboutText3">إذا كنت تبحث عن شقق مفروشة في عمان، أو شقق مفروشة في الشميساني، أو شقق قرب العبدلي
+                والمستشفيات، فإن HIJAZI Apartments تقدم تجربة إقامة أوسع وأكثر خصوصية من الفنادق مع راحة وأناقة عالية.
+            </p>
+        </div>
+    </section>
+
+    <div id="sharedFooter"></div>
+    <div id="sharedWhatsApp"></div>
+
+    <script src="js/main.js"></script>
+    <script>
+        renderSharedHeader("about", false);
+        renderSharedFooter();
+        renderWhatsAppWidget();
+
+        const lang = getCurrentLang();
+
+        if (lang === "en") {
+            document.getElementById("pageTitle").textContent = "About Us";
+            document.getElementById("pageSubtitle").textContent = "Elegant furnished apartments in the heart of Amman Shmeisani";
+            document.getElementById("aboutTitle1").textContent = "Premium stay for medical and executive accommodation";
+            document.getElementById("aboutText1").textContent = "HIJAZI Apartments offers elegant furnished apartments in the heart of Amman Shmeisani, ideal for medical, executive, and family stays, near Jordan Hospital, Islamic Hospital, Abdali, and other key hospitals and medical centers in Amman.";
+            document.getElementById("aboutTitle2").textContent = "Close to restaurants, cafés, and daily services";
+            document.getElementById("aboutText2").textContent = "We provide an ideal location near restaurants, cafés, supermarkets, and daily services, making the stay more comfortable and flexible for visitors, patients, companions, and families.";
+            document.getElementById("aboutTitle3").textContent = "Excellent option for those searching for furnished apartments in Amman";
+            document.getElementById("aboutText3").textContent = "If you are searching for furnished apartments in Amman, Shmeisani, or near Abdali and hospitals, HIJAZI Apartments offers a wider and more private stay experience than hotels, with high comfort and elegance.";
+        }
+    </script>
+</body>
+
+</html>

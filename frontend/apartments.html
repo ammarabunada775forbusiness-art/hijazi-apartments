@@ -5,17 +5,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HIJAZI Apartments - الشقق</title>
+
     <link rel="stylesheet" href="css/style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             background: #f8f8f8;
+            color: #111;
         }
 
-        header {
+        .page-header {
             text-align: center;
-            padding: 26px 16px;
+            padding: 130px 16px 40px;
             background: linear-gradient(90deg, #c89116, #000);
             color: #fff;
         }
@@ -30,11 +34,14 @@
             background: #111;
             color: #fff;
             border-radius: 12px;
-            padding: 14px;
-            margin-top: 16px;
+            padding: 18px;
+            margin-top: -26px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 12px 25px rgba(0, 0, 0, .16);
         }
 
-        .row {
+        .row-box {
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
@@ -76,7 +83,7 @@
         }
 
         .grid {
-            margin-top: 18px;
+            margin-top: 22px;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
             gap: 18px;
@@ -88,6 +95,7 @@
             overflow: hidden;
             background: #fff;
             box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+            color: #111;
         }
 
         .card img {
@@ -103,6 +111,7 @@
 
         .card h3 {
             margin: 0 0 8px;
+            color: #111;
         }
 
         .pill {
@@ -153,6 +162,20 @@
             background: #000;
         }
 
+        .location-line {
+            margin-top: 8px;
+            color: #444;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .long-note-inline {
+            margin-top: 8px;
+            color: #c89116;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
         /* Modal */
         .modal {
             display: none;
@@ -165,7 +188,7 @@
         }
 
         .modal-content {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 30px auto;
             background: #fff;
             border-radius: 16px;
@@ -183,6 +206,7 @@
 
         .modal-body {
             padding: 20px;
+            color: #111;
         }
 
         .close-btn {
@@ -233,15 +257,13 @@
         }
 
         .detail-grid {
-            color: #c89116;
             display: grid;
-            grid-template-columns: 1.1fr .9fr;
+            grid-template-columns: 1.05fr .95fr;
             gap: 20px;
             align-items: start;
         }
 
         .detail-features {
-
             padding: 0;
             list-style: none;
             display: flex;
@@ -250,132 +272,17 @@
         }
 
         .detail-features li {
-
             background: #f1f1f1;
             padding: 8px 12px;
             border-radius: 999px;
             font-size: 13px;
         }
 
-        /* Footer */
-        .site-footer {
-            background: linear-gradient(90deg, #111, #000);
-            color: #fff;
-            margin-top: 40px;
-            padding-top: 35px;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 0 20px 25px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 24px;
-        }
-
-        .footer-box h3,
-        .footer-box h4 {
-            margin-top: 0;
-            margin-bottom: 12px;
-            color: #c89116;
-        }
-
-        .footer-box p {
-            margin: 8px 0;
-            line-height: 1.8;
-            color: #ddd;
-        }
-
-        .footer-box a {
-            color: #fff;
-            text-decoration: none;
-        }
-
-        .footer-box a:hover {
-            color: #c89116;
-        }
-
-        .social-links {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding: 14px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #bbb;
+        .room-description {
+            margin-top: 14px;
             font-size: 14px;
-        }
-
-        /* WhatsApp */
-        .whatsapp-widget {
-            position: fixed;
-            bottom: 22px;
-            right: 22px;
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .whatsapp-label {
-            background: rgba(0, 0, 0, 0.78);
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: 700;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
-            white-space: nowrap;
-        }
-
-        .whatsapp-float {
-            position: relative;
-            width: 64px;
-            height: 64px;
-            background: #25D366;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28);
-            transition: transform 0.25s ease;
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.08);
-        }
-
-        .whatsapp-pulse {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: rgba(37, 211, 102, 0.45);
-            animation: whatsappPulse 1.8s infinite;
-            z-index: -1;
-        }
-
-        @keyframes whatsappPulse {
-            0% {
-                transform: scale(1);
-                opacity: .9;
-            }
-
-            70% {
-                transform: scale(1.6);
-                opacity: 0;
-            }
-
-            100% {
-                transform: scale(1.6);
-                opacity: 0;
-            }
+            color: #555;
+            line-height: 1.8;
         }
 
         @media (max-width: 850px) {
@@ -392,36 +299,45 @@
 
 <body>
 
-    <header>
-        <h1>HIJAZI Apartments</h1>
-        <p>اختر الشقة المناسبة حسب تاريخ الدخول والخروج</p>
-    </header>
+    <!-- الهيدر المشترك -->
+    <div id="sharedHeader"></div>
+
+    <!-- عنوان الصفحة -->
+    <section class="page-header">
+        <h1 id="pageTitle">HIJAZI Apartments</h1>
+        <p id="pageSubtitle">اختر الشقة المناسبة حسب تاريخ الدخول والخروج</p>
+    </section>
 
     <div class="wrap">
 
+        <!-- صندوق الفلترة -->
         <div class="box">
-            <div class="row">
+            <div class="row-box">
                 <div>
-                    <label>تاريخ الدخول</label>
+                    <label id="checkInLabel">تاريخ الدخول</label>
                     <input type="date" id="checkIn">
                 </div>
 
                 <div>
-                    <label>تاريخ الخروج</label>
+                    <label id="checkOutLabel">تاريخ الخروج</label>
                     <input type="date" id="checkOut">
                 </div>
 
                 <button id="refreshBtn">عرض المتاح</button>
             </div>
 
+            <!-- رسالة الخصم الذهبي -->
+            <div id="longStayNotice"></div>
+
             <div class="status" id="status"></div>
         </div>
 
+        <!-- كروت الشقق -->
         <div class="grid" id="grid"></div>
 
     </div>
 
-    <!-- Modal -->
+    <!-- نافذة التفاصيل -->
     <div class="modal" id="detailsModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -445,12 +361,21 @@
                     <div>
                         <h3 id="detailName"></h3>
                         <p id="detailDesc" class="muted"></p>
-                        <p><strong>السعر لليلة:</strong> <span id="detailNightPrice"></span></p>
-                        <p><strong>عدد الليالي:</strong> <span id="detailNights"></span></p>
-                        <p><strong>السعر الكلي التقريبي:</strong> <span id="detailTotal"></span></p>
-                        <p><strong>الفترة:</strong> <span id="detailDates"></span></p>
+                        <p><strong id="locationStrong">الموقع:</strong> <span id="detailLocation"></span></p>
+                        <p><strong id="nightStrong">السعر لليلة:</strong> <span id="detailNightPrice"></span></p>
+                        <p><strong id="nightsStrong">عدد الليالي:</strong> <span id="detailNights"></span></p>
+                        <p><strong id="totalStrong">السعر الكلي التقريبي:</strong> <span id="detailTotal"></span></p>
+                        <p><strong id="datesStrong">الفترة:</strong> <span id="detailDates"></span></p>
 
                         <ul class="detail-features" id="detailFeatures"></ul>
+
+                        <!-- بطاقات تفاصيل الغرف -->
+                        <div style="margin-top:22px;">
+                            <h4 id="roomsTitle">تفاصيل الغرف والمرافق</h4>
+                            <div class="room-cards-grid" id="roomCards"></div>
+                            <div class="room-description" id="roomDescription"></div>
+                            <div class="room-gallery-grid" id="roomGallery"></div>
+                        </div>
 
                         <button id="bookNowBtn" style="margin-top:16px;width:100%;">احجز الآن</button>
                     </div>
@@ -459,142 +384,33 @@
         </div>
     </div>
 
-    <footer class="site-footer">
-        <div class="footer-container">
-            <div class="footer-box">
-                <h3>HIJAZI Apartments</h3>
-                <p>شقق مفروشة مريحة في الشميساني - عمّان، الأردن</p>
-            </div>
+    <!-- الفوتر -->
+    <div id="sharedFooter"></div>
 
-            <div class="footer-box">
-                <h4>معلومات التواصل</h4>
-                <p>الهاتف: <a href="tel:+962789000444">+962789000444</a></p>
-                <p>البريد: <a
-                        href="mailto:ammarabunada775forbusiness@gmail.com">ammarabunada775forbusiness@gmail.com</a></p>
-                <p>العنوان: عمان، الأردن، الشميساني</p>
-            </div>
+    <!-- واتساب -->
+    <div id="sharedWhatsApp"></div>
 
-            <div class="footer-box">
-                <h4>السوشال ميديا</h4>
-                <div class="social-links">
-                    <a href="https://www.instagram.com/j_ibrahim_j/" target="_blank">Instagram</a>
-                    <a href="https://web.facebook.com/abrahem.hjaze.71?locale=ar_AR" target="_blank">Facebook</a>
-                    <a href="https://www.google.com/search?q=%D8%AA%D8%B1%D8%AC%D9%85%D9%87&rlz=1C1GCEA_enJO1134JO1134&oq=&ie=UTF-8"
-                        target="_blank">Snapchat</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            © 2026 HIJAZI Apartments - جميع الحقوق محفوظة
-        </div>
-    </footer>
-
-    <div class="whatsapp-widget">
-        <div class="whatsapp-label">تواصل معنا</div>
-        <a href="https://wa.me/962789000444?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%B4%D9%82%D9%82%20%D8%A7%D9%84%D9%85%D8%AA%D8%A7%D8%AD%D8%A9"
-            class="whatsapp-float" target="_blank" aria-label="WhatsApp" title="تواصل معنا عبر واتساب">
-            <span class="whatsapp-pulse"></span>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="30" height="30" fill="white">
-                <path
-                    d="M19.11 17.27c-.27-.13-1.58-.78-1.82-.87-.24-.09-.41-.13-.59.14-.18.27-.68.87-.84 1.04-.15.18-.31.2-.58.07-.27-.13-1.12-.41-2.13-1.3-.79-.7-1.32-1.57-1.47-1.84-.15-.27-.02-.42.11-.55.11-.11.27-.29.41-.43.14-.15.18-.25.27-.43.09-.18.05-.34-.02-.48-.07-.13-.59-1.43-.81-1.96-.21-.5-.43-.43-.59-.44h-.5c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.29s.98 2.65 1.11 2.83c.14.18 1.92 2.93 4.65 4.11.65.28 1.16.45 1.56.58.66.21 1.26.18 1.73.11.53-.08 1.58-.65 1.8-1.27.22-.63.22-1.16.15-1.27-.06-.12-.24-.18-.5-.31z" />
-                <path
-                    d="M16.02 3.2c-7.07 0-12.8 5.72-12.8 12.77 0 2.25.59 4.45 1.71 6.39L3.1 28.8l6.63-1.73a12.8 12.8 0 0 0 6.29 1.69h.01c7.06 0 12.79-5.72 12.79-12.77 0-3.42-1.34-6.63-3.79-9.04A12.76 12.76 0 0 0 16.02 3.2zm0 23.39h-.01a10.62 10.62 0 0 1-5.41-1.49l-.39-.23-3.94 1.03 1.05-3.84-.25-.4a10.55 10.55 0 0 1-1.63-5.61c0-5.84 4.76-10.59 10.6-10.59 2.82 0 5.47 1.09 7.47 3.08a10.5 10.5 0 0 1 3.11 7.51c0 5.84-4.76 10.59-10.6 10.59z" />
-            </svg>
-        </a>
-    </div>
-
+    <script src="js/main.js"></script>
     <script>
         const API_BASE = "https://hijazi-apartments-backend.onrender.com";
 
+        // عناصر التواريخ والحالة
         const checkInEl = document.getElementById("checkIn");
         const checkOutEl = document.getElementById("checkOut");
         const statusEl = document.getElementById("status");
         const gridEl = document.getElementById("grid");
         const refreshBtn = document.getElementById("refreshBtn");
 
+        // عناصر النافذة المنبثقة
         const modal = document.getElementById("detailsModal");
         const closeModal = document.getElementById("closeModal");
 
+        // قراءة التواريخ من الرابط
         const url = new URLSearchParams(window.location.search);
         const qIn = url.get("checkIn");
         const qOut = url.get("checkOut");
 
-        const apartmentData = {
-            1: {
-                name: "شقة رقم 1",
-                price: 50,
-                desc: "شقة مريحة مناسبة للعائلات الصغيرة، بتصميم أنيق وموقع مميز في الشميساني.",
-                features: ["غرفة نوم", "صالون", "مطبخ", "واي فاي", "مكيف", "حمام"],
-                images: [
-                    "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80"
-                ],
-                video: "https://www.w3schools.com/html/mov_bbb.mp4"
-            },
-            2: {
-                name: "شقة رقم 2",
-                price: 35,
-                desc: "شقة اقتصادية وأنيقة مناسبة للإقامة القصيرة مع كل الخدمات الأساسية.",
-                features: ["ستوديو", "مطبخ صغير", "واي فاي", "تلفاز"],
-                images: [
-                    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1505693431205-36e7f9307d05?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80"
-                ],
-                video: "https://www.w3schools.com/html/mov_bbb.mp4"
-            },
-            3: {
-                name: "شقة رقم 3",
-                price: 70,
-                desc: "شقة واسعة وفاخرة مناسبة للعائلات الكبيرة أو الضيوف الباحثين عن راحة أعلى.",
-                features: ["غرفتا نوم", "صالون كبير", "مطبخ", "واي فاي", "مكيف", "شرفة"],
-                images: [
-                    "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1464890100898-a385f744067f?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=1200&q=80"
-                ],
-                video: "https://www.w3schools.com/html/mov_bbb.mp4"
-            },
-            4: {
-                name: "شقة رقم 4",
-                price: 30,
-                desc: "شقة صغيرة وعملية جدًا، مناسبة لفرد أو زوجين.",
-                features: ["غرفة", "مطبخ", "حمام", "واي فاي"],
-                images: [
-                    "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80"
-                ],
-                video: "https://www.w3schools.com/html/mov_bbb.mp4"
-            },
-            5: {
-                name: "شقة رقم 5",
-                price: 55,
-                desc: "شقة حديثة بتشطيب جميل، مناسبة للضيوف الباحثين عن مستوى أعلى.",
-                features: ["غرفة نوم", "صالون", "تلفاز", "واي فاي", "مكيف"],
-                images: [
-                    "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80"
-                ],
-                video: "https://www.w3schools.com/html/mov_bbb.mp4"
-            },
-            6: {
-                name: "شقة رقم 6",
-                price: 35,
-                desc: "خيار جيد ومريح، مناسب للإقامة المرنة بسعر مناسب.",
-                features: ["غرفة", "حمام", "مطبخ صغير", "واي فاي"],
-                images: [
-                    "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1464890100898-a385f744067f?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=1200&q=80"
-                ],
-                video: "https://www.w3schools.com/html/mov_bbb.mp4"
-            }
-        };
-
+        // إرجاع تاريخ اليوم
         function todayISO() {
             const d = new Date();
             const yyyy = d.getFullYear();
@@ -603,79 +419,168 @@
             return `${yyyy}-${mm}-${dd}`;
         }
 
+        // ضبط الحد الأدنى للتاريخ
         checkInEl.min = todayISO();
         checkOutEl.min = todayISO();
 
+        // تعبئة التواريخ من الرابط إن وجدت
         if (qIn) checkInEl.value = qIn;
         if (qOut) checkOutEl.value = qOut;
 
-        function validateDates() {
+        // ترجمة نصوص الصفحة
+        function applyApartmentsTranslations() {
+            const lang = getCurrentLang();
+
+            if (lang === "ar") {
+                document.getElementById("pageTitle").textContent = "HIJAZI Apartments";
+                document.getElementById("pageSubtitle").textContent = "اختر الشقة المناسبة حسب تاريخ الدخول والخروج";
+                document.getElementById("checkInLabel").textContent = "تاريخ الدخول";
+                document.getElementById("checkOutLabel").textContent = "تاريخ الخروج";
+                document.getElementById("refreshBtn").textContent = "عرض المتاح";
+                document.getElementById("modalTitle").textContent = "تفاصيل الشقة";
+                document.getElementById("locationStrong").textContent = "الموقع:";
+                document.getElementById("nightStrong").textContent = "السعر لليلة:";
+                document.getElementById("nightsStrong").textContent = "عدد الليالي:";
+                document.getElementById("totalStrong").textContent = "السعر الكلي التقريبي:";
+                document.getElementById("datesStrong").textContent = "الفترة:";
+                document.getElementById("roomsTitle").textContent = "تفاصيل الغرف والمرافق";
+                document.getElementById("bookNowBtn").textContent = "احجز الآن";
+            } else {
+                document.getElementById("pageTitle").textContent = "HIJAZI Apartments";
+                document.getElementById("pageSubtitle").textContent = "Choose the right apartment based on your check-in and check-out dates";
+                document.getElementById("checkInLabel").textContent = "Check-in";
+                document.getElementById("checkOutLabel").textContent = "Check-out";
+                document.getElementById("refreshBtn").textContent = "Show available";
+                document.getElementById("modalTitle").textContent = "Apartment details";
+                document.getElementById("locationStrong").textContent = "Location:";
+                document.getElementById("nightStrong").textContent = "Price per night:";
+                document.getElementById("nightsStrong").textContent = "Nights:";
+                document.getElementById("totalStrong").textContent = "Estimated total:";
+                document.getElementById("datesStrong").textContent = "Dates:";
+                document.getElementById("roomsTitle").textContent = "Rooms & facilities";
+                document.getElementById("bookNowBtn").textContent = "Book now";
+            }
+        }
+
+        // التحقق من التواريخ
+        function validateDates(allowEmpty = true) {
+            const lang = getCurrentLang();
             const checkIn = checkInEl.value;
             const checkOut = checkOutEl.value;
 
-            if (!checkIn || !checkOut) return "❌ اختر تاريخ الدخول والخروج";
-            if (checkOut <= checkIn) return "❌ تاريخ الخروج لازم يكون بعد تاريخ الدخول";
+            if (!checkIn || !checkOut) {
+                return allowEmpty ? null : (lang === "ar" ? "❌ اختر تاريخ الدخول والخروج" : "❌ Please select check-in and check-out");
+            }
+
+            if (checkOut <= checkIn) {
+                return lang === "ar" ? "❌ تاريخ الخروج لازم يكون بعد تاريخ الدخول" : "❌ Check-out must be after check-in";
+            }
+
             return null;
         }
 
-        function calcNights(checkIn, checkOut) {
-            const start = new Date(checkIn);
-            const end = new Date(checkOut);
-            const diff = end - start;
-            return Math.ceil(diff / (1000 * 60 * 60 * 24));
-        }
-
-        function cardHtml(id, checkIn, checkOut) {
-            const apt = apartmentData[id];
-            const nights = calcNights(checkIn, checkOut);
-            const total = apt.price * nights;
+        // إنشاء كرت الشقة
+        function cardHtml(id, checkIn = "", checkOut = "") {
+            const lang = getCurrentLang();
+            const apt = HIJAZI_APARTMENTS[id];
+            const nights = checkIn && checkOut ? calcNights(checkIn, checkOut) : 0;
+            const total = nights ? apt.price * nights : 0;
+            const aptName = lang === "ar" ? apt.nameAr : apt.nameEn;
+            const desc = lang === "ar" ? apt.descAr : apt.descEn;
+            const features = lang === "ar" ? apt.featuresAr : apt.featuresEn;
+            const locationLabel = lang === "ar" ? "الموقع" : "Location";
+            const availableLabel = lang === "ar" ? "متاحة ✅" : "Available ✅";
+            const nightLabel = lang === "ar" ? "السعر لليلة" : "Price per night";
+            const nightsLabel = lang === "ar" ? "عدد الليالي" : "Nights";
+            const totalLabel = lang === "ar" ? "السعر الكلي التقريبي" : "Estimated total";
+            const detailsBtn = lang === "ar" ? "عرض التفاصيل" : "View details";
+            const bookBtn = lang === "ar" ? "احجز الآن" : "Book now";
+            const jodText = lang === "ar" ? "دينار" : "JOD";
 
             return `
-        <div class="card">
-          <img src="${apt.images[0]}" alt="${apt.name}">
-          <div class="card-body">
-            <div class="pill">متاحة ✅</div>
-            <h3>${apt.name}</h3>
-            <div class="muted">${apt.desc}</div>
+                <div class="card">
+                    <img src="${apt.images[0]}" alt="${aptName}">
+                    <div class="card-body">
+                        <div class="pill">${availableLabel}</div>
+                        <h3>${aptName}</h3>
+                        <div class="muted">${desc}</div>
 
-            <ul class="features">
-              ${apt.features.slice(0, 4).map(f => `<li>${f}</li>`).join("")}
-            </ul>
+                        <div class="location-line">${locationLabel}: ${apt.location}</div>
 
-            <div class="muted">السعر لليلة: ${apt.price} دينار</div>
-            <div class="muted">عدد الليالي: ${nights}</div>
-            <div class="muted">السعر الكلي التقريبي: ${total} دينار</div>
+                        <ul class="features">
+                            ${features.slice(0, 4).map(f => `<li>${f}</li>`).join("")}
+                        </ul>
 
-            <div class="card-actions">
-              <button class="btn-secondary" onclick="openDetails(${id})">عرض التفاصيل</button>
-              <button onclick="goBook(${id})">احجز الآن</button>
-            </div>
-          </div>
-        </div>
-      `;
+                        <div class="muted">${nightLabel}: ${apt.price} ${jodText}</div>
+                        ${nights ? `<div class="muted">${nightsLabel}: ${nights}</div>` : ""}
+                        ${nights ? `<div class="muted">${totalLabel}: ${total} ${jodText}</div>` : ""}
+                        ${nights >= 30 ? `<div class="long-note-inline">${SITE_TRANSLATIONS[lang].longStayAlert}</div>` : ""}
+
+                        <div class="card-actions">
+                            <button class="btn-secondary" onclick="openDetails(${id})">${detailsBtn}</button>
+                            <button onclick="goBook(${id})">${bookBtn}</button>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
+        // الانتقال إلى صفحة الحجز
         window.goBook = function (id) {
             const checkIn = checkInEl.value;
             const checkOut = checkOutEl.value;
+
             window.location.href =
                 `booking.html?apt=${encodeURIComponent(id)}&checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}`;
+        };
+
+        // عرض بطاقات الغرف داخل التفاصيل
+        function renderRoomCards(apt, selectedKey = "master") {
+            const lang = getCurrentLang();
+            const roomCards = document.getElementById("roomCards");
+            const roomDescription = document.getElementById("roomDescription");
+            const roomGallery = document.getElementById("roomGallery");
+
+            roomCards.innerHTML = apt.rooms.map(room => {
+                const title = lang === "ar" ? room.titleAr : room.titleEn;
+                return `
+                    <div class="room-card ${room.key === selectedKey ? "active" : ""}" onclick="selectRoomCard(${apt.id}, '${room.key}')">
+                        ${title}
+                    </div>
+                `;
+            }).join("");
+
+            const selectedRoom = apt.rooms.find(r => r.key === selectedKey) || apt.rooms[0];
+            roomDescription.textContent = lang === "ar" ? selectedRoom.noteAr : selectedRoom.noteEn;
+
+            roomGallery.innerHTML = selectedRoom.images.map(img => `
+                <img src="${img}" alt="Room image">
+            `).join("");
         }
 
+        // دالة عامة لاختيار كرت غرفة
+        window.selectRoomCard = function (aptId, roomKey) {
+            const apt = HIJAZI_APARTMENTS[aptId];
+            renderRoomCards(apt, roomKey);
+        };
+
+        // فتح التفاصيل
         window.openDetails = function (id) {
-            const apt = apartmentData[id];
+            const lang = getCurrentLang();
+            const apt = HIJAZI_APARTMENTS[id];
             const checkIn = checkInEl.value;
             const checkOut = checkOutEl.value;
-            const nights = calcNights(checkIn, checkOut);
-            const total = apt.price * nights;
+            const nights = checkIn && checkOut ? calcNights(checkIn, checkOut) : 0;
+            const total = nights ? apt.price * nights : 0;
 
-            document.getElementById("modalTitle").textContent = apt.name;
-            document.getElementById("detailName").textContent = apt.name;
-            document.getElementById("detailDesc").textContent = apt.desc;
-            document.getElementById("detailNightPrice").textContent = `${apt.price} دينار`;
-            document.getElementById("detailNights").textContent = nights;
-            document.getElementById("detailTotal").textContent = `${total} دينار`;
-            document.getElementById("detailDates").textContent = `${checkIn} → ${checkOut}`;
+            document.getElementById("modalTitle").textContent = lang === "ar" ? `تفاصيل ${apt.nameAr}` : `${apt.nameEn} details`;
+            document.getElementById("detailName").textContent = lang === "ar" ? apt.nameAr : apt.nameEn;
+            document.getElementById("detailDesc").textContent = lang === "ar" ? apt.descAr : apt.descEn;
+            document.getElementById("detailLocation").textContent = apt.location;
+            document.getElementById("detailNightPrice").textContent = `${apt.price} ${lang === "ar" ? "دينار" : "JOD"}`;
+            document.getElementById("detailNights").textContent = nights || (lang === "ar" ? "غير محدد" : "Not selected");
+            document.getElementById("detailTotal").textContent = nights ? `${total} ${lang === "ar" ? "دينار" : "JOD"}` : (lang === "ar" ? "اختر التاريخ" : "Select dates");
+            document.getElementById("detailDates").textContent = checkIn && checkOut ? `${checkIn} → ${checkOut}` : (lang === "ar" ? "لم يتم اختيار التواريخ" : "Dates not selected");
 
             const mainImage = document.getElementById("mainImage");
             const thumbs = document.getElementById("thumbs");
@@ -685,20 +590,24 @@
             const bookNowBtn = document.getElementById("bookNowBtn");
 
             mainImage.src = apt.images[0];
+
             thumbs.innerHTML = apt.images.map(img => `
                 <img src="${img}" onclick="document.getElementById('mainImage').src='${img}'">
             `).join("");
 
-            featureList.innerHTML = apt.features.map(f => `<li>${f}</li>`).join("");
+            const features = lang === "ar" ? apt.featuresAr : apt.featuresEn;
+            featureList.innerHTML = features.map(f => `<li>${f}</li>`).join("");
 
             videoSource.src = apt.video;
             video.load();
 
             bookNowBtn.onclick = () => goBook(id);
 
+            renderRoomCards(apt, "master");
             modal.style.display = "block";
-        }
+        };
 
+        // إغلاق النافذة
         closeModal.addEventListener("click", () => {
             modal.style.display = "none";
         });
@@ -707,18 +616,31 @@
             if (e.target === modal) modal.style.display = "none";
         });
 
+        // تحميل الشقق
         async function loadAvailability() {
-            const err = validateDates();
+            const lang = getCurrentLang();
+            const checkIn = checkInEl.value;
+            const checkOut = checkOutEl.value;
+
+            renderLongStayNotice("longStayNotice", checkIn, checkOut);
+
+            const err = validateDates(true);
+
+            // إذا ما في تواريخ، اعرض كل الشقق مباشرة
+            if (!checkIn || !checkOut) {
+                statusEl.textContent = lang === "ar" ? "تم عرض جميع الشقق. يمكنك اختيار التواريخ لاحقًا." : "All apartments are displayed. You can choose dates later.";
+                gridEl.innerHTML = Object.keys(HIJAZI_APARTMENTS).map(id => cardHtml(Number(id))).join("");
+                return;
+            }
+
+            // إذا في خطأ بالتاريخ
             if (err) {
                 statusEl.textContent = err;
                 gridEl.innerHTML = "";
                 return;
             }
 
-            const checkIn = checkInEl.value;
-            const checkOut = checkOutEl.value;
-
-            statusEl.textContent = "جاري فحص الشقق المتاحة...";
+            statusEl.textContent = lang === "ar" ? "جاري فحص الشقق المتاحة..." : "Checking available apartments...";
             gridEl.innerHTML = "";
 
             try {
@@ -726,31 +648,45 @@
                 const data = await res.json();
 
                 if (!res.ok) {
-                    statusEl.textContent = data.message || "صار خطأ أثناء الفحص";
+                    statusEl.textContent = data.message || (lang === "ar" ? "صار خطأ أثناء الفحص" : "An error happened while checking");
                     return;
                 }
 
                 const available = data.availableApartments || [];
 
                 if (available.length === 0) {
-                    statusEl.textContent = "❌ للأسف لا يوجد شقق متاحة بهالتواريخ. جرّب تواريخ ثانية.";
+                    statusEl.textContent = lang === "ar" ? "❌ للأسف لا يوجد شقق متاحة بهالتواريخ. جرّب تواريخ ثانية." : "❌ Unfortunately, no apartments are available for these dates. Try different dates.";
                     return;
                 }
 
-                statusEl.textContent = `✅ عدد الشقق المتاحة: ${available.length}`;
+                statusEl.textContent = lang === "ar" ? `✅ عدد الشقق المتاحة: ${available.length}` : `✅ Available apartments: ${available.length}`;
                 gridEl.innerHTML = available.map(id => cardHtml(id, checkIn, checkOut)).join("");
             } catch (e) {
                 console.error(e);
-                statusEl.textContent = "تعذر الاتصال بخادم الحجوزات. حاول مرة أخرى بعد قليل.";
+                statusEl.textContent = lang === "ar" ? "تعذر الاتصال بخادم الحجوزات. حاول مرة أخرى بعد قليل." : "Unable to connect to the booking server. Please try again later.";
             }
         }
 
+        // أحداث
         refreshBtn.addEventListener("click", loadAvailability);
+        checkInEl.addEventListener("change", () => renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value));
+        checkOutEl.addEventListener("change", () => renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value));
 
-        if (qIn && qOut) loadAvailability();
-        else statusEl.textContent = "اختر التواريخ ثم اضغط (عرض المتاح).";
+        // تشغيل أولي
+        renderSharedHeader("apartments", false);
+        renderSharedFooter();
+        renderWhatsAppWidget();
+        applyApartmentsTranslations();
+        renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value);
+
+        if (qIn || qOut) {
+            loadAvailability();
+        } else {
+            loadAvailability();
+        }
     </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIJAZI Apartments - FAQ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div id="sharedHeader"></div>
+
+    <section class="page-hero">
+        <h1 id="faqTitle">الأسئلة الشائعة</h1>
+        <p id="faqSubtitle">أهم الأسئلة التي يطرحها ضيوفنا قبل الحجز</p>
+    </section>
+
+    <section class="page-content">
+        <div id="faqContainer"></div>
+    </section>
+
+    <div id="sharedFooter"></div>
+    <div id="sharedWhatsApp"></div>
+
+    <script src="js/main.js"></script>
+    <script>
+        renderSharedHeader("faq", false);
+        renderSharedFooter();
+        renderWhatsAppWidget();
+
+        const faqData = {
+            ar: [
+                ["هل يوجد خصم كبير على السكن أكثر من شهر؟", "نعم، يوجد خصم خاص على السكن أكثر من شهر."],
+                ["هل الشقق مفروشة بالكامل؟", "نعم، جميع الشقق مفروشة ومجهزة للإقامة المريحة."],
+                ["هل يمكن الحجز لفترات قصيرة؟", "نعم، يمكن الحجز حسب التوفر والفترة المطلوبة."],
+                ["هل الموقع قريب من المستشفيات؟", "نعم، الموقع قريب من أهم مستشفيات عمان خاصة في الشميساني والعبدلي."],
+                ["هل يوجد إنترنت واي فاي؟", "نعم، يتوفر واي فاي في الشقق."],
+                ["هل الشقق مناسبة للعائلات؟", "نعم، الشقق مناسبة للعائلات والإقامة الطويلة."],
+                ["هل يوجد مطبخ داخل الشقة؟", "نعم، كل شقة تحتوي على مطبخ."],
+                ["هل توجد شرفات في الشقق؟", "نعم، معظم الشقق تحتوي على شرفتين، وشقة واحدة تحتوي على شرفة واحدة."],
+                ["كم عدد غرف النوم؟", "كل شقة تحتوي على 3 غرف نوم، واحدة منها ماستر."],
+                ["كم عدد الحمامات؟", "كل شقة تحتوي على 3 حمامات."],
+                ["هل يمكن الدفع بعملات مختلفة؟", "نعم، يمكن عرض السعر بعدة عملات داخل صفحة الحجز."],
+                ["هل يمكن الحجز مباشرة من الموقع؟", "نعم، يمكنك تعبئة نموذج الحجز مباشرة من الموقع."],
+                ["هل يتم التواصل بعد الحجز؟", "نعم، يتم التواصل معك لتأكيد التفاصيل وخاصة في الإقامات الطويلة."],
+                ["هل توجد مطاعم وكافيهات قريبة؟", "نعم، الموقع قريب من العديد من المطاعم والكافيهات والخدمات."],
+                ["هل الشقق مناسبة للإقامة الطبية؟", "نعم، الشقق مناسبة جدًا للإقامة الطبية بسبب قربها من المستشفيات والخدمات."]
+            ],
+            en: [
+                ["Do you offer a large discount for stays longer than one month?", "Yes, a special discount is available for stays longer than one month."],
+                ["Are the apartments fully furnished?", "Yes, all apartments are fully furnished and ready for a comfortable stay."],
+                ["Can I book for short stays?", "Yes, short stays are available depending on availability and requested dates."],
+                ["Are the apartments close to hospitals?", "Yes, the location is close to major hospitals in Amman, especially Shmeisani and Abdali."],
+                ["Is Wi-Fi available?", "Yes, Wi-Fi is available in the apartments."],
+                ["Are the apartments suitable for families?", "Yes, the apartments are ideal for families and long stays."],
+                ["Is there a kitchen in each apartment?", "Yes, every apartment includes a kitchen."],
+                ["Do the apartments have balconies?", "Yes, most apartments have two balconies, and one apartment has one balcony."],
+                ["How many bedrooms are there?", "Each apartment has 3 bedrooms, including one master bedroom."],
+                ["How many bathrooms are there?", "Each apartment has 3 bathrooms."],
+                ["Can I view prices in different currencies?", "Yes, prices can be displayed in multiple currencies on the booking page."],
+                ["Can I book directly through the website?", "Yes, you can submit your booking directly through the website."],
+                ["Will someone contact me after booking?", "Yes, we will contact you to confirm the details, especially for long stays."],
+                ["Are there restaurants and cafés nearby?", "Yes, the location is close to many restaurants, cafés, and daily services."],
+                ["Are the apartments suitable for medical stays?", "Yes, they are very suitable for medical stays because they are near hospitals and services."]
+            ]
+        };
+
+        const lang = getCurrentLang();
+        document.getElementById("faqTitle").textContent = lang === "ar" ? "الأسئلة الشائعة" : "Frequently Asked Questions";
+        document.getElementById("faqSubtitle").textContent = lang === "ar" ? "أهم الأسئلة التي يطرحها ضيوفنا قبل الحجز" : "The most common questions our guests ask before booking";
+
+        const container = document.getElementById("faqContainer");
+        container.innerHTML = faqData[lang].map(([q, a]) => `
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>${q}</span>
+                    <span>+</span>
+                </button>
+                <div class="faq-answer">${a}</div>
+            </div>
+        `).join("");
+
+        document.querySelectorAll(".faq-question").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const item = btn.parentElement;
+                item.classList.toggle("active");
+                btn.querySelector("span:last-child").textContent = item.classList.contains("active") ? "-" : "+";
+            });
+        });
+    </script>
+</body>
+
+</html>

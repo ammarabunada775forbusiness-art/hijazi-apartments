@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIJAZI Apartments - Reviews</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div id="sharedHeader"></div>
+
+    <section class="page-hero">
+        <h1 id="reviewsTitle">ماذا يقول ضيوفنا</h1>
+        <p id="reviewsSubtitle">يمكنك لاحقًا استبدال الصور بلقطات شاشة حقيقية من محادثات العملاء</p>
+    </section>
+
+    <section class="page-content">
+        <div class="review-grid">
+            <div class="review-card">
+                <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=900&q=80"
+                    alt="Review 1">
+                <div class="review-body">
+                    <h3 id="review1Title">تقييم أبو خليل من السعودية</h3>
+                    <p id="review1Text">إقامة لمدة شهرين - شقة مريحة جدًا وموقع ممتاز قريب من المستشفى والخدمات.</p>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80"
+                    alt="Review 2">
+                <div class="review-body">
+                    <h3 id="review2Title">تقييم أم محمد من الأردن</h3>
+                    <p id="review2Text">إقامة عائلية - نظافة عالية وتعامل راقٍ ومساحة ممتازة للعائلة.</p>
+                </div>
+            </div>
+
+            <div class="review-card">
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80"
+                    alt="Review 3">
+                <div class="review-body">
+                    <h3 id="review3Title">تقييم ناصر من الكويت</h3>
+                    <p id="review3Text">إقامة طبية - الموقع قريب جدًا من المستشفيات والمطاعم، وكان مناسبًا جدًا لفترة
+                        العلاج.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="sharedFooter"></div>
+    <div id="sharedWhatsApp"></div>
+
+    <script src="js/main.js"></script>
+    <script>
+        renderSharedHeader("reviews", false);
+        renderSharedFooter();
+        renderWhatsAppWidget();
+
+        if (getCurrentLang() === "en") {
+            document.getElementById("reviewsTitle").textContent = "What Our Guests Say";
+            document.getElementById("reviewsSubtitle").textContent = "You can later replace these images with real screenshots from guest conversations.";
+            document.getElementById("review1Title").textContent = "Review by Abu Khalil from Saudi Arabia";
+            document.getElementById("review1Text").textContent = "Two-month stay - very comfortable apartment and excellent location near the hospital and services.";
+            document.getElementById("review2Title").textContent = "Review by Umm Mohammad from Jordan";
+            document.getElementById("review2Text").textContent = "Family stay - very clean, professional service, and excellent space for a family.";
+            document.getElementById("review3Title").textContent = "Review by Nasser from Kuwait";
+            document.getElementById("review3Text").textContent = "Medical stay - the location is very close to hospitals and restaurants, and it was very suitable during treatment.";
+        }
+    </script>
+</body>
+
+</html>

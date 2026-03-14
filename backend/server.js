@@ -8,7 +8,9 @@ require("dotenv").config();
 
 const app = express();
 
-// ===================== App Middleware =====================
+/* =========================================================
+   إعدادات CORS وقراءة JSON
+========================================================= */
 app.use(
     cors({
         origin: "*",
@@ -18,21 +20,29 @@ app.use(
 );
 app.use(express.json());
 
-// ===================== DB =====================
+/* =========================================================
+   الاتصال بقاعدة البيانات
+========================================================= */
 mongoose
     .connect(process.env.MONGO_URI)
     .then(() => console.log("MongoDB Connected Successfully"))
     .catch((err) => console.log("MongoDB Connection Error:", err));
 
-// ===================== Resend =====================
+/* =========================================================
+   إعداد Resend لإرسال الإيميلات
+========================================================= */
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// ===================== Root =====================
+/* =========================================================
+   مسار الجذر للتجربة
+========================================================= */
 app.get("/", (req, res) => {
     res.send("HIJAZI Apartments API Running");
 });
 
-// ===================== Admin Auth =====================
+/* =========================================================
+   حماية مسارات الأدمن
+========================================================= */
 function requireAdmin(req, res, next) {
     const user = basicAuth(req);
 
@@ -49,14 +59,32 @@ function requireAdmin(req, res, next) {
     next();
 }
 
-// ===================== Helpers =====================
+/* =========================================================
+   تنسيق التاريخ بشكل YYYY-MM-DD
+========================================================= */
 function formatDate(d) {
     const x = new Date(d);
     if (isNaN(x.getTime())) return "";
     return x.toISOString().slice(0, 10);
 }
 
+/* =========================================================
+   حساب عدد الليالي
+========================================================= */
+function calculateNights(checkIn, checkOut) {
+    const start = new Date(checkIn);
+    const end = new Date(checkOut);
+    const diff = end - start;
+    return diff > 0 ? Math.ceil(diff / (1000 * 60 * 60 * 24)) : 0;
+}
+
+/* =========================================================
+   رسالة نصية مختصرة للحجز
+========================================================= */
 function bookingText(booking) {
+    const nights = calculateNights(booking.checkIn, booking.checkOut);
+    const longStayText = nights >= 30 ? "\nملاحظة: هذا الحجز مؤهل لخصم الإقامة الطويلة." : "";
+
     return `
 HIJAZI Apartments - حجز جديد
 
@@ -67,21 +95,37 @@ HIJAZI Apartments - حجز جديد
 
 الدخول: ${formatDate(booking.checkIn)}
 الخروج: ${formatDate(booking.checkOut)}
+عدد الليالي: ${nights}
 بالغين: ${booking.adults}
 أطفال: ${booking.children}
 
 العملة: ${booking.currency}
-السعر: ${booking.totalPriceText || booking.totalPrice}
+السعر: ${booking.totalPriceText || booking.totalPrice}${longStayText}
 
 تم إنشاء الحجز: ${formatDate(booking.createdAt || new Date())}
   `.trim();
 }
 
+/* =========================================================
+   قالب HTML للإيميل
+========================================================= */
 function bookingHtml(booking, forCustomer = false) {
+    const nights = calculateNights(booking.checkIn, booking.checkOut);
+    const isLong = nights >= 30;
+
     const title = forCustomer ? "تم استلام طلب الحجز ✅" : "حجز جديد ✅";
     const msg = forCustomer
         ? "شكراً لك! تم استلام طلب الحجز بنجاح، وسنتواصل معك قريباً لتأكيد التفاصيل."
         : "وصل حجز جديد على الموقع.";
+
+    const longStayBox = isLong
+        ? `
+            <div style="margin-top:14px;padding:12px;border-radius:10px;background:#fff7e7;border:1px solid #e9c46a;color:#6b4f00">
+                <strong>خصم ذهبي للإقامة أكثر من شهر</strong><br/>
+                سوف يتم التواصل مع العميل للحصول على خصم خاص.
+            </div>
+        `
+        : "";
 
     return `
   <div style="font-family:Arial,sans-serif;line-height:1.8">
@@ -98,8 +142,10 @@ function bookingHtml(booking, forCustomer = false) {
       <p><b>البريد:</b> ${booking.email}</p>
       <p><b>الدخول:</b> ${formatDate(booking.checkIn)}</p>
       <p><b>الخروج:</b> ${formatDate(booking.checkOut)}</p>
+      <p><b>عدد الليالي:</b> ${nights}</p>
       <p><b>الضيوف:</b> بالغين ${booking.adults} + أطفال ${booking.children}</p>
       <p><b>السعر:</b> ${booking.totalPriceText || booking.totalPrice} (${booking.currency})</p>
+      ${longStayBox}
     </div>
 
     <p style="color:#666;font-size:13px;margin-top:10px">
@@ -110,6 +156,9 @@ function bookingHtml(booking, forCustomer = false) {
   `;
 }
 
+/* =========================================================
+   إرسال الإيميلات بعد الحجز
+========================================================= */
 async function sendBookingEmails(booking) {
     const from = process.env.RESEND_FROM;
     const adminTo = process.env.ADMIN_EMAIL;
@@ -120,14 +169,11 @@ async function sendBookingEmails(booking) {
         return;
     }
 
-    // Email to admin
     try {
         const adminResult = await resend.emails.send({
             from,
             to: adminTo,
-            subject: `حجز جديد ✅ - ${booking.apartmentLabel} (${formatDate(
-                booking.checkIn
-            )} → ${formatDate(booking.checkOut)})`,
+            subject: `حجز جديد ✅ - ${booking.apartmentLabel} (${formatDate(booking.checkIn)} → ${formatDate(booking.checkOut)})`,
             text: bookingText(booking),
             html: bookingHtml(booking, false),
         });
@@ -137,16 +183,13 @@ async function sendBookingEmails(booking) {
         console.log("Admin email exception:", e.message);
     }
 
-    // Email to customer
     if (enableCustomerEmail) {
         try {
             const customerResult = await resend.emails.send({
                 from,
                 to: booking.email,
                 subject: "تم استلام طلب حجزك ✅ - HIJAZI Apartments",
-                text: `مرحباً ${booking.fullName}\n\nتم استلام طلب حجزك بنجاح.\n${bookingText(
-                    booking
-                )}\n\nشكراً لك.`,
+                text: `مرحباً ${booking.fullName}\n\nتم استلام طلب حجزك بنجاح.\n${bookingText(booking)}\n\nشكراً لك.`,
                 html: bookingHtml(booking, true),
             });
 
@@ -157,9 +200,14 @@ async function sendBookingEmails(booking) {
     }
 }
 
-// ===================== Availability API =====================
+/* =========================================================
+   جميع أرقام الشقق المعتمدة
+========================================================= */
 const APARTMENT_IDS = [1, 2, 3, 4, 5, 6];
 
+/* =========================================================
+   API: فحص الشقق المتاحة
+========================================================= */
 app.get("/availability", async (req, res) => {
     try {
         const { checkIn, checkOut } = req.query;
@@ -212,7 +260,9 @@ app.get("/availability", async (req, res) => {
     }
 });
 
-// ===================== Calendar API =====================
+/* =========================================================
+   API: تقويم الشقة
+========================================================= */
 app.get("/calendar", async (req, res) => {
     try {
         const aptId = Number(req.query.aptId);
@@ -239,7 +289,9 @@ app.get("/calendar", async (req, res) => {
     }
 });
 
-// ===================== Booking APIs =====================
+/* =========================================================
+   API: جلب الحجوزات
+========================================================= */
 app.get("/bookings", async (req, res) => {
     try {
         const aptId = req.query.aptId ? Number(req.query.aptId) : null;
@@ -257,6 +309,9 @@ app.get("/bookings", async (req, res) => {
     }
 });
 
+/* =========================================================
+   API: إنشاء حجز جديد
+========================================================= */
 app.post("/bookings", async (req, res) => {
     try {
         const {
@@ -272,6 +327,7 @@ app.post("/bookings", async (req, res) => {
             currency,
             totalPrice,
             totalPriceText,
+            stayType,
         } = req.body;
 
         if (
@@ -333,11 +389,11 @@ app.post("/bookings", async (req, res) => {
             currency: currency || "JOD",
             totalPrice: Number(totalPrice),
             totalPriceText: totalPriceText || "",
+            stayType: stayType || "normal",
         });
 
         await booking.save();
 
-        // لا نخلي فشل الإيميل يخرب الحجز
         sendBookingEmails(booking).catch((e) => {
             console.log("SEND EMAILS ERROR:", e.message);
         });
@@ -355,7 +411,9 @@ app.post("/bookings", async (req, res) => {
     }
 });
 
-// ===================== Admin APIs =====================
+/* =========================================================
+   API: جلب الحجوزات للأدمن
+========================================================= */
 app.get("/admin/bookings", requireAdmin, async (req, res) => {
     try {
         const bookings = await Booking.find().sort({ createdAt: -1 });
@@ -369,6 +427,9 @@ app.get("/admin/bookings", requireAdmin, async (req, res) => {
     }
 });
 
+/* =========================================================
+   API: حذف حجز للأدمن
+========================================================= */
 app.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
     try {
         const { id } = req.params;
@@ -394,5 +455,8 @@ app.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
     }
 });
 
+/* =========================================================
+   تشغيل السيرفر
+========================================================= */
 const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

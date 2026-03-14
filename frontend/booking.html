@@ -15,11 +15,12 @@
             font-family: Arial, sans-serif;
             margin: 0;
             background: #f7f7f7;
+            color: #111;
         }
 
-        header {
+        .page-header {
             text-align: center;
-            padding: 26px 16px;
+            padding: 130px 16px 40px;
             background: linear-gradient(90deg, #c89116, #000);
             color: #fff;
         }
@@ -35,12 +36,15 @@
             color: #fff;
             border-radius: 12px;
             padding: 14px;
+            margin-top: -24px;
             margin-bottom: 18px;
             display: flex;
             justify-content: space-between;
             gap: 10px;
             flex-wrap: wrap;
             align-items: center;
+            position: relative;
+            z-index: 2;
         }
 
         .top-bar-right,
@@ -92,6 +96,7 @@
             overflow: hidden;
             box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
             border: 1px solid #eee;
+            color: #111;
         }
 
         .card-body {
@@ -347,6 +352,7 @@
 
         .success-body {
             padding: 24px;
+            color: #111;
         }
 
         .success-body h3 {
@@ -387,127 +393,6 @@
             padding: 20px;
         }
 
-        /* Footer */
-        .site-footer {
-            background: linear-gradient(90deg, #111, #000);
-            color: #fff;
-            margin-top: 40px;
-            padding-top: 35px;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 0 20px 25px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 24px;
-        }
-
-        .footer-box h3,
-        .footer-box h4 {
-            margin-top: 0;
-            margin-bottom: 12px;
-            color: #c89116;
-        }
-
-        .footer-box p {
-            margin: 8px 0;
-            line-height: 1.8;
-            color: #ddd;
-        }
-
-        .footer-box a {
-            color: #fff;
-            text-decoration: none;
-        }
-
-        .footer-box a:hover {
-            color: #c89116;
-        }
-
-        .social-links {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding: 14px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #bbb;
-            font-size: 14px;
-        }
-
-        /* WhatsApp */
-        .whatsapp-widget {
-            position: fixed;
-            bottom: 22px;
-            right: 22px;
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .whatsapp-label {
-            background: rgba(0, 0, 0, 0.78);
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: 700;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
-            white-space: nowrap;
-        }
-
-        .whatsapp-float {
-            position: relative;
-            width: 64px;
-            height: 64px;
-            background: #25D366;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28);
-            transition: transform 0.25s ease;
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.08);
-        }
-
-        .whatsapp-pulse {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: rgba(37, 211, 102, 0.45);
-            animation: whatsappPulse 1.8s infinite;
-            z-index: -1;
-        }
-
-        @keyframes whatsappPulse {
-            0% {
-                transform: scale(1);
-                opacity: .9;
-            }
-
-            70% {
-                transform: scale(1.6);
-                opacity: 0;
-            }
-
-            100% {
-                transform: scale(1.6);
-                opacity: 0;
-            }
-        }
-
         @media (max-width: 900px) {
             .layout {
                 grid-template-columns: 1fr;
@@ -528,10 +413,14 @@
 
 <body>
 
-    <header>
-        <h1>HIJAZI Apartments</h1>
-        <p>أكمل بيانات الحجز لشقتك المختارة في الشميساني - عمّان</p>
-    </header>
+    <!-- الهيدر -->
+    <div id="sharedHeader"></div>
+
+    <!-- عنوان الصفحة -->
+    <section class="page-header">
+        <h1 id="pageTitle">HIJAZI Apartments</h1>
+        <p id="pageSubtitle">أكمل بيانات الحجز لشقتك المختارة في الشميساني - عمّان</p>
+    </section>
 
     <div class="wrap">
 
@@ -541,7 +430,7 @@
             </div>
 
             <div class="top-bar-right">
-                <label for="currencySelect">اختر العملة:</label>
+                <label for="currencySelect" id="currencyLabel">اختر العملة:</label>
                 <select id="currencySelect">
                     <option value="JOD" selected>دينار أردني</option>
                     <option value="USD">دولار أمريكي</option>
@@ -552,6 +441,7 @@
 
         <div class="layout">
 
+            <!-- بطاقة الشقة -->
             <div class="card">
                 <div class="slider-box" id="sliderBox">
                     <button class="slider-btn slider-prev" id="prevSlide">❮</button>
@@ -563,39 +453,41 @@
                     <div class="thumbs" id="thumbs"></div>
 
                     <div class="video-box">
-                        <div class="video-title">فيديو الشقة</div>
+                        <div class="video-title" id="videoTitle">فيديو الشقة</div>
                         <video id="aptVideo" controls muted>
                             <source id="aptVideoSource" src="" type="video/mp4">
                         </video>
                     </div>
 
-                    <div class="pill">متاح للحجز ✅</div>
+                    <div class="pill" id="availablePill">متاح للحجز ✅</div>
                     <h2 id="aptName">اختر الشقة أولاً</h2>
                     <p id="aptDesc" class="muted">من صفحة الحجز يمكنك اختيار أي شقة تريدها، وسيتم تحديث الصور والفيديو
                         والسعر والتقويم تلقائيًا.</p>
+                    <p class="muted"><strong id="locationText">الموقع:</strong> <span id="aptLocation">—</span></p>
 
                     <ul class="features" id="aptFeatures"></ul>
 
                     <div class="summary-box">
-                        <p><strong>رقم الشقة:</strong> <span id="summaryAptId">—</span></p>
-                        <p><strong>سعر الليلة:</strong> <span id="nightPrice">—</span></p>
-                        <p><strong>عدد الليالي:</strong> <span id="nightsCount">0</span></p>
-                        <p><strong>البالغين:</strong> <span id="summaryAdults">1</span></p>
-                        <p><strong>الأطفال:</strong> <span id="summaryChildren">0</span></p>
-                        <p><strong>السعر الإجمالي:</strong> <span id="summaryTotal">—</span></p>
+                        <p><strong id="summaryAptLabel">رقم الشقة:</strong> <span id="summaryAptId">—</span></p>
+                        <p><strong id="summaryNightLabel">سعر الليلة:</strong> <span id="nightPrice">—</span></p>
+                        <p><strong id="summaryNightsLabel">عدد الليالي:</strong> <span id="nightsCount">0</span></p>
+                        <p><strong id="summaryAdultsLabel">البالغين:</strong> <span id="summaryAdults">1</span></p>
+                        <p><strong id="summaryChildrenLabel">الأطفال:</strong> <span id="summaryChildren">0</span></p>
+                        <p><strong id="summaryTotalLabel">السعر الإجمالي:</strong> <span id="summaryTotal">—</span></p>
                     </div>
                 </div>
             </div>
 
+            <!-- نموذج الحجز -->
             <div class="card">
                 <div class="form-section">
-                    <h3>نموذج الحجز</h3>
+                    <h3 id="formTitle">نموذج الحجز</h3>
 
                     <div id="formMessage" class="message-box"></div>
 
                     <form id="bookingForm">
 
-                        <label>الشقة المختارة:</label>
+                        <label id="aptLabel">الشقة المختارة:</label>
                         <select id="aptId" required>
                             <option value="">-- اختر الشقة --</option>
                             <option value="1">شقة رقم 1</option>
@@ -606,29 +498,33 @@
                             <option value="6">شقة رقم 6</option>
                         </select>
 
-                        <label>الاسم الكامل:</label>
+                        <label id="fullNameLabel">الاسم الكامل:</label>
                         <input type="text" id="fullName" placeholder="أدخل اسمك الكامل" required>
 
-                        <label>البريد الإلكتروني:</label>
+                        <label id="emailLabel">البريد الإلكتروني:</label>
                         <input type="email" id="email" placeholder="example@email.com" required>
 
-                        <label>رقم الهاتف:</label>
+                        <label id="phoneLabel">رقم الهاتف:</label>
                         <input type="tel" id="phone" placeholder="059xxxxxxx" required>
 
-                        <label>تاريخ الوصول:</label>
+                        <label id="checkInLabel">تاريخ الوصول:</label>
                         <input type="date" id="checkIn" required>
 
-                        <label>تاريخ المغادرة:</label>
+                        <label id="checkOutLabel">تاريخ المغادرة:</label>
                         <input type="date" id="checkOut" required>
-                        <div class="hint">لا يمكن اختيار فترة متداخلة مع الحجوزات الموجودة.</div>
+                        <div class="hint" id="dateHint">لا يمكن اختيار فترة متداخلة مع الحجوزات الموجودة.</div>
 
-                        <label>عدد البالغين:</label>
+                        <!-- رسالة الخصم الذهبي -->
+                        <div id="longStayNotice"></div>
+
+                        <label id="adultsLabel">عدد البالغين:</label>
                         <input type="number" id="adults" min="1" value="1" required>
 
-                        <label>عدد الأطفال:</label>
+                        <label id="childrenLabel">عدد الأطفال:</label>
                         <input type="number" id="children" min="0" value="0">
 
-                        <p>السعر النهائي: <span class="price" id="totalPrice">—</span></p>
+                        <p><span id="finalPriceLabel">السعر النهائي:</span> <span class="price" id="totalPrice">—</span>
+                        </p>
 
                         <button id="submitBtn" type="submit">تأكيد الحجز</button>
                     </form>
@@ -637,19 +533,20 @@
 
         </div>
 
-        <div class="calendar-title">تقويم الشقة</div>
+        <div class="calendar-title" id="calendarTitle">تقويم الشقة</div>
         <div id="calendar"></div>
 
     </div>
 
+    <!-- نافذة النجاح -->
     <div class="success-modal" id="successModal">
         <div class="success-content">
             <div class="success-head">
-                <h2 style="margin:0;">✅ تم الحجز بنجاح</h2>
+                <h2 style="margin:0;" id="successHead">✅ تم الحجز بنجاح</h2>
             </div>
             <div class="success-body">
-                <h3>شكراً لك</h3>
-                <p>
+                <h3 id="successTitle">شكراً لك</h3>
+                <p id="successText">
                     تم حفظ الحجز بنجاح، وتم إرسال رسالة تأكيد إلى بريدك الإلكتروني.<br>
                     سنتواصل معك قريبًا إذا احتجنا أي تفاصيل إضافية.
                 </p>
@@ -658,149 +555,37 @@
         </div>
     </div>
 
-    <footer class="site-footer">
-        <div class="footer-container">
-            <div class="footer-box">
-                <h3>HIJAZI Apartments</h3>
-                <p>شقق مفروشة مريحة في الشميساني - عمّان، الأردن</p>
-            </div>
+    <!-- الفوتر -->
+    <div id="sharedFooter"></div>
 
-            <div class="footer-box">
-                <h4>معلومات التواصل</h4>
-                <p>الهاتف: <a href="tel:+962789000444">+962789000444</a></p>
-                <p>البريد: <a
-                        href="mailto:ammarabunada775forbusiness@gmail.com">ammarabunada775forbusiness@gmail.com</a></p>
-                <p>العنوان: عمان، الأردن، الشميساني</p>
-            </div>
+    <!-- واتساب -->
+    <div id="sharedWhatsApp"></div>
 
-            <div class="footer-box">
-                <h4>السوشال ميديا</h4>
-                <div class="social-links">
-                    <a href="https://www.instagram.com/j_ibrahim_j/" target="_blank">Instagram</a>
-                    <a href="https://web.facebook.com/abrahem.hjaze.71?locale=ar_AR" target="_blank">Facebook</a>
-                    <a href="https://www.google.com/search?q=%D8%AA%D8%B1%D8%AC%D9%85%D9%87&rlz=1C1GCEA_enJO1134JO1134&oq=&ie=UTF-8"
-                        target="_blank">Snapchat</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            © 2026 HIJAZI Apartments - جميع الحقوق محفوظة
-        </div>
-    </footer>
-
-    <div class="whatsapp-widget">
-        <div class="whatsapp-label">تواصل معنا</div>
-        <a href="https://wa.me/962789000444?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%B4%D9%82%D9%82%20%D8%A7%D9%84%D9%85%D8%AA%D8%A7%D8%AD%D8%A9"
-            class="whatsapp-float" target="_blank" aria-label="WhatsApp" title="تواصل معنا عبر واتساب">
-            <span class="whatsapp-pulse"></span>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="30" height="30" fill="white">
-                <path
-                    d="M19.11 17.27c-.27-.13-1.58-.78-1.82-.87-.24-.09-.41-.13-.59.14-.18.27-.68.87-.84 1.04-.15.18-.31.2-.58.07-.27-.13-1.12-.41-2.13-1.3-.79-.7-1.32-1.57-1.47-1.84-.15-.27-.02-.42.11-.55.11-.11.27-.29.41-.43.14-.15.18-.25.27-.43.09-.18.05-.34-.02-.48-.07-.13-.59-1.43-.81-1.96-.21-.5-.43-.43-.59-.44h-.5c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.29s.98 2.65 1.11 2.83c.14.18 1.92 2.93 4.65 4.11.65.28 1.16.45 1.56.58.66.21 1.26.18 1.73.11.53-.08 1.58-.65 1.8-1.27.22-.63.22-1.16.15-1.27-.06-.12-.24-.18-.5-.31z" />
-                <path
-                    d="M16.02 3.2c-7.07 0-12.8 5.72-12.8 12.77 0 2.25.59 4.45 1.71 6.39L3.1 28.8l6.63-1.73a12.8 12.8 0 0 0 6.29 1.69h.01c7.06 0 12.79-5.72 12.79-12.77 0-3.42-1.34-6.63-3.79-9.04A12.76 12.76 0 0 0 16.02 3.2zm0 23.39h-.01a10.62 10.62 0 0 1-5.41-1.49l-.39-.23-3.94 1.03 1.05-3.84-.25-.4a10.55 10.55 0 0 1-1.63-5.61c0-5.84 4.76-10.59 10.6-10.59 2.82 0 5.47 1.09 7.47 3.08a10.5 10.5 0 0 1 3.11 7.51c0 5.84-4.76 10.59-10.6 10.59z" />
-            </svg>
-        </a>
-    </div>
-
+    <script src="js/main.js"></script>
     <script>
         const API_BASE = "https://hijazi-apartments-backend.onrender.com";
 
-        const apartmentData = {
-            1: {
-                name: "شقة رقم 1",
-                price: 50,
-                desc: "شقة مريحة مناسبة للعائلات الصغيرة، بتصميم أنيق وموقع مميز في الشميساني.",
-                features: ["غرفة نوم", "صالون", "مطبخ", "واي فاي", "مكيف", "حمام"],
-                images: [
-                    "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80"
-                ],
-                video: "https://www.w3schools.com/html/mov_bbb.mp4"
-            },
-            2: {
-                name: "شقة رقم 2",
-                price: 35,
-                desc: "شقة اقتصادية وأنيقة مناسبة للإقامة القصيرة مع كل الخدمات الأساسية.",
-                features: ["ستوديو", "مطبخ صغير", "واي فاي", "تلفاز"],
-                images: [
-                    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1505693431205-36e7f9307d05?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80"
-                ],
-                video: "https://www.w3schools.com/html/mov_bbb.mp4"
-            },
-            3: {
-                name: "شقة رقم 3",
-                price: 70,
-                desc: "شقة واسعة وفاخرة مناسبة للعائلات الكبيرة أو الضيوف الباحثين عن راحة أعلى.",
-                features: ["غرفتا نوم", "صالون كبير", "مطبخ", "واي فاي", "مكيف", "شرفة"],
-                images: [
-                    "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1464890100898-a385f744067f?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=1200&q=80"
-                ],
-                video: "https://www.w3schools.com/html/mov_bbb.mp4"
-            },
-            4: {
-                name: "شقة رقم 4",
-                price: 30,
-                desc: "شقة صغيرة وعملية جدًا، مناسبة لفرد أو زوجين.",
-                features: ["غرفة", "مطبخ", "حمام", "واي فاي"],
-                images: [
-                    "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80"
-                ],
-                video: "https://www.w3schools.com/html/mov_bbb.mp4"
-            },
-            5: {
-                name: "شقة رقم 5",
-                price: 55,
-                desc: "شقة حديثة بتشطيب جميل، مناسبة للضيوف الباحثين عن مستوى أعلى.",
-                features: ["غرفة نوم", "صالون", "تلفاز", "واي فاي", "مكيف"],
-                images: [
-                    "https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1505693431205-36e7f9307d05?auto=format&fit=crop&w=1200&q=80"
-                ],
-                video: "https://www.w3schools.com/html/mov_bbb.mp4"
-            },
-            6: {
-                name: "شقة رقم 6",
-                price: 35,
-                desc: "خيار جيد ومريح، مناسب للإقامة المرنة بسعر مناسب.",
-                features: ["غرفة", "حمام", "مطبخ صغير", "واي فاي"],
-                images: [
-                    "https://images.unsplash.com/photo-1464890100898-a385f744067f?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80",
-                    "https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=1200&q=80"
-                ],
-                video: "https://www.w3schools.com/html/mov_bbb.mp4"
-            }
-        };
-
+        // قراءة القيم من الرابط
         const urlParams = new URLSearchParams(window.location.search);
         const initialAptId = Number(urlParams.get("apt")) || "";
         const qCheckIn = urlParams.get("checkIn");
         const qCheckOut = urlParams.get("checkOut");
 
+        // عناصر الصفحة
         const aptSelect = document.getElementById("aptId");
         const aptNameEl = document.getElementById("aptName");
         const aptDescEl = document.getElementById("aptDesc");
+        const aptLocationEl = document.getElementById("aptLocation");
         const summaryAptIdEl = document.getElementById("summaryAptId");
         const featuresEl = document.getElementById("aptFeatures");
-        const aptImage = document.getElementById("aptImage");
-        const thumbsEl = document.getElementById("thumbs");
         const aptVideo = document.getElementById("aptVideo");
         const aptVideoSource = document.getElementById("aptVideoSource");
         const sliderBox = document.getElementById("sliderBox");
+        const thumbsEl = document.getElementById("thumbs");
 
         const backBtn = document.getElementById("backBtn");
         backBtn.href = `apartments.html?checkIn=${encodeURIComponent(qCheckIn || "")}&checkOut=${encodeURIComponent(qCheckOut || "")}`;
 
-        const prices = { 1: 50, 2: 35, 3: 70, 4: 30, 5: 55, 6: 35 };
         const currencyRates = { JOD: 1, USD: 0.71, SAR: 2.66 };
         const currencySymbols = { JOD: "دينار", USD: "$", SAR: "ر.س" };
 
@@ -826,6 +611,7 @@
         let bookedDaysSet = new Set();
         let calendar = null;
 
+        // تعبئة أولية
         if (initialAptId) {
             aptSelect.value = String(initialAptId);
         }
@@ -833,6 +619,92 @@
         if (qCheckIn) checkInEl.value = qCheckIn;
         if (qCheckOut) checkOutEl.value = qCheckOut;
 
+        // ترجمة عناصر الصفحة
+        function applyBookingTranslations() {
+            const lang = getCurrentLang();
+
+            if (lang === "ar") {
+                document.getElementById("pageTitle").textContent = "HIJAZI Apartments";
+                document.getElementById("pageSubtitle").textContent = "أكمل بيانات الحجز لشقتك المختارة في الشميساني - عمّان";
+                document.getElementById("currencyLabel").textContent = "اختر العملة:";
+                document.getElementById("backBtn").textContent = "← الرجوع إلى الشقق";
+                document.getElementById("videoTitle").textContent = "فيديو الشقة";
+                document.getElementById("availablePill").textContent = "متاح للحجز ✅";
+                document.getElementById("locationText").textContent = "الموقع:";
+                document.getElementById("summaryAptLabel").textContent = "رقم الشقة:";
+                document.getElementById("summaryNightLabel").textContent = "سعر الليلة:";
+                document.getElementById("summaryNightsLabel").textContent = "عدد الليالي:";
+                document.getElementById("summaryAdultsLabel").textContent = "البالغين:";
+                document.getElementById("summaryChildrenLabel").textContent = "الأطفال:";
+                document.getElementById("summaryTotalLabel").textContent = "السعر الإجمالي:";
+                document.getElementById("formTitle").textContent = "نموذج الحجز";
+                document.getElementById("aptLabel").textContent = "الشقة المختارة:";
+                document.getElementById("fullNameLabel").textContent = "الاسم الكامل:";
+                document.getElementById("emailLabel").textContent = "البريد الإلكتروني:";
+                document.getElementById("phoneLabel").textContent = "رقم الهاتف:";
+                document.getElementById("checkInLabel").textContent = "تاريخ الوصول:";
+                document.getElementById("checkOutLabel").textContent = "تاريخ المغادرة:";
+                document.getElementById("dateHint").textContent = "لا يمكن اختيار فترة متداخلة مع الحجوزات الموجودة.";
+                document.getElementById("adultsLabel").textContent = "عدد البالغين:";
+                document.getElementById("childrenLabel").textContent = "عدد الأطفال:";
+                document.getElementById("finalPriceLabel").textContent = "السعر النهائي:";
+                document.getElementById("submitBtn").textContent = "تأكيد الحجز";
+                document.getElementById("calendarTitle").textContent = "تقويم الشقة";
+                document.getElementById("successHead").textContent = "✅ تم الحجز بنجاح";
+                document.getElementById("successTitle").textContent = "شكراً لك";
+                document.getElementById("successText").innerHTML = "تم حفظ الحجز بنجاح، وتم إرسال رسالة تأكيد إلى بريدك الإلكتروني.<br>سنتواصل معك قريبًا إذا احتجنا أي تفاصيل إضافية.";
+                document.getElementById("closeSuccessModal").textContent = "إغلاق";
+
+                document.querySelector('#aptId option[value=""]').textContent = "-- اختر الشقة --";
+                for (let i = 1; i <= 6; i++) {
+                    document.querySelector(`#aptId option[value="${i}"]`).textContent = `شقة رقم ${i}`;
+                }
+
+                document.getElementById("fullName").placeholder = "أدخل اسمك الكامل";
+                document.getElementById("phone").placeholder = "059xxxxxxx";
+            } else {
+                document.getElementById("pageTitle").textContent = "HIJAZI Apartments";
+                document.getElementById("pageSubtitle").textContent = "Complete your booking details for your selected apartment in Shmeisani, Amman";
+                document.getElementById("currencyLabel").textContent = "Choose currency:";
+                document.getElementById("backBtn").textContent = "← Back to apartments";
+                document.getElementById("videoTitle").textContent = "Apartment video";
+                document.getElementById("availablePill").textContent = "Available for booking ✅";
+                document.getElementById("locationText").textContent = "Location:";
+                document.getElementById("summaryAptLabel").textContent = "Apartment number:";
+                document.getElementById("summaryNightLabel").textContent = "Night price:";
+                document.getElementById("summaryNightsLabel").textContent = "Nights:";
+                document.getElementById("summaryAdultsLabel").textContent = "Adults:";
+                document.getElementById("summaryChildrenLabel").textContent = "Children:";
+                document.getElementById("summaryTotalLabel").textContent = "Total price:";
+                document.getElementById("formTitle").textContent = "Booking form";
+                document.getElementById("aptLabel").textContent = "Selected apartment:";
+                document.getElementById("fullNameLabel").textContent = "Full name:";
+                document.getElementById("emailLabel").textContent = "Email:";
+                document.getElementById("phoneLabel").textContent = "Phone number:";
+                document.getElementById("checkInLabel").textContent = "Check-in:";
+                document.getElementById("checkOutLabel").textContent = "Check-out:";
+                document.getElementById("dateHint").textContent = "Overlapping dates with existing bookings are not allowed.";
+                document.getElementById("adultsLabel").textContent = "Adults:";
+                document.getElementById("childrenLabel").textContent = "Children:";
+                document.getElementById("finalPriceLabel").textContent = "Final price:";
+                document.getElementById("submitBtn").textContent = "Confirm booking";
+                document.getElementById("calendarTitle").textContent = "Apartment calendar";
+                document.getElementById("successHead").textContent = "✅ Booking completed successfully";
+                document.getElementById("successTitle").textContent = "Thank you";
+                document.getElementById("successText").innerHTML = "Your booking has been saved successfully, and a confirmation email has been sent to your inbox.<br>We will contact you soon if any extra details are needed.";
+                document.getElementById("closeSuccessModal").textContent = "Close";
+
+                document.querySelector('#aptId option[value=""]').textContent = "-- Select apartment --";
+                for (let i = 1; i <= 6; i++) {
+                    document.querySelector(`#aptId option[value="${i}"]`).textContent = `Apartment ${i}`;
+                }
+
+                document.getElementById("fullName").placeholder = "Enter your full name";
+                document.getElementById("phone").placeholder = "Phone number";
+            }
+        }
+
+        // رسائل أعلى النموذج
         function showMessage(text, type = "error") {
             formMessage.style.display = "block";
             formMessage.className = `message-box ${type === "success" ? "message-success" : "message-error"}`;
@@ -845,6 +717,7 @@
             formMessage.className = "message-box";
         }
 
+        // تاريخ اليوم
         function todayISO() {
             const d = new Date();
             const yyyy = d.getFullYear();
@@ -853,18 +726,21 @@
             return `${yyyy}-${mm}-${dd}`;
         }
 
+        // تحويل تاريخ YYYY-MM-DD إلى كائن تاريخ
         function parseISODateOnly(s) {
             const [y, m, d] = (s || "").slice(0, 10).split("-").map(Number);
             if (!y || !m || !d) return null;
             return new Date(y, m - 1, d, 0, 0, 0, 0);
         }
 
+        // إضافة أيام
         function addDays(date, days) {
             const d = new Date(date);
             d.setDate(d.getDate() + days);
             return d;
         }
 
+        // تحويل تاريخ إلى YYYY-MM-DD
         function toISODateOnly(d) {
             const yyyy = d.getFullYear();
             const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -872,30 +748,29 @@
             return `${yyyy}-${mm}-${dd}`;
         }
 
-        function calcNights(checkIn, checkOut) {
-            if (!checkIn || !checkOut) return 0;
-            const start = new Date(checkIn);
-            const end = new Date(checkOut);
-            const diff = end - start;
-            return diff > 0 ? Math.ceil(diff / (1000 * 60 * 60 * 24)) : 0;
-        }
-
+        // جلب رقم الشقة المختارة
         function getSelectedAptId() {
             return Number(aptSelect.value) || null;
         }
 
+        // جلب بيانات الشقة المختارة
         function getSelectedApartment() {
             const id = getSelectedAptId();
-            return id ? apartmentData[id] : null;
+            return id ? HIJAZI_APARTMENTS[id] : null;
         }
 
+        // عرض حالة افتراضية لو لم يتم اختيار شقة
         function renderPlaceholder() {
-            aptNameEl.textContent = "اختر الشقة أولاً";
-            aptDescEl.textContent = "من صفحة الحجز يمكنك اختيار أي شقة تريدها، وسيتم تحديث الصور والفيديو والسعر والتقويم تلقائيًا.";
+            const lang = getCurrentLang();
+            aptNameEl.textContent = lang === "ar" ? "اختر الشقة أولاً" : "Select an apartment first";
+            aptDescEl.textContent = lang === "ar"
+                ? "من صفحة الحجز يمكنك اختيار أي شقة تريدها، وسيتم تحديث الصور والفيديو والسعر والتقويم تلقائيًا."
+                : "From the booking page, you can choose any apartment, and the images, video, price, and calendar will update automatically.";
+            aptLocationEl.textContent = "—";
             summaryAptIdEl.textContent = "—";
             featuresEl.innerHTML = "";
             thumbsEl.innerHTML = "";
-            sliderBox.innerHTML = `<div class="placeholder-box">اختر الشقة لعرض الصور والتفاصيل</div>`;
+            sliderBox.innerHTML = `<div class="placeholder-box">${lang === "ar" ? "اختر الشقة لعرض الصور والتفاصيل" : "Select an apartment to view photos and details"}</div>`;
             aptVideoSource.src = "";
             aptVideo.load();
             nightPriceEl.textContent = "—";
@@ -903,6 +778,7 @@
             totalPriceEl.textContent = "—";
         }
 
+        // عرض السلايدر
         function renderSlider() {
             const apt = getSelectedApartment();
             if (!apt) return;
@@ -921,11 +797,13 @@
             `).join("");
         }
 
+        // تغيير الصورة المختارة
         function goToSlide(index) {
             currentSlide = index;
             renderSlider();
         }
 
+        // الصورة التالية
         function nextSlide() {
             const apt = getSelectedApartment();
             if (!apt) return;
@@ -933,6 +811,7 @@
             renderSlider();
         }
 
+        // الصورة السابقة
         function prevSlide() {
             const apt = getSelectedApartment();
             if (!apt) return;
@@ -942,9 +821,11 @@
 
         window.goToSlide = goToSlide;
 
+        // عرض تفاصيل الشقة المختارة
         function renderApartmentDetails() {
             const id = getSelectedAptId();
             const apt = getSelectedApartment();
+            const lang = getCurrentLang();
 
             if (!id || !apt) {
                 renderPlaceholder();
@@ -952,10 +833,11 @@
             }
 
             currentSlide = 0;
-            aptNameEl.textContent = apt.name;
-            aptDescEl.textContent = apt.desc;
+            aptNameEl.textContent = lang === "ar" ? apt.nameAr : apt.nameEn;
+            aptDescEl.textContent = lang === "ar" ? apt.descAr : apt.descEn;
+            aptLocationEl.textContent = apt.location;
             summaryAptIdEl.textContent = id;
-            featuresEl.innerHTML = apt.features.map(f => `<li>${f}</li>`).join("");
+            featuresEl.innerHTML = (lang === "ar" ? apt.featuresAr : apt.featuresEn).map(f => `<li>${f}</li>`).join("");
 
             renderSlider();
 
@@ -965,8 +847,11 @@
             updatePrice();
         }
 
+        // تحديث السعر
         function updatePrice() {
             const id = getSelectedAptId();
+            const lang = getCurrentLang();
+
             if (!id) {
                 nightsCountEl.textContent = "0";
                 summaryAdultsEl.textContent = adultsEl.value || 1;
@@ -977,9 +862,8 @@
                 return;
             }
 
-            const basePrice = prices[id] || 50;
+            const basePrice = HIJAZI_APARTMENTS[id].price || 50;
             const nights = calcNights(checkInEl.value, checkOutEl.value) || 1;
-
             const perNightConverted = basePrice * currencyRates[currencySelect.value];
             const total = basePrice * nights * currencyRates[currencySelect.value];
 
@@ -990,14 +874,18 @@
 
             summaryAdultsEl.textContent = adultsEl.value || 1;
             summaryChildrenEl.textContent = childrenEl.value || 0;
+
+            renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value);
         }
 
+        // تحويل النص السعري إلى رقم
         function getTotalPriceNumber() {
             const text = totalPriceEl.textContent || "";
             const num = parseFloat(text.replace(/[^\d.]/g, ""));
             return isNaN(num) ? 0 : num;
         }
 
+        // بناء الأيام المحجوزة
         function buildBookedDaysSet() {
             bookedDaysSet = new Set();
             for (const r of bookedRanges) {
@@ -1013,6 +901,7 @@
             }
         }
 
+        // التحقق من تداخل الفترات
         function rangesOverlap(startA, endA, startB, endB) {
             return startA < endB && endA > startB;
         }
@@ -1024,6 +913,7 @@
             return false;
         }
 
+        // جلب الحجوزات من السيرفر
         async function fetchBookedRanges() {
             const id = getSelectedAptId();
             if (!id) {
@@ -1044,12 +934,14 @@
             return bookedRanges;
         }
 
+        // التحقق من صحة التواريخ
         function validateDates() {
             clearMessage();
+            const lang = getCurrentLang();
 
             const id = getSelectedAptId();
             if (!id) {
-                showMessage("اختر الشقة أولاً.", "error");
+                showMessage(lang === "ar" ? "اختر الشقة أولاً." : "Select an apartment first.", "error");
                 return false;
             }
 
@@ -1062,7 +954,7 @@
             if (!inDate || !outDate) return false;
 
             if (outDate <= inDate) {
-                showMessage("تاريخ المغادرة لازم يكون بعد تاريخ الوصول.", "error");
+                showMessage(lang === "ar" ? "تاريخ المغادرة لازم يكون بعد تاريخ الوصول." : "Check-out must be after check-in.", "error");
                 checkOutEl.value = "";
                 updatePrice();
                 return false;
@@ -1071,7 +963,7 @@
             const outExclusive = addDays(outDate, 1);
 
             if (selectionConflicts(inDate, outExclusive)) {
-                showMessage("❌ هذه الفترة متداخلة مع حجز موجود. اختر تواريخ أخرى.", "error");
+                showMessage(lang === "ar" ? "❌ هذه الفترة متداخلة مع حجز موجود. اختر تواريخ أخرى." : "❌ This date range overlaps with an existing booking. Please choose other dates.", "error");
                 checkInEl.value = "";
                 checkOutEl.value = "";
                 updatePrice();
@@ -1081,6 +973,7 @@
             return true;
         }
 
+        // تحديث التقويم
         async function refreshCalendar() {
             await fetchBookedRanges();
             if (calendar) {
@@ -1088,18 +981,22 @@
             }
         }
 
+        // أقل تاريخ ممكن
         checkInEl.min = todayISO();
         checkOutEl.min = todayISO();
 
+        // أحداث تحديث السعر
         currencySelect.addEventListener("change", updatePrice);
         adultsEl.addEventListener("input", updatePrice);
         childrenEl.addEventListener("input", updatePrice);
         checkInEl.addEventListener("change", updatePrice);
         checkOutEl.addEventListener("change", updatePrice);
 
+        // أحداث التحقق من التاريخ
         checkInEl.addEventListener("change", validateDates);
         checkOutEl.addEventListener("change", validateDates);
 
+        // تغيير الشقة
         aptSelect.addEventListener("change", async () => {
             clearMessage();
             renderApartmentDetails();
@@ -1109,19 +1006,21 @@
         const form = document.getElementById("bookingForm");
         const submitBtn = document.getElementById("submitBtn");
 
+        // تشغيل الصفحة
         document.addEventListener("DOMContentLoaded", async function () {
             const calendarEl = document.getElementById("calendar");
+            const lang = getCurrentLang();
 
             calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: "dayGridMonth",
                 height: 520,
-                locale: "ar",
-                direction: "rtl",
+                locale: lang === "ar" ? "ar" : "en",
+                direction: lang === "ar" ? "rtl" : "ltr",
                 events: async (fetchInfo, successCallback, failureCallback) => {
                     try {
                         await fetchBookedRanges();
                         const events = bookedRanges.map(r => ({
-                            title: "محجوز",
+                            title: lang === "ar" ? "محجوز" : "Booked",
                             start: r.start,
                             end: r.end,
                             allDay: true
@@ -1136,7 +1035,7 @@
                     if (bookedDaysSet.has(dayISO)) {
                         info.el.style.background = "rgba(200,145,22,0.35)";
                         info.el.style.borderRadius = "6px";
-                        info.el.title = "محجوز";
+                        info.el.title = lang === "ar" ? "محجوز" : "Booked";
                     }
                 },
                 selectable: true,
@@ -1153,7 +1052,7 @@
                 },
                 select: (info) => {
                     if (!getSelectedAptId()) {
-                        showMessage("اختر الشقة أولاً قبل التحديد من التقويم.", "error");
+                        showMessage(lang === "ar" ? "اختر الشقة أولاً قبل التحديد من التقويم." : "Select an apartment first before choosing from the calendar.", "error");
                         return;
                     }
 
@@ -1170,18 +1069,27 @@
 
             calendar.render();
 
+            renderSharedHeader("booking", false);
+            renderSharedFooter();
+            renderWhatsAppWidget();
+            applyBookingTranslations();
+
             renderApartmentDetails();
             await refreshCalendar();
             updatePrice();
         });
 
+        // إرسال الحجز
         form.addEventListener("submit", async function (e) {
             e.preventDefault();
             clearMessage();
 
+            const lang = getCurrentLang();
             const id = getSelectedAptId();
+            const selectedApartment = getSelectedApartment();
+
             if (!id) {
-                showMessage("اختر الشقة أولاً.", "error");
+                showMessage(lang === "ar" ? "اختر الشقة أولاً." : "Select an apartment first.", "error");
                 return;
             }
 
@@ -1190,7 +1098,7 @@
 
             const payload = {
                 apartmentId: id,
-                apartmentLabel: `شقة رقم ${id}`,
+                apartmentLabel: lang === "ar" ? selectedApartment.nameAr : selectedApartment.nameEn,
                 fullName: document.getElementById("fullName").value,
                 email: document.getElementById("email").value,
                 phone: document.getElementById("phone").value,
@@ -1200,12 +1108,13 @@
                 children: Number(childrenEl.value),
                 currency: currencySelect.value,
                 totalPrice: getTotalPriceNumber(),
-                totalPriceText: totalPriceEl.textContent
+                totalPriceText: totalPriceEl.textContent,
+                stayType: isLongStay(checkInEl.value, checkOutEl.value) ? "long" : "normal"
             };
 
             try {
                 submitBtn.disabled = true;
-                submitBtn.textContent = "جاري الحفظ...";
+                submitBtn.textContent = lang === "ar" ? "جاري الحفظ..." : "Saving...";
 
                 const res = await fetch(`${API_BASE}/bookings`, {
                     method: "POST",
@@ -1216,7 +1125,7 @@
                 const result = await res.json().catch(() => ({}));
 
                 if (!res.ok) {
-                    showMessage(result.message || "صار خطأ أثناء الحجز", "error");
+                    showMessage(result.message || (lang === "ar" ? "صار خطأ أثناء الحجز" : "An error occurred while booking"), "error");
                     return;
                 }
 
@@ -1232,13 +1141,14 @@
                 updatePrice();
             } catch (err) {
                 console.error(err);
-                showMessage("تعذر الاتصال بالسيرفر. حاول مرة أخرى بعد قليل.", "error");
+                showMessage(lang === "ar" ? "تعذر الاتصال بالسيرفر. حاول مرة أخرى بعد قليل." : "Unable to connect to the server. Please try again later.", "error");
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.textContent = "تأكيد الحجز";
+                submitBtn.textContent = lang === "ar" ? "تأكيد الحجز" : "Confirm booking";
             }
         });
 
+        // إغلاق نافذة النجاح
         closeSuccessModal.addEventListener("click", () => {
             successModal.style.display = "none";
         });

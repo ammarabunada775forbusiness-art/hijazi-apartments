@@ -11,6 +11,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             background: #f7f7f7;
+            color: #111;
         }
 
         header {
@@ -173,127 +174,6 @@
             text-align: center;
         }
 
-        /* Footer */
-        .site-footer {
-            background: linear-gradient(90deg, #111, #000);
-            color: #fff;
-            margin-top: 40px;
-            padding-top: 35px;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 0 20px 25px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 24px;
-        }
-
-        .footer-box h3,
-        .footer-box h4 {
-            margin-top: 0;
-            margin-bottom: 12px;
-            color: #c89116;
-        }
-
-        .footer-box p {
-            margin: 8px 0;
-            line-height: 1.8;
-            color: #ddd;
-        }
-
-        .footer-box a {
-            color: #fff;
-            text-decoration: none;
-        }
-
-        .footer-box a:hover {
-            color: #c89116;
-        }
-
-        .social-links {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding: 14px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #bbb;
-            font-size: 14px;
-        }
-
-        /* WhatsApp */
-        .whatsapp-widget {
-            position: fixed;
-            bottom: 22px;
-            right: 22px;
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .whatsapp-label {
-            background: rgba(0, 0, 0, 0.78);
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: 700;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
-            white-space: nowrap;
-        }
-
-        .whatsapp-float {
-            position: relative;
-            width: 64px;
-            height: 64px;
-            background: #25D366;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28);
-            transition: transform 0.25s ease;
-        }
-
-        .whatsapp-float:hover {
-            transform: scale(1.08);
-        }
-
-        .whatsapp-pulse {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: rgba(37, 211, 102, 0.45);
-            animation: whatsappPulse 1.8s infinite;
-            z-index: -1;
-        }
-
-        @keyframes whatsappPulse {
-            0% {
-                transform: scale(1);
-                opacity: .9;
-            }
-
-            70% {
-                transform: scale(1.6);
-                opacity: 0;
-            }
-
-            100% {
-                transform: scale(1.6);
-                opacity: 0;
-            }
-        }
-
         @media (max-width: 900px) {
             .toolbar {
                 align-items: stretch;
@@ -324,8 +204,8 @@
 <body>
 
     <header>
-        <h1>لوحة الإدارة - HIJAZI Apartments</h1>
-        <p class="muted">عرض الحجوزات وإدارتها</p>
+        <h1 id="adminTitle">لوحة الإدارة - HIJAZI Apartments</h1>
+        <p class="muted" id="adminSubtitle">عرض الحجوزات وإدارتها</p>
     </header>
 
     <div class="container">
@@ -333,7 +213,7 @@
         <div class="top-box">
             <div class="toolbar">
                 <div class="field">
-                    <label>فلتر الشقة</label>
+                    <label id="filterLabel">فلتر الشقة</label>
                     <select id="aptFilter">
                         <option value="">الكل</option>
                         <option value="1">شقة 1</option>
@@ -346,7 +226,7 @@
                 </div>
 
                 <div class="field">
-                    <label>بحث بالاسم أو الهاتف</label>
+                    <label id="searchLabel">بحث بالاسم أو الهاتف</label>
                     <input id="searchBox" type="text" placeholder="اكتب اسم أو رقم هاتف..." />
                 </div>
 
@@ -356,17 +236,17 @@
 
         <div class="stats-grid">
             <div class="stat-card">
-                <h3>إجمالي الحجوزات</h3>
+                <h3 id="totalBookingsLabel">إجمالي الحجوزات</h3>
                 <div class="stat-number" id="totalBookings">0</div>
             </div>
 
             <div class="stat-card">
-                <h3>الحجوزات المعروضة</h3>
+                <h3 id="filteredBookingsLabel">الحجوزات المعروضة</h3>
                 <div class="stat-number" id="filteredBookings">0</div>
             </div>
 
             <div class="stat-card">
-                <h3>عدد الشقق المحجوزة</h3>
+                <h3 id="bookedApartmentsLabel">عدد الشقق المحجوزة</h3>
                 <div class="stat-number" id="bookedApartments">0</div>
             </div>
         </div>
@@ -377,15 +257,15 @@
             <table>
                 <thead>
                     <tr>
-                        <th>الشقة</th>
-                        <th>الاسم</th>
-                        <th>الهاتف</th>
-                        <th>البريد</th>
-                        <th>الدخول</th>
-                        <th>الخروج</th>
-                        <th>أشخاص</th>
-                        <th>السعر</th>
-                        <th>إجراء</th>
+                        <th id="thApt">الشقة</th>
+                        <th id="thName">الاسم</th>
+                        <th id="thPhone">الهاتف</th>
+                        <th id="thEmail">البريد</th>
+                        <th id="thCheckIn">الدخول</th>
+                        <th id="thCheckOut">الخروج</th>
+                        <th id="thGuests">أشخاص</th>
+                        <th id="thPrice">السعر</th>
+                        <th id="thAction">إجراء</th>
                     </tr>
                 </thead>
                 <tbody id="tbody"></tbody>
@@ -394,74 +274,138 @@
 
     </div>
 
-    <footer class="site-footer">
-        <div class="footer-container">
-            <div class="footer-box">
-                <h3>HIJAZI Apartments</h3>
-                <p>شقق مفروشة مريحة في الشميساني - عمّان، الأردن</p>
-            </div>
-
-            <div class="footer-box">
-                <h4>معلومات التواصل</h4>
-                <p>الهاتف: <a href="tel:+962789000444">+962789000444</a></p>
-                <p>البريد: <a
-                        href="mailto:ammarabunada775forbusiness@gmail.com">ammarabunada775forbusiness@gmail.com</a></p>
-                <p>العنوان: عمان، الأردن، الشميساني</p>
-            </div>
-
-            <div class="footer-box">
-                <h4>السوشال ميديا</h4>
-                <div class="social-links">
-                    <a href="https://www.instagram.com/j_ibrahim_j/" target="_blank">Instagram</a>
-                    <a href="https://web.facebook.com/abrahem.hjaze.71?locale=ar_AR" target="_blank">Facebook</a>
-                    <a href="https://www.google.com/search?q=%D8%AA%D8%B1%D8%AC%D9%85%D9%87&rlz=1C1GCEA_enJO1134JO1134&oq=&ie=UTF-8"
-                        target="_blank">Snapchat</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            © 2026 HIJAZI Apartments - جميع الحقوق محفوظة
-        </div>
-    </footer>
-
-    <div class="whatsapp-widget">
-        <div class="whatsapp-label">تواصل معنا</div>
-        <a href="https://wa.me/962789000444?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%B4%D9%82%D9%82%20%D8%A7%D9%84%D9%85%D8%AA%D8%A7%D8%AD%D8%A9"
-            class="whatsapp-float" target="_blank" aria-label="WhatsApp" title="تواصل معنا عبر واتساب">
-            <span class="whatsapp-pulse"></span>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="30" height="30" fill="white">
-                <path
-                    d="M19.11 17.27c-.27-.13-1.58-.78-1.82-.87-.24-.09-.41-.13-.59.14-.18.27-.68.87-.84 1.04-.15.18-.31.2-.58.07-.27-.13-1.12-.41-2.13-1.3-.79-.7-1.32-1.57-1.47-1.84-.15-.27-.02-.42.11-.55.11-.11.27-.29.41-.43.14-.15.18-.25.27-.43.09-.18.05-.34-.02-.48-.07-.13-.59-1.43-.81-1.96-.21-.5-.43-.43-.59-.44h-.5c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.29s.98 2.65 1.11 2.83c.14.18 1.92 2.93 4.65 4.11.65.28 1.16.45 1.56.58.66.21 1.26.18 1.73.11.53-.08 1.58-.65 1.8-1.27.22-.63.22-1.16.15-1.27-.06-.12-.24-.18-.5-.31z" />
-                <path
-                    d="M16.02 3.2c-7.07 0-12.8 5.72-12.8 12.77 0 2.25.59 4.45 1.71 6.39L3.1 28.8l6.63-1.73a12.8 12.8 0 0 0 6.29 1.69h.01c7.06 0 12.79-5.72 12.79-12.77 0-3.42-1.34-6.63-3.79-9.04A12.76 12.76 0 0 0 16.02 3.2zm0 23.39h-.01a10.62 10.62 0 0 1-5.41-1.49l-.39-.23-3.94 1.03 1.05-3.84-.25-.4a10.55 10.55 0 0 1-1.63-5.61c0-5.84 4.76-10.59 10.6-10.59 2.82 0 5.47 1.09 7.47 3.08a10.5 10.5 0 0 1 3.11 7.51c0 5.84-4.76 10.59-10.6 10.59z" />
-            </svg>
-        </a>
-    </div>
-
     <script>
         const API_BASE = "https://hijazi-apartments-backend.onrender.com";
 
         let ADMIN_USER = "";
         let ADMIN_PASS = "";
 
+        // ترجمة النصوص داخل صفحة الأدمن
+        function getAdminTexts() {
+            return {
+                ar: {
+                    title: "لوحة الإدارة - HIJAZI Apartments",
+                    subtitle: "عرض الحجوزات وإدارتها",
+                    filterLabel: "فلتر الشقة",
+                    searchLabel: "بحث بالاسم أو الهاتف",
+                    searchPlaceholder: "اكتب اسم أو رقم هاتف...",
+                    refresh: "تحديث",
+                    totalBookings: "إجمالي الحجوزات",
+                    filteredBookings: "الحجوزات المعروضة",
+                    bookedApartments: "عدد الشقق المحجوزة",
+                    loading: "جاري تحميل الحجوزات...",
+                    noBookings: "لا توجد حجوزات مطابقة حالياً",
+                    displayedCount: "عدد الحجوزات المعروضة",
+                    apt: "الشقة",
+                    name: "الاسم",
+                    phone: "الهاتف",
+                    email: "البريد",
+                    checkIn: "الدخول",
+                    checkOut: "الخروج",
+                    guests: "أشخاص",
+                    price: "السعر",
+                    action: "إجراء",
+                    delete: "حذف",
+                    usernamePrompt: "أدخل اسم المستخدم (Admin Username):",
+                    passwordPrompt: "أدخل كلمة المرور (Admin Password):",
+                    needUsername: "لازم تدخل اسم المستخدم.",
+                    needPassword: "لازم تدخل كلمة المرور.",
+                    wrongCreds: "❌ بيانات الدخول غير صحيحة. جرّب مرة ثانية.",
+                    unauthorized: "❌ غير مصرح. أدخل بيانات الأدمن من جديد.",
+                    confirmDelete: "متأكد بدك تحذف هذا الحجز؟",
+                    deleted: "✅ تم الحذف",
+                    serverError: "تعذر تحميل الحجوزات. حاول مرة أخرى بعد قليل.",
+                    deleteError: "تعذر الحذف. تأكد أن السيرفر شغال."
+                },
+                en: {
+                    title: "Admin Dashboard - HIJAZI Apartments",
+                    subtitle: "View and manage bookings",
+                    filterLabel: "Apartment filter",
+                    searchLabel: "Search by name or phone",
+                    searchPlaceholder: "Type a name or phone number...",
+                    refresh: "Refresh",
+                    totalBookings: "Total bookings",
+                    filteredBookings: "Displayed bookings",
+                    bookedApartments: "Booked apartments",
+                    loading: "Loading bookings...",
+                    noBookings: "No matching bookings found",
+                    displayedCount: "Displayed bookings",
+                    apt: "Apartment",
+                    name: "Name",
+                    phone: "Phone",
+                    email: "Email",
+                    checkIn: "Check-in",
+                    checkOut: "Check-out",
+                    guests: "Guests",
+                    price: "Price",
+                    action: "Action",
+                    delete: "Delete",
+                    usernamePrompt: "Enter admin username:",
+                    passwordPrompt: "Enter admin password:",
+                    needUsername: "Admin username is required.",
+                    needPassword: "Admin password is required.",
+                    wrongCreds: "❌ Invalid login details. Please try again.",
+                    unauthorized: "❌ Unauthorized. Enter admin credentials again.",
+                    confirmDelete: "Are you sure you want to delete this booking?",
+                    deleted: "✅ Deleted successfully",
+                    serverError: "Unable to load bookings. Please try again later.",
+                    deleteError: "Unable to delete. Make sure the server is running."
+                }
+            };
+        }
+
+        const currentLang = localStorage.getItem("siteLang") || "ar";
+        const T = getAdminTexts()[currentLang];
+
+        // تطبيق ترجمة الصفحة
+        function applyAdminTranslations() {
+            document.documentElement.lang = currentLang;
+            document.documentElement.dir = currentLang === "ar" ? "rtl" : "ltr";
+
+            document.getElementById("adminTitle").textContent = T.title;
+            document.getElementById("adminSubtitle").textContent = T.subtitle;
+            document.getElementById("filterLabel").textContent = T.filterLabel;
+            document.getElementById("searchLabel").textContent = T.searchLabel;
+            document.getElementById("searchBox").placeholder = T.searchPlaceholder;
+            document.getElementById("refreshBtn").textContent = T.refresh;
+            document.getElementById("totalBookingsLabel").textContent = T.totalBookings;
+            document.getElementById("filteredBookingsLabel").textContent = T.filteredBookings;
+            document.getElementById("bookedApartmentsLabel").textContent = T.bookedApartments;
+            document.getElementById("thApt").textContent = T.apt;
+            document.getElementById("thName").textContent = T.name;
+            document.getElementById("thPhone").textContent = T.phone;
+            document.getElementById("thEmail").textContent = T.email;
+            document.getElementById("thCheckIn").textContent = T.checkIn;
+            document.getElementById("thCheckOut").textContent = T.checkOut;
+            document.getElementById("thGuests").textContent = T.guests;
+            document.getElementById("thPrice").textContent = T.price;
+            document.getElementById("thAction").textContent = T.action;
+
+            document.querySelector('#aptFilter option[value=""]').textContent = currentLang === "ar" ? "الكل" : "All";
+            for (let i = 1; i <= 6; i++) {
+                document.querySelector(`#aptFilter option[value="${i}"]`).textContent = currentLang === "ar" ? `شقة ${i}` : `Apartment ${i}`;
+            }
+        }
+
+        // طلب بيانات الأدمن
         function askCredentials(message = "") {
             if (message) alert(message);
 
-            ADMIN_USER = prompt("أدخل اسم المستخدم (Admin Username):", ADMIN_USER || "");
+            ADMIN_USER = prompt(T.usernamePrompt, ADMIN_USER || "");
             if (ADMIN_USER === null || ADMIN_USER.trim() === "") {
-                return askCredentials("لازم تدخل اسم المستخدم.");
+                return askCredentials(T.needUsername);
             }
 
-            ADMIN_PASS = prompt("أدخل كلمة المرور (Admin Password):");
+            ADMIN_PASS = prompt(T.passwordPrompt);
             if (ADMIN_PASS === null || ADMIN_PASS.trim() === "") {
-                return askCredentials("لازم تدخل كلمة المرور.");
+                return askCredentials(T.needPassword);
             }
 
             ADMIN_USER = ADMIN_USER.trim();
             ADMIN_PASS = ADMIN_PASS.trim();
         }
 
+        // بناء هيدر المصادقة
         function authHeaders() {
             const token = btoa(`${ADMIN_USER}:${ADMIN_PASS}`);
             return {
@@ -482,21 +426,23 @@
 
         let allBookings = [];
 
+        // تنسيق التاريخ
         function fmtDate(d) {
             const date = new Date(d);
             if (isNaN(date.getTime())) return "";
             return date.toISOString().slice(0, 10);
         }
 
+        // تحديث البطاقات الإحصائية
         function updateStats(filtered) {
             totalBookingsEl.textContent = allBookings.length;
-
             filteredBookingsEl.textContent = filtered.length;
 
             const uniqueApts = new Set(filtered.map(b => b.apartmentId).filter(Boolean));
             bookedApartmentsEl.textContent = uniqueApts.size;
         }
 
+        // عرض الجدول
         function render() {
             const apt = aptFilter.value;
             const q = searchBox.value.trim().toLowerCase();
@@ -515,7 +461,7 @@
             if (filtered.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="9" class="empty-row">لا توجد حجوزات مطابقة حالياً</td>
+                        <td colspan="9" class="empty-row">${T.noBookings}</td>
                     </tr>
                 `;
             } else {
@@ -530,17 +476,18 @@
                         <td>${(b.adults ?? 0) + (b.children ?? 0)}</td>
                         <td>${b.totalPriceText ?? (b.totalPrice ?? "")}</td>
                         <td>
-                            <button class="btn btn-delete" onclick="delBooking('${b._id}')">حذف</button>
+                            <button class="btn btn-delete" onclick="delBooking('${b._id}')">${T.delete}</button>
                         </td>
                     </tr>
                 `).join("");
             }
 
-            statusEl.textContent = `عدد الحجوزات المعروضة: ${filtered.length}`;
+            statusEl.textContent = `${T.displayedCount}: ${filtered.length}`;
         }
 
+        // تحميل الحجوزات
         async function load() {
-            statusEl.textContent = "جاري تحميل الحجوزات...";
+            statusEl.textContent = T.loading;
 
             try {
                 const res = await fetch(`${API_BASE}/admin/bookings`, {
@@ -549,14 +496,14 @@
                 });
 
                 if (res.status === 401) {
-                    askCredentials("❌ بيانات الدخول غير صحيحة. جرّب مرة ثانية.");
+                    askCredentials(T.wrongCreds);
                     return load();
                 }
 
                 const data = await res.json();
 
                 if (!res.ok) {
-                    statusEl.textContent = data.message || "تعذر تحميل الحجوزات.";
+                    statusEl.textContent = data.message || T.serverError;
                     return;
                 }
 
@@ -564,12 +511,13 @@
                 render();
             } catch (e) {
                 console.error(e);
-                statusEl.textContent = "تعذر تحميل الحجوزات. حاول مرة أخرى بعد قليل.";
+                statusEl.textContent = T.serverError;
             }
         }
 
+        // حذف حجز
         async function delBooking(id) {
-            if (!confirm("متأكد بدك تحذف هذا الحجز؟")) return;
+            if (!confirm(T.confirmDelete)) return;
 
             try {
                 const res = await fetch(`${API_BASE}/admin/bookings/${id}`, {
@@ -578,21 +526,21 @@
                 });
 
                 if (res.status === 401) {
-                    askCredentials("❌ غير مصرح. أدخل بيانات الأدمن من جديد.");
+                    askCredentials(T.unauthorized);
                     return delBooking(id);
                 }
 
                 const data = await res.json();
                 if (!res.ok) {
-                    alert(data.message || "تعذر الحذف.");
+                    alert(data.message || T.deleteError);
                     return;
                 }
 
-                alert(data.message || "✅ تم الحذف");
+                alert(data.message || T.deleted);
                 await load();
             } catch (e) {
                 console.error(e);
-                alert("تعذر الحذف. تأكد أن السيرفر شغال.");
+                alert(T.deleteError);
             }
         }
 
@@ -602,6 +550,7 @@
         searchBox.addEventListener("input", render);
         refreshBtn.addEventListener("click", load);
 
+        applyAdminTranslations();
         askCredentials();
         load();
     </script>

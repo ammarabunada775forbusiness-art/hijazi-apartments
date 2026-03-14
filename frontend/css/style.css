@@ -1,11 +1,12 @@
 body {
     background-color: #111;
     color: white;
-    font-family: Tahoma;
+    font-family: Tahoma, Arial, sans-serif;
+    margin: 0;
 }
 
 .gold {
-    color: #c89116;
+    color: #c89116 !important;
 }
 
 .gold-btn {
@@ -16,6 +17,11 @@ body {
 
 .navbar .gold {
     font-weight: bold;
+}
+
+.custom-navbar {
+    background: rgba(0, 0, 0, .85) !important;
+    backdrop-filter: blur(6px);
 }
 
 .hero {
@@ -40,11 +46,12 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 }
 
 .card {
     background: #222;
-    color: rgb(0, 0, 0);
+    color: #000;
 }
 
 .price {
@@ -53,13 +60,6 @@ body {
     font-size: 18px;
 }
 
-
-
-
-
-
-
-
 .currency-box {
     margin-top: 20px;
     display: inline-block;
@@ -67,7 +67,7 @@ body {
 
 .currency-box select {
     background: linear-gradient(90deg, #c89116, #000000);
-    color: rgb(0, 0, 0);
+    color: #000;
     border: none;
     padding: 8px 12px;
     font-weight: bold;
@@ -78,4 +78,348 @@ body {
 .currency-box select:focus {
     outline: none;
     box-shadow: 0 0 5px #c89116;
+}
+
+/* أزرار اللغة في الهيدر */
+.lang-switcher {
+    display: flex;
+    gap: 8px;
+    margin-inline-start: 12px;
+}
+
+.lang-btn {
+    border: 1px solid #c89116;
+    background: transparent;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.lang-btn.active,
+.lang-btn:hover {
+    background: #c89116;
+    color: #fff;
+}
+
+/* تنسيق رسالة الخصم الذهبي */
+.long-stay-note {
+    margin-top: 12px;
+    color: #ffe7a6;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.long-stay-box {
+    margin-top: 12px;
+    background: rgba(200, 145, 22, 0.18);
+    color: #fff4d4;
+    border: 1px solid rgba(200, 145, 22, 0.45);
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* قسم لماذا تختار Hijazi */
+.why-section {
+    background: #fff;
+    color: #111;
+    padding: 70px 20px;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 28px;
+    color: #111;
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.why-grid {
+    max-width: 1100px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+}
+
+.why-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, .08);
+    border: 1px solid #eee;
+}
+
+.why-card h3 {
+    color: #c89116;
+    margin-top: 0;
+}
+
+/* صفحات داخلية عامة */
+.page-hero {
+    background: linear-gradient(90deg, #c89116, #000);
+    color: #fff;
+    text-align: center;
+    padding: 120px 20px 60px;
+}
+
+.page-content {
+    max-width: 1150px;
+    margin: auto;
+    padding: 40px 16px;
+}
+
+.white-card {
+    background: #fff;
+    color: #111;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, .08);
+    border: 1px solid #eee;
+    margin-bottom: 20px;
+}
+
+/* FAQ */
+.faq-item {
+    background: #fff;
+    color: #111;
+    border: 1px solid #eee;
+    border-radius: 14px;
+    margin-bottom: 14px;
+    overflow: hidden;
+}
+
+.faq-question {
+    width: 100%;
+    background: #fff;
+    color: #111;
+    border: none;
+    padding: 18px 20px;
+    text-align: start;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.faq-answer {
+    display: none;
+    padding: 0 20px 18px;
+    color: #555;
+    line-height: 1.8;
+}
+
+.faq-item.active .faq-answer {
+    display: block;
+}
+
+/* Reviews */
+.review-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 18px;
+}
+
+.review-card {
+    background: #fff;
+    color: #111;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #eee;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, .08);
+}
+
+.review-card img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+}
+
+.review-card .review-body {
+    padding: 16px;
+}
+
+/* الشقق - بطاقات تفاصيل الغرف */
+.room-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.room-card {
+    border: 1px solid #eee;
+    border-radius: 14px;
+    padding: 14px;
+    background: #fafafa;
+    cursor: pointer;
+    transition: .25s;
+    text-align: center;
+}
+
+.room-card:hover,
+.room-card.active {
+    border-color: #c89116;
+    box-shadow: 0 8px 20px rgba(200, 145, 22, .16);
+}
+
+.room-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.room-gallery-grid img {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 14px;
+}
+
+/* Footer */
+.site-footer {
+    background: linear-gradient(90deg, #111, #000);
+    color: #fff;
+    margin-top: 40px;
+    padding-top: 35px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 20px 25px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+}
+
+.footer-box h3,
+.footer-box h4 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #c89116;
+}
+
+.footer-box p {
+    margin: 8px 0;
+    line-height: 1.8;
+    color: #ddd;
+}
+
+.footer-box a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.footer-box a:hover {
+    color: #c89116;
+}
+
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #bbb;
+    font-size: 14px;
+}
+
+/* WhatsApp */
+.whatsapp-widget {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.whatsapp-label {
+    background: rgba(0, 0, 0, 0.78);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+    white-space: nowrap;
+}
+
+.whatsapp-float {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28);
+    transition: transform 0.25s ease;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.08);
+}
+
+.whatsapp-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(37, 211, 102, 0.45);
+    animation: whatsappPulse 1.8s infinite;
+    z-index: -1;
+}
+
+@keyframes whatsappPulse {
+    0% {
+        transform: scale(1);
+        opacity: .9;
+    }
+
+    70% {
+        transform: scale(1.6);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1.6);
+        opacity: 0;
+    }
+}
+
+/* وضع اللغة الإنجليزية */
+body.ltr-mode {
+    direction: ltr;
+    text-align: left;
+}
+
+body.ltr-mode .lang-switcher {
+    margin-inline-start: 0;
+    margin-inline-end: 12px;
+}
+
+@media (max-width: 768px) {
+    .lang-switcher {
+        margin-top: 12px;
+    }
+
+    .section-title {
+        font-size: 26px;
+    }
 }
