@@ -451,3 +451,54 @@ function initAdminTrigger() {
 document.addEventListener("DOMContentLoaded", () => {
     applyDocumentDirection();
 });
+
+/* =========================
+   زر الصعود للأعلى
+========================= */
+function renderScrollTopButton() {
+    const existing = document.getElementById("scrollTopBtn");
+    if (existing) return;
+
+    const btn = document.createElement("button");
+    btn.id = "scrollTopBtn";
+    btn.className = "scroll-top-btn";
+    btn.innerHTML = "↑";
+    btn.setAttribute("aria-label", "Scroll to top");
+    document.body.appendChild(btn);
+
+    btn.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    window.addEventListener("scroll", () => {
+        btn.style.display = window.scrollY > 250 ? "block" : "none";
+    });
+}
+
+/* =========================
+   تأثير دخول العناصر أثناء التمرير
+========================= */
+function initFadeInSections() {
+    const sections = document.querySelectorAll(".fade-in-section");
+    if (!sections.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+            }
+        });
+    }, {
+        threshold: 0.15
+    });
+
+    sections.forEach(section => observer.observe(section));
+}
+
+/* =========================
+   تشغيل إضافي عام
+========================= */
+document.addEventListener("DOMContentLoaded", () => {
+    renderScrollTopButton();
+    initFadeInSections();
+});

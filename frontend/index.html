@@ -5,7 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HIJAZI Apartments</title>
+    <meta name="description"
+        content="شقق مفروشة فاخرة في عمان الشميساني قريبة من المستشفيات مثل مستشفى الأردن والمستشفى الإسلامي والعبدلي. مناسبة للإقامة الطبية والتنفيذية والإقامة الطويلة.">
 
+    <meta name="keywords"
+        content="شقق مفروشة عمان, شقق مفروشة الشميساني, شقق مفروشة العبدلي, شقق للايجار في عمان, شقق مفروشة قرب مستشفى الاردن, شقق مفروشة قرب المستشفى الاسلامي, Hijazi Apartments">
+
+    <meta name="author" content="Hijazi Apartments">
+
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Hijazi Apartments | شقق مفروشة في عمان الشميساني">
+    <meta property="og:description"
+        content="شقق مفروشة راقية في قلب عمان الشميساني قريبة من أهم المستشفيات والمطاعم. مناسبة للإقامة الطبية والتنفيذية.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://hijazi-apartments.com">
+    <meta property="og:image"
+        content="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 
@@ -58,34 +73,60 @@
         }
 
         .availability-box {
-            max-width: 950px;
+            max-width: 760px;
             margin: 35px auto;
-            background: rgba(0, 0, 0, .72);
-            padding: 22px;
-            border-radius: 14px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, .4);
+            background: rgba(0, 0, 0, .76);
+            padding: 24px 26px;
+            border-radius: 20px;
+            box-shadow: 0 16px 34px rgba(0, 0, 0, .28);
         }
 
         .availability-row {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
             align-items: end;
+        }
+
+        .availability-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .availability-field label {
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: block;
+            opacity: .95;
+            font-weight: 700;
+        }
+
+        .availability-field input {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: none;
+            min-width: unset;
+            font-size: 15px;
+            background: #fff;
+            color: #111;
+        }
+
+        .availability-actions {
+            margin-top: 18px;
+            display: flex;
             justify-content: center;
         }
 
-        .availability-row label {
-            font-size: 14px;
-            margin-bottom: 6px;
-            display: block;
-            opacity: .9;
-        }
-
-        .availability-row input {
-            padding: 10px 12px;
-            border-radius: 8px;
-            border: none;
-            min-width: 180px;
+        .availability-meta {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            text-align: center;
         }
 
         .status-msg {
@@ -105,12 +146,13 @@
             background: linear-gradient(135deg, #d4a017, #8a6508);
             color: #fff;
             border: none;
-            padding: 13px 24px;
-            border-radius: 12px;
+            width: 220px;
+            height: 50px;
+            border-radius: 14px;
             font-weight: 800;
+            font-size: 16px;
             box-shadow: 0 10px 24px rgba(212, 160, 23, 0.28);
             transition: all 0.25s ease;
-            min-width: 210px;
         }
 
         .hero-search-btn:hover {
@@ -144,6 +186,25 @@
             color: #c89116;
             margin-top: 0;
         }
+
+        @media (max-width: 768px) {
+            .availability-box {
+                max-width: 94%;
+                padding: 18px;
+            }
+
+            .availability-row {
+                grid-template-columns: 1fr;
+            }
+
+            .availability-actions {
+                margin-top: 14px;
+            }
+
+            .hero-search-btn {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -165,21 +226,25 @@
 
             <div class="availability-box">
                 <div class="availability-row">
-                    <div>
+                    <div class="availability-field">
                         <label id="checkInLabel">تاريخ الدخول</label>
                         <input type="date" id="checkIn">
                     </div>
-                    <div>
+
+                    <div class="availability-field">
                         <label id="checkOutLabel">تاريخ الخروج</label>
                         <input type="date" id="checkOut">
                     </div>
+                </div>
+
+                <div class="availability-actions">
                     <button id="checkBtn" class="hero-search-btn">عرض الشقق المتاحة</button>
                 </div>
 
-                <!-- رسالة الخصم الذهبي -->
-                <div id="longStayNotice"></div>
-
-                <div id="dateStatus" class="status-msg"></div>
+                <div class="availability-meta">
+                    <div id="longStayNotice"></div>
+                    <div id="dateStatus" class="status-msg"></div>
+                </div>
             </div>
 
             <a href="apartments.html" class="btn gold-btn mt-2" id="viewAllBtn">عرض جميع الشقق</a>
@@ -187,7 +252,7 @@
     </section>
 
     <!-- قسم SEO ونصوص قوية للظهور -->
-    <section class="seo-section">
+    <section class="seo-section fade-in-section">
         <h2 class="section-title" id="seoTitle">إقامة راقية في قلب عمان الشميساني</h2>
 
         <div class="seo-content">
@@ -212,7 +277,7 @@
     </section>
 
     <!-- قسم لماذا تختار Hijazi -->
-    <section class="why-section">
+    <section class="why-section fade-in-section">
         <h2 class="section-title" id="whyTitle">لماذا تختار Hijazi</h2>
 
         <div class="why-grid">
@@ -231,6 +296,31 @@
                 <h3 id="why3Title">شقق سكنية بتنسيق 7 نجوم</h3>
                 <p id="why3Text">تجهيزات أنيقة ومظهر راقٍ يمنح الضيف إحساس الفخامة والراحة في واحدة من أفضل مناطق عمان.
                 </p>
+            </div>
+        </div>
+    </section>
+    <section class="stats-section fade-in-section">
+        <h2 class="section-title" id="statsTitle">أرقام تعكس جودة الإقامة</h2>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <h3 id="stat1Label">شقق مفروشة</h3>
+                <div class="stat-number">6+</div>
+            </div>
+
+            <div class="stat-box">
+                <h3 id="stat2Label">مناطق قريبة من المستشفيات</h3>
+                <div class="stat-number">5+</div>
+            </div>
+
+            <div class="stat-box">
+                <h3 id="stat3Label">خدمات ومرافق قريبة</h3>
+                <div class="stat-number">20+</div>
+            </div>
+
+            <div class="stat-box">
+                <h3 id="stat4Label">خيار مناسب للإقامة الطويلة</h3>
+                <div class="stat-number">100%</div>
             </div>
         </div>
     </section>
@@ -281,6 +371,11 @@
                 document.getElementById("why2Text").textContent = "غرف نوم متعددة وصالة ومطبخ ومساحات مريحة تناسب العائلات والإقامة الطويلة.";
                 document.getElementById("why3Title").textContent = "شقق سكنية بتنسيق 7 نجوم";
                 document.getElementById("why3Text").textContent = "تجهيزات أنيقة ومظهر راقٍ يمنح الضيف إحساس الفخامة والراحة في واحدة من أفضل مناطق عمان.";
+                document.getElementById("statsTitle").textContent = "أرقام تعكس جودة الإقامة";
+                document.getElementById("stat1Label").textContent = "شقق مفروشة";
+                document.getElementById("stat2Label").textContent = "مناطق قريبة من المستشفيات";
+                document.getElementById("stat3Label").textContent = "خدمات ومرافق قريبة";
+                document.getElementById("stat4Label").textContent = "خيار مناسب للإقامة الطويلة";
             } else {
                 document.getElementById("heroTitle").textContent = "Welcome to HIJAZI Apartments";
                 document.getElementById("heroText").textContent = "Luxury furnished apartments for rent in Shmeisani, Amman, ideal for medical and executive stays near major hospitals, restaurants, and cafés.";
@@ -304,6 +399,11 @@
                 document.getElementById("why2Text").textContent = "Multiple bedrooms, living room, kitchen, and comfortable spaces ideal for families and long stays.";
                 document.getElementById("why3Title").textContent = "Residential apartments with 7-star styling";
                 document.getElementById("why3Text").textContent = "Elegant finishing and refined design that provide luxury and comfort in one of Amman’s finest districts.";
+                document.getElementById("statsTitle").textContent = "Numbers that reflect the quality of your stay";
+                document.getElementById("stat1Label").textContent = "Furnished apartments";
+                document.getElementById("stat2Label").textContent = "Areas near hospitals";
+                document.getElementById("stat3Label").textContent = "Nearby services and facilities";
+                document.getElementById("stat4Label").textContent = "Ideal for long stays";
             }
         }
 
