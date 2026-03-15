@@ -23,6 +23,7 @@ const HIJAZI_APARTMENTS = {
     1: {
         id: 1,
         location: "وسط البلد",
+        mapEmbed: "https://www.google.com/maps?q=%D9%88%D8%B3%D8%B7%20%D8%A7%D9%84%D8%A8%D9%84%D8%AF%20%D8%B9%D9%85%D8%A7%D9%86&z=15&output=embed",
         nameAr: "شقة رقم 1",
         nameEn: "Apartment 1",
         price: 50,
@@ -148,9 +149,37 @@ for (let i = 2; i <= 6; i++) {
     HIJAZI_APARTMENTS[i].nameAr = `شقة رقم ${i}`;
     HIJAZI_APARTMENTS[i].nameEn = `Apartment ${i}`;
     HIJAZI_APARTMENTS[i].price = [50, 55, 60, 65, 70][(i - 2) % 5];
-    if (i === 6) {
-        HIJAZI_APARTMENTS[i].oneBalcony = true;
-        const balconies = HIJAZI_APARTMENTS[i].rooms.find(r => r.key === "balconies");
+}
+
+/* =========================================================
+   تخصيص موقع وخريطة مستقلة لكل شقة
+   يمكنك لاحقًا تغيير أي location أو mapEmbed بسهولة
+========================================================= */
+HIJAZI_APARTMENTS[1].location = "الشميساني - قرب مستشفى الأردن";
+HIJAZI_APARTMENTS[1].mapEmbed = "https://www.google.com/maps?q=Jordan%20Hospital%20Amman&z=15&output=embed";
+
+HIJAZI_APARTMENTS[2].location = "الشميساني - قرب المستشفى الإسلامي";
+HIJAZI_APARTMENTS[2].mapEmbed = "https://www.google.com/maps?q=Islamic%20Hospital%20Amman&z=15&output=embed";
+
+HIJAZI_APARTMENTS[3].location = "العبدلي - قرب البوليفارد";
+HIJAZI_APARTMENTS[3].mapEmbed = "https://www.google.com/maps?q=The%20Boulevard%20Amman&z=15&output=embed";
+
+HIJAZI_APARTMENTS[4].location = "الشميساني - قرب شارع الثقافة";
+HIJAZI_APARTMENTS[4].mapEmbed = "https://www.google.com/maps?q=Shmeisani%20Amman&z=15&output=embed";
+
+HIJAZI_APARTMENTS[5].location = "العبدلي - قرب المستشفى التخصصي";
+HIJAZI_APARTMENTS[5].mapEmbed = "https://www.google.com/maps?q=Specialty%20Hospital%20Amman&z=15&output=embed";
+
+HIJAZI_APARTMENTS[6].location = "الشميساني - قرب الكافيهات والخدمات";
+HIJAZI_APARTMENTS[6].mapEmbed = "https://www.google.com/maps?q=Shmeisani%20restaurants%20Amman&z=15&output=embed";
+
+/* =========================================================
+   الشقة 6 تحتوي على شرفة واحدة فقط
+========================================================= */
+if (HIJAZI_APARTMENTS[6]) {
+    HIJAZI_APARTMENTS[6].oneBalcony = true;
+    const balconies = HIJAZI_APARTMENTS[6].rooms.find(r => r.key === "balconies");
+    if (balconies) {
         balconies.noteAr = "تحتوي هذه الشقة على شرفة واحدة.";
         balconies.noteEn = "This apartment includes one balcony.";
     }

@@ -36,9 +36,8 @@
             background: #111;
             color: #fff;
             border-radius: 12px;
-            padding: 14px;
-            margin-top: -24px;
-            margin-bottom: 18px;
+            padding: 14px 18px;
+            margin: -10px auto 18px;
             display: flex;
             justify-content: space-between;
             gap: 10px;
@@ -46,6 +45,7 @@
             align-items: center;
             position: relative;
             z-index: 2;
+            max-width: 980px;
         }
 
         .top-bar-right,
@@ -441,7 +441,17 @@
             border-radius: 14px;
         }
 
+        .map-box {
+            margin-top: 18px;
+        }
 
+        .map-box iframe {
+            width: 100%;
+            height: 280px;
+            border: 0;
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+        }
 
         @media (max-width: 900px) {
             .layout {
@@ -516,6 +526,7 @@
                     <p class="muted"><strong id="locationText">الموقع:</strong> <span id="aptLocation">—</span></p>
 
                     <ul class="features" id="aptFeatures"></ul>
+
                     <!-- قسم تفاصيل الغرف والمرافق مثل صفحة الشقق -->
                     <div style="margin-top:22px;">
                         <h3 id="roomsTitle">تفاصيل الغرف والمرافق</h3>
@@ -523,6 +534,12 @@
                         <div class="room-description" id="roomDescription"></div>
                         <div class="room-gallery-grid" id="roomGallery"></div>
                     </div>
+
+                    <div class="map-box">
+                        <h3 id="mapTitle">موقع الشقة على الخريطة</h3>
+                        <iframe id="aptMap" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+
                     <div class="summary-box">
                         <p><strong id="summaryAptLabel">رقم الشقة:</strong> <span id="summaryAptId">—</span></p>
                         <p><strong id="summaryNightLabel">سعر الليلة:</strong> <span id="nightPrice">—</span></p>
@@ -710,7 +727,8 @@
                 document.getElementById("successTitle").textContent = "شكراً لك";
                 document.getElementById("successText").innerHTML = "تم حفظ الحجز بنجاح، وتم إرسال رسالة تأكيد إلى بريدك الإلكتروني.<br>سنتواصل معك قريبًا إذا احتجنا أي تفاصيل إضافية.";
                 document.getElementById("closeSuccessModal").textContent = "إغلاق";
-
+                const mapTitleEl = document.getElementById("mapTitle");
+                if (mapTitleEl) mapTitleEl.textContent = "موقع الشقة على الخريطة";
                 document.querySelector('#aptId option[value=""]').textContent = "-- اختر الشقة --";
                 for (let i = 1; i <= 6; i++) {
                     document.querySelector(`#aptId option[value="${i}"]`).textContent = `شقة رقم ${i}`;
@@ -751,7 +769,8 @@
                 document.getElementById("successTitle").textContent = "Thank you";
                 document.getElementById("successText").innerHTML = "Your booking has been saved successfully, and a confirmation email has been sent to your inbox.<br>We will contact you soon if any extra details are needed.";
                 document.getElementById("closeSuccessModal").textContent = "Close";
-
+                const mapTitleEl = document.getElementById("mapTitle");
+                if (mapTitleEl) mapTitleEl.textContent = "Apartment location on map";
                 document.querySelector('#aptId option[value=""]').textContent = "-- Select apartment --";
                 for (let i = 1; i <= 6; i++) {
                     document.querySelector(`#aptId option[value="${i}"]`).textContent = `Apartment ${i}`;
@@ -880,21 +899,6 @@
         }
 
         window.goToSlide = goToSlide;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         // عرض كروت تفاصيل الغرف والمرافق في صفحة الحجز
         function renderRoomCards(apt, selectedKey = "master") {
             const lang = getCurrentLang();
@@ -927,25 +931,6 @@
             renderRoomCards(apt, roomKey);
         };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         // عرض تفاصيل الشقة المختارة
         function renderApartmentDetails() {
             const id = getSelectedAptId();
@@ -960,9 +945,14 @@
             currentSlide = 0;
             aptNameEl.textContent = lang === "ar" ? apt.nameAr : apt.nameEn;
             aptDescEl.textContent = lang === "ar" ? apt.descAr : apt.descEn;
-            aptLocationEl.textContent = apt.location;
+            aptLocationEl.textContent = `📍 ${apt.location}`;
             summaryAptIdEl.textContent = id;
             featuresEl.innerHTML = (lang === "ar" ? apt.featuresAr : apt.featuresEn).map(f => `<li>${f}</li>`).join("");
+
+            const aptMap = document.getElementById("aptMap");
+            if (aptMap) {
+                aptMap.src = apt.mapEmbed;
+            }
 
             renderSlider();
 
