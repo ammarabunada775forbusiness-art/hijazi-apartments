@@ -33,21 +33,112 @@
         .box {
             background: #111;
             color: #fff;
-            border-radius: 12px;
-            padding: 18px;
+            border-radius: 20px;
+            padding: 24px 26px;
             margin: -18px auto 0;
             position: relative;
             z-index: 2;
-            box-shadow: 0 12px 25px rgba(0, 0, 0, .16);
-            max-width: 980px;
+            box-shadow: 0 16px 34px rgba(0, 0, 0, .18);
+            max-width: 760px;
         }
 
         .row-box {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
             align-items: end;
+        }
+
+        .filter-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-field label {
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #f2f2f2;
+        }
+
+        .filter-field input[type="date"] {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: none;
+            min-width: unset;
+            font-size: 15px;
+            background: #fff;
+            color: #111;
+        }
+
+        .filter-actions {
+            margin-top: 18px;
+            display: flex;
             justify-content: center;
+        }
+
+        .filter-btn {
+            min-width: 220px;
+            height: 50px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #d4a017, #8a6508);
+            color: #fff;
+            font-weight: 800;
+            font-size: 16px;
+            box-shadow: 0 10px 22px rgba(212, 160, 23, 0.24);
+            transition: all 0.25s ease;
+            border: none;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #e0ad1f, #6f5206);
+            box-shadow: 0 14px 28px rgba(212, 160, 23, 0.32);
+        }
+
+        .filter-meta {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            text-align: center;
+        }
+
+        .status {
+            margin-top: 0;
+            font-size: 15px;
+            opacity: .95;
+            font-weight: 700;
+            color: #f5f5f5;
+        }
+
+        @media (max-width: 768px) {
+            .box {
+                padding: 18px;
+                max-width: 94%;
+            }
+
+            .row-box {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-actions {
+                margin-top: 14px;
+            }
+
+            .filter-btn {
+                width: 100%;
+                min-width: unset;
+            }
+
+            .filter-meta {
+                align-items: center;
+                text-align: center;
+            }
         }
 
         label {
@@ -327,23 +418,28 @@
         <!-- صندوق الفلترة -->
         <div class="box">
             <div class="row-box">
-                <div>
+                <div class="filter-field">
                     <label id="checkInLabel">تاريخ الدخول</label>
                     <input type="date" id="checkIn">
                 </div>
 
-                <div>
+                <div class="filter-field">
                     <label id="checkOutLabel">تاريخ الخروج</label>
                     <input type="date" id="checkOut">
                 </div>
-
-                <button id="refreshBtn">عرض المتاح</button>
             </div>
 
-            <!-- رسالة الخصم الذهبي -->
-            <div id="longStayNotice"></div>
+            <div class="filter-actions">
+                <button id="refreshBtn" class="filter-btn">عرض المتاح</button>
+            </div>
 
-            <div class="status" id="status"></div>
+            <div class="filter-meta">
+                <!-- رسالة الخصم الذهبي -->
+                <div id="longStayNotice"></div>
+
+                <!-- حالة الفحص -->
+                <div class="status" id="status"></div>
+            </div>
         </div>
 
         <!-- كروت الشقق -->
