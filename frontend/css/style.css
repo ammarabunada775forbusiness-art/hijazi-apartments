@@ -1,8 +1,32 @@
+html,
 body {
-    background-color: #111;
-    color: white;
-    font-family: Tahoma, Arial, sans-serif;
     margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+body {
+    background-color: #fff;
+    color: #111;
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    line-height: 1.6;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+img,
+video,
+iframe {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    text-decoration: none;
 }
 
 .gold {
@@ -13,45 +37,119 @@ body {
     background: linear-gradient(90deg, #c89116, #000000);
     color: white;
     border: none;
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-weight: 700;
+    transition: 0.25s ease;
+}
+
+.gold-btn:hover {
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.16);
 }
 
 .navbar .gold {
     font-weight: bold;
 }
 
+/* =========================
+   NAVBAR
+========================= */
 .custom-navbar {
-    background: rgba(0, 0, 0, .85) !important;
-    backdrop-filter: blur(6px);
+    background: rgba(0, 0, 0, 0.88) !important;
+    backdrop-filter: blur(8px);
+    z-index: 9999;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
-.hero {
+.navbar {
+    z-index: 9999;
+}
+
+.navbar .container {
     position: relative;
-    height: 80vh;
-    overflow: hidden;
 }
 
-.hero video {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.navbar-brand {
+    font-size: 1.2rem;
+    font-weight: 800;
+    white-space: nowrap;
 }
 
-.overlay {
-    position: relative;
-    z-index: 2;
-    background: rgba(0, 0, 0, 0.6);
-    height: 100%;
+.navbar-nav .nav-link {
+    color: #fff !important;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 14px !important;
+    transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #c89116 !important;
+}
+
+.navbar-toggler {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 8px 10px;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none !important;
+}
+
+.navbar-collapse {
+    z-index: 9999;
+}
+
+/* أزرار اللغة في الهيدر */
+.lang-switcher-wrapper {
+    margin-inline-start: auto;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
-    padding: 20px;
+}
+
+.lang-switcher {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.lang-btn {
+    border: 1px solid #c89116;
+    background: transparent;
+    color: #fff;
+    padding: 7px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    transition: 0.2s ease;
+}
+
+.lang-btn.active,
+.lang-btn:hover {
+    background: #c89116;
+    color: #fff;
+}
+
+/* =========================
+   GENERAL UI
+========================= */
+section {
+    width: 100%;
 }
 
 .card {
-    background: #222;
-    color: #000;
+    background: #fff;
+    color: #111;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid #eee;
 }
 
 .price {
@@ -67,46 +165,17 @@ body {
 
 .currency-box select {
     background: linear-gradient(90deg, #c89116, #000000);
-    color: #000;
+    color: #fff;
     border: none;
     padding: 8px 12px;
     font-weight: bold;
-    border-radius: 5px;
+    border-radius: 8px;
     text-align: center;
 }
 
 .currency-box select:focus {
     outline: none;
     box-shadow: 0 0 5px #c89116;
-}
-
-/* أزرار اللغة في الهيدر */
-.lang-switcher-wrapper {
-    margin-inline-start: auto;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.lang-switcher {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-.lang-btn {
-    border: 1px solid #c89116;
-    background: transparent;
-    color: #fff;
-    padding: 6px 12px;
-    border-radius: 999px;
-    cursor: pointer;
-    font-size: 13px;
-}
-
-.lang-btn.active,
-.lang-btn:hover {
-    background: #c89116;
-    color: #fff;
 }
 
 /* تنسيق رسالة الخصم الذهبي */
@@ -128,19 +197,24 @@ body {
     line-height: 1.7;
 }
 
-/* قسم لماذا تختار Hijazi */
-.why-section {
-    background: #fff;
-    color: #111;
-    padding: 70px 20px;
-}
-
+/* =========================
+   SECTION TITLES
+========================= */
 .section-title {
     text-align: center;
     margin-bottom: 28px;
     color: #111;
     font-size: 32px;
     font-weight: 800;
+}
+
+/* =========================
+   WHY SECTION
+========================= */
+.why-section {
+    background: #fff;
+    color: #111;
+    padding: 70px 20px;
 }
 
 .why-grid {
@@ -162,9 +236,18 @@ body {
 .why-card h3 {
     color: #c89116;
     margin-top: 0;
+    font-size: 20px;
 }
 
-/* صفحات داخلية عامة */
+.why-card p {
+    margin-bottom: 0;
+    color: #555;
+    line-height: 1.8;
+}
+
+/* =========================
+   صفحات داخلية عامة
+========================= */
 .page-hero {
     background: linear-gradient(90deg, #c89116, #000);
     color: #fff;
@@ -188,7 +271,9 @@ body {
     margin-bottom: 20px;
 }
 
-/* FAQ */
+/* =========================
+   FAQ
+========================= */
 .faq-item {
     background: #fff;
     color: #111;
@@ -211,6 +296,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    line-height: 1.6;
 }
 
 .faq-answer {
@@ -224,33 +310,67 @@ body {
     display: block;
 }
 
-/* Reviews */
+/* =========================
+   REVIEWS
+========================= */
 .review-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 22px;
 }
 
 .review-card {
     background: #fff;
     color: #111;
-    border-radius: 18px;
+    border-radius: 22px;
     overflow: hidden;
     border: 1px solid #eee;
-    box-shadow: 0 8px 22px rgba(0, 0, 0, .08);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .08);
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 36px rgba(0, 0, 0, .12);
 }
 
 .review-card img {
     width: 100%;
-    height: 260px;
+    height: 280px;
     object-fit: cover;
+    display: block;
 }
 
 .review-card .review-body {
-    padding: 16px;
+    padding: 18px;
 }
 
-/* الشقق - بطاقات تفاصيل الغرف */
+.review-card .review-body h3 {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.review-card .review-body p {
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 0;
+}
+
+.review-badge {
+    display: inline-block;
+    margin-bottom: 10px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #fff5d8;
+    color: #a86f00;
+    font-weight: 800;
+    font-size: 12px;
+}
+
+/* =========================
+   APARTMENT / ROOM CARDS
+========================= */
 .room-cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -288,12 +408,51 @@ body {
     border-radius: 14px;
 }
 
-/* Footer */
+/* =========================
+   STATS SECTION
+========================= */
+.stats-section {
+    background: #faf7ef;
+    padding: 70px 20px;
+}
+
+.stats-grid {
+    max-width: 1050px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+}
+
+.stat-box {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 20px;
+    padding: 28px 20px;
+    text-align: center;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, .06);
+}
+
+.stat-box h3 {
+    margin: 0 0 10px;
+    font-size: 16px;
+    color: #555;
+}
+
+.stat-number {
+    font-size: 38px;
+    font-weight: 900;
+    color: #c89116;
+}
+
+/* =========================
+   FOOTER
+========================= */
 .site-footer {
-    background: linear-gradient(90deg, #111, #000);
+    background: linear-gradient(135deg, #0f0f0f, #000);
     color: #fff;
     margin-top: 40px;
-    padding-top: 35px;
+    padding-top: 45px;
 }
 
 .footer-container {
@@ -305,11 +464,21 @@ body {
     gap: 24px;
 }
 
+.footer-box {
+    padding: 10px;
+}
+
 .footer-box h3,
 .footer-box h4 {
     margin-top: 0;
-    margin-bottom: 12px;
-    color: #c89116;
+    margin-bottom: 14px;
+    color: #d4a017;
+    font-weight: 800;
+}
+
+.footer-box p,
+.footer-box a {
+    font-size: 15px;
 }
 
 .footer-box p {
@@ -319,12 +488,13 @@ body {
 }
 
 .footer-box a {
-    color: #fff;
+    color: #f5f5f5;
     text-decoration: none;
+    transition: color 0.2s ease;
 }
 
 .footer-box a:hover {
-    color: #c89116;
+    color: #d4a017;
 }
 
 .social-links {
@@ -335,13 +505,16 @@ body {
 
 .footer-bottom {
     text-align: center;
-    padding: 14px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     color: #bbb;
     font-size: 14px;
+    margin-top: 14px;
 }
 
-/* WhatsApp */
+/* =========================
+   WhatsApp
+========================= */
 .whatsapp-widget {
     position: fixed;
     bottom: 22px;
@@ -409,171 +582,9 @@ body {
     }
 }
 
-/* وضع اللغة الإنجليزية */
-body.ltr-mode {
-    direction: ltr;
-    text-align: left;
-}
-
-body.ltr-mode .lang-switcher-wrapper {
-    margin-inline-start: auto;
-    margin-inline-end: 0;
-}
-
-@media (max-width: 768px) {
-    .lang-switcher {
-        margin-top: 12px;
-    }
-
-    .section-title {
-        font-size: 26px;
-    }
-}
-
-/* =========================================================
-   تحسين الفوتر
-========================================================= */
-.site-footer {
-    background: linear-gradient(135deg, #0f0f0f, #000);
-    color: #fff;
-    margin-top: 40px;
-    padding-top: 45px;
-}
-
-.footer-box {
-    padding: 10px;
-}
-
-.footer-box h3,
-.footer-box h4 {
-    margin-top: 0;
-    margin-bottom: 14px;
-    color: #d4a017;
-    font-weight: 800;
-}
-
-.footer-box p,
-.footer-box a {
-    font-size: 15px;
-}
-
-.footer-box a {
-    color: #f5f5f5;
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.footer-box a:hover {
-    color: #d4a017;
-}
-
-.footer-bottom {
-    text-align: center;
-    padding: 16px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-    color: #bbb;
-    font-size: 14px;
-    margin-top: 14px;
-}
-
-/* =========================================================
-   قسم الإحصائيات
-========================================================= */
-.stats-section {
-    background: #faf7ef;
-    padding: 70px 20px;
-}
-
-.stats-grid {
-    max-width: 1050px;
-    margin: auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 18px;
-}
-
-.stat-box {
-    background: #fff;
-    border: 1px solid #eee;
-    border-radius: 20px;
-    padding: 28px 20px;
-    text-align: center;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, .06);
-}
-
-.stat-box h3 {
-    margin: 0 0 10px;
-    font-size: 16px;
-    color: #555;
-}
-
-.stat-number {
-    font-size: 38px;
-    font-weight: 900;
-    color: #c89116;
-}
-
-/* =========================================================
-   صفحة التقييمات بشكل أفخم
-========================================================= */
-.review-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 22px;
-}
-
-.review-card {
-    background: #fff;
-    color: #111;
-    border-radius: 22px;
-    overflow: hidden;
-    border: 1px solid #eee;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, .08);
-    transition: transform 0.28s ease, box-shadow 0.28s ease;
-}
-
-.review-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 36px rgba(0, 0, 0, .12);
-}
-
-.review-card img {
-    width: 100%;
-    height: 280px;
-    object-fit: cover;
-    display: block;
-}
-
-.review-card .review-body {
-    padding: 18px;
-}
-
-.review-card .review-body h3 {
-    font-size: 18px;
-    font-weight: 800;
-    margin-bottom: 10px;
-}
-
-.review-card .review-body p {
-    color: #666;
-    line-height: 1.8;
-    margin-bottom: 0;
-}
-
-.review-badge {
-    display: inline-block;
-    margin-bottom: 10px;
-    padding: 6px 10px;
-    border-radius: 999px;
-    background: #fff5d8;
-    color: #a86f00;
-    font-weight: 800;
-    font-size: 12px;
-}
-
-/* =========================================================
-   زر الصعود للأعلى
-========================================================= */
+/* =========================
+   Scroll Top Button
+========================= */
 .scroll-top-btn {
     position: fixed;
     left: 22px;
@@ -597,9 +608,9 @@ body.ltr-mode .lang-switcher-wrapper {
     transform: translateY(-3px) scale(1.05);
 }
 
-/* =========================================================
-   تأثير ظهور بسيط
-========================================================= */
+/* =========================
+   Fade In
+========================= */
 .fade-in-section {
     opacity: 0;
     transform: translateY(24px);
@@ -609,4 +620,208 @@ body.ltr-mode .lang-switcher-wrapper {
 .fade-in-section.visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* =========================
+   وضع اللغة الإنجليزية
+========================= */
+body.ltr-mode {
+    direction: ltr;
+    text-align: left;
+}
+
+body.ltr-mode .lang-switcher-wrapper {
+    margin-inline-start: auto;
+    margin-inline-end: 0;
+}
+
+body.ltr-mode .faq-question,
+body.ltr-mode .availability-field,
+body.ltr-mode .footer-box,
+body.ltr-mode .white-card,
+body.ltr-mode .why-card,
+body.ltr-mode .seo-card {
+    text-align: left;
+}
+
+/* =========================
+   TABLET
+========================= */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        background: rgba(0, 0, 0, 0.96);
+        padding: 14px;
+        border-radius: 16px;
+        margin-top: 12px;
+    }
+
+    .navbar-nav {
+        width: 100%;
+    }
+
+    .navbar-nav .nav-link {
+        padding: 12px 8px !important;
+        font-size: 16px;
+    }
+
+    .lang-switcher-wrapper {
+        width: 100%;
+        margin-top: 12px;
+        justify-content: center;
+    }
+
+    .lang-switcher {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .lang-btn {
+        min-width: 90px;
+        min-height: 42px;
+    }
+
+    .page-hero {
+        padding: 110px 18px 50px;
+    }
+
+    .page-content {
+        padding: 30px 14px;
+    }
+
+    .section-title {
+        font-size: 28px;
+    }
+}
+
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 768px) {
+    body {
+        font-size: 15px;
+    }
+
+    .lang-switcher {
+        margin-top: 0;
+    }
+
+    .section-title {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .why-section,
+    .stats-section {
+        padding: 45px 14px;
+    }
+
+    .why-grid,
+    .review-grid,
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .why-card,
+    .white-card,
+    .stat-box {
+        padding: 18px;
+        border-radius: 16px;
+    }
+
+    .review-card {
+        border-radius: 18px;
+    }
+
+    .review-card img {
+        height: 220px;
+    }
+
+    .room-cards-grid,
+    .room-gallery-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .room-gallery-grid img {
+        height: 110px;
+    }
+
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        padding: 0 14px 20px;
+    }
+
+    .footer-box {
+        padding: 0;
+    }
+
+    .footer-bottom {
+        font-size: 13px;
+        padding: 14px 10px;
+    }
+
+    .whatsapp-widget {
+        bottom: 18px;
+        right: 14px;
+    }
+
+    .whatsapp-float {
+        width: 56px;
+        height: 56px;
+    }
+
+    .whatsapp-label {
+        font-size: 12px;
+        padding: 7px 10px;
+    }
+
+    .scroll-top-btn {
+        left: 14px;
+        bottom: 18px;
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+    }
+
+    .long-stay-note,
+    .long-stay-box {
+        font-size: 13px;
+    }
+}
+
+/* =========================
+   VERY SMALL MOBILE
+========================= */
+@media (max-width: 480px) {
+    .navbar-brand {
+        font-size: 1rem;
+    }
+
+    .room-cards-grid,
+    .room-gallery-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .review-card img {
+        height: 200px;
+    }
+
+    .stat-number {
+        font-size: 30px;
+    }
+
+    .faq-question {
+        padding: 16px;
+        font-size: 15px;
+    }
+
+    .white-card,
+    .why-card,
+    .seo-card,
+    .stat-box {
+        padding: 16px;
+    }
 }

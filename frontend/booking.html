@@ -6,21 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description"
         content="احجز شقتك المفروشة في عمان الشميساني بسهولة عبر موقع Hijazi Apartments. حجز سريع وآمن بالقرب من أهم مستشفيات عمان.">
-
     <meta name="keywords" content="حجز شقة مفروشة عمان, شقق مفروشة الشميساني حجز, Hijazi Apartments booking">
     <title>HIJAZI Apartments - الحجز</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.js"></script>
 
     <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
             background: #f7f7f7;
             color: #111;
+            overflow-x: hidden;
         }
 
         .page-header {
@@ -28,6 +27,18 @@
             padding: 130px 16px 40px;
             background: linear-gradient(90deg, #c89116, #000);
             color: #fff;
+        }
+
+        .page-header h1 {
+            margin: 0 0 10px;
+            font-size: 40px;
+            font-weight: 900;
+        }
+
+        .page-header p {
+            margin: 0;
+            font-size: 18px;
+            opacity: 0.96;
         }
 
         .wrap {
@@ -81,6 +92,7 @@
             font-size: 15px;
             background: #fff;
             color: #111;
+            outline: none;
         }
 
         .back-btn {
@@ -94,7 +106,7 @@
             align-items: center;
             justify-content: center;
             min-width: 180px;
-            height: 50px;
+            min-height: 50px;
             box-shadow: 0 10px 20px rgba(255, 255, 255, 0.08);
             transition: all 0.25s ease;
         }
@@ -189,25 +201,28 @@
         .form-section input,
         .form-section select {
             width: 100%;
-            padding: 11px;
-            border-radius: 8px;
+            padding: 11px 12px;
+            border-radius: 10px;
             border: 1px solid #ccc;
             font-size: 14px;
             box-sizing: border-box;
             background: #fff;
+            min-height: 46px;
+            outline: none;
         }
 
         .form-section button {
             margin-top: 16px;
             padding: 13px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             background: #c89116;
             color: #fff;
             font-weight: 700;
             cursor: pointer;
             width: 100%;
             font-size: 15px;
+            min-height: 48px;
         }
 
         .form-section button:hover {
@@ -238,6 +253,7 @@
             box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
             border: 1px solid #eee;
             margin-top: 20px;
+            overflow: hidden;
         }
 
         .calendar-title {
@@ -274,6 +290,9 @@
             cursor: pointer;
             font-size: 20px;
             z-index: 2;
+            min-height: auto;
+            padding: 0;
+            margin-top: 0;
         }
 
         .slider-btn:hover {
@@ -354,6 +373,7 @@
             background: rgba(0, 0, 0, .65);
             z-index: 9999;
             padding: 20px;
+            overflow: auto;
         }
 
         .success-content {
@@ -397,6 +417,7 @@
             color: #fff;
             font-weight: 700;
             cursor: pointer;
+            min-height: 46px;
         }
 
         .success-btn:hover {
@@ -414,7 +435,6 @@
             text-align: center;
             padding: 20px;
         }
-
 
         .room-description {
             margin-top: 14px;
@@ -487,7 +507,7 @@
 
             .top-bar {
                 grid-template-columns: 1fr;
-                max-width: 94%;
+                max-width: 100%;
                 padding: 18px;
             }
 
@@ -508,6 +528,93 @@
             .back-btn {
                 width: 100%;
                 min-width: unset;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 110px 14px 34px;
+            }
+
+            .page-header h1 {
+                font-size: 30px;
+            }
+
+            .page-header p {
+                font-size: 15px;
+                line-height: 1.8;
+            }
+
+            .wrap {
+                padding: 0 14px 24px;
+            }
+
+            .card-body,
+            .form-section {
+                padding: 16px;
+            }
+
+            .summary-box p {
+                font-size: 14px;
+            }
+
+            .thumbs img {
+                width: 78px;
+                height: 58px;
+            }
+
+            .room-cards-grid,
+            .room-gallery-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .room-gallery-grid img {
+                height: 110px;
+            }
+
+            .map-box iframe {
+                height: 220px;
+            }
+
+            .calendar-title {
+                font-size: 20px;
+            }
+
+            #calendar {
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 26px;
+            }
+
+            .slider-box,
+            .slider-box img,
+            .placeholder-box {
+                height: 220px;
+            }
+
+            .slider-btn {
+                width: 38px;
+                height: 38px;
+                font-size: 18px;
+            }
+
+            .thumbs img {
+                width: 68px;
+                height: 52px;
+            }
+
+            .room-cards-grid,
+            .room-gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .success-content {
+                margin: 18% auto;
             }
         }
     </style>
@@ -546,9 +653,9 @@
             <!-- بطاقة الشقة -->
             <div class="card">
                 <div class="slider-box" id="sliderBox">
-                    <button class="slider-btn slider-prev" id="prevSlide">❮</button>
+                    <button class="slider-btn slider-prev" id="prevSlide" type="button">❮</button>
                     <img id="aptImage" src="" alt="Apartment Image">
-                    <button class="slider-btn slider-next" id="nextSlide">❯</button>
+                    <button class="slider-btn slider-next" id="nextSlide" type="button">❯</button>
                 </div>
 
                 <div class="card-body">
@@ -556,7 +663,7 @@
 
                     <div class="video-box">
                         <div class="video-title" id="videoTitle">فيديو الشقة</div>
-                        <video id="aptVideo" controls muted>
+                        <video id="aptVideo" controls muted playsinline>
                             <source id="aptVideoSource" src="" type="video/mp4">
                         </video>
                     </div>
@@ -569,7 +676,6 @@
 
                     <ul class="features" id="aptFeatures"></ul>
 
-                    <!-- قسم تفاصيل الغرف والمرافق مثل صفحة الشقق -->
                     <div style="margin-top:22px;">
                         <h3 id="roomsTitle">تفاصيل الغرف والمرافق</h3>
                         <div class="room-cards-grid" id="roomCards"></div>
@@ -602,7 +708,7 @@
 
                     <form id="bookingForm">
 
-                        <label id="aptLabel">الشقة المختارة:</label>
+                        <label id="aptLabel" for="aptId">الشقة المختارة:</label>
                         <select id="aptId" required>
                             <option value="">-- اختر الشقة --</option>
                             <option value="1">شقة رقم 1</option>
@@ -613,29 +719,28 @@
                             <option value="6">شقة رقم 6</option>
                         </select>
 
-                        <label id="fullNameLabel">الاسم الكامل:</label>
+                        <label id="fullNameLabel" for="fullName">الاسم الكامل:</label>
                         <input type="text" id="fullName" placeholder="أدخل اسمك الكامل" required>
 
-                        <label id="emailLabel">البريد الإلكتروني:</label>
+                        <label id="emailLabel" for="email">البريد الإلكتروني:</label>
                         <input type="email" id="email" placeholder="example@email.com" required>
 
-                        <label id="phoneLabel">رقم الهاتف:</label>
+                        <label id="phoneLabel" for="phone">رقم الهاتف:</label>
                         <input type="tel" id="phone" placeholder="059xxxxxxx" required>
 
-                        <label id="checkInLabel">تاريخ الوصول:</label>
+                        <label id="checkInLabel" for="checkIn">تاريخ الوصول:</label>
                         <input type="date" id="checkIn" required>
 
-                        <label id="checkOutLabel">تاريخ المغادرة:</label>
+                        <label id="checkOutLabel" for="checkOut">تاريخ المغادرة:</label>
                         <input type="date" id="checkOut" required>
                         <div class="hint" id="dateHint">لا يمكن اختيار فترة متداخلة مع الحجوزات الموجودة.</div>
 
-                        <!-- رسالة الخصم الذهبي -->
                         <div id="longStayNotice"></div>
 
-                        <label id="adultsLabel">عدد البالغين:</label>
+                        <label id="adultsLabel" for="adults">عدد البالغين:</label>
                         <input type="number" id="adults" min="1" value="1" required>
 
-                        <label id="childrenLabel">عدد الأطفال:</label>
+                        <label id="childrenLabel" for="children">عدد الأطفال:</label>
                         <input type="number" id="children" min="0" value="0">
 
                         <p><span id="finalPriceLabel">السعر النهائي:</span> <span class="price" id="totalPrice">—</span>
@@ -665,7 +770,7 @@
                     تم حفظ الحجز بنجاح، وتم إرسال رسالة تأكيد إلى بريدك الإلكتروني.<br>
                     سنتواصل معك قريبًا إذا احتجنا أي تفاصيل إضافية.
                 </p>
-                <button class="success-btn" id="closeSuccessModal">إغلاق</button>
+                <button class="success-btn" id="closeSuccessModal" type="button">إغلاق</button>
             </div>
         </div>
     </div>
@@ -680,13 +785,11 @@
     <script>
         const API_BASE = "https://hijazi-apartments-backend.onrender.com";
 
-        // قراءة القيم من الرابط
         const urlParams = new URLSearchParams(window.location.search);
         const initialAptId = Number(urlParams.get("apt")) || "";
         const qCheckIn = urlParams.get("checkIn");
         const qCheckOut = urlParams.get("checkOut");
 
-        // عناصر الصفحة
         const aptSelect = document.getElementById("aptId");
         const aptNameEl = document.getElementById("aptName");
         const aptDescEl = document.getElementById("aptDesc");
@@ -726,7 +829,6 @@
         let bookedDaysSet = new Set();
         let calendar = null;
 
-        // تعبئة أولية
         if (initialAptId) {
             aptSelect.value = String(initialAptId);
         }
@@ -734,7 +836,6 @@
         if (qCheckIn) checkInEl.value = qCheckIn;
         if (qCheckOut) checkOutEl.value = qCheckOut;
 
-        // ترجمة عناصر الصفحة
         function applyBookingTranslations() {
             const lang = getCurrentLang();
 
@@ -769,8 +870,10 @@
                 document.getElementById("successTitle").textContent = "شكراً لك";
                 document.getElementById("successText").innerHTML = "تم حفظ الحجز بنجاح، وتم إرسال رسالة تأكيد إلى بريدك الإلكتروني.<br>سنتواصل معك قريبًا إذا احتجنا أي تفاصيل إضافية.";
                 document.getElementById("closeSuccessModal").textContent = "إغلاق";
+
                 const mapTitleEl = document.getElementById("mapTitle");
                 if (mapTitleEl) mapTitleEl.textContent = "موقع الشقة على الخريطة";
+
                 document.querySelector('#aptId option[value=""]').textContent = "-- اختر الشقة --";
                 for (let i = 1; i <= 6; i++) {
                     document.querySelector(`#aptId option[value="${i}"]`).textContent = `شقة رقم ${i}`;
@@ -778,6 +881,7 @@
 
                 document.getElementById("fullName").placeholder = "أدخل اسمك الكامل";
                 document.getElementById("phone").placeholder = "059xxxxxxx";
+
                 const roomsTitleEl = document.getElementById("roomsTitle");
                 if (roomsTitleEl) roomsTitleEl.textContent = "تفاصيل الغرف والمرافق";
             } else {
@@ -811,8 +915,10 @@
                 document.getElementById("successTitle").textContent = "Thank you";
                 document.getElementById("successText").innerHTML = "Your booking has been saved successfully, and a confirmation email has been sent to your inbox.<br>We will contact you soon if any extra details are needed.";
                 document.getElementById("closeSuccessModal").textContent = "Close";
+
                 const mapTitleEl = document.getElementById("mapTitle");
                 if (mapTitleEl) mapTitleEl.textContent = "Apartment location on map";
+
                 document.querySelector('#aptId option[value=""]').textContent = "-- Select apartment --";
                 for (let i = 1; i <= 6; i++) {
                     document.querySelector(`#aptId option[value="${i}"]`).textContent = `Apartment ${i}`;
@@ -820,12 +926,12 @@
 
                 document.getElementById("fullName").placeholder = "Enter your full name";
                 document.getElementById("phone").placeholder = "Phone number";
+
                 const roomsTitleEl = document.getElementById("roomsTitle");
                 if (roomsTitleEl) roomsTitleEl.textContent = "Rooms & facilities";
             }
         }
 
-        // رسائل أعلى النموذج
         function showMessage(text, type = "error") {
             formMessage.style.display = "block";
             formMessage.className = `message-box ${type === "success" ? "message-success" : "message-error"}`;
@@ -838,7 +944,6 @@
             formMessage.className = "message-box";
         }
 
-        // تاريخ اليوم
         function todayISO() {
             const d = new Date();
             const yyyy = d.getFullYear();
@@ -847,21 +952,18 @@
             return `${yyyy}-${mm}-${dd}`;
         }
 
-        // تحويل تاريخ YYYY-MM-DD إلى كائن تاريخ
         function parseISODateOnly(s) {
             const [y, m, d] = (s || "").slice(0, 10).split("-").map(Number);
             if (!y || !m || !d) return null;
             return new Date(y, m - 1, d, 0, 0, 0, 0);
         }
 
-        // إضافة أيام
         function addDays(date, days) {
             const d = new Date(date);
             d.setDate(d.getDate() + days);
             return d;
         }
 
-        // تحويل تاريخ إلى YYYY-MM-DD
         function toISODateOnly(d) {
             const yyyy = d.getFullYear();
             const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -869,18 +971,15 @@
             return `${yyyy}-${mm}-${dd}`;
         }
 
-        // جلب رقم الشقة المختارة
         function getSelectedAptId() {
             return Number(aptSelect.value) || null;
         }
 
-        // جلب بيانات الشقة المختارة
         function getSelectedApartment() {
             const id = getSelectedAptId();
             return id ? HIJAZI_APARTMENTS[id] : null;
         }
 
-        // عرض حالة افتراضية لو لم يتم اختيار شقة
         function renderPlaceholder() {
             const lang = getCurrentLang();
             aptNameEl.textContent = lang === "ar" ? "اختر الشقة أولاً" : "Select an apartment first";
@@ -894,37 +993,38 @@
             sliderBox.innerHTML = `<div class="placeholder-box">${lang === "ar" ? "اختر الشقة لعرض الصور والتفاصيل" : "Select an apartment to view photos and details"}</div>`;
             aptVideoSource.src = "";
             aptVideo.load();
+            document.getElementById("aptMap").src = "";
+            document.getElementById("roomCards").innerHTML = "";
+            document.getElementById("roomDescription").textContent = "";
+            document.getElementById("roomGallery").innerHTML = "";
             nightPriceEl.textContent = "—";
             summaryTotalEl.textContent = "—";
             totalPriceEl.textContent = "—";
         }
 
-        // عرض السلايدر
         function renderSlider() {
             const apt = getSelectedApartment();
             if (!apt) return;
 
             sliderBox.innerHTML = `
-                <button class="slider-btn slider-prev" id="prevSlide">❮</button>
+                <button class="slider-btn slider-prev" id="prevSlide" type="button">❮</button>
                 <img id="aptImage" src="${apt.images[currentSlide]}" alt="Apartment Image">
-                <button class="slider-btn slider-next" id="nextSlide">❯</button>
+                <button class="slider-btn slider-next" id="nextSlide" type="button">❯</button>
             `;
 
             document.getElementById("prevSlide").addEventListener("click", prevSlide);
             document.getElementById("nextSlide").addEventListener("click", nextSlide);
 
             thumbsEl.innerHTML = apt.images.map((img, index) => `
-                <img src="${img}" class="${index === currentSlide ? "active" : ""}" onclick="goToSlide(${index})">
+                <img src="${img}" class="${index === currentSlide ? "active" : ""}" onclick="goToSlide(${index})" alt="Apartment thumbnail">
             `).join("");
         }
 
-        // تغيير الصورة المختارة
         function goToSlide(index) {
             currentSlide = index;
             renderSlider();
         }
 
-        // الصورة التالية
         function nextSlide() {
             const apt = getSelectedApartment();
             if (!apt) return;
@@ -932,7 +1032,6 @@
             renderSlider();
         }
 
-        // الصورة السابقة
         function prevSlide() {
             const apt = getSelectedApartment();
             if (!apt) return;
@@ -941,7 +1040,7 @@
         }
 
         window.goToSlide = goToSlide;
-        // عرض كروت تفاصيل الغرف والمرافق في صفحة الحجز
+
         function renderRoomCards(apt, selectedKey = "master") {
             const lang = getCurrentLang();
             const roomCards = document.getElementById("roomCards");
@@ -953,27 +1052,25 @@
             roomCards.innerHTML = apt.rooms.map(room => {
                 const title = lang === "ar" ? room.titleAr : room.titleEn;
                 return `
-            <div class="room-card ${room.key === selectedKey ? "active" : ""}" onclick="selectRoomCard(${apt.id}, '${room.key}')">
-                ${title}
-            </div>
-        `;
+                    <div class="room-card ${room.key === selectedKey ? "active" : ""}" onclick="selectRoomCard(${apt.id}, '${room.key}')">
+                        ${title}
+                    </div>
+                `;
             }).join("");
 
             const selectedRoom = apt.rooms.find(r => r.key === selectedKey) || apt.rooms[0];
             roomDescription.textContent = lang === "ar" ? selectedRoom.noteAr : selectedRoom.noteEn;
 
             roomGallery.innerHTML = selectedRoom.images.map(img => `
-        <img src="${img}" alt="Room image">
-    `).join("");
+                <img src="${img}" alt="Room image">
+            `).join("");
         }
 
-        // تغيير الكرت المحدد
         window.selectRoomCard = function (aptId, roomKey) {
             const apt = HIJAZI_APARTMENTS[aptId];
             renderRoomCards(apt, roomKey);
         };
 
-        // عرض تفاصيل الشقة المختارة
         function renderApartmentDetails() {
             const id = getSelectedAptId();
             const apt = getSelectedApartment();
@@ -1001,16 +1098,12 @@
             aptVideoSource.src = apt.video;
             aptVideo.load();
 
-            /* عرض كروت تفاصيل الغرف والمرافق */
             renderRoomCards(apt, "master");
-
             updatePrice();
         }
 
-        // تحديث السعر
         function updatePrice() {
             const id = getSelectedAptId();
-            const lang = getCurrentLang();
 
             if (!id) {
                 nightsCountEl.textContent = "0";
@@ -1023,14 +1116,14 @@
             }
 
             const basePrice = HIJAZI_APARTMENTS[id].price || 50;
-            const nights = calcNights(checkInEl.value, checkOutEl.value) || 1;
+            const nights = Math.max(calcNights(checkInEl.value, checkOutEl.value), 0);
             const perNightConverted = basePrice * currencyRates[currencySelect.value];
-            const total = basePrice * nights * currencyRates[currencySelect.value];
+            const total = nights > 0 ? basePrice * nights * currencyRates[currencySelect.value] : 0;
 
             nightPriceEl.textContent = `${perNightConverted.toFixed(2)} ${currencySymbols[currencySelect.value]}`;
             nightsCountEl.textContent = nights;
-            summaryTotalEl.textContent = `${total.toFixed(2)} ${currencySymbols[currencySelect.value]}`;
-            totalPriceEl.textContent = `${total.toFixed(2)} ${currencySymbols[currencySelect.value]}`;
+            summaryTotalEl.textContent = nights > 0 ? `${total.toFixed(2)} ${currencySymbols[currencySelect.value]}` : "—";
+            totalPriceEl.textContent = nights > 0 ? `${total.toFixed(2)} ${currencySymbols[currencySelect.value]}` : "—";
 
             summaryAdultsEl.textContent = adultsEl.value || 1;
             summaryChildrenEl.textContent = childrenEl.value || 0;
@@ -1038,14 +1131,12 @@
             renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value);
         }
 
-        // تحويل النص السعري إلى رقم
         function getTotalPriceNumber() {
             const text = totalPriceEl.textContent || "";
             const num = parseFloat(text.replace(/[^\d.]/g, ""));
             return isNaN(num) ? 0 : num;
         }
 
-        // بناء الأيام المحجوزة
         function buildBookedDaysSet() {
             bookedDaysSet = new Set();
             for (const r of bookedRanges) {
@@ -1061,7 +1152,6 @@
             }
         }
 
-        // التحقق من تداخل الفترات
         function rangesOverlap(startA, endA, startB, endB) {
             return startA < endB && endA > startB;
         }
@@ -1073,7 +1163,6 @@
             return false;
         }
 
-        // جلب الحجوزات من السيرفر
         async function fetchBookedRanges() {
             const id = getSelectedAptId();
             if (!id) {
@@ -1094,7 +1183,6 @@
             return bookedRanges;
         }
 
-        // التحقق من صحة التواريخ
         function validateDates() {
             clearMessage();
             const lang = getCurrentLang();
@@ -1123,7 +1211,12 @@
             const outExclusive = addDays(outDate, 1);
 
             if (selectionConflicts(inDate, outExclusive)) {
-                showMessage(lang === "ar" ? "❌ هذه الفترة متداخلة مع حجز موجود. اختر تواريخ أخرى." : "❌ This date range overlaps with an existing booking. Please choose other dates.", "error");
+                showMessage(
+                    lang === "ar"
+                        ? "❌ هذه الفترة متداخلة مع حجز موجود. اختر تواريخ أخرى."
+                        : "❌ This date range overlaps with an existing booking. Please choose other dates.",
+                    "error"
+                );
                 checkInEl.value = "";
                 checkOutEl.value = "";
                 updatePrice();
@@ -1133,7 +1226,6 @@
             return true;
         }
 
-        // تحديث التقويم
         async function refreshCalendar() {
             await fetchBookedRanges();
             if (calendar) {
@@ -1141,22 +1233,23 @@
             }
         }
 
-        // أقل تاريخ ممكن
         checkInEl.min = todayISO();
         checkOutEl.min = todayISO();
 
-        // أحداث تحديث السعر
         currencySelect.addEventListener("change", updatePrice);
         adultsEl.addEventListener("input", updatePrice);
         childrenEl.addEventListener("input", updatePrice);
-        checkInEl.addEventListener("change", updatePrice);
+
+        checkInEl.addEventListener("change", () => {
+            checkOutEl.min = checkInEl.value || todayISO();
+            updatePrice();
+        });
+
         checkOutEl.addEventListener("change", updatePrice);
 
-        // أحداث التحقق من التاريخ
         checkInEl.addEventListener("change", validateDates);
         checkOutEl.addEventListener("change", validateDates);
 
-        // تغيير الشقة
         aptSelect.addEventListener("change", async () => {
             clearMessage();
             renderApartmentDetails();
@@ -1166,7 +1259,6 @@
         const form = document.getElementById("bookingForm");
         const submitBtn = document.getElementById("submitBtn");
 
-        // تشغيل الصفحة
         document.addEventListener("DOMContentLoaded", async function () {
             const calendarEl = document.getElementById("calendar");
             const lang = getCurrentLang();
@@ -1212,7 +1304,12 @@
                 },
                 select: (info) => {
                     if (!getSelectedAptId()) {
-                        showMessage(lang === "ar" ? "اختر الشقة أولاً قبل التحديد من التقويم." : "Select an apartment first before choosing from the calendar.", "error");
+                        showMessage(
+                            lang === "ar"
+                                ? "اختر الشقة أولاً قبل التحديد من التقويم."
+                                : "Select an apartment first before choosing from the calendar.",
+                            "error"
+                        );
                         return;
                     }
 
@@ -1222,6 +1319,7 @@
 
                     checkInEl.value = toISODateOnly(start);
                     checkOutEl.value = toISODateOnly(end);
+                    checkOutEl.min = checkInEl.value || todayISO();
                     validateDates();
                     updatePrice();
                 }
@@ -1239,7 +1337,6 @@
             updatePrice();
         });
 
-        // إرسال الحجز
         form.addEventListener("submit", async function (e) {
             e.preventDefault();
             clearMessage();
@@ -1295,20 +1392,25 @@
                 aptSelect.value = String(id);
                 if (qCheckIn) checkInEl.value = qCheckIn;
                 if (qCheckOut) checkOutEl.value = qCheckOut;
+                checkOutEl.min = checkInEl.value || todayISO();
 
                 renderApartmentDetails();
                 await refreshCalendar();
                 updatePrice();
             } catch (err) {
                 console.error(err);
-                showMessage(lang === "ar" ? "تعذر الاتصال بالسيرفر. حاول مرة أخرى بعد قليل." : "Unable to connect to the server. Please try again later.", "error");
+                showMessage(
+                    lang === "ar"
+                        ? "تعذر الاتصال بالسيرفر. حاول مرة أخرى بعد قليل."
+                        : "Unable to connect to the server. Please try again later.",
+                    "error"
+                );
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = lang === "ar" ? "تأكيد الحجز" : "Confirm booking";
             }
         });
 
-        // إغلاق نافذة النجاح
         closeSuccessModal.addEventListener("click", () => {
             successModal.style.display = "none";
         });

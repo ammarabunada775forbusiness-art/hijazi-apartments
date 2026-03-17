@@ -7,18 +7,18 @@
     <title>HIJAZI Apartments - الشقق</title>
     <meta name="description"
         content="شقق مفروشة متاحة للحجز في عمان الشميساني قريبة من المستشفيات والمطاعم. اختر الشقة المناسبة حسب تاريخ الدخول والخروج.">
-
     <meta name="keywords"
         content="حجز شقق مفروشة عمان, شقق مفروشة الشميساني, شقق قريبة من المستشفيات عمان, شقق فندقية عمان">
+
     <link rel="stylesheet" href="css/style.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
             background: #f8f8f8;
             color: #111;
+            overflow-x: hidden;
         }
 
         .page-header {
@@ -26,6 +26,18 @@
             padding: 130px 16px 40px;
             background: linear-gradient(90deg, #c89116, #000);
             color: #fff;
+        }
+
+        .page-header h1 {
+            margin: 0 0 10px;
+            font-size: 40px;
+            font-weight: 900;
+        }
+
+        .page-header p {
+            margin: 0;
+            font-size: 18px;
+            opacity: 0.96;
         }
 
         .wrap {
@@ -56,6 +68,7 @@
         .filter-field {
             display: flex;
             flex-direction: column;
+            text-align: start;
         }
 
         .filter-field label {
@@ -71,9 +84,11 @@
             border-radius: 12px;
             border: none;
             min-width: unset;
+            min-height: 46px;
             font-size: 15px;
             background: #fff;
             color: #111;
+            outline: none;
         }
 
         .filter-actions {
@@ -118,65 +133,6 @@
             opacity: .95;
             font-weight: 700;
             color: #f5f5f5;
-        }
-
-        @media (max-width: 768px) {
-            .box {
-                padding: 18px;
-                max-width: 94%;
-            }
-
-            .row-box {
-                grid-template-columns: 1fr;
-            }
-
-            .filter-actions {
-                margin-top: 14px;
-            }
-
-            .filter-btn {
-                width: 100%;
-                min-width: unset;
-            }
-
-            .filter-meta {
-                align-items: center;
-                text-align: center;
-            }
-        }
-
-        label {
-            display: block;
-            font-size: 13px;
-            margin-bottom: 6px;
-            opacity: .9;
-        }
-
-        input[type="date"] {
-            padding: 10px;
-            border-radius: 8px;
-            border: none;
-            min-width: 180px;
-        }
-
-        button {
-            padding: 12px 16px;
-            border: none;
-            border-radius: 8px;
-            background: #c89116;
-            color: #fff;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #000;
-        }
-
-        .status {
-            margin-top: 10px;
-            font-size: 14px;
-            opacity: .95;
         }
 
         .grid {
@@ -295,11 +251,6 @@
             line-height: 1.7;
         }
 
-        .card h3 {
-            margin: 0 0 8px;
-            color: #111;
-        }
-
         .pill {
             display: inline-block;
             padding: 6px 10px;
@@ -330,38 +281,6 @@
             font-size: 12px;
         }
 
-        .card-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 14px;
-        }
-
-        .card-actions button {
-            flex: 1;
-        }
-
-        .btn-secondary {
-            background: #333;
-        }
-
-        .btn-secondary:hover {
-            background: #000;
-        }
-
-        .location-line {
-            margin-top: 8px;
-            color: #444;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .long-note-inline {
-            margin-top: 8px;
-            color: #c89116;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
         /* Modal */
         .modal {
             display: none;
@@ -389,6 +308,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 12px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 800;
         }
 
         .modal-body {
@@ -404,6 +330,7 @@
             cursor: pointer;
             width: auto;
             padding: 0;
+            min-height: auto;
         }
 
         .gallery-main {
@@ -548,6 +475,147 @@
                 height: 260px;
             }
         }
+
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 110px 14px 34px;
+            }
+
+            .page-header h1 {
+                font-size: 30px;
+            }
+
+            .page-header p {
+                font-size: 15px;
+                line-height: 1.8;
+            }
+
+            .wrap {
+                padding: 0 14px 24px;
+            }
+
+            .box {
+                padding: 18px;
+                max-width: 100%;
+                border-radius: 18px;
+            }
+
+            .row-box {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-actions {
+                margin-top: 14px;
+            }
+
+            .filter-btn {
+                width: 100%;
+                min-width: unset;
+                height: 48px;
+                font-size: 15px;
+            }
+
+            .filter-meta {
+                align-items: center;
+                text-align: center;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .card h3 {
+                font-size: 24px;
+            }
+
+            .card img,
+            .skeleton-image {
+                height: 220px;
+            }
+
+            .card-body {
+                padding: 16px;
+            }
+
+            .card-actions {
+                flex-direction: column;
+            }
+
+            .modal {
+                padding: 12px;
+            }
+
+            .modal-content {
+                margin: 12px auto;
+                border-radius: 18px;
+            }
+
+            .modal-header {
+                padding: 16px;
+            }
+
+            .modal-header h2 {
+                font-size: 20px;
+            }
+
+            .modal-body {
+                padding: 16px;
+            }
+
+            .gallery-main {
+                height: 220px;
+                border-radius: 14px;
+            }
+
+            .thumbs {
+                gap: 8px;
+            }
+
+            .thumbs img {
+                width: 84px;
+                height: 64px;
+            }
+
+            .video-box video {
+                max-height: 260px;
+            }
+
+            .map-box iframe {
+                height: 220px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 26px;
+            }
+
+            .card h3 {
+                font-size: 22px;
+            }
+
+            .card-top-badge {
+                top: 10px;
+                left: 10px;
+                font-size: 12px;
+                padding: 7px 10px;
+            }
+
+            .card-price-main {
+                font-size: 18px;
+            }
+
+            .detail-features li,
+            .features li {
+                font-size: 11px;
+            }
+
+            .thumbs img {
+                width: 72px;
+                height: 58px;
+            }
+        }
     </style>
 </head>
 
@@ -568,12 +636,12 @@
         <div class="box">
             <div class="row-box">
                 <div class="filter-field">
-                    <label id="checkInLabel">تاريخ الدخول</label>
+                    <label id="checkInLabel" for="checkIn">تاريخ الدخول</label>
                     <input type="date" id="checkIn">
                 </div>
 
                 <div class="filter-field">
-                    <label id="checkOutLabel">تاريخ الخروج</label>
+                    <label id="checkOutLabel" for="checkOut">تاريخ الخروج</label>
                     <input type="date" id="checkOut">
                 </div>
             </div>
@@ -583,25 +651,21 @@
             </div>
 
             <div class="filter-meta">
-                <!-- رسالة الخصم الذهبي -->
                 <div id="longStayNotice"></div>
-
-                <!-- حالة الفحص -->
                 <div class="status" id="status"></div>
             </div>
         </div>
 
         <!-- كروت الشقق -->
         <div class="grid" id="grid"></div>
-
     </div>
 
     <!-- نافذة التفاصيل -->
     <div class="modal" id="detailsModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalTitle" style="margin:0;">تفاصيل الشقة</h2>
-                <button class="close-btn" id="closeModal">&times;</button>
+                <h2 id="modalTitle">تفاصيل الشقة</h2>
+                <button class="close-btn" id="closeModal" aria-label="Close">&times;</button>
             </div>
 
             <div class="modal-body">
@@ -628,7 +692,6 @@
 
                         <ul class="detail-features" id="detailFeatures"></ul>
 
-                        <!-- بطاقات تفاصيل الغرف -->
                         <div style="margin-top:22px;">
                             <h4 id="roomsTitle">تفاصيل الغرف والمرافق</h4>
                             <div class="room-cards-grid" id="roomCards"></div>
@@ -658,23 +721,19 @@
     <script>
         const API_BASE = "https://hijazi-apartments-backend.onrender.com";
 
-        // عناصر التواريخ والحالة
         const checkInEl = document.getElementById("checkIn");
         const checkOutEl = document.getElementById("checkOut");
         const statusEl = document.getElementById("status");
         const gridEl = document.getElementById("grid");
         const refreshBtn = document.getElementById("refreshBtn");
 
-        // عناصر النافذة المنبثقة
         const modal = document.getElementById("detailsModal");
         const closeModal = document.getElementById("closeModal");
 
-        // قراءة التواريخ من الرابط
         const url = new URLSearchParams(window.location.search);
         const qIn = url.get("checkIn");
         const qOut = url.get("checkOut");
 
-        // إرجاع تاريخ اليوم
         function todayISO() {
             const d = new Date();
             const yyyy = d.getFullYear();
@@ -683,15 +742,12 @@
             return `${yyyy}-${mm}-${dd}`;
         }
 
-        // ضبط الحد الأدنى للتاريخ
         checkInEl.min = todayISO();
         checkOutEl.min = todayISO();
 
-        // تعبئة التواريخ من الرابط إن وجدت
         if (qIn) checkInEl.value = qIn;
         if (qOut) checkOutEl.value = qOut;
 
-        // ترجمة نصوص الصفحة
         function applyApartmentsTranslations() {
             const lang = getCurrentLang();
 
@@ -728,7 +784,6 @@
             }
         }
 
-        // التحقق من التواريخ
         function validateDates(allowEmpty = true) {
             const lang = getCurrentLang();
             const checkIn = checkInEl.value;
@@ -745,7 +800,6 @@
             return null;
         }
 
-        // إنشاء كرت الشقة
         function cardHtml(id, checkIn = "", checkOut = "") {
             const lang = getCurrentLang();
             const apt = HIJAZI_APARTMENTS[id];
@@ -767,39 +821,39 @@
             const apartmentWord = lang === "ar" ? "شقة راقية" : "Premium apartment";
 
             return `
-        <div class="card">
-            <div class="card-top-badge">${availableLabel}</div>
+                <div class="card">
+                    <div class="card-top-badge">${availableLabel}</div>
 
-            <img src="${apt.images[0]}" alt="${aptName}">
+                    <img src="${apt.images[0]}" alt="${aptName}">
 
-            <div class="card-body">
-                <div class="pill">${apartmentWord}</div>
-                <h3>${aptName}</h3>
-                <div class="muted">${desc}</div>
+                    <div class="card-body">
+                        <div class="pill">${apartmentWord}</div>
+                        <h3>${aptName}</h3>
+                        <div class="muted">${desc}</div>
 
-                <div class="location-line">📍 ${locationLabel}: ${apt.location}</div>
+                        <div class="location-line">📍 ${locationLabel}: ${apt.location}</div>
 
-                <ul class="features">
-                    ${features.slice(0, 4).map(f => `<li>${f}</li>`).join("")}
-                </ul>
+                        <ul class="features">
+                            ${features.slice(0, 4).map(f => `<li>${f}</li>`).join("")}
+                        </ul>
 
-                <div class="card-price-box">
-                    <div class="card-price-main">${nightLabel}: ${apt.price} ${jodText}</div>
-                    ${nights ? `<div class="card-price-sub">${nightsLabel}: ${nights}</div>` : ""}
-                    ${nights ? `<div class="card-price-sub">${totalLabel}: ${total} ${jodText}</div>` : ""}
+                        <div class="card-price-box">
+                            <div class="card-price-main">${nightLabel}: ${apt.price} ${jodText}</div>
+                            ${nights ? `<div class="card-price-sub">${nightsLabel}: ${nights}</div>` : ""}
+                            ${nights ? `<div class="card-price-sub">${totalLabel}: ${total} ${jodText}</div>` : ""}
+                        </div>
+
+                        ${nights >= 30 ? `<div class="long-note-inline">${SITE_TRANSLATIONS[lang].longStayAlert}</div>` : ""}
+
+                        <div class="card-actions">
+                            <button class="btn-secondary" onclick="openDetails(${id})">${detailsBtn}</button>
+                            <button onclick="goBook(${id})">${bookBtn}</button>
+                        </div>
+                    </div>
                 </div>
-
-                ${nights >= 30 ? `<div class="long-note-inline">${SITE_TRANSLATIONS[lang].longStayAlert}</div>` : ""}
-
-                <div class="card-actions">
-                    <button class="btn-secondary" onclick="openDetails(${id})">${detailsBtn}</button>
-                    <button onclick="goBook(${id})">${bookBtn}</button>
-                </div>
-            </div>
-        </div>
-    `;
+            `;
         }
-        // الانتقال إلى صفحة الحجز
+
         window.goBook = function (id) {
             const checkIn = checkInEl.value;
             const checkOut = checkOutEl.value;
@@ -808,7 +862,6 @@
                 `booking.html?apt=${encodeURIComponent(id)}&checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}`;
         };
 
-        // عرض بطاقات الغرف داخل التفاصيل
         function renderRoomCards(apt, selectedKey = "master") {
             const lang = getCurrentLang();
             const roomCards = document.getElementById("roomCards");
@@ -832,13 +885,11 @@
             `).join("");
         }
 
-        // دالة عامة لاختيار كرت غرفة
         window.selectRoomCard = function (aptId, roomKey) {
             const apt = HIJAZI_APARTMENTS[aptId];
             renderRoomCards(apt, roomKey);
         };
 
-        // فتح التفاصيل
         window.openDetails = function (id) {
             const lang = getCurrentLang();
             const apt = HIJAZI_APARTMENTS[id];
@@ -867,7 +918,7 @@
             mainImage.src = apt.images[0];
 
             thumbs.innerHTML = apt.images.map(img => `
-                <img src="${img}" onclick="document.getElementById('mainImage').src='${img}'">
+                <img src="${img}" alt="${lang === "ar" ? apt.nameAr : apt.nameEn}" onclick="document.getElementById('mainImage').src='${img}'">
             `).join("");
 
             const features = lang === "ar" ? apt.featuresAr : apt.featuresEn;
@@ -882,30 +933,40 @@
 
             renderRoomCards(apt, "master");
             modal.style.display = "block";
+            document.body.style.overflow = "hidden";
         };
 
-        // إغلاق النافذة
-        closeModal.addEventListener("click", () => {
+        function closeDetailsModal() {
             modal.style.display = "none";
-        });
+            document.body.style.overflow = "";
+        }
+
+        closeModal.addEventListener("click", closeDetailsModal);
 
         modal.addEventListener("click", (e) => {
-            if (e.target === modal) modal.style.display = "none";
+            if (e.target === modal) closeDetailsModal();
         });
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && modal.style.display === "block") {
+                closeDetailsModal();
+            }
+        });
+
         function renderSkeletonCards(count = 3) {
             gridEl.innerHTML = Array.from({ length: count }).map(() => `
-        <div class="skeleton-card">
-            <div class="skeleton-image"></div>
-            <div class="skeleton-body">
-                <div class="skeleton-line short"></div>
-                <div class="skeleton-line medium"></div>
-                <div class="skeleton-line long"></div>
-                <div class="skeleton-line medium"></div>
-            </div>
-        </div>
-    `).join("");
+                <div class="skeleton-card">
+                    <div class="skeleton-image"></div>
+                    <div class="skeleton-body">
+                        <div class="skeleton-line short"></div>
+                        <div class="skeleton-line medium"></div>
+                        <div class="skeleton-line long"></div>
+                        <div class="skeleton-line medium"></div>
+                    </div>
+                </div>
+            `).join("");
         }
-        // تحميل الشقق
+
         async function loadAvailability() {
             const lang = getCurrentLang();
             const checkIn = checkInEl.value;
@@ -915,14 +976,15 @@
 
             const err = validateDates(true);
 
-            // إذا ما في تواريخ، اعرض كل الشقق مباشرة
             if (!checkIn || !checkOut) {
-                statusEl.textContent = lang === "ar" ? "تم عرض جميع الشقق. يمكنك اختيار التواريخ لاحقًا." : "All apartments are displayed. You can choose dates later.";
+                statusEl.textContent = lang === "ar"
+                    ? "تم عرض جميع الشقق. يمكنك اختيار التواريخ لاحقًا."
+                    : "All apartments are displayed. You can choose dates later.";
+
                 gridEl.innerHTML = Object.keys(HIJAZI_APARTMENTS).map(id => cardHtml(Number(id))).join("");
                 return;
             }
 
-            // إذا في خطأ بالتاريخ
             if (err) {
                 statusEl.textContent = err;
                 gridEl.innerHTML = "";
@@ -938,41 +1000,51 @@
 
                 if (!res.ok) {
                     statusEl.textContent = data.message || (lang === "ar" ? "صار خطأ أثناء الفحص" : "An error happened while checking");
+                    gridEl.innerHTML = "";
                     return;
                 }
 
                 const available = data.availableApartments || [];
 
                 if (available.length === 0) {
-                    statusEl.textContent = lang === "ar" ? "❌ للأسف لا يوجد شقق متاحة بهالتواريخ. جرّب تواريخ ثانية." : "❌ Unfortunately, no apartments are available for these dates. Try different dates.";
+                    statusEl.textContent = lang === "ar"
+                        ? "❌ للأسف لا يوجد شقق متاحة بهالتواريخ. جرّب تواريخ ثانية."
+                        : "❌ Unfortunately, no apartments are available for these dates. Try different dates.";
+                    gridEl.innerHTML = "";
                     return;
                 }
 
-                statusEl.textContent = lang === "ar" ? `✅ عدد الشقق المتاحة: ${available.length}` : `✅ Available apartments: ${available.length}`;
+                statusEl.textContent = lang === "ar"
+                    ? `✅ عدد الشقق المتاحة: ${available.length}`
+                    : `✅ Available apartments: ${available.length}`;
+
                 gridEl.innerHTML = available.map(id => cardHtml(id, checkIn, checkOut)).join("");
             } catch (e) {
                 console.error(e);
-                statusEl.textContent = lang === "ar" ? "تعذر الاتصال بخادم الحجوزات. حاول مرة أخرى بعد قليل." : "Unable to connect to the booking server. Please try again later.";
+                statusEl.textContent = lang === "ar"
+                    ? "تعذر الاتصال بخادم الحجوزات. حاول مرة أخرى بعد قليل."
+                    : "Unable to connect to the booking server. Please try again later.";
+                gridEl.innerHTML = "";
             }
         }
 
-        // أحداث
         refreshBtn.addEventListener("click", loadAvailability);
-        checkInEl.addEventListener("change", () => renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value));
-        checkOutEl.addEventListener("change", () => renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value));
 
-        // تشغيل أولي
+        checkInEl.addEventListener("change", () => {
+            checkOutEl.min = checkInEl.value || todayISO();
+            renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value);
+        });
+
+        checkOutEl.addEventListener("change", () => {
+            renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value);
+        });
+
         renderSharedHeader("apartments", false);
         renderSharedFooter();
         renderWhatsAppWidget();
         applyApartmentsTranslations();
         renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value);
-
-        if (qIn || qOut) {
-            loadAvailability();
-        } else {
-            loadAvailability();
-        }
+        loadAvailability();
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

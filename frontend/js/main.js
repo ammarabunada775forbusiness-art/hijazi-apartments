@@ -15,9 +15,6 @@ const rates = { USD: 1.41, SAR: 5.29 };
 
 /* =========================
    بيانات الشقق المشتركة
-   تم توحيدها هنا حتى نستخدمها
-   في الصفحة الرئيسية وصفحة الشقق
-   وصفحة الحجز
 ========================= */
 const HIJAZI_APARTMENTS = {
     1: {
@@ -141,7 +138,6 @@ const HIJAZI_APARTMENTS = {
 
 /* =========================
    توليد بيانات الشقق 2-6
-   بنفس النمط لتقليل التكرار
 ========================= */
 for (let i = 2; i <= 6; i++) {
     HIJAZI_APARTMENTS[i] = JSON.parse(JSON.stringify(HIJAZI_APARTMENTS[1]));
@@ -153,7 +149,6 @@ for (let i = 2; i <= 6; i++) {
 
 /* =========================================================
    تخصيص موقع وخريطة مستقلة لكل شقة
-   يمكنك لاحقًا تغيير أي location أو mapEmbed بسهولة
 ========================================================= */
 HIJAZI_APARTMENTS[1].location = "الشميساني - قرب مستشفى الأردن";
 HIJAZI_APARTMENTS[1].mapEmbed = "https://www.google.com/maps?q=Jordan%20Hospital%20Amman&z=15&output=embed";
@@ -232,27 +227,27 @@ const SITE_TRANSLATIONS = {
 };
 
 /* =========================
-   جلب اللغة الحالية
+   اللغة الحالية
 ========================= */
 function getCurrentLang() {
     return localStorage.getItem("siteLang") || "ar";
 }
 
-/* =========================
-   حفظ اللغة الحالية
-========================= */
 function setCurrentLang(lang) {
     localStorage.setItem("siteLang", lang);
 }
 
 /* =========================
-   تطبيق اتجاه الصفحة حسب اللغة
+   اتجاه الصفحة حسب اللغة
 ========================= */
 function applyDocumentDirection() {
     const lang = getCurrentLang();
     document.documentElement.lang = lang;
     document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-    document.body.classList.toggle("ltr-mode", lang === "en");
+
+    if (document.body) {
+        document.body.classList.toggle("ltr-mode", lang === "en");
+    }
 }
 
 /* =========================
@@ -266,31 +261,49 @@ function renderSharedHeader(activePage, showAdminTrigger = false) {
     if (!headerHost) return;
 
     const brandClass = showAdminTrigger ? "admin-trigger" : "";
+    const navId = "mainNavbarCollapse";
 
     headerHost.innerHTML = `
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top custom-navbar">
             <div class="container">
-                <a class="navbar-brand gold ${brandClass}" href="${showAdminTrigger ? "javascript:void(0)" : "index.html"}">HIJAZI Apartments</a>
+                <a class="navbar-brand gold ${brandClass}" href="${showAdminTrigger ? "javascript:void(0)" : "index.html"}">
+                    HIJAZI Apartments
+                </a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#${navId}" aria-controls="${navId}" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="nav">
+                <div class="collapse navbar-collapse" id="${navId}">
                     <ul class="navbar-nav mx-auto align-items-lg-center">
-                        <li class="nav-item"><a class="nav-link ${activePage === "index" ? "active" : ""}" href="index.html">${t.home}</a></li>
-                        <li class="nav-item"><a class="nav-link ${activePage === "apartments" ? "active" : ""}" href="apartments.html">${t.apartments}</a></li>
-                        <li class="nav-item"><a class="nav-link ${activePage === "booking" ? "active" : ""}" href="booking.html">${t.booking}</a></li>
-                        <li class="nav-item"><a class="nav-link ${activePage === "about" ? "active" : ""}" href="about.html">${t.about}</a></li>
-                        <li class="nav-item"><a class="nav-link ${activePage === "faq" ? "active" : ""}" href="faq.html">${t.faq}</a></li>
-                        <li class="nav-item"><a class="nav-link ${activePage === "reviews" ? "active" : ""}" href="reviews.html">${t.reviews}</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link ${activePage === "index" ? "active" : ""}" href="index.html">${t.home}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link ${activePage === "apartments" ? "active" : ""}" href="apartments.html">${t.apartments}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link ${activePage === "booking" ? "active" : ""}" href="booking.html">${t.booking}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link ${activePage === "about" ? "active" : ""}" href="about.html">${t.about}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link ${activePage === "faq" ? "active" : ""}" href="faq.html">${t.faq}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link ${activePage === "reviews" ? "active" : ""}" href="reviews.html">${t.reviews}</a>
+                        </li>
                     </ul>
 
-                    <!-- زر تغيير اللغة على الطرف -->
                     <div class="lang-switcher-wrapper">
                         <div class="lang-switcher">
-                            <button class="lang-btn ${lang === "ar" ? "active" : ""}" onclick="switchLanguage('ar')">${t.langArabic}</button>
-                            <button class="lang-btn ${lang === "en" ? "active" : ""}" onclick="switchLanguage('en')">${t.langEnglish}</button>
+                            <button type="button" class="lang-btn ${lang === "ar" ? "active" : ""}" onclick="switchLanguage('ar')">
+                                ${t.langArabic}
+                            </button>
+                            <button type="button" class="lang-btn ${lang === "en" ? "active" : ""}" onclick="switchLanguage('en')">
+                                ${t.langEnglish}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -301,6 +314,47 @@ function renderSharedHeader(activePage, showAdminTrigger = false) {
     if (showAdminTrigger) {
         initAdminTrigger();
     }
+
+    initNavbarMobileBehavior(navId);
+}
+
+/* =========================
+   تحسين سلوك الهيدر على الموبايل
+========================= */
+function initNavbarMobileBehavior(navId = "mainNavbarCollapse") {
+    const navCollapseEl = document.getElementById(navId);
+    const toggler = document.querySelector(`.navbar-toggler[data-bs-target="#${navId}"]`);
+
+    if (!navCollapseEl || !toggler || typeof bootstrap === "undefined") return;
+
+    const bsCollapse = bootstrap.Collapse.getOrCreateInstance(navCollapseEl, { toggle: false });
+
+    const navLinks = navCollapseEl.querySelectorAll(".nav-link");
+    navLinks.forEach(link => {
+        link.addEventListener("click", () => {
+            if (window.innerWidth < 992 && navCollapseEl.classList.contains("show")) {
+                bsCollapse.hide();
+            }
+        });
+    });
+
+    document.addEventListener("click", (e) => {
+        if (window.innerWidth >= 992) return;
+        if (!navCollapseEl.classList.contains("show")) return;
+
+        const clickedInsideMenu = navCollapseEl.contains(e.target);
+        const clickedToggler = toggler.contains(e.target);
+
+        if (!clickedInsideMenu && !clickedToggler) {
+            bsCollapse.hide();
+        }
+    });
+
+    window.addEventListener("resize", () => {
+        if (window.innerWidth >= 992 && navCollapseEl.classList.contains("show")) {
+            bsCollapse.hide();
+        }
+    });
 }
 
 /* =========================
@@ -330,9 +384,9 @@ function renderSharedFooter() {
                 <div class="footer-box">
                     <h4>${t.social}</h4>
                     <div class="social-links">
-                        <a href="https://www.instagram.com/j_ibrahim_j/" target="_blank">Instagram</a>
-                        <a href="https://web.facebook.com/abrahem.hjaze.71?locale=ar_AR" target="_blank">Facebook</a>
-                        <a href="#" target="_blank">Snapchat</a>
+                        <a href="https://www.instagram.com/j_ibrahim_j/" target="_blank" rel="noopener noreferrer">Instagram</a>
+                        <a href="https://web.facebook.com/abrahem.hjaze.71?locale=ar_AR" target="_blank" rel="noopener noreferrer">Facebook</a>
+                        <a href="#" target="_blank" rel="noopener noreferrer">Snapchat</a>
                     </div>
                 </div>
             </div>
@@ -354,7 +408,11 @@ function renderWhatsAppWidget() {
     host.innerHTML = `
         <div class="whatsapp-widget">
             <div class="whatsapp-label">${t.contactUs}</div>
-            <a href="https://wa.me/962789000444?text=Hello%20HIJAZI%20Apartments" class="whatsapp-float" target="_blank" aria-label="WhatsApp">
+            <a href="https://wa.me/962789000444?text=Hello%20HIJAZI%20Apartments"
+               class="whatsapp-float"
+               target="_blank"
+               rel="noopener noreferrer"
+               aria-label="WhatsApp">
                 <span class="whatsapp-pulse"></span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="30" height="30" fill="white">
                     <path d="M19.11 17.27c-.27-.13-1.58-.78-1.82-.87-.24-.09-.41-.13-.59.14-.18.27-.68.87-.84 1.04-.15.18-.31.2-.58.07-.27-.13-1.12-.41-2.13-1.3-.79-.7-1.32-1.57-1.47-1.84-.15-.27-.02-.42.11-.55.11-.11.27-.29.41-.43.14-.15.18-.25.27-.43.09-.18.05-.34-.02-.48-.07-.13-.59-1.43-.81-1.96-.21-.5-.43-.43-.59-.44h-.5c-.18 0-.48.07-.73.34-.25.27-.96.94-.96 2.29s.98 2.65 1.11 2.83c.14.18 1.92 2.93 4.65 4.11.65.28 1.16.45 1.56.58.66.21 1.26.18 1.73.11.53-.08 1.58-.65 1.8-1.27.22-.63.22-1.16.15-1.27-.06-.12-.24-.18-.5-.31z"></path>
@@ -401,6 +459,7 @@ function renderLongStayNotice(containerId, checkIn, checkOut) {
     if (!host) return;
 
     const nights = calcNights(checkIn, checkOut);
+
     if (nights >= 30) {
         host.innerHTML = `
             <div class="long-stay-box">
@@ -446,13 +505,6 @@ function initAdminTrigger() {
 }
 
 /* =========================
-   تشغيل العناصر المشتركة
-========================= */
-document.addEventListener("DOMContentLoaded", () => {
-    applyDocumentDirection();
-});
-
-/* =========================
    زر الصعود للأعلى
 ========================= */
 function renderScrollTopButton() {
@@ -496,9 +548,10 @@ function initFadeInSections() {
 }
 
 /* =========================
-   تشغيل إضافي عام
+   تشغيل عام
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
+    applyDocumentDirection();
     renderScrollTopButton();
     initFadeInSections();
 });
