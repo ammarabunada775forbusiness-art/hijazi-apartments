@@ -6,19 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HIJAZI Apartments - Admin</title>
     <link rel="stylesheet" href="css/style.css" />
+
     <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
             background: #f7f7f7;
             color: #111;
+            overflow-x: hidden;
         }
 
         header {
-            padding: 24px 20px;
+            padding: 32px 20px 26px;
             color: #fff;
             background: linear-gradient(90deg, #c89116, #000);
             text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 34px;
+            font-weight: 900;
         }
 
         .muted {
@@ -26,6 +33,7 @@
             font-size: 14px;
             opacity: 0.95;
             margin-top: 8px;
+            line-height: 1.8;
         }
 
         .container {
@@ -54,6 +62,7 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
+            flex: 1 1 220px;
         }
 
         .field label {
@@ -64,20 +73,25 @@
 
         select,
         input {
-            padding: 10px 12px;
-            border-radius: 8px;
+            padding: 11px 12px;
+            border-radius: 10px;
             border: 1px solid #ccc;
             min-width: 180px;
             font-size: 14px;
+            min-height: 46px;
+            box-sizing: border-box;
+            width: 100%;
+            outline: none;
         }
 
         .btn {
-            padding: 10px 14px;
+            padding: 11px 16px;
             border: none;
             cursor: pointer;
-            border-radius: 8px;
+            border-radius: 10px;
             font-weight: 700;
             transition: .2s;
+            min-height: 46px;
         }
 
         .btn-refresh {
@@ -130,6 +144,7 @@
             color: #444;
             font-size: 14px;
             font-weight: 600;
+            line-height: 1.8;
         }
 
         .table-wrap {
@@ -140,8 +155,14 @@
             border: 1px solid #eee;
         }
 
+        .table-scroll {
+            width: 100%;
+            overflow-x: auto;
+        }
+
         table {
             width: 100%;
+            min-width: 950px;
             border-collapse: collapse;
         }
 
@@ -151,12 +172,14 @@
             font-size: 14px;
             text-align: center;
             border-bottom: 1px solid #eee;
+            vertical-align: middle;
         }
 
         th {
             background: #000;
             color: #fff;
             font-weight: 700;
+            white-space: nowrap;
         }
 
         td {
@@ -174,28 +197,73 @@
             text-align: center;
         }
 
+        body.ltr-mode .field,
+        body.ltr-mode .status-line,
+        body.ltr-mode .muted {
+            text-align: left;
+        }
+
         @media (max-width: 900px) {
+            header {
+                padding: 26px 16px 22px;
+            }
+
+            header h1 {
+                font-size: 28px;
+            }
+
+            .container {
+                padding: 0 14px 24px;
+            }
+
             .toolbar {
                 align-items: stretch;
             }
 
-            .field,
+            .field {
+                width: 100%;
+                flex: 1 1 100%;
+            }
+
             .btn {
                 width: 100%;
             }
 
-            select,
-            input {
-                width: 100%;
-                min-width: unset;
+            .top-box {
+                padding: 14px;
             }
 
-            .table-wrap {
-                overflow-x: auto;
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
             }
 
-            table {
-                min-width: 900px;
+            .stat-card {
+                padding: 16px;
+            }
+
+            .stat-number {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 24px;
+            }
+
+            .muted {
+                font-size: 13px;
+            }
+
+            .status-line {
+                font-size: 13px;
+            }
+
+            th,
+            td {
+                font-size: 13px;
+                padding: 10px 8px;
             }
         }
     </style>
@@ -213,7 +281,7 @@
         <div class="top-box">
             <div class="toolbar">
                 <div class="field">
-                    <label id="filterLabel">فلتر الشقة</label>
+                    <label id="filterLabel" for="aptFilter">فلتر الشقة</label>
                     <select id="aptFilter">
                         <option value="">الكل</option>
                         <option value="1">شقة 1</option>
@@ -226,11 +294,11 @@
                 </div>
 
                 <div class="field">
-                    <label id="searchLabel">بحث بالاسم أو الهاتف</label>
+                    <label id="searchLabel" for="searchBox">بحث بالاسم أو الهاتف</label>
                     <input id="searchBox" type="text" placeholder="اكتب اسم أو رقم هاتف..." />
                 </div>
 
-                <button class="btn btn-refresh" id="refreshBtn">تحديث</button>
+                <button class="btn btn-refresh" id="refreshBtn" type="button">تحديث</button>
             </div>
         </div>
 
@@ -254,22 +322,24 @@
         <div id="status" class="status-line">جاري تحميل الحجوزات...</div>
 
         <div class="table-wrap">
-            <table>
-                <thead>
-                    <tr>
-                        <th id="thApt">الشقة</th>
-                        <th id="thName">الاسم</th>
-                        <th id="thPhone">الهاتف</th>
-                        <th id="thEmail">البريد</th>
-                        <th id="thCheckIn">الدخول</th>
-                        <th id="thCheckOut">الخروج</th>
-                        <th id="thGuests">أشخاص</th>
-                        <th id="thPrice">السعر</th>
-                        <th id="thAction">إجراء</th>
-                    </tr>
-                </thead>
-                <tbody id="tbody"></tbody>
-            </table>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th id="thApt">الشقة</th>
+                            <th id="thName">الاسم</th>
+                            <th id="thPhone">الهاتف</th>
+                            <th id="thEmail">البريد</th>
+                            <th id="thCheckIn">الدخول</th>
+                            <th id="thCheckOut">الخروج</th>
+                            <th id="thGuests">أشخاص</th>
+                            <th id="thPrice">السعر</th>
+                            <th id="thAction">إجراء</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
         </div>
 
     </div>
@@ -280,7 +350,6 @@
         let ADMIN_USER = "";
         let ADMIN_PASS = "";
 
-        // ترجمة النصوص داخل صفحة الأدمن
         function getAdminTexts() {
             return {
                 ar: {
@@ -357,10 +426,10 @@
         const currentLang = localStorage.getItem("siteLang") || "ar";
         const T = getAdminTexts()[currentLang];
 
-        // تطبيق ترجمة الصفحة
         function applyAdminTranslations() {
             document.documentElement.lang = currentLang;
             document.documentElement.dir = currentLang === "ar" ? "rtl" : "ltr";
+            document.body.classList.toggle("ltr-mode", currentLang === "en");
 
             document.getElementById("adminTitle").textContent = T.title;
             document.getElementById("adminSubtitle").textContent = T.subtitle;
@@ -387,7 +456,6 @@
             }
         }
 
-        // طلب بيانات الأدمن
         function askCredentials(message = "") {
             if (message) alert(message);
 
@@ -405,7 +473,6 @@
             ADMIN_PASS = ADMIN_PASS.trim();
         }
 
-        // بناء هيدر المصادقة
         function authHeaders() {
             const token = btoa(`${ADMIN_USER}:${ADMIN_PASS}`);
             return {
@@ -426,14 +493,12 @@
 
         let allBookings = [];
 
-        // تنسيق التاريخ
         function fmtDate(d) {
             const date = new Date(d);
             if (isNaN(date.getTime())) return "";
             return date.toISOString().slice(0, 10);
         }
 
-        // تحديث البطاقات الإحصائية
         function updateStats(filtered) {
             totalBookingsEl.textContent = allBookings.length;
             filteredBookingsEl.textContent = filtered.length;
@@ -442,7 +507,6 @@
             bookedApartmentsEl.textContent = uniqueApts.size;
         }
 
-        // عرض الجدول
         function render() {
             const apt = aptFilter.value;
             const q = searchBox.value.trim().toLowerCase();
@@ -476,7 +540,7 @@
                         <td>${(b.adults ?? 0) + (b.children ?? 0)}</td>
                         <td>${b.totalPriceText ?? (b.totalPrice ?? "")}</td>
                         <td>
-                            <button class="btn btn-delete" onclick="delBooking('${b._id}')">${T.delete}</button>
+                            <button class="btn btn-delete" onclick="delBooking('${b._id}')" type="button">${T.delete}</button>
                         </td>
                     </tr>
                 `).join("");
@@ -485,7 +549,6 @@
             statusEl.textContent = `${T.displayedCount}: ${filtered.length}`;
         }
 
-        // تحميل الحجوزات
         async function load() {
             statusEl.textContent = T.loading;
 
@@ -515,7 +578,6 @@
             }
         }
 
-        // حذف حجز
         async function delBooking(id) {
             if (!confirm(T.confirmDelete)) return;
 

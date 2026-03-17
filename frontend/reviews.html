@@ -7,8 +7,96 @@
     <title>HIJAZI Apartments - Reviews</title>
     <meta name="description"
         content="آراء وتقييمات الضيوف الذين أقاموا في Hijazi Apartments في عمان الشميساني. تجربة إقامة مميزة وقريبة من المستشفيات والخدمات.">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        body {
+            background: #f8f8f8;
+            color: #111;
+            overflow-x: hidden;
+        }
+
+        .page-content {
+            max-width: 1150px;
+            margin: auto;
+            padding: 40px 16px 50px;
+        }
+
+        .review-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .review-card {
+            background: #fff;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+            transition: .3s;
+        }
+
+        .review-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .review-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .review-body {
+            padding: 16px;
+        }
+
+        .review-badge {
+            display: inline-block;
+            background: #c89116;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .review-body h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .review-body p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 768px) {
+            .page-content {
+                padding: 28px 14px 40px;
+            }
+
+            .review-card img {
+                height: 170px;
+            }
+
+            .review-body h3 {
+                font-size: 16px;
+            }
+
+            .review-body p {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .review-card img {
+                height: 150px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -21,6 +109,7 @@
 
     <section class="page-content fade-in-section">
         <div class="review-grid">
+
             <div class="review-card">
                 <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=900&q=80"
                     alt="Review 1">
@@ -51,6 +140,7 @@
                         العلاج.</p>
                 </div>
             </div>
+
         </div>
     </section>
 
@@ -62,25 +152,28 @@
         renderSharedHeader("reviews", false);
         renderSharedFooter();
         renderWhatsAppWidget();
-        if (getCurrentLang() === "ar") {
-            document.getElementById("badge1").textContent = "إقامة طويلة";
-            document.getElementById("badge2").textContent = "إقامة عائلية";
-            document.getElementById("badge3").textContent = "إقامة طبية";
-        }
-        if (getCurrentLang() === "en") {
+
+        const lang = getCurrentLang();
+
+        if (lang === "en") {
             document.getElementById("reviewsTitle").textContent = "What Our Guests Say";
             document.getElementById("reviewsSubtitle").textContent = "You can later replace these images with real screenshots from guest conversations.";
+
             document.getElementById("review1Title").textContent = "Review by Abu Khalil from Saudi Arabia";
             document.getElementById("review1Text").textContent = "Two-month stay - very comfortable apartment and excellent location near the hospital and services.";
+
             document.getElementById("review2Title").textContent = "Review by Umm Mohammad from Jordan";
             document.getElementById("review2Text").textContent = "Family stay - very clean, professional service, and excellent space for a family.";
+
             document.getElementById("review3Title").textContent = "Review by Nasser from Kuwait";
             document.getElementById("review3Text").textContent = "Medical stay - the location is very close to hospitals and restaurants, and it was very suitable during treatment.";
+
             document.getElementById("badge1").textContent = "Long stay";
             document.getElementById("badge2").textContent = "Family stay";
             document.getElementById("badge3").textContent = "Medical stay";
         }
     </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
