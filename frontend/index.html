@@ -45,6 +45,8 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transform: scale(1.08);
+            filter: blur(1.5px) brightness(0.58) saturate(1.05);
         }
 
         .hero-bottom-fade {
@@ -66,22 +68,37 @@
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
-            background: linear-gradient(rgba(0, 0, 0, .52), rgba(0, 0, 0, .66));
+            background:
+                linear-gradient(rgba(0, 0, 0, .42), rgba(0, 0, 0, .72)),
+                radial-gradient(circle at top center, rgba(200, 145, 22, 0.18), transparent 45%);
             color: #fff;
             text-align: center;
             padding: 120px 20px 20px;
         }
 
+        .hero-cinematic {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background:
+                linear-gradient(to right, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.18)),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.14), transparent 25%, transparent 75%, rgba(0, 0, 0, 0.22));
+            pointer-events: none;
+        }
+
         .overlay h1 {
-            font-size: 42px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 14px;
+            text-shadow: 0 6px 20px rgba(0, 0, 0, .35);
         }
 
         .overlay p {
-            font-size: 20px;
-            opacity: .9;
-            max-width: 850px;
+            font-size: 24px;
+            opacity: .96;
+            max-width: 900px;
+            line-height: 1.8;
+            text-shadow: 0 4px 14px rgba(0, 0, 0, .28);
         }
 
         .availability-box {
@@ -201,21 +218,27 @@
         }
 
         @media (max-width: 768px) {
-            .availability-box {
-                max-width: 94%;
-                padding: 18px;
+            .hero {
+                height: 78vh;
+                min-height: 620px;
             }
 
-            .availability-row {
-                grid-template-columns: 1fr;
+            .overlay {
+                padding: 110px 16px 20px;
             }
 
-            .availability-actions {
-                margin-top: 14px;
+            .overlay h1 {
+                font-size: 38px;
             }
 
-            .hero-search-btn {
-                width: 100%;
+            .overlay p {
+                font-size: 18px;
+                line-height: 1.7;
+            }
+
+            .hero-video {
+                transform: scale(1.12);
+                filter: blur(1px) brightness(0.55) saturate(1.03);
             }
         }
     </style>
@@ -234,6 +257,8 @@
                 type="video/mp4">
         </video>
         <video autoplay muted loop playsinline preload="none" class="hero-video"></video>
+        <div class="hero-cinematic"></div>
+
 
         <div class="overlay">
             <h1 id="heroTitle" class="admin-trigger">مرحباً بكم في HIJAZI Apartments</h1>
