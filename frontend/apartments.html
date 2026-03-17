@@ -215,27 +215,6 @@
             font-size: 14px;
         }
 
-        .card-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 16px;
-        }
-
-        .card-actions button {
-            flex: 1;
-            min-height: 48px;
-            border-radius: 12px;
-            font-weight: 800;
-        }
-
-        .btn-secondary {
-            background: #222;
-        }
-
-        .btn-secondary:hover {
-            background: #000;
-        }
-
         .location-line {
             margin-top: 10px;
             color: #444;
@@ -279,6 +258,78 @@
             padding: 6px 10px;
             border-radius: 999px;
             font-size: 12px;
+        }
+
+        /* أزرار الكروت */
+        .card-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .card-actions button {
+            flex: 1;
+            min-height: 54px;
+            border-radius: 18px;
+            font-weight: 800;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+        }
+
+        .btn-icon {
+            font-size: 18px;
+        }
+
+        .btn-book {
+            background: linear-gradient(135deg, #d4a017, #8a6508);
+            color: #fff;
+            box-shadow: 0 10px 24px rgba(212, 160, 23, 0.25);
+        }
+
+        .btn-book:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 16px 30px rgba(212, 160, 23, 0.35);
+            background: linear-gradient(135deg, #e0ad1f, #6f5206);
+        }
+
+        .btn-details {
+            background: linear-gradient(135deg, #1f1f1f, #000);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-details:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 14px 26px rgba(0, 0, 0, 0.25);
+            background: linear-gradient(135deg, #2c2c2c, #000);
+        }
+
+        /* Ripple */
+        .ripple-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple-btn .ripple {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-effect 0.6s linear;
+            background: rgba(255, 255, 255, 0.35);
+            pointer-events: none;
+        }
+
+        @keyframes ripple-effect {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
         }
 
         /* Modal */
@@ -416,6 +467,26 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
         }
 
+        .modal-book-btn {
+            margin-top: 16px;
+            width: 100%;
+            min-height: 52px;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #d4a017, #8a6508);
+            color: #fff;
+            font-weight: 800;
+            font-size: 16px;
+            box-shadow: 0 10px 24px rgba(212, 160, 23, 0.22);
+            transition: all 0.25s ease;
+        }
+
+        .modal-book-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #e0ad1f, #6f5206);
+            box-shadow: 0 14px 28px rgba(212, 160, 23, 0.3);
+        }
+
         .skeleton-card {
             background: #fff;
             border-radius: 22px;
@@ -540,6 +611,13 @@
 
             .card-actions {
                 flex-direction: column;
+                gap: 10px;
+            }
+
+            .card-actions button {
+                min-height: 48px;
+                font-size: 15px;
+                border-radius: 16px;
             }
 
             .modal {
@@ -621,10 +699,8 @@
 
 <body>
 
-    <!-- الهيدر المشترك -->
     <div id="sharedHeader"></div>
 
-    <!-- عنوان الصفحة -->
     <section class="page-header">
         <h1 id="pageTitle">HIJAZI Apartments</h1>
         <p id="pageSubtitle">اختر الشقة المناسبة حسب تاريخ الدخول والخروج</p>
@@ -632,7 +708,6 @@
 
     <div class="wrap">
 
-        <!-- صندوق الفلترة -->
         <div class="box">
             <div class="row-box">
                 <div class="filter-field">
@@ -656,11 +731,9 @@
             </div>
         </div>
 
-        <!-- كروت الشقق -->
         <div class="grid" id="grid"></div>
     </div>
 
-    <!-- نافذة التفاصيل -->
     <div class="modal" id="detailsModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -704,17 +777,14 @@
                             <iframe id="detailMap" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
 
-                        <button id="bookNowBtn" style="margin-top:16px;width:100%;">احجز الآن</button>
+                        <button id="bookNowBtn" class="modal-book-btn" type="button">احجز الآن</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- الفوتر -->
     <div id="sharedFooter"></div>
-
-    <!-- واتساب -->
     <div id="sharedWhatsApp"></div>
 
     <script src="js/main.js"></script>
@@ -846,8 +916,15 @@
                         ${nights >= 30 ? `<div class="long-note-inline">${SITE_TRANSLATIONS[lang].longStayAlert}</div>` : ""}
 
                         <div class="card-actions">
-                            <button class="btn-secondary" onclick="openDetails(${id})">${detailsBtn}</button>
-                            <button onclick="goBook(${id})">${bookBtn}</button>
+                            <button class="btn-book ripple-btn" onclick="goBook(${apt.id})" type="button">
+                                <span class="btn-icon">📅</span>
+                                <span>${bookBtn}</span>
+                            </button>
+
+                            <button class="btn-details ripple-btn" onclick="openDetails(${apt.id})" type="button">
+                                <span class="btn-icon">👁️</span>
+                                <span>${detailsBtn}</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -967,6 +1044,31 @@
             `).join("");
         }
 
+        function initRippleButtons() {
+            document.querySelectorAll(".ripple-btn").forEach(button => {
+                button.addEventListener("click", function (e) {
+                    const oldRipple = this.querySelector(".ripple");
+                    if (oldRipple) oldRipple.remove();
+
+                    const ripple = document.createElement("span");
+                    ripple.classList.add("ripple");
+
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+
+                    ripple.style.width = ripple.style.height = `${size}px`;
+                    ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+                    ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+
+                    this.appendChild(ripple);
+
+                    ripple.addEventListener("animationend", () => {
+                        ripple.remove();
+                    });
+                });
+            });
+        }
+
         async function loadAvailability() {
             const lang = getCurrentLang();
             const checkIn = checkInEl.value;
@@ -982,6 +1084,7 @@
                     : "All apartments are displayed. You can choose dates later.";
 
                 gridEl.innerHTML = Object.keys(HIJAZI_APARTMENTS).map(id => cardHtml(Number(id))).join("");
+                initRippleButtons();
                 return;
             }
 
@@ -1019,6 +1122,7 @@
                     : `✅ Available apartments: ${available.length}`;
 
                 gridEl.innerHTML = available.map(id => cardHtml(id, checkIn, checkOut)).join("");
+                initRippleButtons();
             } catch (e) {
                 console.error(e);
                 statusEl.textContent = lang === "ar"
