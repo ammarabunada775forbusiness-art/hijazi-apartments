@@ -35,8 +35,8 @@
 
         .hero {
             position: relative;
-            height: 82vh;
-            min-height: 620px;
+            height: 86vh;
+            min-height: 700px;
             overflow: hidden;
         }
 
@@ -65,8 +65,8 @@
             left: 0;
             right: 0;
             bottom: 0;
-            height: 120px;
-            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.82), #fff);
+            height: 55px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.35), #fff);
             z-index: 3;
             pointer-events: none;
         }
@@ -80,11 +80,11 @@
             justify-content: flex-start;
             align-items: center;
             background:
-                linear-gradient(rgba(0, 0, 0, .42), rgba(0, 0, 0, .72)),
+                linear-gradient(rgba(0, 0, 0, .42), rgba(0, 0, 0, .68)),
                 radial-gradient(circle at top center, rgba(200, 145, 22, 0.18), transparent 45%);
             color: #fff;
             text-align: center;
-            padding: 115px 20px 20px;
+            padding: 115px 20px 90px;
         }
 
         .overlay h1 {
@@ -106,7 +106,7 @@
             width: 100%;
             max-width: 760px;
             margin: 28px auto 0;
-            background: rgba(0, 0, 0, .68);
+            background: rgba(0, 0, 0, .72);
             padding: 22px 22px;
             border-radius: 20px;
             box-shadow: 0 16px 34px rgba(0, 0, 0, .26);
@@ -222,10 +222,16 @@
             margin-top: 0;
         }
 
+        #viewAllBtn {
+            position: relative;
+            z-index: 5;
+            margin-top: 18px !important;
+        }
+
         @media (max-width: 768px) {
             .hero {
-                height: 78vh;
-                min-height: 560px;
+                height: 82vh;
+                min-height: 620px;
             }
 
             .hero-video {
@@ -234,7 +240,7 @@
             }
 
             .overlay {
-                padding: 100px 14px 18px;
+                padding: 95px 14px 75px;
             }
 
             .overlay h1 {
@@ -269,7 +275,7 @@
             }
 
             .hero-bottom-fade {
-                height: 100px;
+                height: 38px;
             }
 
             .seo-section {
@@ -285,15 +291,21 @@
                 padding: 18px;
                 border-radius: 16px;
             }
+
+            #viewAllBtn {
+                width: 100%;
+                max-width: 320px;
+            }
         }
 
         @media (max-width: 480px) {
             .hero {
-                min-height: 520px;
+                min-height: 580px;
             }
 
             .overlay {
-                padding-top: 92px;
+                padding-top: 88px;
+                padding-bottom: 68px;
             }
 
             .overlay h1 {
@@ -302,6 +314,10 @@
 
             .overlay p {
                 font-size: 15px;
+            }
+
+            .hero-bottom-fade {
+                height: 30px;
             }
         }
     </style>
