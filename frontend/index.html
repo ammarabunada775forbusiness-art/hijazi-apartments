@@ -228,54 +228,152 @@
             margin-top: 18px !important;
         }
 
+        .mobile-availability-card {
+            display: none;
+        }
+
         @media (max-width: 768px) {
             .hero {
-                height: 82vh;
-                min-height: 620px;
+                height: auto;
+                min-height: 100vh;
             }
 
             .hero-video {
-                transform: scale(1.1);
+                transform: scale(1.08);
                 filter: blur(1px) brightness(0.55) saturate(1.03);
             }
 
             .overlay {
-                padding: 95px 14px 75px;
+                padding: 88px 14px 28px;
+                justify-content: flex-start;
             }
 
             .overlay h1 {
-                font-size: 30px;
+                font-size: 28px;
                 line-height: 1.35;
+                margin-bottom: 10px;
             }
 
             .overlay p {
-                font-size: 16px;
+                font-size: 15px;
                 line-height: 1.75;
                 max-width: 100%;
+                margin-bottom: 12px;
             }
 
-            .availability-box {
-                padding: 18px 14px;
-                border-radius: 18px;
+            .availability-box,
+            #viewAllBtn {
+                display: none !important;
             }
 
-            .availability-row {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
-            .availability-field input {
-                min-height: 46px;
-            }
-
-            .hero-search-btn {
+            .mobile-availability-card {
+                display: block;
                 width: 100%;
-                height: 48px;
+                max-width: 100%;
+                margin: 14px auto 0;
+                background: rgba(0, 0, 0, 0.74);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 20px;
+                padding: 14px;
+                box-shadow: 0 14px 28px rgba(0, 0, 0, 0.24);
+                backdrop-filter: blur(7px);
+                text-align: start;
+            }
+
+            .mobile-availability-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .mobile-field {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .mobile-field label {
+                color: #fff;
+                font-size: 13px;
+                font-weight: 700;
+                margin-bottom: 6px;
+            }
+
+            .mobile-field input {
+                width: 100%;
+                min-height: 44px;
+                padding: 10px 12px;
+                border-radius: 12px;
+                border: none;
+                background: #fff;
+                color: #111;
                 font-size: 15px;
+                outline: none;
+            }
+
+            .mobile-actions {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 10px;
+                margin-top: 12px;
+            }
+
+            .mobile-primary-btn {
+                background: linear-gradient(135deg, #d4a017, #8a6508);
+                color: #fff;
+                border: none;
+                min-height: 46px;
+                border-radius: 14px;
+                font-weight: 800;
+                font-size: 15px;
+                box-shadow: 0 10px 22px rgba(212, 160, 23, 0.24);
+                transition: all 0.25s ease;
+            }
+
+            .mobile-primary-btn:hover {
+                transform: translateY(-2px);
+                background: linear-gradient(135deg, #e0ad1f, #6f5206);
+            }
+
+            .mobile-secondary-btn {
+                background: rgba(255, 255, 255, 0.08);
+                color: #fff;
+                border: 1px solid rgba(255, 255, 255, 0.14);
+                min-height: 46px;
+                border-radius: 14px;
+                font-weight: 800;
+                font-size: 15px;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.25s ease;
+            }
+
+            .mobile-secondary-btn:hover {
+                background: rgba(255, 255, 255, 0.14);
+                color: #fff;
+                transform: translateY(-2px);
+            }
+
+            .mobile-availability-meta {
+                margin-top: 10px;
+                padding-top: 10px;
+                border-top: 1px solid rgba(255, 255, 255, 0.08);
+                text-align: center;
+            }
+
+            .mobile-availability-meta .status-msg,
+            .mobile-availability-meta .long-stay-note,
+            .mobile-availability-meta .long-stay-box {
+                font-size: 13px;
             }
 
             .hero-bottom-fade {
-                height: 38px;
+                height: 18px;
+                background: linear-gradient(to bottom,
+                        rgba(255, 255, 255, 0),
+                        rgba(255, 255, 255, 0.12),
+                        #fff);
             }
 
             .seo-section {
@@ -291,33 +389,36 @@
                 padding: 18px;
                 border-radius: 16px;
             }
-
-            #viewAllBtn {
-                width: 100%;
-                max-width: 320px;
-            }
         }
 
         @media (max-width: 480px) {
-            .hero {
-                min-height: 580px;
-            }
-
             .overlay {
-                padding-top: 88px;
-                padding-bottom: 68px;
+                padding: 82px 12px 24px;
             }
 
             .overlay h1 {
-                font-size: 26px;
+                font-size: 24px;
             }
 
             .overlay p {
-                font-size: 15px;
+                font-size: 14px;
+                line-height: 1.8;
             }
 
-            .hero-bottom-fade {
-                height: 30px;
+            .mobile-availability-card {
+                padding: 12px;
+                border-radius: 18px;
+            }
+
+            .mobile-field input {
+                min-height: 42px;
+                font-size: 14px;
+            }
+
+            .mobile-primary-btn,
+            .mobile-secondary-btn {
+                min-height: 44px;
+                font-size: 14px;
             }
         }
     </style>
@@ -325,10 +426,8 @@
 
 <body>
 
-    <!-- مكان الهيدر المشترك -->
     <div id="sharedHeader"></div>
 
-    <!-- قسم البطل الرئيسي -->
     <section class="hero">
         <video autoplay muted loop playsinline preload="metadata" class="hero-video">
             <source
@@ -367,12 +466,35 @@
             </div>
 
             <a href="apartments.html" class="btn gold-btn mt-3" id="viewAllBtn">عرض جميع الشقق</a>
+
+            <div class="mobile-availability-card">
+                <div class="mobile-availability-grid">
+                    <div class="mobile-field">
+                        <label id="mobileCheckInLabel" for="mobileCheckIn">تاريخ الدخول</label>
+                        <input type="date" id="mobileCheckIn">
+                    </div>
+
+                    <div class="mobile-field">
+                        <label id="mobileCheckOutLabel" for="mobileCheckOut">تاريخ الخروج</label>
+                        <input type="date" id="mobileCheckOut">
+                    </div>
+                </div>
+
+                <div class="mobile-actions">
+                    <button id="mobileCheckBtn" class="mobile-primary-btn">عرض الشقق المتاحة</button>
+                    <a href="apartments.html" class="mobile-secondary-btn" id="mobileViewAllBtn">عرض جميع الشقق</a>
+                </div>
+
+                <div class="mobile-availability-meta">
+                    <div id="mobileLongStayNotice"></div>
+                    <div id="mobileDateStatus" class="status-msg"></div>
+                </div>
+            </div>
         </div>
 
         <div class="hero-bottom-fade"></div>
     </section>
 
-    <!-- قسم SEO ونصوص قوية للظهور -->
     <section class="seo-section fade-in-section">
         <h2 class="section-title" id="seoTitle">إقامة راقية في قلب عمان الشميساني</h2>
 
@@ -397,7 +519,6 @@
         </div>
     </section>
 
-    <!-- قسم لماذا تختار Hijazi -->
     <section class="why-section fade-in-section">
         <h2 class="section-title" id="whyTitle">لماذا تختار Hijazi</h2>
 
@@ -421,7 +542,6 @@
         </div>
     </section>
 
-    <!-- قسم الإحصائيات -->
     <section class="stats-section fade-in-section">
         <h2 class="section-title" id="statsTitle">أرقام تعكس جودة الإقامة</h2>
 
@@ -448,10 +568,7 @@
         </div>
     </section>
 
-    <!-- مكان الفوتر المشترك -->
     <div id="sharedFooter"></div>
-
-    <!-- مكان زر واتساب المشترك -->
     <div id="sharedWhatsApp"></div>
 
     <script src="js/main.js"></script>
@@ -461,8 +578,28 @@
         const statusEl = document.getElementById("dateStatus");
         const btn = document.getElementById("checkBtn");
 
+        const mobileCheckInEl = document.getElementById("mobileCheckIn");
+        const mobileCheckOutEl = document.getElementById("mobileCheckOut");
+        const mobileStatusEl = document.getElementById("mobileDateStatus");
+        const mobileBtn = document.getElementById("mobileCheckBtn");
+
         function todayISO() {
             return new Date().toISOString().split('T')[0];
+        }
+
+        function syncDesktopToMobile() {
+            if (mobileCheckInEl) mobileCheckInEl.value = checkInEl.value;
+            if (mobileCheckOutEl) mobileCheckOutEl.value = checkOutEl.value;
+        }
+
+        function syncMobileToDesktop() {
+            if (checkInEl) checkInEl.value = mobileCheckInEl.value;
+            if (checkOutEl) checkOutEl.value = mobileCheckOutEl.value;
+        }
+
+        function updateMobileMinDates() {
+            if (mobileCheckInEl) mobileCheckInEl.min = todayISO();
+            if (mobileCheckOutEl) mobileCheckOutEl.min = mobileCheckInEl.value || todayISO();
         }
 
         function applyIndexTranslations() {
@@ -475,6 +612,11 @@
                 document.getElementById("checkOutLabel").textContent = "تاريخ الخروج";
                 document.getElementById("checkBtn").textContent = "عرض الشقق المتاحة";
                 document.getElementById("viewAllBtn").textContent = "عرض جميع الشقق";
+
+                document.getElementById("mobileCheckInLabel").textContent = "تاريخ الدخول";
+                document.getElementById("mobileCheckOutLabel").textContent = "تاريخ الخروج";
+                document.getElementById("mobileCheckBtn").textContent = "عرض الشقق المتاحة";
+                document.getElementById("mobileViewAllBtn").textContent = "عرض جميع الشقق";
 
                 document.getElementById("seoTitle").textContent = "إقامة راقية في قلب عمان الشميساني";
                 document.getElementById("seoCard1Title").textContent = "قرب من المستشفيات";
@@ -505,6 +647,11 @@
                 document.getElementById("checkBtn").textContent = "View available apartments";
                 document.getElementById("viewAllBtn").textContent = "View all apartments";
 
+                document.getElementById("mobileCheckInLabel").textContent = "Check-in";
+                document.getElementById("mobileCheckOutLabel").textContent = "Check-out";
+                document.getElementById("mobileCheckBtn").textContent = "View available apartments";
+                document.getElementById("mobileViewAllBtn").textContent = "View all apartments";
+
                 document.getElementById("seoTitle").textContent = "Premium stay in the heart of Amman Shmeisani";
                 document.getElementById("seoCard1Title").textContent = "Near major hospitals";
                 document.getElementById("seoCard1Text").textContent = "Elegant furnished apartments suitable for medical stays near Jordan Hospital, Islamic Hospital, Abdali hospitals, and medical centers in Amman.";
@@ -531,14 +678,34 @@
 
         checkInEl.min = todayISO();
         checkOutEl.min = todayISO();
+        updateMobileMinDates();
 
         checkInEl.addEventListener("change", () => {
             checkOutEl.min = checkInEl.value || todayISO();
+            syncDesktopToMobile();
+            updateMobileMinDates();
             renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value);
+            renderLongStayNotice("mobileLongStayNotice", checkInEl.value, checkOutEl.value);
         });
 
         checkOutEl.addEventListener("change", () => {
+            syncDesktopToMobile();
             renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value);
+            renderLongStayNotice("mobileLongStayNotice", checkInEl.value, checkOutEl.value);
+        });
+
+        mobileCheckInEl.addEventListener("change", () => {
+            syncMobileToDesktop();
+            checkOutEl.min = checkInEl.value || todayISO();
+            updateMobileMinDates();
+            renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value);
+            renderLongStayNotice("mobileLongStayNotice", checkInEl.value, checkOutEl.value);
+        });
+
+        mobileCheckOutEl.addEventListener("change", () => {
+            syncMobileToDesktop();
+            renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value);
+            renderLongStayNotice("mobileLongStayNotice", checkInEl.value, checkOutEl.value);
         });
 
         btn.addEventListener("click", () => {
@@ -550,6 +717,7 @@
             statusEl.textContent = "";
 
             renderLongStayNotice("longStayNotice", checkIn, checkOut);
+            renderLongStayNotice("mobileLongStayNotice", checkIn, checkOut);
 
             if (!checkIn || !checkOut) {
                 statusEl.classList.add("status-error");
@@ -577,11 +745,56 @@
             }, 500);
         });
 
+        mobileBtn.addEventListener("click", () => {
+            syncMobileToDesktop();
+            const checkIn = checkInEl.value;
+            const checkOut = checkOutEl.value;
+            const lang = getCurrentLang();
+
+            mobileStatusEl.className = "status-msg";
+            mobileStatusEl.textContent = "";
+            statusEl.className = "status-msg";
+            statusEl.textContent = "";
+
+            renderLongStayNotice("longStayNotice", checkIn, checkOut);
+            renderLongStayNotice("mobileLongStayNotice", checkIn, checkOut);
+
+            if (!checkIn || !checkOut) {
+                const msg = lang === "ar" ? "❌ اختر تاريخ الدخول والخروج" : "❌ Please select check-in and check-out dates";
+                mobileStatusEl.classList.add("status-error");
+                mobileStatusEl.textContent = msg;
+                statusEl.classList.add("status-error");
+                statusEl.textContent = msg;
+                return;
+            }
+
+            if (checkOut <= checkIn) {
+                const msg = lang === "ar" ? "❌ تاريخ الخروج لازم يكون بعد تاريخ الدخول" : "❌ Check-out must be after check-in";
+                mobileStatusEl.classList.add("status-error");
+                mobileStatusEl.textContent = msg;
+                statusEl.classList.add("status-error");
+                statusEl.textContent = msg;
+                return;
+            }
+
+            const okMsg = lang === "ar" ? "✓ جاري عرض الشقق المتاحة..." : "✓ Loading available apartments...";
+            mobileStatusEl.classList.add("status-ok");
+            mobileStatusEl.textContent = okMsg;
+            statusEl.classList.add("status-ok");
+            statusEl.textContent = okMsg;
+
+            setTimeout(() => {
+                window.location.href = `apartments.html?checkIn=${checkIn}&checkOut=${checkOut}`;
+            }, 500);
+        });
+
         renderSharedHeader("index", true);
         renderSharedFooter();
         renderWhatsAppWidget();
         applyIndexTranslations();
         renderLongStayNotice("longStayNotice", "", "");
+        renderLongStayNotice("mobileLongStayNotice", "", "");
+        syncDesktopToMobile();
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
