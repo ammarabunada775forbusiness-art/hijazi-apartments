@@ -34,7 +34,8 @@
 
         .hero {
             position: relative;
-            height: 100vh;
+            height: 84vh;
+            min-height: 680px;
             overflow: hidden;
         }
 
@@ -46,18 +47,29 @@
             object-fit: cover;
         }
 
+        .hero-bottom-fade {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 150px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.82), #fff);
+            z-index: 3;
+            pointer-events: none;
+        }
+
         .overlay {
             position: relative;
             z-index: 2;
             height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
-            background: linear-gradient(rgba(0, 0, 0, .55), rgba(0, 0, 0, .65));
+            background: linear-gradient(rgba(0, 0, 0, .52), rgba(0, 0, 0, .66));
             color: #fff;
             text-align: center;
-            padding: 20px;
+            padding: 120px 20px 20px;
         }
 
         .overlay h1 {
@@ -74,11 +86,12 @@
 
         .availability-box {
             max-width: 760px;
-            margin: 35px auto;
-            background: rgba(0, 0, 0, .76);
+            margin: 30px auto;
+            background: rgba(0, 0, 0, .68);
             padding: 24px 26px;
-            border-radius: 20px;
-            box-shadow: 0 16px 34px rgba(0, 0, 0, .28);
+            border-radius: 22px;
+            box-shadow: 0 16px 34px rgba(0, 0, 0, .26);
+            backdrop-filter: blur(6px);
         }
 
         .availability-row {
@@ -216,7 +229,8 @@
     <!-- قسم البطل الرئيسي -->
     <section class="hero">
         <video autoplay muted loop class="hero-video">
-            <source src="رابط الفيديو" type="video/mp4">
+            <source src="videos/invideo-ai-1080 من الخلافة الراشدة إلى سقوط العثمانية في 2025-01-30.mp4"
+                type="video/mp4">
         </video>
 
         <div class="overlay">
@@ -249,6 +263,7 @@
 
             <a href="apartments.html" class="btn gold-btn mt-2" id="viewAllBtn">عرض جميع الشقق</a>
         </div>
+        <div class="hero-bottom-fade"></div>
     </section>
 
     <!-- قسم SEO ونصوص قوية للظهور -->
