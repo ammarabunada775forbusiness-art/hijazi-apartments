@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://hijazi-apartments.vercel.app/sitemap.xml
+Sitemap: https://hijazi-apartments.com/sitemap.xml

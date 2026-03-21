@@ -2,32 +2,32 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://hijazi-apartments.vercel.app/</loc>
+    <loc>https://hijazi-apartments.com/</loc>
     <priority>1.00</priority>
   </url>
 
   <url>
-    <loc>https://hijazi-apartments.vercel.app/apartments.html</loc>
+    <loc>https://hijazi-apartments.com/apartments.html</loc>
     <priority>0.90</priority>
   </url>
 
   <url>
-    <loc>https://hijazi-apartments.vercel.app/booking.html</loc>
+    <loc>https://hijazi-apartments.com/booking.html</loc>
     <priority>0.85</priority>
   </url>
 
   <url>
-    <loc>https://hijazi-apartments.vercel.app/about.html</loc>
+    <loc>https://hijazi-apartments.com/about.html</loc>
     <priority>0.70</priority>
   </url>
 
   <url>
-    <loc>https://hijazi-apartments.vercel.app/faq.html</loc>
+    <loc>https://hijazi-apartments.com/faq.html</loc>
     <priority>0.65</priority>
   </url>
 
   <url>
-    <loc>https://hijazi-apartments.vercel.app/reviews.html</loc>
+    <loc>https://hijazi-apartments.com/reviews.html</loc>
     <priority>0.70</priority>
   </url>
 
