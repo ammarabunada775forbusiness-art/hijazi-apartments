@@ -1396,6 +1396,23 @@
                     return;
                 }
 
+                // ✅ نجاح الحجز
+                successModal.style.display = "block";
+
+                // 🔥 هذا السطر الجديد (Analytics)
+                gtag('event', 'booking_submit', {
+                    event_category: 'booking',
+                    event_label: 'booking_success'
+                });
+
+                form.reset();
+                gtag('event', 'booking_submit', {
+                    event_category: 'booking',
+                    event_label: 'booking_success',
+                    value: payload.totalPrice
+                });
+
+
                 successModal.style.display = "block";
 
                 form.reset();
