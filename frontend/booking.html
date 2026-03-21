@@ -1017,17 +1017,17 @@
             if (!apt) return;
 
             sliderBox.innerHTML = `
-                <button class="slider-btn slider-prev" id="prevSlide" type="button">❮</button>
-                <img id="aptImage" src="${apt.images[currentSlide]}" alt="Apartment Image">
-                <button class="slider-btn slider-next" id="nextSlide" type="button">❯</button>
-            `;
+            <button class="slider-btn slider-prev" id="prevSlide" type="button">❮</button>
+            <img id="aptImage" src="${apt.images[currentSlide]}" alt="Apartment Image">
+            <button class="slider-btn slider-next" id="nextSlide" type="button">❯</button>
+        `;
 
             document.getElementById("prevSlide").addEventListener("click", prevSlide);
             document.getElementById("nextSlide").addEventListener("click", nextSlide);
 
             thumbsEl.innerHTML = apt.images.map((img, index) => `
-                <img src="${img}" class="${index === currentSlide ? "active" : ""}" onclick="goToSlide(${index})" alt="Apartment thumbnail">
-            `).join("");
+            <img src="${img}" class="${index === currentSlide ? "active" : ""}" onclick="goToSlide(${index})" alt="Apartment thumbnail">
+        `).join("");
         }
 
         function goToSlide(index) {
@@ -1062,18 +1062,18 @@
             roomCards.innerHTML = apt.rooms.map(room => {
                 const title = lang === "ar" ? room.titleAr : room.titleEn;
                 return `
-                    <div class="room-card ${room.key === selectedKey ? "active" : ""}" onclick="selectRoomCard(${apt.id}, '${room.key}')">
-                        ${title}
-                    </div>
-                `;
+                <div class="room-card ${room.key === selectedKey ? "active" : ""}" onclick="selectRoomCard(${apt.id}, '${room.key}')">
+                    ${title}
+                </div>
+            `;
             }).join("");
 
             const selectedRoom = apt.rooms.find(r => r.key === selectedKey) || apt.rooms[0];
             roomDescription.textContent = lang === "ar" ? selectedRoom.noteAr : selectedRoom.noteEn;
 
             roomGallery.innerHTML = selectedRoom.images.map(img => `
-                <img src="${img}" alt="Room image">
-            `).join("");
+            <img src="${img}" alt="Room image">
+        `).join("");
         }
 
         window.selectRoomCard = function (aptId, roomKey) {
@@ -1263,6 +1263,15 @@
         aptSelect.addEventListener("change", async () => {
             clearMessage();
             renderApartmentDetails();
+
+            const selectedId = getSelectedAptId();
+            if (selectedId && typeof gtag === "function") {
+                gtag('event', 'select_apartment', {
+                    event_category: 'booking',
+                    event_label: `apartment_${selectedId}`
+                });
+            }
+
             await refreshCalendar();
         });
 
@@ -1342,6 +1351,13 @@
             renderWhatsAppWidget();
             applyBookingTranslations();
 
+            if (typeof gtag === "function") {
+                gtag('event', 'view_booking_page', {
+                    event_category: 'booking',
+                    event_label: 'booking_page'
+                });
+            }
+
             renderApartmentDetails();
             await refreshCalendar();
             updatePrice();
@@ -1396,24 +1412,15 @@
                     return;
                 }
 
-                // ✅ نجاح الحجز
                 successModal.style.display = "block";
 
-                // 🔥 هذا السطر الجديد (Analytics)
-                gtag('event', 'booking_submit', {
-                    event_category: 'booking',
-                    event_label: 'booking_success'
-                });
-
-                form.reset();
-                gtag('event', 'booking_submit', {
-                    event_category: 'booking',
-                    event_label: 'booking_success',
-                    value: payload.totalPrice
-                });
-
-
-                successModal.style.display = "block";
+                if (typeof gtag === "function") {
+                    gtag('event', 'booking_submit', {
+                        event_category: 'booking',
+                        event_label: 'booking_success',
+                        value: payload.totalPrice
+                    });
+                }
 
                 form.reset();
                 aptSelect.value = String(id);
