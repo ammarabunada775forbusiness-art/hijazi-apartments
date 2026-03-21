@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://hijazi-apartments.com/sitemap.xml
+Disallow: /admin.html
