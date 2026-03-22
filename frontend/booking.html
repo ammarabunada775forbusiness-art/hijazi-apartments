@@ -11,6 +11,7 @@
 
         gtag('config', 'G-KG0M4GYNCV');
     </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>احجز الآن | HIJAZI Apartments</title>
@@ -19,6 +20,7 @@
         content="احجز شقتك المفروشة في عمان الشميساني بسهولة عبر موقع Hijazi Apartments. حجز سريع وآمن بالقرب من أهم مستشفيات عمان.">
     <meta name="keywords" content="حجز شقة مفروشة عمان, شقق مفروشة الشميساني حجز, Hijazi Apartments booking">
     <meta name="google-site-verification" content="CQow9HEGehI7vI8t4xQ3J6aqW_cw58dW8eZ8o8htyf4" />
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.css" />
@@ -254,6 +256,19 @@
             margin-top: 6px;
             color: #666;
             font-size: 13px;
+        }
+
+        .field-error {
+            margin-top: 6px;
+            color: #b42318;
+            font-size: 13px;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .input-error {
+            border-color: #f5c2c7 !important;
+            background: #fff9f9 !important;
         }
 
         #calendar {
@@ -632,10 +647,8 @@
 
 <body>
 
-    <!-- الهيدر -->
     <div id="sharedHeader"></div>
 
-    <!-- عنوان الصفحة -->
     <section class="page-header">
         <h1 id="pageTitle">HIJAZI Apartments</h1>
         <p id="pageSubtitle">أكمل بيانات الحجز لشقتك المختارة في الشميساني - عمّان</p>
@@ -660,7 +673,6 @@
 
         <div class="layout">
 
-            <!-- بطاقة الشقة -->
             <div class="card">
                 <div class="slider-box" id="sliderBox">
                     <button class="slider-btn slider-prev" id="prevSlide" type="button">❮</button>
@@ -709,14 +721,13 @@
                 </div>
             </div>
 
-            <!-- نموذج الحجز -->
             <div class="card">
                 <div class="form-section">
                     <h3 id="formTitle">نموذج الحجز</h3>
 
                     <div id="formMessage" class="message-box"></div>
 
-                    <form id="bookingForm">
+                    <form id="bookingForm" novalidate>
 
                         <label id="aptLabel" for="aptId">الشقة المختارة:</label>
                         <select id="aptId" required>
@@ -728,30 +739,38 @@
                             <option value="5">شقة رقم 5</option>
                             <option value="6">شقة رقم 6</option>
                         </select>
+                        <div class="field-error" id="aptIdError"></div>
 
                         <label id="fullNameLabel" for="fullName">الاسم الكامل:</label>
                         <input type="text" id="fullName" placeholder="أدخل اسمك الكامل" required>
+                        <div class="field-error" id="fullNameError"></div>
 
                         <label id="emailLabel" for="email">البريد الإلكتروني:</label>
                         <input type="email" id="email" placeholder="example@email.com" required>
+                        <div class="field-error" id="emailError"></div>
 
                         <label id="phoneLabel" for="phone">رقم الهاتف:</label>
                         <input type="tel" id="phone" placeholder="059xxxxxxx" required>
+                        <div class="field-error" id="phoneError"></div>
 
                         <label id="checkInLabel" for="checkIn">تاريخ الوصول:</label>
                         <input type="date" id="checkIn" required>
+                        <div class="field-error" id="checkInError"></div>
 
                         <label id="checkOutLabel" for="checkOut">تاريخ المغادرة:</label>
                         <input type="date" id="checkOut" required>
                         <div class="hint" id="dateHint">لا يمكن اختيار فترة متداخلة مع الحجوزات الموجودة.</div>
+                        <div class="field-error" id="dateError"></div>
 
                         <div id="longStayNotice"></div>
 
                         <label id="adultsLabel" for="adults">عدد البالغين:</label>
                         <input type="number" id="adults" min="1" value="1" required>
+                        <div class="field-error" id="adultsError"></div>
 
                         <label id="childrenLabel" for="children">عدد الأطفال:</label>
                         <input type="number" id="children" min="0" value="0">
+                        <div class="field-error" id="childrenError"></div>
 
                         <p><span id="finalPriceLabel">السعر النهائي:</span> <span class="price" id="totalPrice">—</span>
                         </p>
@@ -768,7 +787,6 @@
 
     </div>
 
-    <!-- نافذة النجاح -->
     <div class="success-modal" id="successModal">
         <div class="success-content">
             <div class="success-head">
@@ -785,10 +803,7 @@
         </div>
     </div>
 
-    <!-- الفوتر -->
     <div id="sharedFooter"></div>
-
-    <!-- واتساب -->
     <div id="sharedWhatsApp"></div>
 
     <script src="js/main.js"></script>
@@ -834,6 +849,17 @@
         const closeSuccessModal = document.getElementById("closeSuccessModal");
         const formMessage = document.getElementById("formMessage");
 
+        const fieldErrors = {
+            aptId: document.getElementById("aptIdError"),
+            fullName: document.getElementById("fullNameError"),
+            email: document.getElementById("emailError"),
+            phone: document.getElementById("phoneError"),
+            checkIn: document.getElementById("checkInError"),
+            checkOut: document.getElementById("dateError"),
+            adults: document.getElementById("adultsError"),
+            children: document.getElementById("childrenError")
+        };
+
         let currentSlide = 0;
         let bookedRanges = [];
         let bookedDaysSet = new Set();
@@ -846,6 +872,10 @@
         if (qCheckIn) checkInEl.value = qCheckIn;
         if (qCheckOut) checkOutEl.value = qCheckOut;
 
+        /* =========================================================
+           تطبيق ترجمة صفحة الحجز حسب اللغة الحالية
+           تغيّر النصوص والعناوين والعناصر بين العربية والإنجليزية
+        ========================================================= */
         function applyBookingTranslations() {
             const lang = getCurrentLang();
 
@@ -942,18 +972,71 @@
             }
         }
 
+        /* =========================================================
+           إظهار رسالة عامة أعلى النموذج
+           تستخدم لأخطاء عامة ليست مرتبطة بحقل محدد
+        ========================================================= */
         function showMessage(text, type = "error") {
             formMessage.style.display = "block";
             formMessage.className = `message-box ${type === "success" ? "message-success" : "message-error"}`;
             formMessage.textContent = text;
         }
 
+        /* =========================================================
+           إخفاء الرسالة العامة أعلى النموذج
+        ========================================================= */
         function clearMessage() {
             formMessage.style.display = "none";
             formMessage.textContent = "";
             formMessage.className = "message-box";
         }
 
+        /* =========================================================
+           إظهار خطأ تحت حقل معيّن
+           تضيف الرسالة وتلوّن الحقل نفسه
+        ========================================================= */
+        function showFieldError(fieldKey, text) {
+            const errorEl = fieldErrors[fieldKey];
+            const inputEl = document.getElementById(fieldKey);
+
+            if (errorEl) {
+                errorEl.style.display = "block";
+                errorEl.textContent = text;
+            }
+
+            if (inputEl) {
+                inputEl.classList.add("input-error");
+            }
+        }
+
+        /* =========================================================
+           إخفاء خطأ حقل معيّن
+        ========================================================= */
+        function clearFieldError(fieldKey) {
+            const errorEl = fieldErrors[fieldKey];
+            const inputEl = document.getElementById(fieldKey);
+
+            if (errorEl) {
+                errorEl.style.display = "none";
+                errorEl.textContent = "";
+            }
+
+            if (inputEl) {
+                inputEl.classList.remove("input-error");
+            }
+        }
+
+        /* =========================================================
+           إخفاء جميع أخطاء الحقول دفعة واحدة
+        ========================================================= */
+        function clearAllFieldErrors() {
+            Object.keys(fieldErrors).forEach(clearFieldError);
+        }
+
+        /* =========================================================
+           إرجاع تاريخ اليوم بصيغة ISO
+           مثال: 2026-03-22
+        ========================================================= */
         function todayISO() {
             const d = new Date();
             const yyyy = d.getFullYear();
@@ -962,18 +1045,27 @@
             return `${yyyy}-${mm}-${dd}`;
         }
 
+        /* =========================================================
+           تحويل نص التاريخ إلى كائن Date بدون وقت
+        ========================================================= */
         function parseISODateOnly(s) {
             const [y, m, d] = (s || "").slice(0, 10).split("-").map(Number);
             if (!y || !m || !d) return null;
             return new Date(y, m - 1, d, 0, 0, 0, 0);
         }
 
+        /* =========================================================
+           إضافة عدد أيام إلى تاريخ معين
+        ========================================================= */
         function addDays(date, days) {
             const d = new Date(date);
             d.setDate(d.getDate() + days);
             return d;
         }
 
+        /* =========================================================
+           تحويل كائن Date إلى نص بصيغة YYYY-MM-DD
+        ========================================================= */
         function toISODateOnly(d) {
             const yyyy = d.getFullYear();
             const mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -981,15 +1073,24 @@
             return `${yyyy}-${mm}-${dd}`;
         }
 
+        /* =========================================================
+           جلب رقم الشقة المختارة
+        ========================================================= */
         function getSelectedAptId() {
             return Number(aptSelect.value) || null;
         }
 
+        /* =========================================================
+           جلب بيانات الشقة المختارة من الكائن العام
+        ========================================================= */
         function getSelectedApartment() {
             const id = getSelectedAptId();
             return id ? HIJAZI_APARTMENTS[id] : null;
         }
 
+        /* =========================================================
+           عرض واجهة افتراضية قبل اختيار الشقة
+        ========================================================= */
         function renderPlaceholder() {
             const lang = getCurrentLang();
             aptNameEl.textContent = lang === "ar" ? "اختر الشقة أولاً" : "Select an apartment first";
@@ -1012,29 +1113,38 @@
             totalPriceEl.textContent = "—";
         }
 
+        /* =========================================================
+           عرض سلايدر صور الشقة المختارة
+        ========================================================= */
         function renderSlider() {
             const apt = getSelectedApartment();
             if (!apt) return;
 
             sliderBox.innerHTML = `
-            <button class="slider-btn slider-prev" id="prevSlide" type="button">❮</button>
-            <img id="aptImage" src="${apt.images[currentSlide]}" alt="Apartment Image">
-            <button class="slider-btn slider-next" id="nextSlide" type="button">❯</button>
-        `;
+                <button class="slider-btn slider-prev" id="prevSlide" type="button">❮</button>
+                <img id="aptImage" src="${apt.images[currentSlide]}" alt="Apartment Image">
+                <button class="slider-btn slider-next" id="nextSlide" type="button">❯</button>
+            `;
 
             document.getElementById("prevSlide").addEventListener("click", prevSlide);
             document.getElementById("nextSlide").addEventListener("click", nextSlide);
 
             thumbsEl.innerHTML = apt.images.map((img, index) => `
-            <img src="${img}" class="${index === currentSlide ? "active" : ""}" onclick="goToSlide(${index})" alt="Apartment thumbnail">
-        `).join("");
+                <img src="${img}" class="${index === currentSlide ? "active" : ""}" onclick="goToSlide(${index})" alt="Apartment thumbnail">
+            `).join("");
         }
 
+        /* =========================================================
+           الانتقال إلى صورة محددة داخل السلايدر
+        ========================================================= */
         function goToSlide(index) {
             currentSlide = index;
             renderSlider();
         }
 
+        /* =========================================================
+           الانتقال إلى الصورة التالية
+        ========================================================= */
         function nextSlide() {
             const apt = getSelectedApartment();
             if (!apt) return;
@@ -1042,6 +1152,9 @@
             renderSlider();
         }
 
+        /* =========================================================
+           الانتقال إلى الصورة السابقة
+        ========================================================= */
         function prevSlide() {
             const apt = getSelectedApartment();
             if (!apt) return;
@@ -1051,6 +1164,9 @@
 
         window.goToSlide = goToSlide;
 
+        /* =========================================================
+           عرض بطاقات الغرف والمرافق الخاصة بالشقة
+        ========================================================= */
         function renderRoomCards(apt, selectedKey = "master") {
             const lang = getCurrentLang();
             const roomCards = document.getElementById("roomCards");
@@ -1062,18 +1178,18 @@
             roomCards.innerHTML = apt.rooms.map(room => {
                 const title = lang === "ar" ? room.titleAr : room.titleEn;
                 return `
-                <div class="room-card ${room.key === selectedKey ? "active" : ""}" onclick="selectRoomCard(${apt.id}, '${room.key}')">
-                    ${title}
-                </div>
-            `;
+                    <div class="room-card ${room.key === selectedKey ? "active" : ""}" onclick="selectRoomCard(${apt.id}, '${room.key}')">
+                        ${title}
+                    </div>
+                `;
             }).join("");
 
             const selectedRoom = apt.rooms.find(r => r.key === selectedKey) || apt.rooms[0];
             roomDescription.textContent = lang === "ar" ? selectedRoom.noteAr : selectedRoom.noteEn;
 
             roomGallery.innerHTML = selectedRoom.images.map(img => `
-            <img src="${img}" alt="Room image">
-        `).join("");
+                <img src="${img}" alt="Room image">
+            `).join("");
         }
 
         window.selectRoomCard = function (aptId, roomKey) {
@@ -1081,6 +1197,9 @@
             renderRoomCards(apt, roomKey);
         };
 
+        /* =========================================================
+           عرض تفاصيل الشقة المختارة
+        ========================================================= */
         function renderApartmentDetails() {
             const id = getSelectedAptId();
             const apt = getSelectedApartment();
@@ -1099,9 +1218,7 @@
             featuresEl.innerHTML = (lang === "ar" ? apt.featuresAr : apt.featuresEn).map(f => `<li>${f}</li>`).join("");
 
             const aptMap = document.getElementById("aptMap");
-            if (aptMap) {
-                aptMap.src = apt.mapEmbed;
-            }
+            if (aptMap) aptMap.src = apt.mapEmbed;
 
             renderSlider();
 
@@ -1112,6 +1229,9 @@
             updatePrice();
         }
 
+        /* =========================================================
+           تحديث السعر النهائي وسعر الليلة وعدد الليالي
+        ========================================================= */
         function updatePrice() {
             const id = getSelectedAptId();
 
@@ -1141,12 +1261,18 @@
             renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value);
         }
 
+        /* =========================================================
+           استخراج القيمة الرقمية من السعر الظاهر
+        ========================================================= */
         function getTotalPriceNumber() {
             const text = totalPriceEl.textContent || "";
             const num = parseFloat(text.replace(/[^\d.]/g, ""));
             return isNaN(num) ? 0 : num;
         }
 
+        /* =========================================================
+           بناء مجموعة بكل الأيام المحجوزة
+        ========================================================= */
         function buildBookedDaysSet() {
             bookedDaysSet = new Set();
             for (const r of bookedRanges) {
@@ -1162,10 +1288,16 @@
             }
         }
 
+        /* =========================================================
+           فحص التداخل بين فترتي حجز
+        ========================================================= */
         function rangesOverlap(startA, endA, startB, endB) {
             return startA < endB && endA > startB;
         }
 
+        /* =========================================================
+           فحص هل التواريخ المختارة تتعارض مع حجوزات موجودة
+        ========================================================= */
         function selectionConflicts(checkInDate, checkOutDateExclusive) {
             for (const r of bookedRanges) {
                 if (rangesOverlap(checkInDate, checkOutDateExclusive, r.start, r.end)) return true;
@@ -1173,6 +1305,9 @@
             return false;
         }
 
+        /* =========================================================
+           جلب الحجوزات الحالية للشقة من السيرفر
+        ========================================================= */
         async function fetchBookedRanges() {
             const id = getSelectedAptId();
             if (!id) {
@@ -1193,26 +1328,99 @@
             return bookedRanges;
         }
 
-        function validateDates() {
+        /* =========================================================
+           التحقق من صحة الحقول النصية والعددية
+           يعرض الخطأ تحت كل حقل إذا كان فارغًا أو غير صحيح
+        ========================================================= */
+        function validateFormFields() {
+            clearAllFieldErrors();
             clearMessage();
-            const lang = getCurrentLang();
 
-            const id = getSelectedAptId();
-            if (!id) {
-                showMessage(lang === "ar" ? "اختر الشقة أولاً." : "Select an apartment first.", "error");
-                return false;
+            const lang = getCurrentLang();
+            let isValid = true;
+
+            const fullName = document.getElementById("fullName").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const adults = Number(adultsEl.value);
+            const children = Number(childrenEl.value);
+
+            if (!getSelectedAptId()) {
+                showFieldError("aptId", lang === "ar" ? "يرجى اختيار الشقة." : "Please select an apartment.");
+                isValid = false;
             }
+
+            if (!fullName || fullName.length < 3) {
+                showFieldError("fullName", lang === "ar" ? "يرجى إدخال الاسم الكامل بشكل صحيح." : "Please enter a valid full name.");
+                isValid = false;
+            }
+
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email || !emailPattern.test(email)) {
+                showFieldError("email", lang === "ar" ? "يرجى إدخال بريد إلكتروني صحيح." : "Please enter a valid email address.");
+                isValid = false;
+            }
+
+            const phoneDigits = phone.replace(/[^\d+]/g, "");
+            if (!phone || phoneDigits.length < 8) {
+                showFieldError("phone", lang === "ar" ? "يرجى إدخال رقم هاتف صحيح." : "Please enter a valid phone number.");
+                isValid = false;
+            }
+
+            if (!checkInEl.value) {
+                showFieldError("checkIn", lang === "ar" ? "يرجى اختيار تاريخ الوصول." : "Please select a check-in date.");
+                isValid = false;
+            }
+
+            if (!checkOutEl.value) {
+                showFieldError("checkOut", lang === "ar" ? "يرجى اختيار تاريخ المغادرة." : "Please select a check-out date.");
+                isValid = false;
+            }
+
+            if (!Number.isInteger(adults) || adults < 1) {
+                showFieldError("adults", lang === "ar" ? "عدد البالغين يجب أن يكون 1 أو أكثر." : "Adults must be 1 or more.");
+                isValid = false;
+            }
+
+            if (!Number.isInteger(children) || children < 0) {
+                showFieldError("children", lang === "ar" ? "عدد الأطفال لا يمكن أن يكون أقل من 0." : "Children cannot be less than 0.");
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        /* =========================================================
+           التحقق من صحة تواريخ الحجز
+           تتأكد أن تاريخ المغادرة بعد الوصول
+           وأن الفترة لا تتداخل مع حجوزات موجودة
+        ========================================================= */
+        function validateDates() {
+            clearFieldError("checkIn");
+            clearFieldError("checkOut");
+
+            const lang = getCurrentLang();
+            const id = getSelectedAptId();
+
+            if (!id) return false;
 
             const inVal = checkInEl.value;
             const outVal = checkOutEl.value;
+
             if (!inVal || !outVal) return true;
 
             const inDate = parseISODateOnly(inVal);
             const outDate = parseISODateOnly(outVal);
+
             if (!inDate || !outDate) return false;
 
             if (outDate <= inDate) {
-                showMessage(lang === "ar" ? "تاريخ المغادرة لازم يكون بعد تاريخ الوصول." : "Check-out must be after check-in.", "error");
+                showFieldError(
+                    "checkOut",
+                    lang === "ar"
+                        ? "❌ تاريخ المغادرة يجب أن يكون بعد تاريخ الوصول."
+                        : "❌ Check-out must be after check-in."
+                );
                 checkOutEl.value = "";
                 updatePrice();
                 return false;
@@ -1221,11 +1429,11 @@
             const outExclusive = addDays(outDate, 1);
 
             if (selectionConflicts(inDate, outExclusive)) {
-                showMessage(
+                showFieldError(
+                    "checkOut",
                     lang === "ar"
                         ? "❌ هذه الفترة متداخلة مع حجز موجود. اختر تواريخ أخرى."
-                        : "❌ This date range overlaps with an existing booking. Please choose other dates.",
-                    "error"
+                        : "❌ This date range overlaps with an existing booking. Please choose other dates."
                 );
                 checkInEl.value = "";
                 checkOutEl.value = "";
@@ -1236,6 +1444,9 @@
             return true;
         }
 
+        /* =========================================================
+           تحديث التقويم بعد جلب أو تعديل بيانات الحجز
+        ========================================================= */
         async function refreshCalendar() {
             await fetchBookedRanges();
             if (calendar) {
@@ -1247,20 +1458,17 @@
         checkOutEl.min = todayISO();
 
         currencySelect.addEventListener("change", updatePrice);
-        adultsEl.addEventListener("input", updatePrice);
-        childrenEl.addEventListener("input", updatePrice);
-
-        checkInEl.addEventListener("change", () => {
-            checkOutEl.min = checkInEl.value || todayISO();
+        adultsEl.addEventListener("input", () => {
+            clearFieldError("adults");
+            updatePrice();
+        });
+        childrenEl.addEventListener("input", () => {
+            clearFieldError("children");
             updatePrice();
         });
 
-        checkOutEl.addEventListener("change", updatePrice);
-
-        checkInEl.addEventListener("change", validateDates);
-        checkOutEl.addEventListener("change", validateDates);
-
         aptSelect.addEventListener("change", async () => {
+            clearFieldError("aptId");
             clearMessage();
             renderApartmentDetails();
 
@@ -1273,6 +1481,24 @@
             }
 
             await refreshCalendar();
+        });
+
+        document.getElementById("fullName").addEventListener("input", () => clearFieldError("fullName"));
+        document.getElementById("email").addEventListener("input", () => clearFieldError("email"));
+        document.getElementById("phone").addEventListener("input", () => clearFieldError("phone"));
+
+        checkInEl.addEventListener("change", () => {
+            clearFieldError("checkIn");
+            clearFieldError("checkOut");
+            checkOutEl.min = checkInEl.value || todayISO();
+            updatePrice();
+            validateDates();
+        });
+
+        checkOutEl.addEventListener("change", () => {
+            clearFieldError("checkOut");
+            updatePrice();
+            validateDates();
         });
 
         const form = document.getElementById("bookingForm");
@@ -1319,6 +1545,7 @@
                     const end = new Date(selectInfo.end);
                     const today = parseISODateOnly(todayISO());
                     if (start < today) return false;
+
                     return !selectionConflicts(start, end);
                 },
                 select: (info) => {
@@ -1339,6 +1566,7 @@
                     checkInEl.value = toISODateOnly(start);
                     checkOutEl.value = toISODateOnly(end);
                     checkOutEl.min = checkInEl.value || todayISO();
+
                     validateDates();
                     updatePrice();
                 }
@@ -1363,28 +1591,30 @@
             updatePrice();
         });
 
+        /* =========================================================
+           إرسال نموذج الحجز إلى السيرفر
+           يحقق من الحقول أولًا ثم من التواريخ ثم يرسل الطلب
+        ========================================================= */
         form.addEventListener("submit", async function (e) {
             e.preventDefault();
             clearMessage();
+            clearAllFieldErrors();
 
             const lang = getCurrentLang();
             const id = getSelectedAptId();
             const selectedApartment = getSelectedApartment();
 
-            if (!id) {
-                showMessage(lang === "ar" ? "اختر الشقة أولاً." : "Select an apartment first.", "error");
-                return;
-            }
+            const fieldsValid = validateFormFields();
+            const datesValid = validateDates();
 
-            const isValid = validateDates();
-            if (!isValid || !checkInEl.value || !checkOutEl.value) return;
+            if (!fieldsValid || !datesValid) return;
 
             const payload = {
                 apartmentId: id,
                 apartmentLabel: lang === "ar" ? selectedApartment.nameAr : selectedApartment.nameEn,
-                fullName: document.getElementById("fullName").value,
-                email: document.getElementById("email").value,
-                phone: document.getElementById("phone").value,
+                fullName: document.getElementById("fullName").value.trim(),
+                email: document.getElementById("email").value.trim(),
+                phone: document.getElementById("phone").value.trim(),
                 checkIn: checkInEl.value,
                 checkOut: checkOutEl.value,
                 adults: Number(adultsEl.value),
@@ -1408,7 +1638,10 @@
                 const result = await res.json().catch(() => ({}));
 
                 if (!res.ok) {
-                    showMessage(result.message || (lang === "ar" ? "صار خطأ أثناء الحجز" : "An error occurred while booking"), "error");
+                    showMessage(
+                        result.message || (lang === "ar" ? "صار خطأ أثناء الحجز" : "An error occurred while booking"),
+                        "error"
+                    );
                     return;
                 }
 
@@ -1423,6 +1656,8 @@
                 }
 
                 form.reset();
+                clearAllFieldErrors();
+
                 aptSelect.value = String(id);
                 if (qCheckIn) checkInEl.value = qCheckIn;
                 if (qCheckOut) checkOutEl.value = qCheckOut;
