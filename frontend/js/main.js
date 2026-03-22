@@ -377,7 +377,7 @@ function renderSharedFooter() {
                 <div class="footer-box">
                     <h4>${t.contactUs}</h4>
                     <p>${t.phoneLabel}: <a href="tel:+962789000444">+962789000444</a></p>
-                    <p>${t.emailLabel}: <a href="mailto:ammarabunada775forbusiness@gmail.com">ammarabunada775forbusiness@gmail.com</a></p>
+                    <p>${t.emailLabel}: <a href="mailto:info@hijazi-apartments.com">info@hijazi-apartments.com</a></p>
                     <p>${t.address}</p>
                 </div>
 
