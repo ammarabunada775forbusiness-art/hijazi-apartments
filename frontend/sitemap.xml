@@ -46,4 +46,9 @@
 <url>
   <loc>https://hijazi-apartments.com/apartments-monthly-amman.html</loc>
 </url>
+
+<url>
+  <loc>https://hijazi-apartments.com/apartments-islamic-hospital.html</loc>
+  <priority>0.80</priority>
+</url>
 </urlset>
