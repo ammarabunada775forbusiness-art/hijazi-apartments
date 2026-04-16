@@ -644,6 +644,243 @@ body.ltr-mode .seo-card {
     text-align: left;
 }
 
+
+.faq-pro-card {
+    padding: 28px;
+}
+
+.faq-main-title {
+    font-size: 30px;
+    font-weight: 900;
+    margin-bottom: 22px;
+    text-align: center;
+    color: #111;
+}
+
+.faq-pro-list {
+    display: grid;
+    gap: 14px;
+}
+
+.faq-pro-item {
+    border: 1px solid #ececec;
+    border-radius: 16px;
+    background: linear-gradient(180deg, #ffffff, #fcfcfc);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: 0.25s ease;
+}
+
+.faq-pro-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+}
+
+.faq-pro-question {
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: right;
+    font-size: 18px;
+    font-weight: 800;
+    color: #111;
+    cursor: pointer;
+}
+
+.faq-pro-question:hover {
+    background: rgba(200, 145, 22, 0.04);
+}
+
+.faq-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #fff5d8;
+    color: #a86f00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 900;
+    flex-shrink: 0;
+    transition: 0.25s ease;
+}
+
+.faq-pro-answer {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 20px;
+    color: #555;
+    font-size: 15px;
+    line-height: 1.95;
+    transition: all 0.3s ease;
+}
+
+.faq-pro-item.active .faq-pro-answer {
+    max-height: 220px;
+    padding: 0 20px 18px;
+}
+
+.faq-pro-item.active .faq-icon {
+    transform: rotate(45deg);
+    background: #c89116;
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .faq-pro-card {
+        padding: 20px;
+    }
+
+    .faq-main-title {
+        font-size: 24px;
+        line-height: 1.5;
+    }
+
+    .faq-pro-question {
+        font-size: 16px;
+        padding: 16px;
+    }
+
+    .faq-pro-answer {
+        font-size: 14px;
+    }
+
+    .faq-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 20px;
+    }
+}
+
+.luxury-seo-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.luxury-seo-card {
+    position: relative;
+    background: linear-gradient(180deg, #ffffff, #fcfcfc);
+    border: 1px solid #ececec;
+    border-radius: 22px;
+    padding: 28px 26px;
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.06),
+        0 2px 8px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+    transition: 0.28s ease;
+}
+
+.luxury-seo-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(200, 145, 22, 0.13), transparent 70%);
+    pointer-events: none;
+}
+
+.luxury-seo-card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+        0 16px 36px rgba(0, 0, 0, 0.08),
+        0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+.luxury-seo-badge {
+    display: inline-block;
+    margin-bottom: 14px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: #fff5d8;
+    color: #a86f00;
+    font-size: 13px;
+    font-weight: 800;
+    border: 1px solid #f1dfb0;
+}
+
+.luxury-seo-card h2 {
+    font-size: 34px;
+    font-weight: 900;
+    line-height: 1.5;
+    margin-bottom: 14px;
+    color: #111;
+}
+
+.luxury-seo-card p {
+    font-size: 16px;
+    line-height: 2;
+    color: #555;
+    margin: 0;
+}
+
+.luxury-links-card h2 {
+    margin-bottom: 18px;
+}
+
+.luxury-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.luxury-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #fff8e8, #fff);
+    color: #8a6508;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 14px;
+    border: 1px solid #f1dfb0;
+    box-shadow: 0 6px 14px rgba(200, 145, 22, 0.08);
+    transition: 0.22s ease;
+}
+
+.luxury-links a:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #d4a017, #8a6508);
+    color: #fff;
+    box-shadow: 0 10px 22px rgba(200, 145, 22, 0.22);
+}
+
+@media (max-width: 768px) {
+    .luxury-seo-card {
+        padding: 22px 18px;
+        border-radius: 18px;
+    }
+
+    .luxury-seo-card h2 {
+        font-size: 24px;
+        line-height: 1.6;
+    }
+
+    .luxury-seo-card p {
+        font-size: 15px;
+        line-height: 1.9;
+    }
+
+    .luxury-links {
+        gap: 10px;
+    }
+
+    .luxury-links a {
+        width: 100%;
+        font-size: 14px;
+        padding: 11px 14px;
+    }
+}
+
+
 /* =========================
    TABLET
 ========================= */
