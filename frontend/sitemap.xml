@@ -30,5 +30,20 @@
     <loc>https://hijazi-apartments.com/reviews.html</loc>
     <priority>0.70</priority>
   </url>
+<url>
+  <loc>https://hijazi-apartments.com/apartments-amman.html</loc>
+  <priority>0.80</priority>
+</url>
 
+<url>
+  <loc>https://hijazi-apartments.com/apartments-medical-amman.html</loc>
+</url>
+
+<url>
+  <loc>https://hijazi-apartments.com/apartments-jordan-hospital.html</loc>
+</url>
+
+<url>
+  <loc>https://hijazi-apartments.com/apartments-monthly-amman.html</loc>
+</url>
 </urlset>
