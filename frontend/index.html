@@ -139,13 +139,15 @@
             text-shadow: 0 4px 14px rgba(0, 0, 0, .28);
         }
 
+        /* ===== BOOKING BOX - DESKTOP ===== */
+
         .availability-box {
             width: 100%;
-            max-width: 760px;
-            margin: 28px auto 0;
+            max-width: 500px;
+            margin: 16px auto 0;
             background: rgba(0, 0, 0, .72);
-            padding: 22px 22px;
-            border-radius: 20px;
+            padding: 14px 14px;
+            border-radius: 16px;
             box-shadow: 0 16px 34px rgba(0, 0, 0, .26);
             backdrop-filter: blur(6px);
         }
@@ -153,39 +155,41 @@
         .availability-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            gap: 10px;
             align-items: end;
         }
 
         .availability-field {
-            display: flex;
-            flex-direction: column;
+            position: relative;
             text-align: start;
         }
 
         .availability-field label {
-            font-size: 14px;
-            margin-bottom: 8px;
-            display: block;
-            opacity: .95;
+            position: absolute;
+            top: 7px;
+            right: 12px;
+            font-size: 10px;
             font-weight: 700;
-            color: #fff;
+            color: #999;
+            z-index: 1;
+            pointer-events: none;
+            line-height: 1;
         }
 
         .availability-field input {
             width: 100%;
-            padding: 12px 14px;
-            border-radius: 12px;
+            padding: 22px 12px 8px;
+            border-radius: 11px;
             border: none;
             min-width: unset;
-            font-size: 15px;
+            font-size: 14px;
             background: #fff;
             color: #111;
             outline: none;
         }
 
         .availability-actions {
-            margin-top: 16px;
+            margin-top: 12px;
             display: flex;
             justify-content: center;
         }
@@ -218,13 +222,14 @@
             background: linear-gradient(135deg, #d4a017, #8a6508);
             color: #fff;
             border: none;
-            width: 220px;
-            height: 50px;
-            border-radius: 14px;
+            width: 190px;
+            height: 44px;
+            border-radius: 12px;
             font-weight: 800;
-            font-size: 16px;
+            font-size: 14px;
             box-shadow: 0 10px 24px rgba(212, 160, 23, 0.28);
             transition: all 0.25s ease;
+            cursor: pointer;
         }
 
         .hero-search-btn:hover {
@@ -298,6 +303,8 @@
                 margin-bottom: 12px;
             }
 
+            /* ===== BOOKING BOX - MOBILE ===== */
+
             .availability-box,
             #viewAllBtn {
                 display: none !important;
@@ -307,6 +314,7 @@
                 display: block;
                 width: 100%;
                 max-width: 100%;
+                box-sizing: border-box;
                 margin: 14px auto 0;
                 background: rgba(0, 0, 0, 0.74);
                 border: 1px solid rgba(255, 255, 255, 0.08);
@@ -324,27 +332,32 @@
             }
 
             .mobile-field {
-                display: flex;
-                flex-direction: column;
+                position: relative;
+                text-align: start;
             }
 
             .mobile-field label {
-                color: #fff;
-                font-size: 13px;
+                position: absolute;
+                top: 7px;
+                right: 12px;
+                font-size: 10px;
                 font-weight: 700;
-                margin-bottom: 6px;
+                color: #999;
+                z-index: 1;
+                pointer-events: none;
+                line-height: 1;
             }
 
             .mobile-field input {
                 width: 100%;
-                min-height: 44px;
-                padding: 10px 12px;
+                padding: 22px 12px 8px;
                 border-radius: 12px;
                 border: none;
                 background: #fff;
                 color: #111;
                 font-size: 15px;
                 outline: none;
+                box-sizing: border-box;
             }
 
             .mobile-actions {
@@ -364,6 +377,7 @@
                 font-size: 15px;
                 box-shadow: 0 10px 22px rgba(212, 160, 23, 0.24);
                 transition: all 0.25s ease;
+                cursor: pointer;
             }
 
             .mobile-primary-btn:hover {
