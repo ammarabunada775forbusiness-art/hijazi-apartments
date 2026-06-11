@@ -59,8 +59,7 @@
     </script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-
+    <link rel="stylesheet" href="css/style.css?v=4">
     <style>
         body {
             margin: 0;
@@ -472,6 +471,197 @@
                 font-size: 14px;
             }
         }
+
+        /* ===== FINAL HOME MOBILE SAFETY FIX ===== */
+
+        .hero {
+            background: #000;
+        }
+
+        .hero-video {
+            z-index: 0;
+        }
+
+        .hero-cinematic {
+            z-index: 1;
+        }
+
+        .overlay {
+            z-index: 2;
+        }
+
+        .hero-bottom-fade {
+            z-index: 3;
+        }
+
+        @media (max-width: 768px) {
+
+            html,
+            body {
+                width: 100%;
+                min-height: 100%;
+                overflow-x: hidden;
+                background: #fff;
+            }
+
+            .hero {
+                position: relative;
+                height: auto !important;
+                min-height: 100vh;
+                min-height: 100svh;
+                background: #000;
+                overflow: hidden;
+            }
+
+            .hero-video {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                min-height: 100%;
+                object-fit: cover;
+                transform: scale(1.08);
+                filter: blur(1px) brightness(0.55) saturate(1.03);
+                z-index: 0;
+            }
+
+            .overlay {
+                position: relative;
+                z-index: 2;
+                height: auto !important;
+                min-height: 100vh;
+                min-height: 100svh;
+                padding: 88px 14px 28px;
+                box-sizing: border-box;
+                justify-content: flex-start;
+                background:
+                    linear-gradient(rgba(0, 0, 0, .42), rgba(0, 0, 0, .68)),
+                    radial-gradient(circle at top center, rgba(200, 145, 22, 0.18), transparent 45%);
+            }
+
+            .overlay h1 {
+                font-size: 28px;
+                line-height: 1.35;
+                margin-bottom: 10px;
+            }
+
+            .overlay p {
+                font-size: 15px;
+                line-height: 1.75;
+                max-width: 100%;
+                margin-bottom: 12px;
+            }
+
+            .availability-box,
+            #viewAllBtn {
+                display: none !important;
+            }
+
+            .mobile-availability-card {
+                display: block !important;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+                margin: 14px auto 0;
+                background: rgba(0, 0, 0, 0.74);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 20px;
+                padding: 14px;
+                box-shadow: 0 14px 28px rgba(0, 0, 0, 0.24);
+                backdrop-filter: blur(7px);
+                text-align: start;
+            }
+
+            .mobile-availability-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .mobile-field {
+                position: relative;
+                text-align: start;
+            }
+
+            .mobile-field label {
+                position: absolute;
+                top: 7px;
+                right: 12px;
+                font-size: 10px;
+                font-weight: 700;
+                color: #999;
+                z-index: 1;
+                pointer-events: none;
+                line-height: 1;
+            }
+
+            .mobile-field input {
+                width: 100%;
+                padding: 22px 12px 8px;
+                border-radius: 12px;
+                border: none;
+                background: #fff;
+                color: #111;
+                font-size: 15px;
+                outline: none;
+                box-sizing: border-box;
+            }
+
+            .mobile-actions {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 10px;
+                margin-top: 12px;
+            }
+
+            .mobile-primary-btn {
+                background: linear-gradient(135deg, #d4a017, #8a6508);
+                color: #fff;
+                border: none;
+                min-height: 46px;
+                border-radius: 14px;
+                font-weight: 800;
+                font-size: 15px;
+                box-shadow: 0 10px 22px rgba(212, 160, 23, 0.24);
+                transition: all 0.25s ease;
+                cursor: pointer;
+            }
+
+            .mobile-secondary-btn {
+                background: rgba(255, 255, 255, 0.08);
+                color: #fff;
+                border: 1px solid rgba(255, 255, 255, 0.14);
+                min-height: 46px;
+                border-radius: 14px;
+                font-weight: 800;
+                font-size: 15px;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .mobile-availability-meta {
+                margin-top: 10px;
+                padding-top: 10px;
+                border-top: 1px solid rgba(255, 255, 255, 0.08);
+                text-align: center;
+            }
+
+            .hero-bottom-fade {
+                height: 18px;
+                background: linear-gradient(to bottom,
+                        rgba(255, 255, 255, 0),
+                        rgba(255, 255, 255, 0.12),
+                        #fff);
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-availability-card {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -709,7 +899,7 @@
     <div id="sharedFooter"></div>
     <div id="sharedWhatsApp"></div>
 
-    <script src="js/main.js"></script>
+    <script src="js/main.js?v=4"></script>
     <script>
         const checkInEl = document.getElementById("checkIn");
         const checkOutEl = document.getElementById("checkOut");
@@ -726,20 +916,22 @@
         }
 
         function syncDesktopToMobile() {
-            if (mobileCheckInEl) mobileCheckInEl.value = checkInEl.value;
-            if (mobileCheckOutEl) mobileCheckOutEl.value = checkOutEl.value;
+            if (checkInEl && mobileCheckInEl) mobileCheckInEl.value = checkInEl.value;
+            if (checkOutEl && mobileCheckOutEl) mobileCheckOutEl.value = checkOutEl.value;
         }
 
         function syncMobileToDesktop() {
-            if (checkInEl) checkInEl.value = mobileCheckInEl.value;
-            if (checkOutEl) checkOutEl.value = mobileCheckOutEl.value;
+            if (checkInEl && mobileCheckInEl) checkInEl.value = mobileCheckInEl.value;
+            if (checkOutEl && mobileCheckOutEl) checkOutEl.value = mobileCheckOutEl.value;
         }
 
         function updateMobileMinDates() {
             if (mobileCheckInEl) mobileCheckInEl.min = todayISO();
-            if (mobileCheckOutEl) mobileCheckOutEl.min = mobileCheckInEl.value || todayISO();
-        }
 
+            if (mobileCheckOutEl) {
+                mobileCheckOutEl.min = mobileCheckInEl ? (mobileCheckInEl.value || todayISO()) : todayISO();
+            }
+        }
         function applyIndexTranslations() {
             const lang = getCurrentLang();
 
@@ -814,117 +1006,178 @@
             }
         }
 
-        checkInEl.min = todayISO();
-        checkOutEl.min = todayISO();
+        if (checkInEl) checkInEl.min = todayISO();
+        if (checkOutEl) checkOutEl.min = todayISO();
         updateMobileMinDates();
 
-        checkInEl.addEventListener("change", () => {
-            checkOutEl.min = checkInEl.value || todayISO();
-            syncDesktopToMobile();
-            updateMobileMinDates();
-            renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value);
-            renderLongStayNotice("mobileLongStayNotice", checkInEl.value, checkOutEl.value);
-        });
+        if (checkInEl) {
+            checkInEl.addEventListener("change", () => {
+                if (checkOutEl) checkOutEl.min = checkInEl.value || todayISO();
 
-        checkOutEl.addEventListener("change", () => {
-            syncDesktopToMobile();
-            renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value);
-            renderLongStayNotice("mobileLongStayNotice", checkInEl.value, checkOutEl.value);
-        });
+                syncDesktopToMobile();
+                updateMobileMinDates();
 
-        mobileCheckInEl.addEventListener("change", () => {
-            syncMobileToDesktop();
-            checkOutEl.min = checkInEl.value || todayISO();
-            updateMobileMinDates();
-            renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value);
-            renderLongStayNotice("mobileLongStayNotice", checkInEl.value, checkOutEl.value);
-        });
+                renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl ? checkOutEl.value : "");
+                renderLongStayNotice("mobileLongStayNotice", checkInEl.value, checkOutEl ? checkOutEl.value : "");
+            });
+        }
 
-        mobileCheckOutEl.addEventListener("change", () => {
-            syncMobileToDesktop();
-            renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value);
-            renderLongStayNotice("mobileLongStayNotice", checkInEl.value, checkOutEl.value);
-        });
+        if (checkOutEl) {
+            checkOutEl.addEventListener("change", () => {
+                syncDesktopToMobile();
 
-        btn.addEventListener("click", () => {
-            const checkIn = checkInEl.value;
-            const checkOut = checkOutEl.value;
-            const lang = getCurrentLang();
+                renderLongStayNotice("longStayNotice", checkInEl ? checkInEl.value : "", checkOutEl.value);
+                renderLongStayNotice("mobileLongStayNotice", checkInEl ? checkInEl.value : "", checkOutEl.value);
+            });
+        }
 
-            statusEl.className = "status-msg";
-            statusEl.textContent = "";
+        if (mobileCheckInEl) {
+            mobileCheckInEl.addEventListener("change", () => {
+                syncMobileToDesktop();
 
-            renderLongStayNotice("longStayNotice", checkIn, checkOut);
-            renderLongStayNotice("mobileLongStayNotice", checkIn, checkOut);
+                if (checkOutEl && checkInEl) {
+                    checkOutEl.min = checkInEl.value || todayISO();
+                }
 
-            if (!checkIn || !checkOut) {
-                statusEl.classList.add("status-error");
-                statusEl.textContent = lang === "ar"
-                    ? "❌ اختر تاريخ الدخول والخروج"
-                    : "❌ Please select check-in and check-out dates";
-                return;
-            }
+                updateMobileMinDates();
 
-            if (checkOut <= checkIn) {
-                statusEl.classList.add("status-error");
-                statusEl.textContent = lang === "ar"
-                    ? "❌ تاريخ الخروج لازم يكون بعد تاريخ الدخول"
-                    : "❌ Check-out must be after check-in";
-                return;
-            }
+                renderLongStayNotice("longStayNotice", checkInEl ? checkInEl.value : "", checkOutEl ? checkOutEl.value : "");
+                renderLongStayNotice("mobileLongStayNotice", checkInEl ? checkInEl.value : "", checkOutEl ? checkOutEl.value : "");
+            });
+        }
 
-            statusEl.classList.add("status-ok");
-            statusEl.textContent = lang === "ar"
-                ? "✓ جاري عرض الشقق المتاحة..."
-                : "✓ Loading available apartments...";
+        if (mobileCheckOutEl) {
+            mobileCheckOutEl.addEventListener("change", () => {
+                syncMobileToDesktop();
 
-            setTimeout(() => {
-                window.location.href = `apartments.html?checkIn=${checkIn}&checkOut=${checkOut}`;
-            }, 500);
-        });
+                renderLongStayNotice("longStayNotice", checkInEl ? checkInEl.value : "", checkOutEl ? checkOutEl.value : "");
+                renderLongStayNotice("mobileLongStayNotice", checkInEl ? checkInEl.value : "", checkOutEl ? checkOutEl.value : "");
+            });
+        }
 
-        mobileBtn.addEventListener("click", () => {
-            syncMobileToDesktop();
-            const checkIn = checkInEl.value;
-            const checkOut = checkOutEl.value;
-            const lang = getCurrentLang();
+        if (btn) {
+            btn.addEventListener("click", () => {
+                const checkIn = checkInEl ? checkInEl.value : "";
+                const checkOut = checkOutEl ? checkOutEl.value : "";
+                const lang = getCurrentLang();
 
-            mobileStatusEl.className = "status-msg";
-            mobileStatusEl.textContent = "";
-            statusEl.className = "status-msg";
-            statusEl.textContent = "";
+                if (statusEl) {
+                    statusEl.className = "status-msg";
+                    statusEl.textContent = "";
+                }
 
-            renderLongStayNotice("longStayNotice", checkIn, checkOut);
-            renderLongStayNotice("mobileLongStayNotice", checkIn, checkOut);
+                renderLongStayNotice("longStayNotice", checkIn, checkOut);
+                renderLongStayNotice("mobileLongStayNotice", checkIn, checkOut);
 
-            if (!checkIn || !checkOut) {
-                const msg = lang === "ar" ? "❌ اختر تاريخ الدخول والخروج" : "❌ Please select check-in and check-out dates";
-                mobileStatusEl.classList.add("status-error");
-                mobileStatusEl.textContent = msg;
-                statusEl.classList.add("status-error");
-                statusEl.textContent = msg;
-                return;
-            }
+                if (!checkIn || !checkOut) {
+                    if (statusEl) {
+                        statusEl.classList.add("status-error");
+                        statusEl.textContent = lang === "ar"
+                            ? "❌ اختر تاريخ الدخول والخروج"
+                            : "❌ Please select check-in and check-out dates";
+                    }
+                    return;
+                }
 
-            if (checkOut <= checkIn) {
-                const msg = lang === "ar" ? "❌ تاريخ الخروج لازم يكون بعد تاريخ الدخول" : "❌ Check-out must be after check-in";
-                mobileStatusEl.classList.add("status-error");
-                mobileStatusEl.textContent = msg;
-                statusEl.classList.add("status-error");
-                statusEl.textContent = msg;
-                return;
-            }
+                if (checkOut <= checkIn) {
+                    if (statusEl) {
+                        statusEl.classList.add("status-error");
+                        statusEl.textContent = lang === "ar"
+                            ? "❌ تاريخ الخروج لازم يكون بعد تاريخ الدخول"
+                            : "❌ Check-out must be after check-in";
+                    }
+                    return;
+                }
 
-            const okMsg = lang === "ar" ? "✓ جاري عرض الشقق المتاحة..." : "✓ Loading available apartments...";
-            mobileStatusEl.classList.add("status-ok");
-            mobileStatusEl.textContent = okMsg;
-            statusEl.classList.add("status-ok");
-            statusEl.textContent = okMsg;
+                if (statusEl) {
+                    statusEl.classList.add("status-ok");
+                    statusEl.textContent = lang === "ar"
+                        ? "✓ جاري عرض الشقق المتاحة..."
+                        : "✓ Loading available apartments...";
+                }
 
-            setTimeout(() => {
-                window.location.href = `apartments.html?checkIn=${checkIn}&checkOut=${checkOut}`;
-            }, 500);
-        });
+                setTimeout(() => {
+                    window.location.href = `apartments.html?checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}`;
+                }, 500);
+            });
+        }
+
+        if (mobileBtn) {
+            mobileBtn.addEventListener("click", () => {
+                syncMobileToDesktop();
+
+                const checkIn = checkInEl ? checkInEl.value : "";
+                const checkOut = checkOutEl ? checkOutEl.value : "";
+                const lang = getCurrentLang();
+
+                if (mobileStatusEl) {
+                    mobileStatusEl.className = "status-msg";
+                    mobileStatusEl.textContent = "";
+                }
+
+                if (statusEl) {
+                    statusEl.className = "status-msg";
+                    statusEl.textContent = "";
+                }
+
+                renderLongStayNotice("longStayNotice", checkIn, checkOut);
+                renderLongStayNotice("mobileLongStayNotice", checkIn, checkOut);
+
+                if (!checkIn || !checkOut) {
+                    const msg = lang === "ar"
+                        ? "❌ اختر تاريخ الدخول والخروج"
+                        : "❌ Please select check-in and check-out dates";
+
+                    if (mobileStatusEl) {
+                        mobileStatusEl.classList.add("status-error");
+                        mobileStatusEl.textContent = msg;
+                    }
+
+                    if (statusEl) {
+                        statusEl.classList.add("status-error");
+                        statusEl.textContent = msg;
+                    }
+
+                    return;
+                }
+
+                if (checkOut <= checkIn) {
+                    const msg = lang === "ar"
+                        ? "❌ تاريخ الخروج لازم يكون بعد تاريخ الدخول"
+                        : "❌ Check-out must be after check-in";
+
+                    if (mobileStatusEl) {
+                        mobileStatusEl.classList.add("status-error");
+                        mobileStatusEl.textContent = msg;
+                    }
+
+                    if (statusEl) {
+                        statusEl.classList.add("status-error");
+                        statusEl.textContent = msg;
+                    }
+
+                    return;
+                }
+
+                const okMsg = lang === "ar"
+                    ? "✓ جاري عرض الشقق المتاحة..."
+                    : "✓ Loading available apartments...";
+
+                if (mobileStatusEl) {
+                    mobileStatusEl.classList.add("status-ok");
+                    mobileStatusEl.textContent = okMsg;
+                }
+
+                if (statusEl) {
+                    statusEl.classList.add("status-ok");
+                    statusEl.textContent = okMsg;
+                }
+
+                setTimeout(() => {
+                    window.location.href = `apartments.html?checkIn=${encodeURIComponent(checkIn)}&checkOut=${encodeURIComponent(checkOut)}`;
+                }, 500);
+            });
+        }
 
         renderSharedHeader("index", true);
         renderSharedFooter();
