@@ -1228,3 +1228,154 @@ body.ltr-mode .seo-card {
         flex-direction: column;
     }
 }
+
+/* ===== LUXURY GLASS NAVBAR FINAL LOOK ===== */
+
+.custom-navbar {
+    background: rgba(0, 0, 0, 0.72) !important;
+    border-bottom: 1px solid rgba(212, 160, 23, 0.22) !important;
+    box-shadow:
+        0 12px 34px rgba(0, 0, 0, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+    backdrop-filter: blur(18px) saturate(145%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(145%) !important;
+    padding-top: 9px !important;
+    padding-bottom: 9px !important;
+}
+
+.navbar-brand {
+    color: #d4a017 !important;
+    font-weight: 950 !important;
+    letter-spacing: 0.4px !important;
+    text-shadow: 0 0 18px rgba(212, 160, 23, 0.28) !important;
+    transition: 0.25s ease !important;
+}
+
+.navbar-brand:hover {
+    color: #ffd36a !important;
+    transform: translateY(-1px);
+}
+
+/* روابط النافبار */
+.navbar-nav {
+    gap: 6px !important;
+}
+
+.navbar-nav .nav-link {
+    position: relative !important;
+    color: rgba(255, 255, 255, 0.88) !important;
+    font-size: 15px !important;
+    font-weight: 850 !important;
+    padding: 9px 14px !important;
+    border-radius: 999px !important;
+    transition: 0.25s ease !important;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #fff !important;
+    background: rgba(255, 255, 255, 0.09) !important;
+    transform: translateY(-1px);
+}
+
+.navbar-nav .nav-link.active {
+    color: #fff !important;
+    background: linear-gradient(135deg, rgba(212, 160, 23, 0.92), rgba(138, 101, 8, 0.92)) !important;
+    box-shadow: 0 8px 20px rgba(212, 160, 23, 0.24) !important;
+}
+
+/* حاوية زر اللغة */
+.lang-switcher-wrapper {
+    margin-inline-start: 18px !important;
+}
+
+.lang-switcher {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 5px !important;
+    border-radius: 999px !important;
+    background: rgba(255, 255, 255, 0.07) !important;
+    border: 1px solid rgba(212, 160, 23, 0.34) !important;
+    box-shadow:
+        0 10px 24px rgba(0, 0, 0, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+    backdrop-filter: blur(12px) saturate(145%) !important;
+    -webkit-backdrop-filter: blur(12px) saturate(145%) !important;
+}
+
+/* أزرار اللغة */
+.lang-btn {
+    min-width: 74px !important;
+    height: 38px !important;
+    padding: 0 15px !important;
+    border-radius: 999px !important;
+    border: 1px solid transparent !important;
+    background: transparent !important;
+    color: rgba(255, 255, 255, 0.88) !important;
+    font-size: 13px !important;
+    font-weight: 950 !important;
+    cursor: pointer !important;
+    transition: 0.25s ease !important;
+}
+
+.lang-btn:hover {
+    color: #fff !important;
+    background: rgba(255, 255, 255, 0.10) !important;
+}
+
+.lang-btn.active {
+    color: #fff !important;
+    background: linear-gradient(135deg, #d4a017, #8a6508) !important;
+    box-shadow: 0 8px 18px rgba(212, 160, 23, 0.28) !important;
+}
+
+/* زر فتح القائمة على الموبايل */
+.navbar-toggler {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(212, 160, 23, 0.28) !important;
+    border-radius: 13px !important;
+    padding: 8px 10px !important;
+}
+
+/* القائمة في الموبايل */
+@media (max-width: 991.98px) {
+    .navbar-collapse {
+        background: rgba(0, 0, 0, 0.82) !important;
+        border: 1px solid rgba(212, 160, 23, 0.22) !important;
+        border-radius: 22px !important;
+        padding: 14px !important;
+        margin-top: 12px !important;
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.34) !important;
+        backdrop-filter: blur(18px) saturate(145%) !important;
+        -webkit-backdrop-filter: blur(18px) saturate(145%) !important;
+    }
+
+    .navbar-nav {
+        gap: 8px !important;
+    }
+
+    .navbar-nav .nav-link {
+        text-align: center !important;
+        padding: 12px 14px !important;
+        border-radius: 15px !important;
+    }
+
+    .lang-switcher-wrapper {
+        width: 100% !important;
+        margin-inline-start: 0 !important;
+        margin-top: 12px !important;
+        justify-content: center !important;
+    }
+
+    .lang-switcher {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    .lang-btn {
+        flex: 1 !important;
+        min-width: unset !important;
+        height: 42px !important;
+    }
+}
