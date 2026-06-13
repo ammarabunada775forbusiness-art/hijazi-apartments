@@ -24,7 +24,10 @@ app.use(express.json());
    الاتصال بقاعدة البيانات
 ========================================================= */
 mongoose
-    .connect(process.env.MONGO_URI)
+    .connect(process.env.MONGO_URI, {
+        serverSelectionTimeoutMS: 15000,
+        family: 4
+    })
     .then(() => console.log("MongoDB Connected Successfully"))
     .catch((err) => console.log("MongoDB Connection Error:", err));
 
@@ -77,7 +80,8 @@ app.get("/admin/db-test", requireAdmin, async (req, res) => {
 
         if (mongoose.connection.readyState !== 1) {
             await mongoose.connect(process.env.MONGO_URI, {
-                serverSelectionTimeoutMS: 10000
+                serverSelectionTimeoutMS: 15000,
+                family: 4
             });
         }
 
