@@ -1663,6 +1663,299 @@
                 font-size: 14px;
             }
         }
+
+        /* ===== AIRBNB STYLE GALLERY ===== */
+
+        .airbnb-gallery-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            grid-template-rows: 180px 180px;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .airbnb-gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 18px;
+            background: #f3f3f3;
+            cursor: pointer;
+            min-height: 150px;
+        }
+
+        .airbnb-gallery-item.main {
+            grid-row: span 2;
+        }
+
+        .airbnb-gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.35s ease;
+        }
+
+        .airbnb-gallery-item:hover img {
+            transform: scale(1.04);
+        }
+
+        .airbnb-gallery-label {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            background: rgba(0, 0, 0, 0.68);
+            color: #fff;
+            padding: 7px 11px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .airbnb-show-all {
+            position: absolute;
+            left: 12px;
+            bottom: 12px;
+            background: rgba(255, 255, 255, 0.92);
+            color: #111;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        .airbnb-gallery-item.image-missing::after {
+            content: "الصورة غير مرفوعة بعد";
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            font-weight: 800;
+            font-size: 13px;
+            padding: 14px;
+            text-align: center;
+            background: linear-gradient(135deg, #f5f5f5, #fff);
+        }
+
+        .room-summary-grid {
+            display: flex !important;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .room-summary-pill {
+            border: 1px solid #eee;
+            background: #fff;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: 800;
+            color: #222;
+        }
+
+        .room-summary-pill span {
+            color: #c89116;
+            margin-inline-start: 5px;
+        }
+
+        .photo-album-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 999999;
+            background: #fff;
+            color: #111;
+            overflow: auto;
+        }
+
+        .photo-album-header {
+            position: sticky;
+            top: 0;
+            z-index: 3;
+            height: 64px;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 22px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .photo-album-title {
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        .album-close-btn {
+            border: none;
+            background: #111;
+            color: #fff;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .photo-album-body {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 18px 40px;
+        }
+
+        .photo-album-stage {
+            position: relative;
+            background: #f6f6f6;
+            border-radius: 24px;
+            overflow: hidden;
+            min-height: 520px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-album-stage img {
+            width: 100%;
+            max-height: 74vh;
+            object-fit: contain;
+            display: block;
+        }
+
+        .album-empty {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: #777;
+        }
+
+        .album-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0, 0, 0, 0.74);
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .album-prev {
+            left: 18px;
+        }
+
+        .album-next {
+            right: 18px;
+        }
+
+        .photo-album-caption {
+            margin-top: 14px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            font-weight: 800;
+            color: #333;
+        }
+
+        .album-thumbs {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 16px 2px 4px;
+        }
+
+        .album-thumbs img {
+            width: 96px;
+            height: 68px;
+            object-fit: cover;
+            border-radius: 12px;
+            cursor: pointer;
+            opacity: 0.58;
+            border: 2px solid transparent;
+        }
+
+        .album-thumbs img.active {
+            opacity: 1;
+            border-color: #c89116;
+        }
+
+        .gallery-hint {
+            color: #777;
+            font-size: 13px;
+            font-weight: 700;
+            margin: 10px 0 14px;
+        }
+
+        @media (max-width: 768px) {
+            .airbnb-gallery-grid {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 190px 120px 120px;
+                gap: 8px;
+            }
+
+            .airbnb-gallery-item.main {
+                grid-column: span 2;
+                grid-row: span 1;
+            }
+
+            .airbnb-gallery-label {
+                font-size: 11px;
+                padding: 6px 9px;
+            }
+
+            .photo-album-header {
+                height: 58px;
+                padding: 0 14px;
+            }
+
+            .photo-album-title {
+                font-size: 15px;
+            }
+
+            .photo-album-body {
+                padding: 16px 12px 30px;
+            }
+
+            .photo-album-stage {
+                min-height: 360px;
+                border-radius: 18px;
+            }
+
+            .album-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            .album-prev {
+                left: 10px;
+            }
+
+            .album-next {
+                right: 10px;
+            }
+
+            .album-thumbs img {
+                width: 78px;
+                height: 56px;
+            }
+
+            .photo-album-caption {
+                font-size: 13px;
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 
@@ -1703,14 +1996,12 @@
         <div class="layout">
 
             <div class="card">
-                <div class="slider-box" id="sliderBox">
-                    <button class="slider-btn slider-prev" id="prevSlide" type="button">❮</button>
-                    <img id="aptImage" src="" alt="Apartment Image">
-                    <button class="slider-btn slider-next" id="nextSlide" type="button">❯</button>
-                </div>
+                <div class="airbnb-gallery-grid booking-gallery-grid" id="sliderBox"></div>
 
                 <div class="card-body">
-                    <div class="thumbs" id="thumbs"></div>
+                    <div class="gallery-hint" id="thumbs">
+                        اضغط على أي صورة لفتح ألبوم الصور الكامل
+                    </div>
 
                     <div class="video-box">
                         <div class="video-title" id="videoTitle">فيديو الشقة</div>
@@ -1726,12 +2017,11 @@
                     <p class="muted"><strong id="locationText">الموقع:</strong> <span id="aptLocation">—</span></p>
 
                     <ul class="features" id="aptFeatures"></ul>
-
                     <div style="margin-top:22px;">
-                        <h3 id="roomsTitle">تفاصيل الغرف والمرافق</h3>
-                        <div class="room-cards-grid" id="roomCards"></div>
+                        <h3 id="roomsTitle">ترتيب الصور حسب الغرف</h3>
+                        <div class="room-cards-grid room-summary-grid" id="roomCards"></div>
                         <div class="room-description" id="roomDescription"></div>
-                        <div class="room-gallery-grid" id="roomGallery"></div>
+                        <div class="room-gallery-grid" id="roomGallery" style="display:none;"></div>
                     </div>
 
                     <div class="map-box">
@@ -1815,7 +2105,29 @@
         <div id="calendar"></div>
 
     </div>
+    <div class="photo-album-modal" id="photoAlbumModal">
+        <div class="photo-album-header">
+            <button class="album-close-btn" id="closePhotoAlbum" type="button">×</button>
+            <div class="photo-album-title" id="photoAlbumTitle">جولة بالصور</div>
+            <div id="photoAlbumCounter">1 / 1</div>
+        </div>
 
+        <div class="photo-album-body">
+            <div class="photo-album-stage">
+                <button class="album-nav album-prev" id="albumPrevBtn" type="button">‹</button>
+                <img id="albumMainImage" src="" alt="Apartment photo">
+                <div class="album-empty" id="albumEmpty">الصورة غير مرفوعة بعد</div>
+                <button class="album-nav album-next" id="albumNextBtn" type="button">›</button>
+            </div>
+
+            <div class="photo-album-caption">
+                <div id="albumCaption">—</div>
+                <div id="albumRoomName">—</div>
+            </div>
+
+            <div class="album-thumbs" id="albumThumbs"></div>
+        </div>
+    </div>
     <div class="success-modal" id="successModal">
         <div class="success-content">
             <div class="success-head">
@@ -2142,61 +2454,90 @@
             totalPriceEl.textContent = "—";
         }
 
-        /* =========================================================
-           عرض سلايدر صور الشقة المختارة
-        ========================================================= */
+        let currentAlbumItems = [];
+        let currentAlbumIndex = 0;
+
+        function getGalleryItemsForApartment(apt) {
+            if (typeof getApartmentGalleryImages === "function") {
+                return getApartmentGalleryImages(apt);
+            }
+
+            return (apt.images || []).map((src, index) => ({
+                src,
+                roomTitleAr: "صور الشقة",
+                roomTitleEn: "Apartment Photos",
+                titleAr: `صورة ${index + 1}`,
+                titleEn: `Photo ${index + 1}`,
+                label: `صورة ${index + 1}`
+            }));
+        }
+
+        function safeGalleryImage(src, alt) {
+            return `
+        <img
+            src="${src}"
+            alt="${alt}"
+            loading="lazy"
+            onerror="this.closest('.airbnb-gallery-item').classList.add('image-missing'); this.remove();"
+        >
+    `;
+        }
+
         function renderSlider() {
             const apt = getSelectedApartment();
+            const lang = getCurrentLang();
+
             if (!apt) return;
 
-            sliderBox.innerHTML = `
-                <button class="slider-btn slider-prev" id="prevSlide" type="button">❮</button>
-                <img id="aptImage" src="${apt.images[currentSlide]}" alt="Apartment Image">
-                <button class="slider-btn slider-next" id="nextSlide" type="button">❯</button>
-            `;
+            const items = getGalleryItemsForApartment(apt);
 
-            document.getElementById("prevSlide").addEventListener("click", prevSlide);
-            document.getElementById("nextSlide").addEventListener("click", nextSlide);
+            if (!items.length) {
+                sliderBox.innerHTML = `
+            <div class="airbnb-gallery-item main image-missing"></div>
+        `;
+                thumbsEl.textContent = lang === "ar"
+                    ? "ارفع صور الشقة حتى تظهر هنا."
+                    : "Upload apartment photos to display them here.";
+                return;
+            }
 
-            thumbsEl.innerHTML = apt.images.map((img, index) => `
-                <img src="${img}" class="${index === currentSlide ? "active" : ""}" onclick="goToSlide(${index})" alt="Apartment thumbnail">
-            `).join("");
+            const visibleItems = items.slice(0, 5);
+            const showAllText = lang === "ar" ? "عرض كل الصور" : "Show all photos";
+
+            sliderBox.innerHTML = visibleItems.map((item, index) => {
+                const title = lang === "ar" ? item.titleAr : item.titleEn;
+                const roomTitle = lang === "ar" ? item.roomTitleAr : item.roomTitleEn;
+                const isLastVisible = index === visibleItems.length - 1 && items.length > visibleItems.length;
+
+                return `
+            <div class="airbnb-gallery-item ${index === 0 ? "main" : ""}" onclick="openPhotoAlbum(${index})">
+                ${safeGalleryImage(item.src, title)}
+                <div class="airbnb-gallery-label">${roomTitle}</div>
+                ${isLastVisible ? `<button class="airbnb-show-all" type="button">${showAllText}</button>` : ""}
+            </div>
+        `;
+            }).join("");
+
+            thumbsEl.textContent = lang === "ar"
+                ? "اضغط على أي صورة لفتح ألبوم الصور الكامل"
+                : "Click any photo to open the full album";
         }
 
-        /* =========================================================
-           الانتقال إلى صورة محددة داخل السلايدر
-        ========================================================= */
         function goToSlide(index) {
-            currentSlide = index;
-            renderSlider();
+            openPhotoAlbum(index);
         }
 
-        /* =========================================================
-           الانتقال إلى الصورة التالية
-        ========================================================= */
         function nextSlide() {
-            const apt = getSelectedApartment();
-            if (!apt) return;
-            currentSlide = (currentSlide + 1) % apt.images.length;
-            renderSlider();
+            openPhotoAlbum(0);
         }
 
-        /* =========================================================
-           الانتقال إلى الصورة السابقة
-        ========================================================= */
         function prevSlide() {
-            const apt = getSelectedApartment();
-            if (!apt) return;
-            currentSlide = (currentSlide - 1 + apt.images.length) % apt.images.length;
-            renderSlider();
+            openPhotoAlbum(0);
         }
 
         window.goToSlide = goToSlide;
 
-        /* =========================================================
-           عرض بطاقات الغرف والمرافق الخاصة بالشقة
-        ========================================================= */
-        function renderRoomCards(apt, selectedKey = "master") {
+        function renderRoomCards(apt) {
             const lang = getCurrentLang();
             const roomCards = document.getElementById("roomCards");
             const roomDescription = document.getElementById("roomDescription");
@@ -2206,25 +2547,115 @@
 
             roomCards.innerHTML = apt.rooms.map(room => {
                 const title = lang === "ar" ? room.titleAr : room.titleEn;
+                const count = room.images ? room.images.length : 0;
+
                 return `
-                    <div class="room-card ${room.key === selectedKey ? "active" : ""}" onclick="selectRoomCard(${apt.id}, '${room.key}')">
-                        ${title}
-                    </div>
-                `;
+            <div class="room-summary-pill">
+                ${title}
+                <span>${count}</span>
+            </div>
+        `;
             }).join("");
 
-            const selectedRoom = apt.rooms.find(r => r.key === selectedKey) || apt.rooms[0];
-            roomDescription.textContent = lang === "ar" ? selectedRoom.noteAr : selectedRoom.noteEn;
+            roomDescription.textContent = lang === "ar"
+                ? "الصور مرتبة حسب الغرف. اضغط على أي صورة في المعرض لفتح الألبوم الكامل."
+                : "Photos are organized by room. Click any photo to open the full album.";
 
-            roomGallery.innerHTML = selectedRoom.images.map(img => `
-                <img src="${img}" alt="Room image">
-            `).join("");
+            roomGallery.innerHTML = "";
         }
 
-        window.selectRoomCard = function (aptId, roomKey) {
-            const apt = HIJAZI_APARTMENTS[aptId];
-            renderRoomCards(apt, roomKey);
-        };
+        function openPhotoAlbum(index = 0) {
+            const apt = getSelectedApartment();
+
+            if (!apt) return;
+
+            currentAlbumItems = getGalleryItemsForApartment(apt);
+            currentAlbumIndex = index;
+
+            const modal = document.getElementById("photoAlbumModal");
+            if (!modal || !currentAlbumItems.length) return;
+
+            modal.style.display = "block";
+            document.body.style.overflow = "hidden";
+            renderPhotoAlbum();
+        }
+
+        function closePhotoAlbum() {
+            const modal = document.getElementById("photoAlbumModal");
+            if (!modal) return;
+
+            modal.style.display = "none";
+            document.body.style.overflow = "";
+        }
+
+        function renderPhotoAlbum() {
+            const lang = getCurrentLang();
+            const item = currentAlbumItems[currentAlbumIndex];
+
+            const img = document.getElementById("albumMainImage");
+            const empty = document.getElementById("albumEmpty");
+            const caption = document.getElementById("albumCaption");
+            const roomName = document.getElementById("albumRoomName");
+            const counter = document.getElementById("photoAlbumCounter");
+            const thumbs = document.getElementById("albumThumbs");
+            const title = document.getElementById("photoAlbumTitle");
+
+            if (!item || !img) return;
+
+            img.style.display = "block";
+            empty.style.display = "none";
+
+            img.onerror = function () {
+                img.style.display = "none";
+                empty.style.display = "flex";
+            };
+
+            img.src = item.src;
+
+            title.textContent = lang === "ar" ? "جولة بالصور" : "Photo tour";
+            caption.textContent = lang === "ar" ? item.titleAr : item.titleEn;
+            roomName.textContent = lang === "ar" ? item.roomTitleAr : item.roomTitleEn;
+            counter.textContent = `${currentAlbumIndex + 1} / ${currentAlbumItems.length}`;
+
+            thumbs.innerHTML = currentAlbumItems.map((photo, index) => `
+        <img
+            src="${photo.src}"
+            class="${index === currentAlbumIndex ? "active" : ""}"
+            onclick="goToAlbumPhoto(${index})"
+            alt="Album thumbnail"
+            onerror="this.style.display='none'"
+        >
+    `).join("");
+        }
+
+        function goToAlbumPhoto(index) {
+            currentAlbumIndex = index;
+            renderPhotoAlbum();
+        }
+
+        function nextAlbumPhoto() {
+            if (!currentAlbumItems.length) return;
+            currentAlbumIndex = (currentAlbumIndex + 1) % currentAlbumItems.length;
+            renderPhotoAlbum();
+        }
+
+        function prevAlbumPhoto() {
+            if (!currentAlbumItems.length) return;
+            currentAlbumIndex = (currentAlbumIndex - 1 + currentAlbumItems.length) % currentAlbumItems.length;
+            renderPhotoAlbum();
+        }
+
+        window.openPhotoAlbum = openPhotoAlbum;
+        window.goToAlbumPhoto = goToAlbumPhoto;
+
+        document.getElementById("closePhotoAlbum").addEventListener("click", closePhotoAlbum);
+        document.getElementById("albumNextBtn").addEventListener("click", nextAlbumPhoto);
+        document.getElementById("albumPrevBtn").addEventListener("click", prevAlbumPhoto);
+
+        document.getElementById("photoAlbumModal").addEventListener("click", function (e) {
+            if (e.target === this) closePhotoAlbum();
+        });
+
 
         /* =========================================================
            عرض تفاصيل الشقة المختارة
@@ -2251,10 +2682,17 @@
 
             renderSlider();
 
-            aptVideoSource.src = apt.video;
-            aptVideo.load();
+            if (apt.video) {
+                aptVideo.closest(".video-box").style.display = "block";
+                aptVideoSource.src = apt.video;
+                aptVideo.load();
+            } else {
+                aptVideo.closest(".video-box").style.display = "none";
+                aptVideoSource.src = "";
+                aptVideo.load();
+            }
 
-            renderRoomCards(apt, "master");
+            renderRoomCards(apt);
             updatePrice();
         }
 

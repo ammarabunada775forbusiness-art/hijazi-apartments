@@ -179,7 +179,187 @@ if (HIJAZI_APARTMENTS[6]) {
         balconies.noteEn = "This apartment includes one balcony.";
     }
 }
+/* =========================================================
+   نظام صور محلية مرتبة لكل شقة مثل Airbnb
+   بدون أي صور خارجية من الإنترنت
 
+   ملاحظة:
+   أول صورة من أول قسم هي صورة البطاقة الرئيسية.
+========================================================= */
+
+const APARTMENT_ROOM_PHOTO_PLAN = [
+    {
+        key: "living",
+        folder: "living",
+        count: 4,
+        titleAr: "غرفة المعيشة",
+        titleEn: "Living Room",
+        noteAr: "صور غرفة المعيشة والصالة.",
+        noteEn: "Living room and seating area photos."
+    },
+    {
+        key: "dining",
+        folder: "dining",
+        count: 2,
+        titleAr: "غرفة الطعام",
+        titleEn: "Dining Room",
+        noteAr: "صور غرفة الطعام والمساحة القريبة من المطبخ.",
+        noteEn: "Dining room and nearby kitchen area photos."
+    },
+    {
+        key: "bedroom-1",
+        folder: "bedroom-1",
+        count: 3,
+        titleAr: "غرفة النوم 1",
+        titleEn: "Bedroom 1",
+        noteAr: "صور غرفة النوم الأولى.",
+        noteEn: "Bedroom 1 photos."
+    },
+    {
+        key: "bedroom-2",
+        folder: "bedroom-2",
+        count: 2,
+        titleAr: "غرفة النوم 2",
+        titleEn: "Bedroom 2",
+        noteAr: "صور غرفة النوم الثانية.",
+        noteEn: "Bedroom 2 photos."
+    },
+    {
+        key: "bedroom-3",
+        folder: "bedroom-3",
+        count: 2,
+        titleAr: "غرفة النوم 3",
+        titleEn: "Bedroom 3",
+        noteAr: "صور غرفة النوم الثالثة.",
+        noteEn: "Bedroom 3 photos."
+    },
+    {
+        key: "guest",
+        folder: "guest",
+        count: 2,
+        titleAr: "غرفة الضيوف",
+        titleEn: "Guest Room",
+        noteAr: "صور غرفة الضيوف.",
+        noteEn: "Guest room photos."
+    },
+    {
+        key: "kitchen",
+        folder: "kitchen",
+        count: 2,
+        titleAr: "المطبخ",
+        titleEn: "Kitchen",
+        noteAr: "صور المطبخ وتجهيزاته.",
+        noteEn: "Kitchen photos."
+    },
+    {
+        key: "bathroom-1",
+        folder: "bathroom-1",
+        count: 2,
+        titleAr: "حمام كامل 1",
+        titleEn: "Bathroom 1",
+        noteAr: "صور الحمام الأول.",
+        noteEn: "Bathroom 1 photos."
+    },
+    {
+        key: "bathroom-2",
+        folder: "bathroom-2",
+        count: 2,
+        titleAr: "حمام كامل 2",
+        titleEn: "Bathroom 2",
+        noteAr: "صور الحمام الثاني.",
+        noteEn: "Bathroom 2 photos."
+    },
+    {
+        key: "bathroom-3",
+        folder: "bathroom-3",
+        count: 2,
+        titleAr: "حمام كامل 3",
+        titleEn: "Bathroom 3",
+        noteAr: "صور الحمام الثالث.",
+        noteEn: "Bathroom 3 photos."
+    },
+    {
+        key: "balcony",
+        folder: "balcony",
+        count: 2,
+        titleAr: "الشرفات",
+        titleEn: "Balconies",
+        noteAr: "صور الشرفات والإطلالة.",
+        noteEn: "Balcony and view photos."
+    }
+];
+
+function buildApartmentPhotoPath(aptId, folder, index) {
+    return `images/apartments/apt-${aptId}/${folder}/${index}.webp`;
+}
+
+function buildApartmentRoomImages(aptId, folder, count) {
+    return Array.from({ length: count }, (_, index) => {
+        return buildApartmentPhotoPath(aptId, folder, index + 1);
+    });
+}
+
+function buildApartmentRooms(aptId, oneBalcony = false) {
+    return APARTMENT_ROOM_PHOTO_PLAN.map(room => {
+        const isBalcony = room.key === "balcony";
+
+        return {
+            key: room.key,
+            titleAr: isBalcony && oneBalcony ? "الشرفة" : room.titleAr,
+            titleEn: isBalcony && oneBalcony ? "Balcony" : room.titleEn,
+            noteAr: isBalcony && oneBalcony ? "تحتوي هذه الشقة على شرفة واحدة." : room.noteAr,
+            noteEn: isBalcony && oneBalcony ? "This apartment includes one balcony." : room.noteEn,
+            images: buildApartmentRoomImages(aptId, room.folder, isBalcony && oneBalcony ? 1 : room.count)
+        };
+    });
+}
+
+function getApartmentGalleryImages(apt) {
+    if (!apt || !Array.isArray(apt.rooms)) return [];
+
+    const lang = getCurrentLang ? getCurrentLang() : "ar";
+    const items = [];
+
+    apt.rooms.forEach(room => {
+        const roomTitle = lang === "ar" ? room.titleAr : room.titleEn;
+
+        (room.images || []).forEach((src, index) => {
+            items.push({
+                src,
+                roomKey: room.key,
+                roomTitleAr: room.titleAr,
+                roomTitleEn: room.titleEn,
+                titleAr: `${room.titleAr} ${index + 1}`,
+                titleEn: `${room.titleEn} ${index + 1}`,
+                label: `${roomTitle} ${index + 1}`
+            });
+        });
+    });
+
+    return items;
+}
+
+function getApartmentImageSources(apt) {
+    return getApartmentGalleryImages(apt).map(item => item.src);
+}
+
+Object.keys(HIJAZI_APARTMENTS).forEach(id => {
+    const apt = HIJAZI_APARTMENTS[id];
+    const aptId = Number(id);
+
+    if (!apt) return;
+
+    apt.rooms = buildApartmentRooms(aptId, apt.oneBalcony);
+    apt.images = getApartmentImageSources(apt);
+
+    /* لا نستخدم فيديو خارجي الآن */
+    apt.video = "";
+
+    if (apt.oneBalcony) {
+        apt.featuresAr = apt.featuresAr.map(f => f === "شرفتان" ? "شرفة واحدة" : f);
+        apt.featuresEn = apt.featuresEn.map(f => f === "2 Balconies" ? "1 Balcony" : f);
+    }
+});
 /* =========================
    النصوص المشتركة للترجمة
 ========================= */
