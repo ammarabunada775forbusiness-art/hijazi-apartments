@@ -38,9 +38,11 @@
     <style>
         body {
             margin: 0;
-            background: #f8f8f8;
             color: #111;
             overflow-x: hidden;
+            min-height: 100vh;
+            background: #ffffff;
+            position: relative;
         }
 
         .page-header {
@@ -52,7 +54,7 @@
             color: #fff;
             background: linear-gradient(120deg, #c89116, #5a3b00, #000000, #9b7108, #000000);
             background-size: 350% 350%;
-            animation: luxuryHeaderMove 7s ease-in-out infinite;
+            animation: luxuryHeaderMove 14s ease-in-out infinite;
         }
 
         .page-header h1 {
@@ -729,7 +731,7 @@
             width: 100% !important;
             max-width: 500px !important;
             margin: 24px auto 0 !important;
-            background: rgba(0, 0, 0, 0.38) !important;
+            background: rgba(0, 0, 0, 0.14) !important;
             border: 1px solid rgba(255, 255, 255, 0.16) !important;
             border-radius: 16px !important;
             padding: 14px !important;
@@ -873,7 +875,7 @@
             .box {
                 max-width: 100% !important;
                 margin: 18px auto 0 !important;
-                background: rgba(0, 0, 0, 0.38) !important;
+                background: rgba(0, 0, 0, 0.18) !important;
                 border: 1px solid rgba(255, 255, 255, 0.16) !important;
                 border-radius: 20px !important;
                 padding: 14px !important;
@@ -995,11 +997,312 @@
                 opacity: 0;
             }
         }
+
+        /* ===== STRONG TRI-COLOR COSMIC DUST BACKGROUND - APARTMENTS PAGE ===== */
+
+        .apartments-page-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 12% 20%, rgba(212, 160, 23, 0.30), transparent 25%),
+                radial-gradient(circle at 88% 32%, rgba(0, 0, 0, 0.16), transparent 27%),
+                radial-gradient(circle at 52% 86%, rgba(255, 255, 255, 0.95), transparent 30%),
+                linear-gradient(135deg, #ffffff 0%, #ffffff 42%, #ffffff 72%, #ffffff 100%);
+            background-size: 230% 230%;
+            animation: cosmicBaseMove 16s ease-in-out infinite;
+        }
+
+        /* الغيمات الكبيرة */
+        .gold-orb {
+            position: absolute;
+            display: block;
+            border-radius: 50%;
+            filter: blur(20px);
+            background: radial-gradient(circle, rgba(212, 160, 23, 0.75), transparent 68%);
+            animation: cosmicOrbFloat 10s ease-in-out infinite alternate;
+        }
+
+        .orb-1 {
+            width: 460px;
+            height: 460px;
+            top: 235px;
+            right: -150px;
+            opacity: 0.52;
+        }
+
+        .orb-2 {
+            width: 350px;
+            height: 350px;
+            top: 620px;
+            left: -125px;
+            opacity: 0.42;
+            animation-delay: 2s;
+        }
+
+        .orb-3 {
+            width: 280px;
+            height: 280px;
+            bottom: 100px;
+            right: 34%;
+            opacity: 0.34;
+            animation-delay: 4s;
+        }
+
+        /* لمعة بيضاء/ذهبية تمر فوق الخلفية */
+        .luxury-shine {
+            position: absolute;
+            width: 48%;
+            height: 170%;
+            top: -35%;
+            left: -65%;
+            transform: rotate(18deg);
+            background: linear-gradient(90deg,
+                    transparent 0%,
+                    rgba(255, 255, 255, 0.70) 38%,
+                    rgba(212, 160, 23, 0.30) 50%,
+                    rgba(0, 0, 0, 0.10) 58%,
+                    transparent 100%);
+            animation: cosmicShineMove 9s ease-in-out infinite;
+        }
+
+        /* طبقة الغبار الذهبية والبيضاء */
+        .gold-dust {
+            position: absolute;
+            inset: 0;
+        }
+
+        .dust-1 {
+            opacity: 0.72;
+            background-image:
+                radial-gradient(rgba(212, 160, 23, 0.75) 1.4px, transparent 1.4px),
+                radial-gradient(rgba(255, 255, 255, 0.98) 1.2px, transparent 1.2px),
+                radial-gradient(rgba(212, 160, 23, 0.45) 2px, transparent 2px);
+            background-size: 34px 34px, 68px 68px, 130px 130px;
+            background-position: 0 0, 22px 28px, 70px 90px;
+            animation: cosmicDustMoveOne 22s linear infinite;
+        }
+
+        /* طبقة الغبار الأسود الناعم */
+        /* طبقة غبار أسود واضحة */
+        .dust-2 {
+            opacity: 0.72;
+            background-image:
+                radial-gradient(rgba(0, 0, 0, 0.62) 1.4px, transparent 1.4px),
+                radial-gradient(rgba(0, 0, 0, 0.34) 2.4px, transparent 2.4px),
+                radial-gradient(rgba(30, 24, 12, 0.42) 3px, transparent 3px);
+            background-size: 42px 42px, 95px 95px, 160px 160px;
+            background-position: 18px 12px, 60px 80px, 110px 140px;
+            animation: cosmicDustMoveTwo 30s linear infinite reverse;
+        }
+
+        /* دخان كوني أسود واضح لكن ناعم */
+        .apartments-page-bg::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 2% 38%, rgba(0, 0, 0, 0.30), transparent 34%),
+                radial-gradient(circle at 98% 66%, rgba(0, 0, 0, 0.26), transparent 38%),
+                radial-gradient(circle at 48% 58%, rgba(0, 0, 0, 0.12), transparent 42%),
+                radial-gradient(circle at 70% 18%, rgba(212, 160, 23, 0.12), transparent 28%);
+            opacity: 1;
+            animation: blackCosmicSmoke 16s ease-in-out infinite alternate;
+        }
+
+        /* نجوم أوف وايت + ذهبية + نقاط سوداء */
+        .apartments-page-bg::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            opacity: 0.55;
+            background-image:
+                radial-gradient(rgba(255, 255, 255, 1) 1px, transparent 1px),
+                radial-gradient(rgba(212, 160, 23, 0.85) 1.1px, transparent 1.1px),
+                radial-gradient(rgba(0, 0, 0, 0.28) 0.9px, transparent 0.9px);
+            background-size: 95px 95px, 145px 145px, 115px 115px;
+            background-position: 18px 36px, 75px 100px, 44px 70px;
+            animation: cosmicTwinkle 4.5s ease-in-out infinite alternate;
+        }
+
+        /* المحتوى فوق الخلفية */
+        .page-header,
+        .wrap,
+        #sharedFooter {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* الناف بار فوق كل شيء */
+        #sharedHeader {
+            position: relative;
+            z-index: 99999 !important;
+        }
+
+        .custom-navbar,
+        .navbar,
+        .navbar.fixed-top {
+            z-index: 99999 !important;
+        }
+
+        /* واتساب فوق الخلفية */
+        #sharedWhatsApp {
+            position: relative;
+            z-index: 99998 !important;
+        }
+
+        /* المودال فوق الكل */
+        #detailsModal {
+            z-index: 999999 !important;
+        }
+
+        @keyframes cosmicBaseMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes cosmicOrbFloat {
+            from {
+                transform: translate(0, 0) scale(1);
+            }
+
+            to {
+                transform: translate(-90px, 60px) scale(1.20);
+            }
+        }
+
+        @keyframes cosmicShineMove {
+            0% {
+                left: -65%;
+                opacity: 0;
+            }
+
+            30% {
+                opacity: 0.9;
+            }
+
+            65% {
+                left: 125%;
+                opacity: 0;
+            }
+
+            100% {
+                left: 125%;
+                opacity: 0;
+            }
+        }
+
+        @keyframes cosmicDustMoveOne {
+            from {
+                background-position: 0 0, 22px 28px, 70px 90px;
+            }
+
+            to {
+                background-position: 190px 130px, 250px 185px, 310px 230px;
+            }
+        }
+
+        @keyframes cosmicDustMoveTwo {
+            from {
+                background-position: 18px 12px, 60px 80px, 42px 64px;
+            }
+
+            to {
+                background-position: -175px 120px, -240px 180px, -205px 150px;
+            }
+        }
+
+        @keyframes cosmicTwinkle {
+            from {
+                opacity: 0.32;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: 0.62;
+                transform: scale(1.018);
+            }
+        }
+
+        @keyframes blackCosmicSmoke {
+            from {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.82;
+            }
+
+            to {
+                transform: translate(-35px, 28px) scale(1.08);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .orb-1 {
+                width: 320px;
+                height: 320px;
+                top: 355px;
+                right: -135px;
+                opacity: 0.48;
+            }
+
+            .orb-2 {
+                width: 260px;
+                height: 260px;
+                top: 760px;
+                left: -130px;
+                opacity: 0.38;
+            }
+
+            .orb-3 {
+                width: 210px;
+                height: 210px;
+                right: 18%;
+                opacity: 0.28;
+            }
+
+            .luxury-shine {
+                width: 62%;
+                animation-duration: 11s;
+            }
+
+            .dust-1 {
+                opacity: 0.62;
+                background-size: 42px 42px, 82px 82px, 145px 145px;
+            }
+
+            .dust-2 {
+                opacity: 0.58;
+                background-size: 50px 50px, 105px 105px, 170px 170px;
+            }
+
+            .apartments-page-bg::after {
+                opacity: 0.45;
+            }
+        }
     </style>
 </head>
 
 <body>
 
+    <div class="apartments-page-bg" aria-hidden="true">
+        <span class="gold-orb orb-1"></span>
+        <span class="gold-orb orb-2"></span>
+        <span class="gold-orb orb-3"></span>
+        <span class="luxury-shine"></span>
+        <span class="gold-dust dust-1"></span>
+        <span class="gold-dust dust-2"></span>
+    </div>
     <div id="sharedHeader"></div>
 
     <section class="page-header">
