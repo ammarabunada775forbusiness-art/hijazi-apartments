@@ -839,3 +839,61 @@ document.addEventListener("DOMContentLoaded", () => {
     renderScrollTopButton();
     initFadeInSections();
 });
+
+/* =========================================================
+   HIJAZI Glass Date Picker
+   يستبدل تقويم المتصفح الأصلي بتقويم زجاجي
+========================================================= */
+
+function initHijaziGlassDatePickers() {
+    if (typeof flatpickr === "undefined") return;
+
+    const lang = getCurrentLang ? getCurrentLang() : "ar";
+
+    const dateInputs = document.querySelectorAll('input[type="date"], input.glass-date-input');
+
+    dateInputs.forEach(input => {
+        if (input._flatpickr) return;
+
+        input.type = "text";
+        input.classList.add("glass-date-input");
+        input.setAttribute("autocomplete", "off");
+        input.setAttribute("readonly", "readonly");
+
+        flatpickr(input, {
+            dateFormat: "Y-m-d",
+            minDate: input.min || "today",
+            locale: lang === "ar" ? flatpickr.l10ns.ar : "default",
+            disableMobile: true,
+            allowInput: false,
+
+            onReady: function (_, __, instance) {
+                instance.calendarContainer.classList.add("hijazi-glass-calendar");
+            },
+
+            onOpen: function (_, __, instance) {
+                instance.calendarContainer.classList.add("hijazi-glass-calendar");
+            },
+
+            onChange: function () {
+                input.dispatchEvent(new Event("change", { bubbles: true }));
+            }
+        });
+    });
+
+    const checkIn = document.getElementById("checkIn");
+    const checkOut = document.getElementById("checkOut");
+
+    if (checkIn && checkOut && checkIn._flatpickr && checkOut._flatpickr) {
+        checkIn.addEventListener("change", function () {
+            checkOut._flatpickr.set("minDate", checkIn.value || "today");
+
+            if (checkOut.value && checkIn.value && checkOut.value <= checkIn.value) {
+                checkOut.value = "";
+                checkOut._flatpickr.clear();
+            }
+        });
+    }
+}
+
+document.addEventListener("DOMContentLoaded", initHijaziGlassDatePickers);

@@ -35,6 +35,11 @@
         content="حجز شقق مفروشة عمان, شقق مفروشة الشميساني, شقق قريبة من المستشفيات عمان, شقق فندقية عمان">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css?v=5" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ar.js"></script>
+
     <style>
         body {
             margin: 0;
@@ -1949,6 +1954,384 @@
         @media (max-width: 768px) {
             .card-image-missing {
                 height: 220px;
+            }
+        }
+
+        /* ===== APARTMENTS PAGE GLASS CARDS ===== */
+
+        .grid .card {
+            background: rgba(0, 0, 0, 0.22) !important;
+            border: 1px solid rgba(255, 255, 255, 0.16) !important;
+            border-radius: 26px !important;
+            box-shadow:
+                0 24px 55px rgba(0, 0, 0, 0.16),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+            backdrop-filter: blur(16px) saturate(145%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(145%) !important;
+            color: #fff !important;
+            overflow: hidden !important;
+        }
+
+        .grid .card:hover {
+            transform: translateY(-7px) !important;
+            box-shadow:
+                0 30px 65px rgba(0, 0, 0, 0.22),
+                0 0 0 1px rgba(212, 160, 23, 0.22) !important;
+        }
+
+        .grid .card img {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.10) !important;
+        }
+
+        .grid .card-body {
+            color: #fff !important;
+        }
+
+        .grid .card h3 {
+            color: #fff !important;
+            font-weight: 950 !important;
+        }
+
+        .grid .muted {
+            color: rgba(255, 255, 255, 0.74) !important;
+        }
+
+        .grid .pill {
+            background: rgba(255, 255, 255, 0.12) !important;
+            color: #fff !important;
+            border: 1px solid rgba(255, 255, 255, 0.14) !important;
+            font-weight: 900 !important;
+        }
+
+        .grid .location-line {
+            color: rgba(255, 255, 255, 0.86) !important;
+        }
+
+        .grid .features li {
+            background: rgba(255, 255, 255, 0.11) !important;
+            color: #fff !important;
+            border: 1px solid rgba(255, 255, 255, 0.13) !important;
+            font-weight: 800 !important;
+        }
+
+        .grid .card-price-box {
+            background: rgba(255, 255, 255, 0.10) !important;
+            border: 1px solid rgba(212, 160, 23, 0.22) !important;
+            border-radius: 18px !important;
+            backdrop-filter: blur(10px) saturate(140%) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(140%) !important;
+        }
+
+        .grid .card-price-main {
+            color: #ffd36a !important;
+            font-weight: 950 !important;
+        }
+
+        .grid .card-price-sub {
+            color: rgba(255, 255, 255, 0.76) !important;
+            font-weight: 800 !important;
+        }
+
+        .grid .card-top-badge {
+            background: rgba(0, 0, 0, 0.62) !important;
+            color: #fff !important;
+            border: 1px solid rgba(212, 160, 23, 0.22) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+        }
+
+        .card-image-missing {
+            background: rgba(255, 255, 255, 0.10) !important;
+            color: rgba(255, 255, 255, 0.76) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+        }
+
+        /* ===== APARTMENTS DETAILS MODAL GLASS LOOK ===== */
+
+        #detailsModal {
+            background: rgba(0, 0, 0, 0.72) !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+        }
+
+        #detailsModal .modal-content {
+            background: rgba(0, 0, 0, 0.28) !important;
+            border: 1px solid rgba(255, 255, 255, 0.16) !important;
+            border-radius: 28px !important;
+            color: #fff !important;
+            box-shadow:
+                0 30px 80px rgba(0, 0, 0, 0.42),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+            backdrop-filter: blur(18px) saturate(145%) !important;
+            -webkit-backdrop-filter: blur(18px) saturate(145%) !important;
+        }
+
+        #detailsModal .modal-header {
+            background: rgba(0, 0, 0, 0.36) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+            color: #fff !important;
+        }
+
+        #detailsModal .modal-header h2 {
+            color: #fff !important;
+            font-weight: 950 !important;
+        }
+
+        #detailsModal .modal-body {
+            color: #fff !important;
+        }
+
+        #detailsModal h3,
+        #detailsModal h4,
+        #detailName,
+        #roomsTitle,
+        #mapTitle {
+            color: #fff !important;
+            font-weight: 950 !important;
+        }
+
+        #detailsModal .muted,
+        #detailDesc,
+        #roomDescription {
+            color: rgba(255, 255, 255, 0.76) !important;
+        }
+
+        #detailsModal p,
+        #detailsModal strong,
+        #detailLocation,
+        #detailNightPrice,
+        #detailNights,
+        #detailTotal,
+        #detailDates {
+            color: rgba(255, 255, 255, 0.90) !important;
+            font-weight: 800 !important;
+        }
+
+        #detailNightPrice,
+        #detailTotal {
+            color: #ffd36a !important;
+            font-weight: 950 !important;
+        }
+
+        #detailsModal .detail-features li {
+            background: rgba(255, 255, 255, 0.11) !important;
+            color: #fff !important;
+            border: 1px solid rgba(255, 255, 255, 0.14) !important;
+        }
+
+        #detailsModal .room-summary-pill {
+            background: rgba(255, 255, 255, 0.11) !important;
+            color: #fff !important;
+            border: 1px solid rgba(255, 255, 255, 0.14) !important;
+        }
+
+        #detailsModal .room-summary-pill span {
+            color: #ffd36a !important;
+        }
+
+        #detailsModal .airbnb-gallery-grid {
+            background: rgba(255, 255, 255, 0.08) !important;
+            padding: 10px !important;
+            border-radius: 24px !important;
+            border: 1px solid rgba(255, 255, 255, 0.13) !important;
+            backdrop-filter: blur(12px) saturate(140%) !important;
+            -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+        }
+
+        #detailsModal .airbnb-gallery-item {
+            background: rgba(255, 255, 255, 0.10) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+        }
+
+        #detailsModal .gallery-hint {
+            color: rgba(255, 255, 255, 0.72) !important;
+            font-weight: 800 !important;
+        }
+
+        #detailsModal .video-box {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border: 1px solid rgba(255, 255, 255, 0.14) !important;
+            border-radius: 20px !important;
+            padding: 12px !important;
+            backdrop-filter: blur(12px) saturate(140%) !important;
+            -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+        }
+
+        #detailsModal .video-box video {
+            border-radius: 16px !important;
+        }
+
+        #detailsModal .map-box {
+            background: rgba(255, 255, 255, 0.07) !important;
+            border: 1px solid rgba(255, 255, 255, 0.13) !important;
+            border-radius: 20px !important;
+            padding: 12px !important;
+            backdrop-filter: blur(12px) saturate(140%) !important;
+            -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+        }
+
+        #detailsModal .map-box iframe {
+            border-radius: 16px !important;
+        }
+
+        #detailsModal .modal-book-btn {
+            border-radius: 16px !important;
+            font-weight: 950 !important;
+            box-shadow: 0 12px 28px rgba(212, 160, 23, 0.30) !important;
+        }
+
+        /* ===== FINAL FIX - APARTMENTS FILTER SAME INDEX LOOK ===== */
+
+        .wrap .box {
+            width: 100% !important;
+            max-width: 500px !important;
+            margin: 24px auto 0 !important;
+            padding: 14px !important;
+            border-radius: 16px !important;
+            background: rgba(0, 0, 0, 0.46) !important;
+            border: 1px solid rgba(255, 255, 255, 0.16) !important;
+            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.18) !important;
+            backdrop-filter: blur(10px) saturate(130%) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(130%) !important;
+            color: #fff !important;
+        }
+
+        .wrap .box .row-box {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 10px !important;
+            align-items: end !important;
+        }
+
+        .wrap .box .filter-field {
+            position: relative !important;
+            display: block !important;
+            text-align: start !important;
+        }
+
+        .wrap .box .filter-field label {
+            position: absolute !important;
+            top: 7px !important;
+            right: 12px !important;
+            margin: 0 !important;
+            font-size: 10px !important;
+            font-weight: 800 !important;
+            color: rgba(255, 255, 255, 0.82) !important;
+            z-index: 5 !important;
+            pointer-events: none !important;
+            line-height: 1 !important;
+        }
+
+        /* مهم: يمسك التاريخ سواء بقي date أو صار flatpickr text */
+        .wrap .box .filter-field input,
+        .wrap .box .filter-field input[type="date"],
+        .wrap .box .filter-field input[type="text"],
+        .wrap .box .filter-field input.glass-date-input,
+        .wrap .box .filter-field .flatpickr-input {
+            width: 100% !important;
+            min-width: unset !important;
+            height: 42px !important;
+            min-height: 42px !important;
+            padding: 20px 42px 6px 12px !important;
+            border-radius: 11px !important;
+            border: 1px solid rgba(255, 255, 255, 0.28) !important;
+            background-color: rgba(255, 255, 255, 0.16) !important;
+            color: #fff !important;
+            font-size: 14px !important;
+            font-weight: 800 !important;
+            outline: none !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
+            direction: ltr !important;
+            text-align: right !important;
+            unicode-bidi: plaintext !important;
+        }
+
+        .wrap .box .filter-field input:focus,
+        .wrap .box .filter-field input.glass-date-input:focus,
+        .wrap .box .filter-field .flatpickr-input:focus {
+            background-color: rgba(255, 255, 255, 0.22) !important;
+            border-color: rgba(212, 160, 23, 0.85) !important;
+            box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.18) !important;
+        }
+
+        .wrap .box .filter-actions {
+            margin-top: 12px !important;
+            display: flex !important;
+            justify-content: center !important;
+        }
+
+        .wrap .box .filter-btn {
+            width: 190px !important;
+            min-width: unset !important;
+            height: 44px !important;
+            min-height: unset !important;
+            border-radius: 12px !important;
+            border: none !important;
+            background: linear-gradient(135deg, #d4a017, #8a6508) !important;
+            color: #fff !important;
+            font-size: 14px !important;
+            font-weight: 900 !important;
+            box-shadow: 0 10px 24px rgba(212, 160, 23, 0.28) !important;
+        }
+
+        .wrap .box .filter-btn:hover {
+            transform: translateY(-2px) !important;
+            background: linear-gradient(135deg, #e0ad1f, #6f5206) !important;
+        }
+
+        .wrap .box .filter-meta {
+            margin-top: 14px !important;
+            padding-top: 12px !important;
+            border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 8px !important;
+            text-align: center !important;
+        }
+
+        .wrap .box .filter-meta,
+        .wrap .box .filter-meta .status,
+        .wrap .box .filter-meta .long-stay-note,
+        .wrap .box .filter-meta .long-stay-box {
+            color: rgba(255, 255, 255, 0.92) !important;
+            font-weight: 850 !important;
+        }
+
+        .wrap .box .long-stay-note,
+        .wrap .box .long-stay-box strong {
+            color: #ffe08a !important;
+        }
+
+        @media (max-width: 768px) {
+            .wrap .box {
+                max-width: 100% !important;
+                margin: 18px auto 0 !important;
+                padding: 14px !important;
+                border-radius: 20px !important;
+                background: rgba(0, 0, 0, 0.44) !important;
+            }
+
+            .wrap .box .row-box {
+                grid-template-columns: 1fr !important;
+                gap: 10px !important;
+            }
+
+            .wrap .box .filter-btn {
+                width: 100% !important;
+                height: 46px !important;
+                border-radius: 14px !important;
+                font-size: 15px !important;
+            }
+
+            .wrap .box .filter-field input,
+            .wrap .box .filter-field input.glass-date-input,
+            .wrap .box .filter-field .flatpickr-input {
+                height: 42px !important;
+                min-height: 42px !important;
+                font-size: 15px !important;
             }
         }
     </style>

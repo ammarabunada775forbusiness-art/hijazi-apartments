@@ -1064,7 +1064,119 @@ body.ltr-mode .seo-card {
 
 }
 
+/* ===== HIJAZI GLASS DATE PICKER ===== */
 
+.glass-date-input {
+    cursor: pointer !important;
+    color-scheme: dark !important;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-size: 18px 18px !important;
+    background-position: 14px center !important;
+    padding-left: 42px !important;
+}
+
+.flatpickr-calendar.hijazi-glass-calendar {
+    background: rgba(0, 0, 0, 0.72) !important;
+    border: 1px solid rgba(212, 160, 23, 0.30) !important;
+    border-radius: 22px !important;
+    box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.40),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+    backdrop-filter: blur(18px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(18px) saturate(150%) !important;
+    overflow: hidden !important;
+    z-index: 9999999 !important;
+}
+
+.flatpickr-calendar.hijazi-glass-calendar::before,
+.flatpickr-calendar.hijazi-glass-calendar::after {
+    display: none !important;
+}
+
+.hijazi-glass-calendar .flatpickr-months {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10) !important;
+    padding: 8px 0 !important;
+}
+
+.hijazi-glass-calendar .flatpickr-month,
+.hijazi-glass-calendar .flatpickr-current-month,
+.hijazi-glass-calendar .flatpickr-current-month input.cur-year,
+.hijazi-glass-calendar .flatpickr-current-month .cur-month {
+    color: #fff !important;
+    font-weight: 900 !important;
+}
+
+.hijazi-glass-calendar .flatpickr-weekdays {
+    background: rgba(0, 0, 0, 0.18) !important;
+}
+
+.hijazi-glass-calendar span.flatpickr-weekday {
+    color: #ffd36a !important;
+    font-weight: 900 !important;
+}
+
+.hijazi-glass-calendar .flatpickr-day {
+    color: #fff !important;
+    border-radius: 12px !important;
+    font-weight: 800 !important;
+    border: none !important;
+}
+
+.hijazi-glass-calendar .flatpickr-day:hover {
+    background: rgba(212, 160, 23, 0.22) !important;
+    color: #fff !important;
+}
+
+.hijazi-glass-calendar .flatpickr-day.today {
+    border: 1px solid rgba(212, 160, 23, 0.75) !important;
+    color: #ffd36a !important;
+}
+
+.hijazi-glass-calendar .flatpickr-day.selected,
+.hijazi-glass-calendar .flatpickr-day.startRange,
+.hijazi-glass-calendar .flatpickr-day.endRange {
+    background: linear-gradient(135deg, #d4a017, #8a6508) !important;
+    color: #fff !important;
+    box-shadow: 0 8px 18px rgba(212, 160, 23, 0.35) !important;
+}
+
+.hijazi-glass-calendar .flatpickr-day.inRange {
+    background: rgba(212, 160, 23, 0.18) !important;
+    color: #fff !important;
+}
+
+.hijazi-glass-calendar .flatpickr-day.disabled,
+.hijazi-glass-calendar .flatpickr-day.prevMonthDay,
+.hijazi-glass-calendar .flatpickr-day.nextMonthDay {
+    color: rgba(255, 255, 255, 0.28) !important;
+}
+
+.hijazi-glass-calendar .flatpickr-prev-month svg,
+.hijazi-glass-calendar .flatpickr-next-month svg {
+    fill: #fff !important;
+}
+
+.hijazi-glass-calendar .flatpickr-prev-month:hover svg,
+.hijazi-glass-calendar .flatpickr-next-month:hover svg {
+    fill: #ffd36a !important;
+}
+
+@media (max-width: 768px) {
+    .flatpickr-calendar.hijazi-glass-calendar {
+        width: calc(100vw - 28px) !important;
+        left: 14px !important;
+        right: 14px !important;
+        border-radius: 20px !important;
+    }
+
+    .hijazi-glass-calendar .flatpickr-day {
+        max-width: none !important;
+    }
+}
 
 /* =========================
    PREMIUM BUTTONS

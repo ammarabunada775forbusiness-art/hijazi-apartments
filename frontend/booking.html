@@ -37,6 +37,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ar.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.js"></script>
 
     <style>
@@ -2305,6 +2309,662 @@
                 font-size: 28px;
             }
         }
+
+        /* ===== LUXURY GLASS BOOKING FORM ===== */
+
+        /* كرت نموذج الحجز نفسه */
+        .layout>.card:nth-child(2) {
+            background: rgba(0, 0, 0, 0.22) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            border-radius: 24px !important;
+            box-shadow:
+                0 24px 55px rgba(0, 0, 0, 0.18),
+                inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+            backdrop-filter: blur(16px) saturate(145%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(145%) !important;
+            overflow: visible !important;
+            color: #fff !important;
+        }
+
+        .layout>.card:nth-child(2) .form-section {
+            padding: 22px !important;
+            color: #fff !important;
+        }
+
+        #formTitle {
+            color: #fff !important;
+            font-size: 28px !important;
+            font-weight: 950 !important;
+            text-align: center !important;
+            margin-bottom: 18px !important;
+        }
+
+        /* عناوين الحقول */
+        .form-section label {
+            color: rgba(255, 255, 255, 0.90) !important;
+            font-size: 12px !important;
+            font-weight: 900 !important;
+            margin: 12px 0 7px !important;
+        }
+
+        /* الحقول */
+        .form-section input,
+        .form-section select {
+            width: 100% !important;
+            min-height: 48px !important;
+            border-radius: 14px !important;
+            border: 1px solid rgba(255, 255, 255, 0.24) !important;
+            background: rgba(255, 255, 255, 0.11) !important;
+            color: #fff !important;
+            font-weight: 800 !important;
+            outline: none !important;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 10px 24px rgba(0, 0, 0, 0.08) !important;
+            backdrop-filter: blur(10px) saturate(145%) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(145%) !important;
+        }
+
+        .form-section input::placeholder {
+            color: rgba(255, 255, 255, 0.58) !important;
+        }
+
+        .form-section input:focus,
+        .form-section select:focus {
+            border-color: rgba(212, 160, 23, 0.85) !important;
+            background: rgba(255, 255, 255, 0.16) !important;
+            box-shadow:
+                0 0 0 3px rgba(212, 160, 23, 0.20),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+        }
+
+        /* التاريخ يخلي أيقونة التقويم بيضاء */
+        .form-section input[type="date"] {
+            color-scheme: dark;
+            direction: ltr !important;
+            text-align: right !important;
+        }
+
+        .form-section input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            opacity: 0.9;
+        }
+
+        /* الملاحظات والسعر */
+        .form-section .hint {
+            color: rgba(255, 255, 255, 0.72) !important;
+            font-weight: 700 !important;
+        }
+
+        #finalPriceLabel {
+            color: rgba(255, 255, 255, 0.88) !important;
+            font-weight: 900 !important;
+        }
+
+        .price,
+        #totalPrice {
+            color: #ffd36a !important;
+            font-weight: 950 !important;
+        }
+
+        /* زر تأكيد الحجز */
+        #submitBtn {
+            min-height: 52px !important;
+            border-radius: 15px !important;
+            background: linear-gradient(135deg, #d4a017, #8a6508) !important;
+            color: #fff !important;
+            font-weight: 950 !important;
+            font-size: 16px !important;
+            box-shadow: 0 12px 28px rgba(212, 160, 23, 0.30) !important;
+            transition: 0.25s ease !important;
+        }
+
+        #submitBtn:hover {
+            background: linear-gradient(135deg, #000, #2a2a2a) !important;
+            transform: translateY(-2px) !important;
+        }
+
+        /* رسائل الخطأ داخل الكرت الزجاجي */
+        .field-error {
+            color: #ffd1d1 !important;
+            font-weight: 800 !important;
+        }
+
+        .input-error {
+            border-color: rgba(255, 120, 120, 0.85) !important;
+            background: rgba(120, 0, 0, 0.18) !important;
+        }
+
+        /* ===== CUSTOM GLASS APARTMENT SELECT IN FORM ===== */
+
+        /* نخفي اختيار الشقة الأصلي ونخليه للكود فقط */
+        .form-section select#aptId {
+            position: absolute !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            min-width: 0 !important;
+        }
+
+        /* القائمة الزجاجية الجديدة */
+        .booking-form-glass-select {
+            position: relative;
+            width: 100%;
+            z-index: 50;
+        }
+
+        .booking-form-glass-current {
+            width: 100% !important;
+            min-height: 48px !important;
+            margin: 0 !important;
+            padding: 0 14px !important;
+            border-radius: 14px !important;
+            border: 1px solid rgba(255, 255, 255, 0.24) !important;
+            background: rgba(255, 255, 255, 0.11) !important;
+            color: #fff !important;
+            font-weight: 900 !important;
+            font-size: 15px !important;
+            cursor: pointer !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 10px 24px rgba(0, 0, 0, 0.08) !important;
+            backdrop-filter: blur(10px) saturate(145%) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(145%) !important;
+        }
+
+        .booking-form-glass-current::before {
+            content: "⌄";
+            font-size: 18px;
+            opacity: 0.95;
+        }
+
+        .booking-form-glass-select.open .booking-form-glass-current {
+            border-color: rgba(212, 160, 23, 0.85) !important;
+            box-shadow:
+                0 0 0 3px rgba(212, 160, 23, 0.18),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+        }
+
+        /* القائمة المفتوحة */
+        .booking-form-glass-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            left: 0;
+            display: none;
+            padding: 8px;
+            border-radius: 18px;
+            background: rgba(0, 0, 0, 0.76);
+            border: 1px solid rgba(212, 160, 23, 0.28);
+            box-shadow: 0 20px 42px rgba(0, 0, 0, 0.32);
+            backdrop-filter: blur(18px) saturate(150%);
+            -webkit-backdrop-filter: blur(18px) saturate(150%);
+            z-index: 999999;
+        }
+
+        .booking-form-glass-select.open .booking-form-glass-menu {
+            display: block;
+        }
+
+        .booking-form-glass-option {
+            width: 100% !important;
+            min-height: 44px !important;
+            margin: 0 0 6px !important;
+            padding: 0 12px !important;
+            border: none !important;
+            border-radius: 13px !important;
+            background: rgba(255, 255, 255, 0.10) !important;
+            color: #fff !important;
+            font-weight: 900 !important;
+            font-size: 15px !important;
+            text-align: center !important;
+            cursor: pointer !important;
+            transition: 0.22s ease !important;
+        }
+
+        .booking-form-glass-option:last-child {
+            margin-bottom: 0 !important;
+        }
+
+        .booking-form-glass-option:hover,
+        .booking-form-glass-option.active {
+            background: linear-gradient(135deg, #d4a017, #8a6508) !important;
+            color: #fff !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 9px 20px rgba(212, 160, 23, 0.28) !important;
+        }
+
+        /* لما يكون اختيار الشقة عليه خطأ */
+        #aptId.input-error+.booking-form-glass-select .booking-form-glass-current {
+            border-color: rgba(255, 120, 120, 0.85) !important;
+            background: rgba(120, 0, 0, 0.18) !important;
+        }
+
+        /* نخلي كرت النموذج ما يقص القائمة */
+        .layout,
+        .layout>.card:nth-child(2),
+        .form-section,
+        #bookingForm {
+            overflow: visible !important;
+        }
+
+        @media (max-width: 768px) {
+            .layout>.card:nth-child(2) {
+                border-radius: 22px !important;
+                background: rgba(0, 0, 0, 0.20) !important;
+            }
+
+            .layout>.card:nth-child(2) .form-section {
+                padding: 18px !important;
+            }
+
+            #formTitle {
+                font-size: 24px !important;
+            }
+
+            .booking-form-glass-current,
+            .booking-form-glass-option,
+            .form-section input {
+                font-size: 14px !important;
+            }
+        }
+
+        /* ===== BOOKING PAGE FULL GLASS SYSTEM ===== */
+
+        /* الكرتين الرئيسيين: تفاصيل الشقة + نموذج الحجز */
+        .layout>.card {
+            background: rgba(0, 0, 0, 0.22) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            border-radius: 26px !important;
+            box-shadow:
+                0 24px 55px rgba(0, 0, 0, 0.18),
+                inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+            backdrop-filter: blur(16px) saturate(145%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(145%) !important;
+            color: #fff !important;
+            overflow: visible !important;
+        }
+
+        /* جسم كرت تفاصيل الشقة */
+        .layout>.card .card-body {
+            background: transparent !important;
+            color: #fff !important;
+        }
+
+        /* النصوص داخل تفاصيل الشقة */
+        .layout>.card h2,
+        .layout>.card h3,
+        #aptName,
+        #mapTitle,
+        #roomsTitle {
+            color: #fff !important;
+            font-weight: 950 !important;
+        }
+
+        .muted,
+        #aptDesc,
+        #aptLocation,
+        #roomDescription {
+            color: rgba(255, 255, 255, 0.76) !important;
+        }
+
+        /* شارة متاح */
+        #availablePill,
+        .pill {
+            background: rgba(255, 255, 255, 0.12) !important;
+            color: #fff !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            font-weight: 900 !important;
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
+        }
+
+        /* مميزات الشقة */
+        .features li {
+            background: rgba(255, 255, 255, 0.11) !important;
+            color: #fff !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            font-weight: 800 !important;
+        }
+
+        /* ألبوم الصور الصغير */
+        .airbnb-gallery-grid {
+            background: rgba(255, 255, 255, 0.08) !important;
+            padding: 10px !important;
+            border-radius: 24px !important;
+            border: 1px solid rgba(255, 255, 255, 0.13) !important;
+            backdrop-filter: blur(12px) saturate(140%) !important;
+            -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+        }
+
+        .airbnb-gallery-item {
+            background: rgba(255, 255, 255, 0.10) !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.16) !important;
+        }
+
+        .gallery-hint {
+            color: rgba(255, 255, 255, 0.72) !important;
+            font-weight: 800 !important;
+        }
+
+        /* الفيديو */
+        .video-box {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border: 1px solid rgba(255, 255, 255, 0.14) !important;
+            border-radius: 20px !important;
+            padding: 12px !important;
+            backdrop-filter: blur(12px) saturate(140%) !important;
+            -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+        }
+
+        .video-title {
+            color: #fff !important;
+            font-weight: 900 !important;
+        }
+
+        .video-box video {
+            border-radius: 16px !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.20) !important;
+        }
+
+        /* خريطة الشقة */
+        .map-box {
+            background: rgba(255, 255, 255, 0.07) !important;
+            border: 1px solid rgba(255, 255, 255, 0.13) !important;
+            border-radius: 20px !important;
+            padding: 12px !important;
+            backdrop-filter: blur(12px) saturate(140%) !important;
+            -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+        }
+
+        .map-box iframe {
+            border-radius: 16px !important;
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.20) !important;
+        }
+
+        /* ملخص السعر */
+        .summary-box {
+            background: rgba(0, 0, 0, 0.30) !important;
+            border: 1px solid rgba(212, 160, 23, 0.28) !important;
+            border-radius: 20px !important;
+            box-shadow:
+                0 18px 38px rgba(0, 0, 0, 0.20),
+                inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
+            backdrop-filter: blur(14px) saturate(145%) !important;
+            -webkit-backdrop-filter: blur(14px) saturate(145%) !important;
+        }
+
+        .summary-box p {
+            color: rgba(255, 255, 255, 0.92) !important;
+            font-weight: 800 !important;
+        }
+
+        .summary-box span {
+            color: #ffd36a !important;
+            font-weight: 950 !important;
+        }
+
+        /* غرفة / عدد الصور */
+        .room-summary-pill {
+            background: rgba(255, 255, 255, 0.11) !important;
+            color: #fff !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        }
+
+        .room-summary-pill span {
+            color: #ffd36a !important;
+            font-weight: 950 !important;
+        }
+
+        /* نموذج الحجز */
+        .layout>.card:nth-child(2) .form-section {
+            padding: 22px !important;
+            color: #fff !important;
+        }
+
+        #formTitle {
+            color: #fff !important;
+            font-size: 28px !important;
+            font-weight: 950 !important;
+            text-align: center !important;
+            margin-bottom: 18px !important;
+        }
+
+        .form-section label {
+            color: rgba(255, 255, 255, 0.90) !important;
+            font-size: 12px !important;
+            font-weight: 900 !important;
+            margin: 12px 0 7px !important;
+        }
+
+        .form-section input,
+        .form-section select {
+            width: 100% !important;
+            min-height: 48px !important;
+            border-radius: 14px !important;
+            border: 1px solid rgba(255, 255, 255, 0.24) !important;
+            background: rgba(255, 255, 255, 0.11) !important;
+            color: #fff !important;
+            font-weight: 800 !important;
+            outline: none !important;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 10px 24px rgba(0, 0, 0, 0.08) !important;
+            backdrop-filter: blur(10px) saturate(145%) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(145%) !important;
+        }
+
+        .form-section input::placeholder {
+            color: rgba(255, 255, 255, 0.58) !important;
+        }
+
+        .form-section input:focus,
+        .form-section select:focus {
+            border-color: rgba(212, 160, 23, 0.85) !important;
+            background: rgba(255, 255, 255, 0.16) !important;
+            box-shadow:
+                0 0 0 3px rgba(212, 160, 23, 0.20),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+        }
+
+        .form-section input[type="date"] {
+            color-scheme: dark;
+            direction: ltr !important;
+            text-align: right !important;
+        }
+
+        .form-section input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            opacity: 0.9;
+        }
+
+        .form-section .hint {
+            color: rgba(255, 255, 255, 0.72) !important;
+            font-weight: 700 !important;
+        }
+
+        #finalPriceLabel {
+            color: rgba(255, 255, 255, 0.88) !important;
+            font-weight: 900 !important;
+        }
+
+        .price,
+        #totalPrice {
+            color: #ffd36a !important;
+            font-weight: 950 !important;
+        }
+
+        #submitBtn {
+            min-height: 52px !important;
+            border-radius: 15px !important;
+            background: linear-gradient(135deg, #d4a017, #8a6508) !important;
+            color: #fff !important;
+            font-weight: 950 !important;
+            font-size: 16px !important;
+            box-shadow: 0 12px 28px rgba(212, 160, 23, 0.30) !important;
+            transition: 0.25s ease !important;
+        }
+
+        #submitBtn:hover {
+            background: linear-gradient(135deg, #000, #2a2a2a) !important;
+            transform: translateY(-2px) !important;
+        }
+
+        /* أخطاء الحقول */
+        .field-error {
+            color: #ffd1d1 !important;
+            font-weight: 800 !important;
+        }
+
+        .input-error {
+            border-color: rgba(255, 120, 120, 0.85) !important;
+            background: rgba(120, 0, 0, 0.18) !important;
+        }
+
+        /* مهم حتى القوائم الزجاجية ما تنقص */
+        .layout,
+        .layout>.card,
+        .card-body,
+        .form-section,
+        #bookingForm {
+            overflow: visible !important;
+        }
+
+        @media (max-width: 768px) {
+            .layout>.card {
+                border-radius: 22px !important;
+                background: rgba(0, 0, 0, 0.20) !important;
+            }
+
+            .layout>.card:nth-child(2) .form-section {
+                padding: 18px !important;
+            }
+
+            #formTitle {
+                font-size: 24px !important;
+            }
+
+            .summary-box,
+            .video-box,
+            .map-box {
+                border-radius: 18px !important;
+            }
+        }
+
+        /* ===== FINAL GLASS COUNTER FOR ADULTS / CHILDREN ===== */
+
+        /* إخفاء أسهم المتصفح الأصلية */
+        #bookingForm input[type="number"]::-webkit-inner-spin-button,
+        #bookingForm input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none !important;
+            margin: 0 !important;
+        }
+
+        #bookingForm input[type="number"] {
+            -moz-appearance: textfield !important;
+        }
+
+        /* نخفي input الأصلي ونخليه شغال للكود */
+        #bookingForm #adults.hijazi-number-original,
+        #bookingForm #children.hijazi-number-original {
+            position: absolute !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            min-height: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: 0 !important;
+        }
+
+        /* الكونترول الزجاجي الجديد */
+        .hijazi-counter {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 48px 1fr 48px;
+            gap: 10px;
+            align-items: center;
+            direction: rtl;
+            margin-top: 6px;
+        }
+
+        .form-section .hijazi-counter-btn,
+        .form-section .hijazi-counter-value {
+            height: 50px !important;
+            min-height: 50px !important;
+            border-radius: 15px !important;
+            border: 1px solid rgba(255, 255, 255, 0.24) !important;
+            background: rgba(255, 255, 255, 0.11) !important;
+            color: #fff !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            backdrop-filter: blur(10px) saturate(145%) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(145%) !important;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 10px 24px rgba(0, 0, 0, 0.08) !important;
+        }
+
+        .form-section .hijazi-counter-btn {
+            width: 48px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            cursor: pointer !important;
+            font-size: 24px !important;
+            font-weight: 950 !important;
+            transition: 0.22s ease !important;
+        }
+
+        .form-section .hijazi-counter-btn:hover {
+            background: linear-gradient(135deg, #d4a017, #8a6508) !important;
+            transform: translateY(-1px) !important;
+            box-shadow: 0 10px 24px rgba(212, 160, 23, 0.28) !important;
+        }
+
+        .form-section .hijazi-counter-btn:disabled {
+            opacity: 0.42 !important;
+            cursor: not-allowed !important;
+            transform: none !important;
+            background: rgba(255, 255, 255, 0.08) !important;
+        }
+
+        .form-section .hijazi-counter-value {
+            font-size: 19px !important;
+            font-weight: 950 !important;
+            text-align: center !important;
+        }
+
+        #bookingForm #adults.input-error+.hijazi-counter .hijazi-counter-value,
+        #bookingForm #children.input-error+.hijazi-counter .hijazi-counter-value {
+            border-color: rgba(255, 120, 120, 0.85) !important;
+            background: rgba(120, 0, 0, 0.18) !important;
+        }
+
+        @media (max-width: 768px) {
+            .hijazi-counter {
+                grid-template-columns: 46px 1fr 46px;
+                gap: 8px;
+            }
+
+            .form-section .hijazi-counter-btn,
+            .form-section .hijazi-counter-value {
+                height: 48px !important;
+                min-height: 48px !important;
+                border-radius: 14px !important;
+            }
+
+            .form-section .hijazi-counter-btn {
+                width: 46px !important;
+            }
+        }
     </style>
 </head>
 
@@ -2895,17 +3555,17 @@
             if (!roomCards || !roomDescription || !roomGallery) return;
 
             roomCards.innerHTML = apt.rooms.map(room => {
+                const title = lang === "ar" ? room.titleAr : room.titleEn;
                 const count = room.images ? room.images.length : 0;
                 const countText = lang === "ar" ? `${count} صور` : `${count} photos`;
 
                 return `
-    <div class="room-summary-pill">
-        ${title}
-        <span>${countText}</span>
-    </div>
-`;
+        <div class="room-summary-pill">
+            ${title}
+            <span>${countText}</span>
+        </div>
+    `;
             }).join("");
-
             roomDescription.textContent = lang === "ar"
                 ? "الصور مرتبة حسب الغرف. اضغط على أي صورة في المعرض لفتح الألبوم الكامل."
                 : "Photos are organized by room. Click any photo to open the full album.";
@@ -3758,6 +4418,164 @@
             setTimeout(syncCurrencyDropdown, 50);
         });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const select = document.getElementById("aptId");
+
+            if (!select || document.getElementById("bookingFormGlassAptSelect")) return;
+
+            const wrapper = document.createElement("div");
+            wrapper.className = "booking-form-glass-select";
+            wrapper.id = "bookingFormGlassAptSelect";
+
+            const currentBtn = document.createElement("button");
+            currentBtn.type = "button";
+            currentBtn.className = "booking-form-glass-current";
+            currentBtn.id = "bookingFormGlassAptCurrent";
+
+            const menu = document.createElement("div");
+            menu.className = "booking-form-glass-menu";
+            menu.id = "bookingFormGlassAptMenu";
+
+            wrapper.appendChild(currentBtn);
+            wrapper.appendChild(menu);
+
+            select.insertAdjacentElement("afterend", wrapper);
+
+            function getSelectedText() {
+                return select.options[select.selectedIndex]
+                    ? select.options[select.selectedIndex].textContent
+                    : "";
+            }
+
+            function syncAptDropdown() {
+                currentBtn.textContent = getSelectedText();
+
+                menu.innerHTML = "";
+
+                Array.from(select.options).forEach(function (option) {
+                    const btn = document.createElement("button");
+                    btn.type = "button";
+                    btn.className = "booking-form-glass-option";
+                    btn.textContent = option.textContent;
+                    btn.dataset.value = option.value;
+
+                    if (option.value === select.value) {
+                        btn.classList.add("active");
+                    }
+
+                    btn.addEventListener("click", function () {
+                        select.value = option.value;
+                        select.dispatchEvent(new Event("change", { bubbles: true }));
+                        wrapper.classList.remove("open");
+                        syncAptDropdown();
+                    });
+
+                    menu.appendChild(btn);
+                });
+            }
+
+            currentBtn.addEventListener("click", function (e) {
+                e.stopPropagation();
+
+                const currencyDropdown = document.getElementById("currencyGlassSelect");
+                if (currencyDropdown) {
+                    currencyDropdown.classList.remove("open");
+                }
+
+                wrapper.classList.toggle("open");
+            });
+
+            document.addEventListener("click", function () {
+                wrapper.classList.remove("open");
+            });
+
+            select.addEventListener("change", syncAptDropdown);
+
+            setTimeout(syncAptDropdown, 80);
+        });
+    </script>
+
+    <script>
+        (function () {
+            function initHijaziCounters() {
+                function createCounter(inputId, minValue) {
+                    const input = document.getElementById(inputId);
+
+                    if (!input || document.getElementById(inputId + "HijaziCounter")) return;
+
+                    input.classList.add("hijazi-number-original");
+
+                    const wrapper = document.createElement("div");
+                    wrapper.className = "hijazi-counter";
+                    wrapper.id = inputId + "HijaziCounter";
+
+                    const plusBtn = document.createElement("button");
+                    plusBtn.type = "button";
+                    plusBtn.className = "hijazi-counter-btn";
+                    plusBtn.textContent = "+";
+
+                    const valueBox = document.createElement("div");
+                    valueBox.className = "hijazi-counter-value";
+
+                    const minusBtn = document.createElement("button");
+                    minusBtn.type = "button";
+                    minusBtn.className = "hijazi-counter-btn";
+                    minusBtn.textContent = "−";
+
+                    wrapper.appendChild(plusBtn);
+                    wrapper.appendChild(valueBox);
+                    wrapper.appendChild(minusBtn);
+
+                    input.insertAdjacentElement("afterend", wrapper);
+
+                    function getValue() {
+                        const value = Number(input.value);
+                        return Number.isFinite(value) ? value : minValue;
+                    }
+
+                    function sync() {
+                        const value = Math.max(getValue(), minValue);
+                        input.value = value;
+                        valueBox.textContent = value;
+                        minusBtn.disabled = value <= minValue;
+                    }
+
+                    function setValue(nextValue) {
+                        input.value = Math.max(Number(nextValue), minValue);
+
+                        input.dispatchEvent(new Event("input", { bubbles: true }));
+                        input.dispatchEvent(new Event("change", { bubbles: true }));
+
+                        sync();
+                    }
+
+                    plusBtn.addEventListener("click", function () {
+                        setValue(getValue() + 1);
+                    });
+
+                    minusBtn.addEventListener("click", function () {
+                        setValue(getValue() - 1);
+                    });
+
+                    input.addEventListener("input", sync);
+                    input.addEventListener("change", sync);
+
+                    sync();
+                }
+
+                createCounter("adults", 1);
+                createCounter("children", 0);
+            }
+
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", initHijaziCounters);
+            } else {
+                initHijaziCounters();
+            }
+        })();
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
