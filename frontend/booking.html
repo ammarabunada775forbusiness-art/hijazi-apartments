@@ -1956,6 +1956,355 @@
                 flex-direction: column;
             }
         }
+
+        /* ===== VERTICAL PHOTO TOUR ALBUM - AIRBNB STYLE ===== */
+
+        .photo-album-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 999999;
+            background: #fff;
+            color: #111;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .photo-album-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            display: grid;
+            grid-template-columns: 70px 1fr 90px;
+            align-items: center;
+            padding: 0 22px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .album-close-btn {
+            border: none;
+            background: transparent;
+            color: #111;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            font-size: 32px;
+            line-height: 1;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .album-close-btn:hover {
+            background: #f2f2f2;
+        }
+
+        .photo-album-title {
+            text-align: center;
+            font-weight: 900;
+            font-size: 18px;
+        }
+
+        #photoAlbumCounter {
+            text-align: end;
+            font-size: 14px;
+            font-weight: 800;
+            color: #555;
+        }
+
+        .photo-album-body {
+            max-width: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* الشريط العلوي المصغر */
+        .photo-tour-top-strip {
+            position: sticky;
+            top: 70px;
+            z-index: 15;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .photo-tour-strip-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 16px 22px;
+            display: flex;
+            gap: 14px;
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+
+        .photo-tour-thumb-btn {
+            flex: 0 0 auto;
+            width: 138px;
+            border: none;
+            background: transparent;
+            padding: 0;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .photo-tour-thumb-img {
+            width: 138px;
+            height: 96px;
+            border-radius: 18px;
+            overflow: hidden;
+            background: #f1f1f1;
+            border: 3px solid transparent;
+            transition: 0.22s ease;
+            position: relative;
+        }
+
+        .photo-tour-thumb-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-tour-thumb-btn.active .photo-tour-thumb-img {
+            border-color: #c89116;
+            box-shadow: 0 10px 24px rgba(200, 145, 22, 0.25);
+        }
+
+        .photo-tour-thumb-label {
+            display: block;
+            margin-top: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            color: #777;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* جسم الألبوم العمودي */
+        .photo-tour-sections {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 42px 24px 70px;
+        }
+
+        .photo-tour-section {
+            display: grid;
+            grid-template-columns: minmax(0, 1.45fr) 340px;
+            gap: 70px;
+            align-items: start;
+            margin-bottom: 86px;
+            scroll-margin-top: 170px;
+        }
+
+        .photo-tour-photos {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .photo-tour-photo {
+            position: relative;
+            display: block;
+            width: 100%;
+            height: 265px;
+            border: none;
+            padding: 0;
+            background: #f3f3f3;
+            border-radius: 18px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .photo-tour-photo.wide {
+            grid-column: span 2;
+            height: 360px;
+        }
+
+        .photo-tour-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.35s ease;
+        }
+
+        .photo-tour-photo:hover img {
+            transform: scale(1.035);
+        }
+
+        .photo-tour-photo-title {
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            background: rgba(0, 0, 0, 0.62);
+            color: #fff;
+            padding: 7px 11px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .photo-tour-photo.image-missing::after,
+        .photo-tour-thumb-img.image-missing::after {
+            content: "الصورة غير مرفوعة بعد";
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f6f6f6, #fff);
+            color: #777;
+            font-size: 12px;
+            font-weight: 900;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .photo-tour-room-info {
+            position: sticky;
+            top: 175px;
+            text-align: right;
+            padding-top: 10px;
+        }
+
+        .photo-tour-room-info h2 {
+            margin: 0 0 12px;
+            font-size: 42px;
+            font-weight: 950;
+            color: #222;
+            line-height: 1.2;
+        }
+
+        .photo-tour-room-info p {
+            margin: 0;
+            color: #777;
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .photo-tour-room-info .photo-tour-room-note {
+            margin-top: 18px;
+            font-size: 14px;
+            line-height: 1.9;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .photo-tour-empty {
+            min-height: 420px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            font-weight: 900;
+            background: #f7f7f7;
+            border-radius: 24px;
+        }
+
+        @media (max-width: 900px) {
+            .photo-album-header {
+                height: 60px;
+                grid-template-columns: 52px 1fr 70px;
+                padding: 0 12px;
+            }
+
+            .album-close-btn {
+                width: 42px;
+                height: 42px;
+                font-size: 28px;
+            }
+
+            .photo-album-title {
+                font-size: 15px;
+            }
+
+            #photoAlbumCounter {
+                font-size: 12px;
+            }
+
+            .photo-tour-top-strip {
+                top: 60px;
+            }
+
+            .photo-tour-strip-inner {
+                padding: 12px;
+                gap: 10px;
+            }
+
+            .photo-tour-thumb-btn {
+                width: 104px;
+            }
+
+            .photo-tour-thumb-img {
+                width: 104px;
+                height: 76px;
+                border-radius: 14px;
+            }
+
+            .photo-tour-thumb-label {
+                font-size: 11px;
+            }
+
+            .photo-tour-sections {
+                padding: 28px 14px 50px;
+            }
+
+            .photo-tour-section {
+                display: flex;
+                flex-direction: column-reverse;
+                gap: 18px;
+                margin-bottom: 58px;
+                scroll-margin-top: 145px;
+            }
+
+            .photo-tour-room-info {
+                position: static;
+                text-align: right;
+                padding-top: 0;
+            }
+
+            .photo-tour-room-info h2 {
+                font-size: 32px;
+            }
+
+            .photo-tour-room-info p {
+                font-size: 14px;
+            }
+
+            .photo-tour-photos {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .photo-tour-photo,
+            .photo-tour-photo.wide {
+                grid-column: span 1;
+                height: 260px;
+                border-radius: 16px;
+            }
+
+            .photo-tour-photo-title {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+
+            .photo-tour-photo,
+            .photo-tour-photo.wide {
+                height: 230px;
+            }
+
+            .photo-tour-room-info h2 {
+                font-size: 28px;
+            }
+        }
     </style>
 </head>
 
@@ -2546,15 +2895,15 @@
             if (!roomCards || !roomDescription || !roomGallery) return;
 
             roomCards.innerHTML = apt.rooms.map(room => {
-                const title = lang === "ar" ? room.titleAr : room.titleEn;
                 const count = room.images ? room.images.length : 0;
+                const countText = lang === "ar" ? `${count} صور` : `${count} photos`;
 
                 return `
-            <div class="room-summary-pill">
-                ${title}
-                <span>${count}</span>
-            </div>
-        `;
+    <div class="room-summary-pill">
+        ${title}
+        <span>${countText}</span>
+    </div>
+`;
             }).join("");
 
             roomDescription.textContent = lang === "ar"
@@ -2564,8 +2913,199 @@
             roomGallery.innerHTML = "";
         }
 
+        function getCurrentGalleryApartment() {
+            if (typeof getSelectedApartment === "function") {
+                const selectedApartment = getSelectedApartment();
+                if (selectedApartment) return selectedApartment;
+            }
+
+            const bookBtn = document.getElementById("bookNowBtn");
+            const aptId = bookBtn ? Number(bookBtn.dataset.aptId) : null;
+
+            return aptId ? HIJAZI_APARTMENTS[aptId] : null;
+        }
+
+        function getAlbumItemRoomTitle(item) {
+            const lang = getCurrentLang();
+            return lang === "ar"
+                ? (item.roomTitleAr || "صور الشقة")
+                : (item.roomTitleEn || "Apartment Photos");
+        }
+
+        function getAlbumItemTitle(item, index) {
+            const lang = getCurrentLang();
+            return lang === "ar"
+                ? (item.titleAr || `صورة ${index + 1}`)
+                : (item.titleEn || `Photo ${index + 1}`);
+        }
+
+        function groupAlbumItemsByRoom(items) {
+            const map = new Map();
+
+            items.forEach((item, index) => {
+                const key = item.roomKey || "apartment-photos";
+
+                if (!map.has(key)) {
+                    map.set(key, {
+                        key,
+                        roomTitleAr: item.roomTitleAr || "صور الشقة",
+                        roomTitleEn: item.roomTitleEn || "Apartment Photos",
+                        items: []
+                    });
+                }
+
+                map.get(key).items.push({
+                    ...item,
+                    originalIndex: index
+                });
+            });
+
+            return Array.from(map.values());
+        }
+
+        function renderTourPhoto(item, index, isWide = false) {
+            const title = getAlbumItemTitle(item, index);
+
+            return `
+        <button
+            class="photo-tour-photo ${isWide ? "wide" : ""}"
+            id="photo-tour-photo-${index}"
+            type="button"
+            onclick="goToAlbumPhoto(${index})"
+        >
+            <img
+                src="${item.src}"
+                alt="${title}"
+                loading="lazy"
+                onerror="this.parentElement.classList.add('image-missing'); this.remove();"
+            >
+            <span class="photo-tour-photo-title">${title}</span>
+        </button>
+    `;
+        }
+
+        function renderPhotoAlbumTour() {
+            const lang = getCurrentLang();
+            const modalBody = document.querySelector("#photoAlbumModal .photo-album-body");
+            const albumTitle = document.getElementById("photoAlbumTitle");
+            const albumCounter = document.getElementById("photoAlbumCounter");
+
+            if (!modalBody) return;
+
+            if (!currentAlbumItems.length) {
+                modalBody.innerHTML = `
+            <div class="photo-tour-sections">
+                <div class="photo-tour-empty">
+                    ${lang === "ar" ? "لا توجد صور مرفوعة لهذه الشقة بعد" : "No photos uploaded for this apartment yet"}
+                </div>
+            </div>
+        `;
+                return;
+            }
+
+            const groupedRooms = groupAlbumItemsByRoom(currentAlbumItems);
+
+            albumTitle.textContent = lang === "ar" ? "جولة بالصور" : "Photo tour";
+            albumCounter.textContent = lang === "ar"
+                ? `${currentAlbumItems.length} صورة`
+                : `${currentAlbumItems.length} photos`;
+
+            const topStripHtml = `
+        <div class="photo-tour-top-strip">
+            <div class="photo-tour-strip-inner">
+                ${currentAlbumItems.map((item, index) => {
+                const roomTitle = getAlbumItemRoomTitle(item);
+
+                return `
+                        <button
+                            class="photo-tour-thumb-btn ${index === currentAlbumIndex ? "active" : ""}"
+                            type="button"
+                            data-album-thumb="${index}"
+                            onclick="goToAlbumPhoto(${index})"
+                        >
+                            <div class="photo-tour-thumb-img">
+                                <img
+                                    src="${item.src}"
+                                    alt="${roomTitle}"
+                                    loading="lazy"
+                                    onerror="this.parentElement.classList.add('image-missing'); this.remove();"
+                                >
+                            </div>
+                            <span class="photo-tour-thumb-label">${roomTitle}</span>
+                        </button>
+                    `;
+            }).join("")}
+            </div>
+        </div>
+    `;
+
+            const sectionsHtml = `
+        <div class="photo-tour-sections">
+            ${groupedRooms.map(group => {
+                const roomTitle = lang === "ar" ? group.roomTitleAr : group.roomTitleEn;
+                const photosCountText = lang === "ar"
+                    ? `${group.items.length} صور`
+                    : `${group.items.length} photos`;
+
+                return `
+                    <section class="photo-tour-section" id="photo-tour-room-${group.key}">
+                        <div class="photo-tour-photos">
+                            ${group.items.map((item, localIndex) => {
+                    return renderTourPhoto(item, item.originalIndex, localIndex === 0);
+                }).join("")}
+                        </div>
+
+                        <aside class="photo-tour-room-info">
+                            <h2>${roomTitle}</h2>
+                            <p>${photosCountText}</p>
+                            <div class="photo-tour-room-note">
+                                ${lang === "ar"
+                        ? "اسحب للأعلى والأسفل لمشاهدة صور هذا القسم وباقي أقسام الشقة."
+                        : "Scroll up and down to view this section and the rest of the apartment photos."
+                    }
+                            </div>
+                        </aside>
+                    </section>
+                `;
+            }).join("")}
+        </div>
+    `;
+
+            modalBody.innerHTML = topStripHtml + sectionsHtml;
+        }
+
+        function setActiveAlbumPhoto(index) {
+            if (!currentAlbumItems.length) return;
+
+            currentAlbumIndex = Math.max(0, Math.min(index, currentAlbumItems.length - 1));
+
+            document.querySelectorAll("[data-album-thumb]").forEach(btn => {
+                btn.classList.toggle("active", Number(btn.dataset.albumThumb) === currentAlbumIndex);
+            });
+
+            const counter = document.getElementById("photoAlbumCounter");
+            if (counter) {
+                const lang = getCurrentLang();
+                counter.textContent = lang === "ar"
+                    ? `${currentAlbumIndex + 1} / ${currentAlbumItems.length}`
+                    : `${currentAlbumIndex + 1} / ${currentAlbumItems.length}`;
+            }
+        }
+
+        function goToAlbumPhoto(index) {
+            setActiveAlbumPhoto(index);
+
+            const target = document.getElementById(`photo-tour-photo-${currentAlbumIndex}`);
+            if (target) {
+                target.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+            }
+        }
+
         function openPhotoAlbum(index = 0) {
-            const apt = getSelectedApartment();
+            const apt = getCurrentGalleryApartment();
 
             if (!apt) return;
 
@@ -2573,11 +3113,16 @@
             currentAlbumIndex = index;
 
             const modal = document.getElementById("photoAlbumModal");
-            if (!modal || !currentAlbumItems.length) return;
+            if (!modal) return;
 
             modal.style.display = "block";
             document.body.style.overflow = "hidden";
-            renderPhotoAlbum();
+
+            renderPhotoAlbumTour();
+
+            requestAnimationFrame(() => {
+                goToAlbumPhoto(index);
+            });
         }
 
         function closePhotoAlbum() {
@@ -2585,86 +3130,58 @@
             if (!modal) return;
 
             modal.style.display = "none";
-            document.body.style.overflow = "";
-        }
 
-        function renderPhotoAlbum() {
-            const lang = getCurrentLang();
-            const item = currentAlbumItems[currentAlbumIndex];
+            const detailsModal = document.getElementById("detailsModal");
+            const detailsStillOpen = detailsModal && detailsModal.style.display === "block";
 
-            const img = document.getElementById("albumMainImage");
-            const empty = document.getElementById("albumEmpty");
-            const caption = document.getElementById("albumCaption");
-            const roomName = document.getElementById("albumRoomName");
-            const counter = document.getElementById("photoAlbumCounter");
-            const thumbs = document.getElementById("albumThumbs");
-            const title = document.getElementById("photoAlbumTitle");
-
-            if (!item || !img) return;
-
-            img.style.display = "block";
-            empty.style.display = "none";
-
-            img.onerror = function () {
-                img.style.display = "none";
-                empty.style.display = "flex";
-            };
-
-            img.src = item.src;
-
-            title.textContent = lang === "ar" ? "جولة بالصور" : "Photo tour";
-            caption.textContent = lang === "ar" ? item.titleAr : item.titleEn;
-            roomName.textContent = lang === "ar" ? item.roomTitleAr : item.roomTitleEn;
-            counter.textContent = `${currentAlbumIndex + 1} / ${currentAlbumItems.length}`;
-
-            thumbs.innerHTML = currentAlbumItems.map((photo, index) => `
-        <img
-            src="${photo.src}"
-            class="${index === currentAlbumIndex ? "active" : ""}"
-            onclick="goToAlbumPhoto(${index})"
-            alt="Album thumbnail"
-            onerror="this.style.display='none'"
-        >
-    `).join("");
-        }
-
-        function goToAlbumPhoto(index) {
-            currentAlbumIndex = index;
-            renderPhotoAlbum();
+            document.body.style.overflow = detailsStillOpen ? "hidden" : "";
         }
 
         function nextAlbumPhoto() {
             if (!currentAlbumItems.length) return;
-            currentAlbumIndex = (currentAlbumIndex + 1) % currentAlbumItems.length;
-            renderPhotoAlbum();
+            goToAlbumPhoto((currentAlbumIndex + 1) % currentAlbumItems.length);
         }
 
         function prevAlbumPhoto() {
             if (!currentAlbumItems.length) return;
-            currentAlbumIndex = (currentAlbumIndex - 1 + currentAlbumItems.length) % currentAlbumItems.length;
-            renderPhotoAlbum();
+            goToAlbumPhoto((currentAlbumIndex - 1 + currentAlbumItems.length) % currentAlbumItems.length);
         }
 
         window.openPhotoAlbum = openPhotoAlbum;
         window.goToAlbumPhoto = goToAlbumPhoto;
 
-        document.getElementById("closePhotoAlbum").addEventListener("click", closePhotoAlbum);
-        document.getElementById("albumNextBtn").addEventListener("click", nextAlbumPhoto);
-        document.getElementById("albumPrevBtn").addEventListener("click", prevAlbumPhoto);
+        const closeAlbumButton = document.getElementById("closePhotoAlbum");
+        if (closeAlbumButton) {
+            closeAlbumButton.addEventListener("click", closePhotoAlbum);
+        }
 
-        document.getElementById("photoAlbumModal").addEventListener("click", function (e) {
-            if (e.target === this) closePhotoAlbum();
+        const albumModalElement = document.getElementById("photoAlbumModal");
+        if (albumModalElement) {
+            albumModalElement.addEventListener("click", function (e) {
+                if (e.target === this) closePhotoAlbum();
+            });
+        }
+
+        document.addEventListener("keydown", function (e) {
+            const modal = document.getElementById("photoAlbumModal");
+
+            if (!modal || modal.style.display !== "block") return;
+
+            if (e.key === "Escape") closePhotoAlbum();
+            if (e.key === "ArrowRight") nextAlbumPhoto();
+            if (e.key === "ArrowLeft") prevAlbumPhoto();
         });
-
 
         /* =========================================================
            عرض تفاصيل الشقة المختارة
         ========================================================= */
-        function renderApartmentDetails() {
+        async function renderApartmentDetails() {
             const id = getSelectedAptId();
             const apt = getSelectedApartment();
             const lang = getCurrentLang();
-
+            if (id) {
+                await loadApartmentGallery(id);
+            }
             if (!id || !apt) {
                 renderPlaceholder();
                 return;
@@ -2937,8 +3454,7 @@
         aptSelect.addEventListener("change", async () => {
             clearFieldError("aptId");
             clearMessage();
-            renderApartmentDetails();
-
+            await renderApartmentDetails();
             const selectedId = getSelectedAptId();
             if (selectedId && typeof gtag === "function") {
                 gtag('event', 'select_apartment', {
@@ -3067,7 +3583,7 @@
                 });
             }
 
-            renderApartmentDetails();
+            await renderApartmentDetails();
             await refreshCalendar();
             updatePrice();
         });
@@ -3144,7 +3660,7 @@
                 if (qCheckOut) checkOutEl.value = qCheckOut;
                 checkOutEl.min = checkInEl.value || todayISO();
 
-                renderApartmentDetails();
+                await renderApartmentDetails();
                 await refreshCalendar();
                 updatePrice();
             } catch (err) {
