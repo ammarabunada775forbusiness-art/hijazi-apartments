@@ -42,9 +42,11 @@
     <style>
         body {
             margin: 0;
-            background: #f7f7f7;
+            background: #ffffff;
             color: #111;
             overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
         }
 
         .page-header {
@@ -285,13 +287,15 @@
         }
 
         #calendar {
-            background: linear-gradient(90deg, #c89116, #000);
-            border-radius: 14px;
-            padding: 12px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
-            border: 1px solid #eee;
+            background: rgba(255, 255, 255, 0.88);
+            border-radius: 24px;
+            padding: 18px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(212, 160, 23, 0.18);
             margin-top: 20px;
             overflow: hidden;
+            backdrop-filter: blur(10px) saturate(130%);
+            -webkit-backdrop-filter: blur(10px) saturate(130%);
         }
 
         .calendar-title {
@@ -655,11 +659,1023 @@
                 margin: 18% auto;
             }
         }
+
+        /* ===== COSMIC DUST BACKGROUND - BOOKING PAGE ===== */
+
+        .booking-page-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 12% 20%, rgba(212, 160, 23, 0.30), transparent 25%),
+                radial-gradient(circle at 88% 32%, rgba(0, 0, 0, 0.18), transparent 27%),
+                radial-gradient(circle at 52% 86%, rgba(255, 255, 255, 0.95), transparent 30%),
+                linear-gradient(135deg, #ffffff 0%, #ffffff 45%, #ffffff 72%, #ffffff 100%);
+            background-size: 230% 230%;
+            animation: bookingCosmicBaseMove 16s ease-in-out infinite;
+        }
+
+        .booking-gold-orb {
+            position: absolute;
+            display: block;
+            border-radius: 50%;
+            filter: blur(20px);
+            background: radial-gradient(circle, rgba(212, 160, 23, 0.75), transparent 68%);
+            animation: bookingCosmicOrbFloat 10s ease-in-out infinite alternate;
+        }
+
+        .booking-orb-1 {
+            width: 460px;
+            height: 460px;
+            top: 250px;
+            right: -150px;
+            opacity: 0.50;
+        }
+
+        .booking-orb-2 {
+            width: 350px;
+            height: 350px;
+            top: 700px;
+            left: -125px;
+            opacity: 0.40;
+            animation-delay: 2s;
+        }
+
+        .booking-orb-3 {
+            width: 280px;
+            height: 280px;
+            bottom: 120px;
+            right: 34%;
+            opacity: 0.32;
+            animation-delay: 4s;
+        }
+
+        .booking-luxury-shine {
+            position: absolute;
+            width: 48%;
+            height: 170%;
+            top: -35%;
+            left: -65%;
+            transform: rotate(18deg);
+            background: linear-gradient(90deg,
+                    transparent 0%,
+                    rgba(255, 255, 255, 0.70) 38%,
+                    rgba(212, 160, 23, 0.30) 50%,
+                    rgba(0, 0, 0, 0.10) 58%,
+                    transparent 100%);
+            animation: bookingCosmicShineMove 9s ease-in-out infinite;
+        }
+
+        .booking-dust {
+            position: absolute;
+            inset: 0;
+        }
+
+        .booking-dust-1 {
+            opacity: 0.70;
+            background-image:
+                radial-gradient(rgba(212, 160, 23, 0.75) 1.4px, transparent 1.4px),
+                radial-gradient(rgba(255, 255, 255, 1) 1.2px, transparent 1.2px),
+                radial-gradient(rgba(212, 160, 23, 0.45) 2px, transparent 2px);
+            background-size: 34px 34px, 68px 68px, 130px 130px;
+            background-position: 0 0, 22px 28px, 70px 90px;
+            animation: bookingCosmicDustMoveOne 22s linear infinite;
+        }
+
+        .booking-dust-2 {
+            opacity: 0.72;
+            background-image:
+                radial-gradient(rgba(0, 0, 0, 0.62) 1.4px, transparent 1.4px),
+                radial-gradient(rgba(0, 0, 0, 0.34) 2.4px, transparent 2.4px),
+                radial-gradient(rgba(30, 24, 12, 0.42) 3px, transparent 3px);
+            background-size: 42px 42px, 95px 95px, 160px 160px;
+            background-position: 18px 12px, 60px 80px, 110px 140px;
+            animation: bookingCosmicDustMoveTwo 30s linear infinite reverse;
+        }
+
+        .booking-page-bg::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 2% 38%, rgba(0, 0, 0, 0.30), transparent 34%),
+                radial-gradient(circle at 98% 66%, rgba(0, 0, 0, 0.26), transparent 38%),
+                radial-gradient(circle at 48% 58%, rgba(0, 0, 0, 0.12), transparent 42%),
+                radial-gradient(circle at 70% 18%, rgba(212, 160, 23, 0.12), transparent 28%);
+            opacity: 1;
+            animation: bookingBlackCosmicSmoke 16s ease-in-out infinite alternate;
+        }
+
+        .booking-page-bg::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            opacity: 0.55;
+            background-image:
+                radial-gradient(rgba(255, 255, 255, 1) 1px, transparent 1px),
+                radial-gradient(rgba(212, 160, 23, 0.85) 1.1px, transparent 1.1px),
+                radial-gradient(rgba(0, 0, 0, 0.28) 0.9px, transparent 0.9px);
+            background-size: 95px 95px, 145px 145px, 115px 115px;
+            background-position: 18px 36px, 75px 100px, 44px 70px;
+            animation: bookingCosmicTwinkle 4.5s ease-in-out infinite alternate;
+        }
+
+        /* نخلي محتوى صفحة الحجز فوق الخلفية */
+        .page-header,
+        .wrap,
+        #sharedFooter {
+            position: relative;
+            z-index: 2;
+        }
+
+        #sharedHeader {
+            position: relative;
+            z-index: 99999 !important;
+        }
+
+        .custom-navbar,
+        .navbar,
+        .navbar.fixed-top {
+            z-index: 99999 !important;
+        }
+
+        #sharedWhatsApp {
+            position: relative;
+            z-index: 99998 !important;
+        }
+
+        .success-modal {
+            z-index: 999999 !important;
+        }
+
+        @keyframes bookingCosmicBaseMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes bookingCosmicOrbFloat {
+            from {
+                transform: translate(0, 0) scale(1);
+            }
+
+            to {
+                transform: translate(-90px, 60px) scale(1.20);
+            }
+        }
+
+        @keyframes bookingCosmicShineMove {
+            0% {
+                left: -65%;
+                opacity: 0;
+            }
+
+            30% {
+                opacity: 0.9;
+            }
+
+            65% {
+                left: 125%;
+                opacity: 0;
+            }
+
+            100% {
+                left: 125%;
+                opacity: 0;
+            }
+        }
+
+        @keyframes bookingCosmicDustMoveOne {
+            from {
+                background-position: 0 0, 22px 28px, 70px 90px;
+            }
+
+            to {
+                background-position: 190px 130px, 250px 185px, 310px 230px;
+            }
+        }
+
+        @keyframes bookingCosmicDustMoveTwo {
+            from {
+                background-position: 18px 12px, 60px 80px, 110px 140px;
+            }
+
+            to {
+                background-position: -175px 120px, -240px 180px, -260px 220px;
+            }
+        }
+
+        @keyframes bookingBlackCosmicSmoke {
+            from {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.82;
+            }
+
+            to {
+                transform: translate(-35px, 28px) scale(1.08);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bookingCosmicTwinkle {
+            from {
+                opacity: 0.32;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: 0.62;
+                transform: scale(1.018);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .booking-orb-1 {
+                width: 320px;
+                height: 320px;
+                top: 355px;
+                right: -135px;
+                opacity: 0.48;
+            }
+
+            .booking-orb-2 {
+                width: 260px;
+                height: 260px;
+                top: 820px;
+                left: -130px;
+                opacity: 0.38;
+            }
+
+            .booking-orb-3 {
+                width: 210px;
+                height: 210px;
+                right: 18%;
+                opacity: 0.28;
+            }
+
+            .booking-luxury-shine {
+                width: 62%;
+                animation-duration: 11s;
+            }
+
+            .booking-dust-1 {
+                opacity: 0.62;
+                background-size: 42px 42px, 82px 82px, 145px 145px;
+            }
+
+            .booking-dust-2 {
+                opacity: 0.58;
+                background-size: 50px 50px, 105px 105px, 170px 170px;
+            }
+        }
+
+        /* ===== PROFESSIONAL FULLCALENDAR STYLE ===== */
+
+        .calendar-title {
+            color: #111;
+            font-weight: 900;
+            position: relative;
+            z-index: 2;
+        }
+
+        .fc {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        .fc .fc-toolbar {
+            gap: 12px;
+            margin-bottom: 18px !important;
+        }
+
+        .fc .fc-toolbar-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #111;
+        }
+
+        .fc .fc-button {
+            border: none !important;
+            border-radius: 12px !important;
+            padding: 9px 14px !important;
+            font-weight: 800 !important;
+            box-shadow: none !important;
+        }
+
+        .fc .fc-button-primary {
+            background: linear-gradient(135deg, #d4a017, #8a6508) !important;
+            color: #fff !important;
+        }
+
+        .fc .fc-button-primary:hover,
+        .fc .fc-button-primary:focus {
+            background: linear-gradient(135deg, #000, #2a2a2a) !important;
+            color: #fff !important;
+        }
+
+        .fc .fc-button-primary:disabled {
+            background: #ddd !important;
+            color: #777 !important;
+        }
+
+        .fc-theme-standard .fc-scrollgrid {
+            border: none !important;
+        }
+
+        .fc-theme-standard td,
+        .fc-theme-standard th {
+            border-color: rgba(0, 0, 0, 0.06) !important;
+        }
+
+        .fc-col-header-cell {
+            background: linear-gradient(135deg, #111, #2a2a2a);
+            padding: 10px 0 !important;
+        }
+
+        .fc-col-header-cell-cushion {
+            color: #fff !important;
+            font-weight: 800;
+            text-decoration: none !important;
+        }
+
+        .fc-daygrid-day {
+            background: rgba(255, 255, 255, 0.72);
+            transition: all 0.22s ease;
+        }
+
+        .fc-daygrid-day:hover {
+            background: rgba(212, 160, 23, 0.10);
+        }
+
+        .fc .fc-daygrid-day-frame {
+            min-height: 82px;
+            padding: 5px;
+        }
+
+        .fc .fc-daygrid-day-number {
+            color: #222;
+            font-weight: 800;
+            text-decoration: none;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .fc .fc-day-today {
+            background: rgba(212, 160, 23, 0.16) !important;
+        }
+
+        .fc .fc-day-today .fc-daygrid-day-number {
+            background: #d4a017;
+            color: #fff;
+        }
+
+        .fc-event {
+            border: none !important;
+            border-radius: 999px !important;
+            padding: 4px 8px !important;
+            background: linear-gradient(135deg, #111, #000) !important;
+            color: #fff !important;
+            font-size: 12px !important;
+            font-weight: 800 !important;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+        }
+
+        .fc-daygrid-event-dot {
+            display: none !important;
+        }
+
+        .fc-day-past {
+            background: rgba(0, 0, 0, 0.025) !important;
+        }
+
+        .fc-day-past .fc-daygrid-day-number {
+            color: #aaa !important;
+        }
+
+        .fc-highlight {
+            background: rgba(212, 160, 23, 0.22) !important;
+        }
+
+        @media (max-width: 768px) {
+            #calendar {
+                padding: 12px;
+                border-radius: 18px;
+            }
+
+            .fc .fc-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .fc .fc-toolbar-title {
+                font-size: 20px;
+                text-align: center;
+            }
+
+            .fc .fc-toolbar-chunk {
+                display: flex;
+                justify-content: center;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+
+            .fc .fc-button {
+                padding: 8px 12px !important;
+                font-size: 13px !important;
+            }
+
+            .fc .fc-daygrid-day-frame {
+                min-height: 64px;
+                padding: 3px;
+            }
+
+            .fc .fc-daygrid-day-number {
+                width: 26px;
+                height: 26px;
+                font-size: 12px;
+            }
+
+            .fc-event {
+                font-size: 10px !important;
+                padding: 2px 5px !important;
+            }
+        }
+
+        /* ===== BOOKING ANIMATED LUXURY HEADER - SAME APARTMENTS ===== */
+
+        .page-header {
+            position: relative !important;
+            overflow: hidden !important;
+            isolation: isolate !important;
+            text-align: center !important;
+            padding: 130px 16px 40px !important;
+            color: #fff !important;
+            background: linear-gradient(120deg, #c89116, #5a3b00, #000000, #9b7108, #000000) !important;
+            background-size: 350% 350% !important;
+            animation: bookingLuxuryHeaderMove 14s ease-in-out infinite !important;
+        }
+
+        .page-header::before {
+            content: "";
+            position: absolute;
+            inset: -40%;
+            z-index: -2;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(255, 214, 118, 0.45), transparent 28%),
+                radial-gradient(circle at 80% 55%, rgba(255, 255, 255, 0.16), transparent 26%),
+                radial-gradient(circle at 50% 90%, rgba(200, 145, 22, 0.32), transparent 32%);
+            filter: blur(18px);
+            animation: bookingFloatingLuxuryLights 8s ease-in-out infinite alternate;
+        }
+
+        .page-header::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background:
+                linear-gradient(110deg,
+                    transparent 0%,
+                    rgba(255, 255, 255, 0.08) 40%,
+                    rgba(255, 255, 255, 0.18) 50%,
+                    rgba(255, 255, 255, 0.08) 60%,
+                    transparent 100%);
+            transform: translateX(-120%);
+            animation: bookingLuxuryShine 5s ease-in-out infinite;
+        }
+
+        .page-header h1,
+        .page-header p {
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes bookingLuxuryHeaderMove {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes bookingFloatingLuxuryLights {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.65;
+            }
+
+            100% {
+                transform: translate(90px, -55px) scale(1.18);
+                opacity: 1;
+            }
+        }
+
+        @keyframes bookingLuxuryShine {
+            0% {
+                transform: translateX(-120%);
+                opacity: 0;
+            }
+
+            35% {
+                opacity: 0.75;
+            }
+
+            70% {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(120%);
+                opacity: 0;
+            }
+        }
+
+
+        /* ===== MORE GLASS CALENDAR - BOOKING PAGE ===== */
+
+        #calendar {
+            background: rgba(255, 255, 255, 0.48) !important;
+            border-radius: 26px !important;
+            padding: 18px !important;
+            box-shadow:
+                0 22px 50px rgba(0, 0, 0, 0.14),
+                inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
+            border: 1px solid rgba(212, 160, 23, 0.26) !important;
+            margin-top: 20px !important;
+            overflow: hidden !important;
+            backdrop-filter: blur(16px) saturate(145%) !important;
+            -webkit-backdrop-filter: blur(16px) saturate(145%) !important;
+        }
+
+        /* قلب التقويم نفسه */
+        .fc {
+            font-family: 'Segoe UI', Tahoma, sans-serif !important;
+        }
+
+        .fc .fc-toolbar {
+            gap: 12px !important;
+            margin-bottom: 18px !important;
+        }
+
+        .fc .fc-toolbar-title {
+            font-size: 24px !important;
+            font-weight: 900 !important;
+            color: #111 !important;
+        }
+
+        .fc .fc-button {
+            border: none !important;
+            border-radius: 13px !important;
+            padding: 9px 14px !important;
+            font-weight: 800 !important;
+            box-shadow: none !important;
+        }
+
+        .fc .fc-button-primary {
+            background: rgba(0, 0, 0, 0.78) !important;
+            color: #fff !important;
+            border: 1px solid rgba(212, 160, 23, 0.25) !important;
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
+        }
+
+        .fc .fc-button-primary:hover,
+        .fc .fc-button-primary:focus {
+            background: linear-gradient(135deg, #d4a017, #8a6508) !important;
+            color: #fff !important;
+        }
+
+        .fc .fc-button-primary:disabled {
+            background: rgba(255, 255, 255, 0.45) !important;
+            color: #777 !important;
+        }
+
+        /* إزالة حدود التقويم القاسية */
+        .fc-theme-standard .fc-scrollgrid {
+            border: none !important;
+            background: rgba(255, 255, 255, 0.28) !important;
+            border-radius: 20px !important;
+            overflow: hidden !important;
+        }
+
+        .fc-theme-standard td,
+        .fc-theme-standard th {
+            border-color: rgba(0, 0, 0, 0.055) !important;
+        }
+
+        /* أيام الأسبوع */
+        .fc-col-header-cell {
+            background: rgba(0, 0, 0, 0.78) !important;
+            padding: 10px 0 !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+        }
+
+        .fc-col-header-cell-cushion {
+            color: #fff !important;
+            font-weight: 900 !important;
+            text-decoration: none !important;
+        }
+
+        /* خلايا الأيام */
+        .fc-daygrid-day {
+            background: rgba(255, 255, 255, 0.36) !important;
+            transition: all 0.22s ease !important;
+        }
+
+        .fc-daygrid-day:hover {
+            background: rgba(212, 160, 23, 0.16) !important;
+        }
+
+        .fc .fc-daygrid-day-frame {
+            min-height: 82px !important;
+            padding: 5px !important;
+        }
+
+        .fc .fc-daygrid-day-number {
+            color: #222 !important;
+            font-weight: 900 !important;
+            text-decoration: none !important;
+            width: 30px !important;
+            height: 30px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border-radius: 50% !important;
+        }
+
+        /* اليوم الحالي */
+        .fc .fc-day-today {
+            background: rgba(212, 160, 23, 0.22) !important;
+        }
+
+        .fc .fc-day-today .fc-daygrid-day-number {
+            background: #d4a017 !important;
+            color: #fff !important;
+        }
+
+        /* الحجز داخل التقويم */
+        .fc-event {
+            border: none !important;
+            border-radius: 999px !important;
+            padding: 4px 8px !important;
+            background: rgba(0, 0, 0, 0.86) !important;
+            color: #fff !important;
+            font-size: 12px !important;
+            font-weight: 900 !important;
+            box-shadow: 0 7px 16px rgba(0, 0, 0, 0.22) !important;
+        }
+
+        .fc-daygrid-event-dot {
+            display: none !important;
+        }
+
+        /* الأيام الماضية */
+        .fc-day-past {
+            background: rgba(0, 0, 0, 0.035) !important;
+        }
+
+        .fc-day-past .fc-daygrid-day-number {
+            color: #999 !important;
+        }
+
+        /* التحديد */
+        .fc-highlight {
+            background: rgba(212, 160, 23, 0.28) !important;
+        }
+
+        /* عنوان تقويم الشقة */
+        .calendar-title {
+            color: #111 !important;
+            font-weight: 900 !important;
+            position: relative !important;
+            z-index: 2 !important;
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 110px 14px 34px !important;
+            }
+
+            #calendar {
+                padding: 12px !important;
+                border-radius: 20px !important;
+                background: rgba(255, 255, 255, 0.40) !important;
+                backdrop-filter: blur(18px) saturate(150%) !important;
+                -webkit-backdrop-filter: blur(18px) saturate(150%) !important;
+            }
+
+            .fc .fc-toolbar {
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
+
+            .fc .fc-toolbar-title {
+                font-size: 20px !important;
+                text-align: center !important;
+            }
+
+            .fc .fc-toolbar-chunk {
+                display: flex !important;
+                justify-content: center !important;
+                gap: 8px !important;
+                flex-wrap: wrap !important;
+            }
+
+            .fc .fc-button {
+                padding: 8px 12px !important;
+                font-size: 13px !important;
+            }
+
+            .fc .fc-daygrid-day-frame {
+                min-height: 64px !important;
+                padding: 3px !important;
+            }
+
+            .fc .fc-daygrid-day-number {
+                width: 26px !important;
+                height: 26px !important;
+                font-size: 12px !important;
+            }
+
+            .fc-event {
+                font-size: 10px !important;
+                padding: 2px 5px !important;
+            }
+        }
+
+        /* ===== GLASS TOP BAR - BOOKING PAGE ===== */
+
+        .top-bar {
+            width: 100% !important;
+            max-width: 620px !important;
+            margin: 24px auto 22px !important;
+            padding: 14px !important;
+            background: rgba(0, 0, 0, 0.22) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.16) !important;
+            backdrop-filter: blur(14px) saturate(145%) !important;
+            -webkit-backdrop-filter: blur(14px) saturate(145%) !important;
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 12px !important;
+            align-items: end !important;
+            position: relative !important;
+            z-index: 3 !important;
+        }
+
+        .top-bar-left,
+        .top-bar-right {
+            width: 100% !important;
+        }
+
+        .top-bar-right {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 6px !important;
+        }
+
+        .top-bar label {
+            margin: 0 !important;
+            font-size: 11px !important;
+            font-weight: 800 !important;
+            color: rgba(255, 255, 255, 0.88) !important;
+        }
+
+        .top-bar select {
+            width: 100% !important;
+            min-width: unset !important;
+            height: 46px !important;
+            padding: 10px 12px !important;
+            border-radius: 13px !important;
+            border: 1px solid rgba(255, 255, 255, 0.28) !important;
+            background: rgba(255, 255, 255, 0.12) !important;
+            color: #fff !important;
+            font-weight: 800 !important;
+            outline: none !important;
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
+        }
+
+        .top-bar select option {
+            background: #111 !important;
+            color: #fff !important;
+        }
+
+        .back-btn {
+            width: 100% !important;
+            min-width: unset !important;
+            height: 46px !important;
+            min-height: unset !important;
+            border-radius: 13px !important;
+            background: linear-gradient(135deg, #d4a017, #8a6508) !important;
+            color: #fff !important;
+            font-weight: 900 !important;
+            box-shadow: 0 10px 24px rgba(212, 160, 23, 0.28) !important;
+            border: none !important;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(135deg, #000, #2a2a2a) !important;
+            color: #fff !important;
+            transform: translateY(-2px) !important;
+        }
+
+        @media (max-width: 768px) {
+            .top-bar {
+                max-width: 100% !important;
+                grid-template-columns: 1fr !important;
+                margin: 18px auto 20px !important;
+                padding: 14px !important;
+                background: rgba(0, 0, 0, 0.18) !important;
+                border-radius: 20px !important;
+            }
+
+            .back-btn,
+            .top-bar select {
+                height: 46px !important;
+            }
+        }
+
+        /* ===== FIX CALENDAR WEEK DAYS ON MOBILE ===== */
+
+        .fc-col-header-cell {
+            overflow: hidden !important;
+        }
+
+        .fc-col-header-cell-cushion {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            white-space: nowrap !important;
+            width: 100% !important;
+            padding: 8px 2px !important;
+            font-size: 13px !important;
+            line-height: 1.2 !important;
+        }
+
+        @media (max-width: 768px) {
+            .fc-col-header-cell-cushion {
+                font-size: 11px !important;
+                padding: 7px 1px !important;
+                letter-spacing: 0 !important;
+            }
+
+            .fc .fc-daygrid-day-frame {
+                min-height: 58px !important;
+            }
+
+            .fc .fc-daygrid-day-number {
+                width: 24px !important;
+                height: 24px !important;
+                font-size: 11px !important;
+            }
+
+            .fc-event {
+                font-size: 9px !important;
+                padding: 2px 4px !important;
+                max-width: 100% !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+            }
+        }
+
+        /* ===== CUSTOM GLASS CURRENCY DROPDOWN ===== */
+
+        /* نخفي select الأصلي ونخليه فقط للكود */
+        .top-bar select#currencySelect {
+            position: absolute !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            min-width: 0 !important;
+        }
+
+        /* القائمة الجديدة */
+        .currency-glass-select {
+            position: relative;
+            width: 100%;
+            z-index: 9999;
+        }
+
+        .currency-glass-current {
+            width: 100%;
+            height: 46px;
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            border-radius: 13px;
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+            font-weight: 900;
+            font-size: 16px;
+            padding: 0 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            backdrop-filter: blur(10px) saturate(145%);
+            -webkit-backdrop-filter: blur(10px) saturate(145%);
+        }
+
+        .currency-glass-current::before {
+            content: "⌄";
+            font-size: 18px;
+            opacity: 0.95;
+        }
+
+        .currency-glass-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            left: 0;
+            display: none;
+            padding: 8px;
+            border-radius: 16px;
+            background: rgba(0, 0, 0, 0.72);
+            border: 1px solid rgba(212, 160, 23, 0.28);
+            box-shadow: 0 18px 38px rgba(0, 0, 0, 0.28);
+            backdrop-filter: blur(16px) saturate(150%);
+            -webkit-backdrop-filter: blur(16px) saturate(150%);
+            z-index: 999999;
+        }
+
+        .currency-glass-select.open .currency-glass-menu {
+            display: block;
+        }
+
+        .currency-glass-option {
+            width: 100%;
+            min-height: 44px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.10);
+            color: #fff;
+            font-weight: 900;
+            font-size: 15px;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 6px;
+            transition: all 0.22s ease;
+        }
+
+        .currency-glass-option:last-child {
+            margin-bottom: 0;
+        }
+
+        .currency-glass-option:hover,
+        .currency-glass-option.active {
+            background: linear-gradient(135deg, #d4a017, #8a6508);
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(212, 160, 23, 0.28);
+        }
+
+        @media (max-width: 768px) {
+            .currency-glass-current {
+                height: 46px;
+                font-size: 15px;
+            }
+
+            .currency-glass-option {
+                min-height: 42px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
+    <div class="booking-page-bg" aria-hidden="true">
+        <span class="booking-gold-orb booking-orb-1"></span>
+        <span class="booking-gold-orb booking-orb-2"></span>
+        <span class="booking-gold-orb booking-orb-3"></span>
+        <span class="booking-luxury-shine"></span>
+        <span class="booking-dust booking-dust-1"></span>
+        <span class="booking-dust booking-dust-2"></span>
+    </div>
     <div id="sharedHeader"></div>
 
     <section class="page-header">
@@ -1523,9 +2539,23 @@
 
             calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: "dayGridMonth",
-                height: 520,
+                height: window.innerWidth <= 768 ? 470 : 520,
                 locale: lang === "ar" ? "ar" : "en",
                 direction: lang === "ar" ? "rtl" : "ltr",
+
+                dayHeaderContent: (arg) => {
+                    const isMobile = window.innerWidth <= 768;
+                    const day = arg.date.getDay();
+
+                    if (lang === "ar") {
+                        const fullDays = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+                        const shortDays = ["أحد", "إثن", "ثلا", "أرب", "خمي", "جمع", "سبت"];
+                        return isMobile ? shortDays[day] : fullDays[day];
+                    }
+
+                    const shortEn = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+                    return isMobile ? shortEn[day] : arg.text;
+                },
                 events: async (fetchInfo, successCallback, failureCallback) => {
                     try {
                         await fetchBookedRanges();
@@ -1703,7 +2733,77 @@
             }
         });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const select = document.getElementById("currencySelect");
 
+            if (!select || document.getElementById("currencyGlassSelect")) return;
+
+            const wrapper = document.createElement("div");
+            wrapper.className = "currency-glass-select";
+            wrapper.id = "currencyGlassSelect";
+
+            const currentBtn = document.createElement("button");
+            currentBtn.type = "button";
+            currentBtn.className = "currency-glass-current";
+            currentBtn.id = "currencyGlassCurrent";
+
+            const menu = document.createElement("div");
+            menu.className = "currency-glass-menu";
+            menu.id = "currencyGlassMenu";
+
+            wrapper.appendChild(currentBtn);
+            wrapper.appendChild(menu);
+
+            select.insertAdjacentElement("afterend", wrapper);
+
+            function getSelectedText() {
+                return select.options[select.selectedIndex]
+                    ? select.options[select.selectedIndex].textContent
+                    : "";
+            }
+
+            function syncCurrencyDropdown() {
+                currentBtn.textContent = getSelectedText();
+
+                menu.innerHTML = "";
+
+                Array.from(select.options).forEach(function (option) {
+                    const btn = document.createElement("button");
+                    btn.type = "button";
+                    btn.className = "currency-glass-option";
+                    btn.textContent = option.textContent;
+                    btn.dataset.value = option.value;
+
+                    if (option.value === select.value) {
+                        btn.classList.add("active");
+                    }
+
+                    btn.addEventListener("click", function () {
+                        select.value = option.value;
+                        select.dispatchEvent(new Event("change", { bubbles: true }));
+                        wrapper.classList.remove("open");
+                        syncCurrencyDropdown();
+                    });
+
+                    menu.appendChild(btn);
+                });
+            }
+
+            currentBtn.addEventListener("click", function (e) {
+                e.stopPropagation();
+                wrapper.classList.toggle("open");
+            });
+
+            document.addEventListener("click", function () {
+                wrapper.classList.remove("open");
+            });
+
+            select.addEventListener("change", syncCurrencyDropdown);
+
+            setTimeout(syncCurrencyDropdown, 50);
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
