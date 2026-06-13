@@ -59,6 +59,49 @@ function requireAdmin(req, res, next) {
     next();
 }
 
+app.get("/admin/db-test", requireAdmin, async (req, res) => {
+    try {
+        const stateMap = {
+            0: "disconnected",
+            1: "connected",
+            2: "connecting",
+            3: "disconnecting"
+        };
+
+        if (!process.env.MONGO_URI) {
+            return res.status(500).json({
+                success: false,
+                message: "MONGO_URI is missing in Render Environment"
+            });
+        }
+
+        if (mongoose.connection.readyState !== 1) {
+            await mongoose.connect(process.env.MONGO_URI, {
+                serverSelectionTimeoutMS: 10000
+            });
+        }
+
+        await mongoose.connection.db.admin().ping();
+
+        const bookingsCount = await Booking.countDocuments();
+
+        res.json({
+            success: true,
+            message: "MongoDB connection is working ✅",
+            connectionState: stateMap[mongoose.connection.readyState],
+            bookingsCount
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "MongoDB connection failed ❌",
+            connectionState: mongoose.connection.readyState,
+            errorName: error.name,
+            errorMessage: error.message
+        });
+    }
+});
+
 /* =========================================================
    تنسيق التاريخ بشكل YYYY-MM-DD
 ========================================================= */
