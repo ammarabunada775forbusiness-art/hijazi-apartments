@@ -198,22 +198,22 @@ const APARTMENT_ROOM_PHOTO_PLAN = [
         noteEn: "Living room and seating area photos."
     },
     {
-        key: "dining",
-        folder: "dining",
+        key: "guest",
+        folder: "guest",
         count: 2,
-        titleAr: "غرفة الطعام",
-        titleEn: "Dining Room",
-        noteAr: "صور غرفة الطعام والمساحة القريبة من المطبخ.",
-        noteEn: "Dining room and nearby kitchen area photos."
+        titleAr: "غرفة الضيوف",
+        titleEn: "Guest Room",
+        noteAr: "صور غرفة الضيوف.",
+        noteEn: "Guest room photos."
     },
     {
         key: "bedroom-1",
         folder: "bedroom-1",
         count: 3,
-        titleAr: "غرفة النوم 1",
-        titleEn: "Bedroom 1",
-        noteAr: "صور غرفة النوم الأولى.",
-        noteEn: "Bedroom 1 photos."
+        titleAr: "غرفة النوم الماستر",
+        titleEn: "Master Bedroom",
+        noteAr: "صور غرفة النوم الماستر.",
+        noteEn: "Master bedroom photos."
     },
     {
         key: "bedroom-2",
@@ -234,18 +234,9 @@ const APARTMENT_ROOM_PHOTO_PLAN = [
         noteEn: "Bedroom 3 photos."
     },
     {
-        key: "guest",
-        folder: "guest",
-        count: 2,
-        titleAr: "غرفة الضيوف",
-        titleEn: "Guest Room",
-        noteAr: "صور غرفة الضيوف.",
-        noteEn: "Guest room photos."
-    },
-    {
         key: "kitchen",
         folder: "kitchen",
-        count: 2,
+        count: 3,
         titleAr: "المطبخ",
         titleEn: "Kitchen",
         noteAr: "صور المطبخ وتجهيزاته.",
@@ -255,10 +246,10 @@ const APARTMENT_ROOM_PHOTO_PLAN = [
         key: "bathroom-1",
         folder: "bathroom-1",
         count: 2,
-        titleAr: "حمام كامل 1",
-        titleEn: "Bathroom 1",
-        noteAr: "صور الحمام الأول.",
-        noteEn: "Bathroom 1 photos."
+        titleAr: "حمام الماستر",
+        titleEn: "Master Bathroom",
+        noteAr: "صور حمام غرفة النوم الماستر.",
+        noteEn: "Master bathroom photos."
     },
     {
         key: "bathroom-2",
@@ -279,15 +270,6 @@ const APARTMENT_ROOM_PHOTO_PLAN = [
         noteEn: "Bathroom 3 photos."
     },
     {
-        key: "corridor",
-        folder: "corridor",
-        count: 2,
-        titleAr: "الممر",
-        titleEn: "Corridor",
-        noteAr: "صور الممر ومدخل الشقة.",
-        noteEn: "Corridor and apartment entrance photos."
-    },
-    {
         key: "laundry",
         folder: "laundry",
         count: 2,
@@ -297,12 +279,21 @@ const APARTMENT_ROOM_PHOTO_PLAN = [
         noteEn: "Laundry or service area photos."
     },
     {
+        key: "corridor",
+        folder: "corridor",
+        count: 2,
+        titleAr: "الممر",
+        titleEn: "Corridor",
+        noteAr: "صور الممر ومدخل الشقة.",
+        noteEn: "Corridor and apartment entrance photos."
+    },
+    {
         key: "balcony",
         folder: "balcony",
         count: 2,
-        titleAr: "الشرفات",
-        titleEn: "Balconies",
-        noteAr: "صور الشرفات والإطلالة.",
+        titleAr: "الشرفة",
+        titleEn: "Balcony",
+        noteAr: "صور الشرفة والإطلالة.",
         noteEn: "Balcony and view photos."
     }
 ];
