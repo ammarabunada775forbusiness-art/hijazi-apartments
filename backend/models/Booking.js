@@ -42,6 +42,9 @@ const bookingSchema = new mongoose.Schema(
         // السعر النصي النهائي
         totalPriceText: { type: String },
 
+        // ملاحظات أو أسئلة إضافية من العميل - اختياري
+        notes: { type: String, default: "", trim: true, maxlength: 1000 },
+
         // نوع الإقامة: عادية أو طويلة
         stayType: { type: String, default: "normal" }
     },

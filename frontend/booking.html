@@ -2966,6 +2966,38 @@
                 width: 46px !important;
             }
         }
+
+        /* ===== OPTIONAL NOTES FIELD ===== */
+        .form-section textarea {
+            width: 100% !important;
+            min-height: 110px !important;
+            resize: vertical !important;
+            border-radius: 14px !important;
+            border: 1px solid rgba(255, 255, 255, 0.24) !important;
+            background: rgba(255, 255, 255, 0.11) !important;
+            color: #fff !important;
+            font-weight: 800 !important;
+            outline: none !important;
+            padding: 12px 14px !important;
+            line-height: 1.8 !important;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 10px 24px rgba(0, 0, 0, 0.08) !important;
+            backdrop-filter: blur(10px) saturate(145%) !important;
+            -webkit-backdrop-filter: blur(10px) saturate(145%) !important;
+        }
+
+        .form-section textarea::placeholder {
+            color: rgba(255, 255, 255, 0.58) !important;
+        }
+
+        .form-section textarea:focus {
+            border-color: rgba(212, 160, 23, 0.85) !important;
+            background: rgba(255, 255, 255, 0.16) !important;
+            box-shadow:
+                0 0 0 3px rgba(212, 160, 23, 0.20),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+        }
     </style>
 </head>
 
@@ -3100,6 +3132,11 @@
                         <label id="childrenLabel" for="children">عدد الأطفال:</label>
                         <input type="number" id="children" min="0" value="0">
                         <div class="field-error" id="childrenError"></div>
+
+                        <label id="notesLabel" for="notes">ملاحظات أو أسئلة إضافية:</label>
+                        <textarea id="notes" rows="4" maxlength="1000"
+                            placeholder="مثال: وقت الوصول المتوقع، طلبات خاصة، أو أي سؤال قبل تأكيد الحجز"></textarea>
+                        <div class="hint" id="notesHint">هذا الحقل اختياري.</div>
 
                         <p><span id="finalPriceLabel">السعر النهائي:</span> <span class="price" id="totalPrice">—</span>
                         </p>
@@ -3254,6 +3291,9 @@
                 document.getElementById("dateHint").textContent = "لا يمكن اختيار فترة متداخلة مع الحجوزات الموجودة.";
                 document.getElementById("adultsLabel").textContent = "عدد البالغين:";
                 document.getElementById("childrenLabel").textContent = "عدد الأطفال:";
+                document.getElementById("notesLabel").textContent = "ملاحظات أو أسئلة إضافية:";
+                document.getElementById("notes").placeholder = "مثال: وقت الوصول المتوقع، طلبات خاصة، أو أي سؤال قبل تأكيد الحجز";
+                document.getElementById("notesHint").textContent = "هذا الحقل اختياري.";
                 document.getElementById("finalPriceLabel").textContent = "السعر النهائي:";
                 document.getElementById("submitBtn").textContent = "تأكيد الحجز";
                 document.getElementById("calendarTitle").textContent = "تقويم الشقة";
@@ -3299,6 +3339,9 @@
                 document.getElementById("dateHint").textContent = "Overlapping dates with existing bookings are not allowed.";
                 document.getElementById("adultsLabel").textContent = "Adults:";
                 document.getElementById("childrenLabel").textContent = "Children:";
+                document.getElementById("notesLabel").textContent = "Additional notes or questions:";
+                document.getElementById("notes").placeholder = "Example: expected arrival time, special requests, or any question before confirming";
+                document.getElementById("notesHint").textContent = "This field is optional.";
                 document.getElementById("finalPriceLabel").textContent = "Final price:";
                 document.getElementById("submitBtn").textContent = "Confirm booking";
                 document.getElementById("calendarTitle").textContent = "Apartment calendar";
@@ -4280,6 +4323,7 @@
                 currency: currencySelect.value,
                 totalPrice: getTotalPriceNumber(),
                 totalPriceText: totalPriceEl.textContent,
+                notes: document.getElementById("notes").value.trim(),
                 stayType: isLongStay(checkInEl.value, checkOutEl.value) ? "long" : "normal"
             };
 

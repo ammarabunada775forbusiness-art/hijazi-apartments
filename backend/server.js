@@ -147,7 +147,8 @@ HIJAZI Apartments - حجز جديد
 أطفال: ${booking.children}
 
 العملة: ${booking.currency}
-السعر: ${booking.totalPriceText || booking.totalPrice}${longStayText}
+السعر: ${booking.totalPriceText || booking.totalPrice}
+الملاحظات: ${booking.notes || "لا توجد ملاحظات"}${longStayText}
 
 تم إنشاء الحجز: ${formatDate(booking.createdAt || new Date())}
   `.trim();
@@ -173,6 +174,12 @@ function bookingHtml(booking, forCustomer = false) {
             </div>
         `
         : "";
+    const notesBox = booking.notes
+        ? `
+        <p><b>ملاحظات العميل:</b><br/>
+        <span style="white-space:pre-line">${String(booking.notes).replace(/[<>]/g, "")}</span></p>
+    `
+        : `<p><b>ملاحظات العميل:</b> لا توجد ملاحظات</p>`;
 
     return `
   <div style="font-family:Arial,sans-serif;line-height:1.8">
@@ -192,7 +199,8 @@ function bookingHtml(booking, forCustomer = false) {
       <p><b>عدد الليالي:</b> ${nights}</p>
       <p><b>الضيوف:</b> بالغين ${booking.adults} + أطفال ${booking.children}</p>
       <p><b>السعر:</b> ${booking.totalPriceText || booking.totalPrice} (${booking.currency})</p>
-      ${longStayBox}
+${notesBox}
+${longStayBox}
     </div>
 
     <p style="color:#666;font-size:13px;margin-top:10px">
@@ -384,6 +392,7 @@ app.post("/bookings", async (req, res) => {
             currency,
             totalPrice,
             totalPriceText,
+            notes,
             stayType,
         } = req.body;
 
@@ -446,6 +455,7 @@ app.post("/bookings", async (req, res) => {
             currency: currency || "JOD",
             totalPrice: Number(totalPrice),
             totalPriceText: totalPriceText || "",
+            notes: notes ? String(notes).trim().slice(0, 1000) : "",
             stayType: stayType || "normal",
         });
 
