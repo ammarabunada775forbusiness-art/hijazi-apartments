@@ -1379,3 +1379,180 @@ body.ltr-mode .seo-card {
         height: 42px !important;
     }
 }
+
+/* ===== FIX MOBILE NAVBAR ALIGNMENT ===== */
+@media (max-width: 991.98px) {
+    .custom-navbar .container {
+        max-width: 100% !important;
+        padding-left: 18px !important;
+        padding-right: 18px !important;
+    }
+
+    .navbar-collapse {
+        width: 100% !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        text-align: center !important;
+    }
+
+    .navbar-nav {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        align-items: stretch !important;
+    }
+
+    .navbar-nav .nav-item {
+        width: 100% !important;
+    }
+
+    .navbar-nav .nav-link {
+        width: 100% !important;
+        text-align: center !important;
+        justify-content: center !important;
+        display: flex !important;
+        align-items: center !important;
+        margin: 0 auto !important;
+    }
+
+    .lang-switcher-wrapper {
+        width: 100% !important;
+        padding: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        justify-content: center !important;
+    }
+
+    .lang-switcher {
+        width: 100% !important;
+        max-width: 420px !important;
+        margin: 0 auto !important;
+    }
+}
+
+/* ===== FIX AIRBNB GALLERY OVERLAP ON MOBILE ===== */
+@media (max-width: 768px) {
+
+    .airbnb-gallery-grid,
+    #detailsModal .airbnb-gallery-grid,
+    .booking-gallery-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        grid-template-rows: 190px 132px 132px !important;
+        gap: 10px !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    .airbnb-gallery-item,
+    #detailsModal .airbnb-gallery-item,
+    .booking-gallery-grid .airbnb-gallery-item {
+        min-height: 0 !important;
+        height: 100% !important;
+        overflow: hidden !important;
+        border-radius: 18px !important;
+    }
+
+    .airbnb-gallery-item.main,
+    #detailsModal .airbnb-gallery-item.main,
+    .booking-gallery-grid .airbnb-gallery-item.main {
+        grid-column: 1 / -1 !important;
+        grid-row: 1 !important;
+    }
+
+    .airbnb-gallery-item img,
+    #detailsModal .airbnb-gallery-item img,
+    .booking-gallery-grid .airbnb-gallery-item img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        display: block !important;
+    }
+}
+
+@media (max-width: 430px) {
+
+    .airbnb-gallery-grid,
+    #detailsModal .airbnb-gallery-grid,
+    .booking-gallery-grid {
+        grid-template-rows: 180px 120px 120px !important;
+        gap: 8px !important;
+    }
+
+    .airbnb-gallery-label {
+        font-size: 11px !important;
+        padding: 6px 8px !important;
+    }
+
+    .airbnb-show-all {
+        font-size: 11px !important;
+        padding: 7px 10px !important;
+    }
+}
+
+/* ===== BOOKED DATE RANGES ON APARTMENT CARDS ===== */
+.booking-conflict-box {
+    margin-top: 14px;
+    padding: 12px 13px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.11);
+    border: 1px solid rgba(255, 211, 106, 0.24);
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.booking-conflict-box strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #ffe08a;
+    font-weight: 950;
+}
+
+.booking-conflict-box.selected-conflict {
+    background: rgba(150, 0, 0, 0.22);
+    border-color: rgba(255, 130, 130, 0.38);
+}
+
+.booking-conflict-box.selected-conflict strong {
+    color: #ffd1d1;
+}
+
+.booking-period-line {
+    color: rgba(255, 255, 255, 0.90);
+    font-weight: 800;
+}
+
+.booking-period-line span {
+    color: #ffd36a;
+    font-weight: 950;
+}
+
+.booking-period-more {
+    margin-top: 4px;
+    color: rgba(255, 255, 255, 0.72);
+    font-weight: 800;
+}
+
+.booked-card {
+    border-color: rgba(255, 120, 120, 0.32) !important;
+}
+
+.booked-card .card-top-badge {
+    background: rgba(140, 0, 0, 0.78) !important;
+    border-color: rgba(255, 140, 140, 0.35) !important;
+}
+
+.has-bookings-card .card-top-badge {
+    background: rgba(110, 80, 0, 0.78) !important;
+    border-color: rgba(255, 211, 106, 0.38) !important;
+}
+
+.btn-book-disabled,
+.btn-book:disabled {
+    opacity: 0.72 !important;
+    cursor: not-allowed !important;
+    background: linear-gradient(135deg, #777, #333) !important;
+    box-shadow: none !important;
+    transform: none !important;
+}

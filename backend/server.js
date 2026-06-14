@@ -254,6 +254,7 @@ const APARTMENT_IDS = [1, 2, 3, 4, 5, 6];
 
 /* =========================================================
    API: فحص الشقق المتاحة
+   يرجّع المتاح + المحجوز + فترات الحجز المتعارضة
 ========================================================= */
 app.get("/availability", async (req, res) => {
     try {
@@ -286,10 +287,19 @@ app.get("/availability", async (req, res) => {
         const conflicts = await Booking.find({
             checkIn: { $lt: checkOutDate },
             checkOut: { $gt: checkInDate },
-        }).select("apartmentId");
+        })
+            .select("apartmentId apartmentLabel checkIn checkOut")
+            .sort({ apartmentId: 1, checkIn: 1 });
 
         const bookedSet = new Set(conflicts.map((b) => Number(b.apartmentId)));
         const available = APARTMENT_IDS.filter((id) => !bookedSet.has(id));
+
+        const bookedRanges = conflicts.map((b) => ({
+            apartmentId: Number(b.apartmentId),
+            apartmentLabel: b.apartmentLabel || `شقة رقم ${b.apartmentId}`,
+            checkIn: formatDate(b.checkIn),
+            checkOut: formatDate(b.checkOut),
+        }));
 
         res.json({
             success: true,
@@ -297,6 +307,7 @@ app.get("/availability", async (req, res) => {
             checkOut: formatDate(checkOutDate),
             availableApartments: available,
             bookedApartments: Array.from(bookedSet),
+            bookedRanges,
         });
     } catch (error) {
         console.log("AVAILABILITY ERROR:", error);
@@ -306,7 +317,6 @@ app.get("/availability", async (req, res) => {
         });
     }
 });
-
 /* =========================================================
    API: تقويم الشقة
 ========================================================= */

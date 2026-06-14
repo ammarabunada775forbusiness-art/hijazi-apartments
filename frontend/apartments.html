@@ -34,8 +34,7 @@
     <meta name="keywords"
         content="حجز شقق مفروشة عمان, شقق مفروشة الشميساني, شقق قريبة من المستشفيات عمان, شقق فندقية عمان">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css?v=5" />
-
+    <link rel="stylesheet" href="css/style.css?v=6" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ar.js"></script>
@@ -2543,7 +2542,118 @@
             return null;
         }
 
-        function cardHtml(id, checkIn = "", checkOut = "") {
+        function formatDisplayDate(dateValue) {
+            if (!dateValue) return "";
+
+            const dateText = String(dateValue).slice(0, 10);
+            const [year, month, day] = dateText.split("-");
+
+            if (!year || !month || !day) return dateText;
+
+            return `${day}/${month}/${year}`;
+        }
+
+        function renderBookingRangesHtml(ranges = [], options = {}) {
+            const lang = getCurrentLang();
+            const isSelectedConflict = Boolean(options.isSelectedConflict);
+
+            if (!ranges.length && !isSelectedConflict) return "";
+
+            const title = isSelectedConflict
+                ? (lang === "ar" ? "هذه الشقة محجوزة خلال الفترة المختارة:" : "This apartment is booked during your selected dates:")
+                : (lang === "ar" ? "حجوزات قادمة لهذه الشقة:" : "Upcoming bookings for this apartment:");
+
+            if (!ranges.length) {
+                return `
+            <div class="booking-conflict-box ${isSelectedConflict ? "selected-conflict" : ""}">
+                <strong>${title}</strong>
+                <div class="booking-period-line">
+                    ${lang === "ar" ? "يوجد تعارض مع حجز سابق." : "There is a conflict with an existing booking."}
+                </div>
+            </div>
+        `;
+            }
+
+            const visibleRanges = ranges.slice(0, 3);
+            const moreCount = ranges.length - visibleRanges.length;
+            const fromText = lang === "ar" ? "من" : "From";
+            const toText = lang === "ar" ? "إلى" : "to";
+            const moreText = lang === "ar"
+                ? `و ${moreCount} حجز آخر`
+                : `and ${moreCount} more booking${moreCount > 1 ? "s" : ""}`;
+
+            return `
+        <div class="booking-conflict-box ${isSelectedConflict ? "selected-conflict" : ""}">
+            <strong>${title}</strong>
+            <div class="booking-periods-list">
+                ${visibleRanges.map(range => `
+                    <div class="booking-period-line">
+                        ${fromText} <span>${formatDisplayDate(range.checkIn)}</span> ${toText} <span>${formatDisplayDate(range.checkOut)}</span>
+                    </div>
+                `).join("")}
+                ${moreCount > 0 ? `<div class="booking-period-more">${moreText}</div>` : ""}
+            </div>
+        </div>
+    `;
+        }
+
+        function buildConflictMap(data) {
+            const map = new Map();
+
+            const ranges = Array.isArray(data.bookedRanges) ? data.bookedRanges : [];
+
+            ranges.forEach(range => {
+                const aptId = Number(range.apartmentId);
+                if (!aptId) return;
+
+                if (!map.has(aptId)) {
+                    map.set(aptId, []);
+                }
+
+                map.get(aptId).push(range);
+            });
+
+            return map;
+        }
+
+        async function fetchBookingsByApartment() {
+            const map = new Map();
+
+            try {
+                const res = await fetch(`${API_BASE}/bookings`);
+                const data = await res.json();
+
+                if (!res.ok || !data.success || !Array.isArray(data.bookings)) {
+                    return map;
+                }
+
+                const today = todayISO();
+
+                data.bookings
+                    .filter(booking => String(booking.checkOut).slice(0, 10) >= today)
+                    .forEach(booking => {
+                        const aptId = Number(booking.apartmentId);
+                        if (!aptId) return;
+
+                        if (!map.has(aptId)) {
+                            map.set(aptId, []);
+                        }
+
+                        map.get(aptId).push({
+                            apartmentId: aptId,
+                            checkIn: String(booking.checkIn).slice(0, 10),
+                            checkOut: String(booking.checkOut).slice(0, 10),
+                        });
+                    });
+
+                return map;
+            } catch (error) {
+                console.error("BOOKINGS LIST ERROR:", error);
+                return map;
+            }
+        }
+
+        function cardHtml(id, checkIn = "", checkOut = "", availabilityInfo = {}) {
             const lang = getCurrentLang();
             const apt = HIJAZI_APARTMENTS[id];
             const nights = checkIn && checkOut ? calcNights(checkIn, checkOut) : 0;
@@ -2555,55 +2665,73 @@
 
             const locationLabel = lang === "ar" ? "الموقع" : "Location";
             const availableLabel = lang === "ar" ? "متاحة ✅" : "Available ✅";
+            const bookedLabel = lang === "ar" ? "محجوزة ❌" : "Booked ❌";
+            const hasBookingsLabel = lang === "ar" ? "لديها حجوزات" : "Has bookings";
             const nightLabel = lang === "ar" ? "السعر لليلة" : "Price per night";
             const nightsLabel = lang === "ar" ? "عدد الليالي" : "Nights";
             const totalLabel = lang === "ar" ? "السعر الكلي التقريبي" : "Estimated total";
             const detailsBtn = lang === "ar" ? "عرض التفاصيل" : "View details";
             const bookBtn = lang === "ar" ? "احجز الآن" : "Book now";
+            const changeDatesBtn = lang === "ar" ? "اختر تاريخًا آخر" : "Choose other dates";
             const jodText = lang === "ar" ? "دينار" : "JOD";
             const apartmentWord = lang === "ar" ? "شقة راقية" : "Premium apartment";
 
-            return `
-                <div class="card">
-                    <div class="card-top-badge">${availableLabel}</div>
+            const ranges = Array.isArray(availabilityInfo.ranges) ? availabilityInfo.ranges : [];
+            const isBookedForSelectedDates = Boolean(availabilityInfo.isBookedForSelectedDates);
+            const hasUpcomingBookings = ranges.length > 0 && !isBookedForSelectedDates;
+            const cardClass = isBookedForSelectedDates ? "booked-card" : (hasUpcomingBookings ? "has-bookings-card" : "");
+            const badgeLabel = isBookedForSelectedDates ? bookedLabel : (hasUpcomingBookings ? hasBookingsLabel : availableLabel);
+            const bookingRangesHtml = renderBookingRangesHtml(ranges, { isSelectedConflict: isBookedForSelectedDates });
 
-${apt.images && apt.images[0]
+            return `
+        <div class="card ${cardClass}">
+            <div class="card-top-badge">${badgeLabel}</div>
+
+            ${apt.images && apt.images[0]
                     ? `<img src="${apt.images[0]}" alt="${aptName}">`
                     : `<div class="card-image-missing">${lang === "ar" ? "الصورة غير مرفوعة بعد" : "Photo not uploaded yet"}</div>`
                 }
-                    <div class="card-body">
-                        <div class="pill">${apartmentWord}</div>
-                        <h3>${aptName}</h3>
-                        <div class="muted">${desc}</div>
 
-                        <div class="location-line">📍 ${locationLabel}: ${apt.location}</div>
+            <div class="card-body">
+                <div class="pill">${apartmentWord}</div>
+                <h3>${aptName}</h3>
+                <div class="muted">${desc}</div>
 
-                        <ul class="features">
-                            ${features.slice(0, 4).map(f => `<li>${f}</li>`).join("")}
-                        </ul>
+                <div class="location-line">📍 ${locationLabel}: ${apt.location}</div>
 
-                        <div class="card-price-box">
-                            <div class="card-price-main">${nightLabel}: ${apt.price} ${jodText}</div>
-                            ${nights ? `<div class="card-price-sub">${nightsLabel}: ${nights}</div>` : ""}
-                            ${nights ? `<div class="card-price-sub">${totalLabel}: ${total} ${jodText}</div>` : ""}
-                        </div>
+                <ul class="features">
+                    ${features.slice(0, 4).map(f => `<li>${f}</li>`).join("")}
+                </ul>
 
-                        ${nights >= 30 ? `<div class="long-note-inline">${SITE_TRANSLATIONS[lang].longStayAlert}</div>` : ""}
+                ${bookingRangesHtml}
 
-                        <div class="card-actions">
-                            <button class="btn-book ripple-btn" onclick="goBook(${apt.id})" type="button">
-                                <span class="btn-icon"></span>
-                                <span>${bookBtn}</span>
-                            </button>
-
-                            <button class="btn-details ripple-btn" onclick="openDetails(${apt.id})" type="button">
-                                <span class="btn-icon"></span>
-                                <span>${detailsBtn}</span>
-                            </button>
-                        </div>
-                    </div>
+                <div class="card-price-box">
+                    <div class="card-price-main">${nightLabel}: ${apt.price} ${jodText}</div>
+                    ${nights ? `<div class="card-price-sub">${nightsLabel}: ${nights}</div>` : ""}
+                    ${nights ? `<div class="card-price-sub">${totalLabel}: ${total} ${jodText}</div>` : ""}
                 </div>
-            `;
+
+                ${nights >= 30 ? `<div class="long-note-inline">${SITE_TRANSLATIONS[lang].longStayAlert}</div>` : ""}
+
+                <div class="card-actions">
+                    ${isBookedForSelectedDates
+                    ? `<button class="btn-book btn-book-disabled" type="button" disabled>
+                            <span>${changeDatesBtn}</span>
+                       </button>`
+                    : `<button class="btn-book ripple-btn" onclick="goBook(${apt.id})" type="button">
+                            <span class="btn-icon"></span>
+                            <span>${bookBtn}</span>
+                       </button>`
+                }
+
+                    <button class="btn-details ripple-btn" onclick="openDetails(${apt.id})" type="button">
+                        <span class="btn-icon"></span>
+                        <span>${detailsBtn}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
         }
 
         window.goBook = function (id) {
@@ -3076,17 +3204,23 @@ ${apt.images && apt.images[0]
             renderLongStayNotice("longStayNotice", checkIn, checkOut);
 
             const err = validateDates(true);
+            const allApartmentIds = Object.keys(HIJAZI_APARTMENTS).map(Number);
 
             if (!checkIn || !checkOut) {
                 statusEl.textContent = lang === "ar"
-                    ? "تم عرض جميع الشقق. يمكنك اختيار التواريخ لاحقًا."
-                    : "All apartments are displayed. You can choose dates later.";
+                    ? "تم عرض جميع الشقق مع توضيح أي حجوزات قادمة. يمكنك اختيار التواريخ لاحقًا."
+                    : "All apartments are displayed with upcoming booked periods. You can choose dates later.";
 
-                const allApartmentIds = Object.keys(HIJAZI_APARTMENTS).map(Number);
+                renderSkeletonCards(3);
 
+                const bookingsByApartment = await fetchBookingsByApartment();
                 await loadAllApartmentCoverImages(allApartmentIds);
 
-                gridEl.innerHTML = allApartmentIds.map(id => cardHtml(Number(id))).join("");
+                gridEl.innerHTML = allApartmentIds.map(id => {
+                    const ranges = bookingsByApartment.get(Number(id)) || [];
+                    return cardHtml(Number(id), "", "", { ranges });
+                }).join("");
+
                 initRippleButtons();
                 return;
             }
@@ -3111,23 +3245,24 @@ ${apt.images && apt.images[0]
                 }
 
                 const available = data.availableApartments || [];
-
-                if (available.length === 0) {
-                    statusEl.textContent = lang === "ar"
-                        ? "❌ للأسف لا يوجد شقق متاحة بهالتواريخ. جرّب تواريخ ثانية."
-                        : "❌ Unfortunately, no apartments are available for these dates. Try different dates.";
-                    gridEl.innerHTML = "";
-                    return;
-                }
+                const conflictMap = buildConflictMap(data);
+                const bookedCount = conflictMap.size;
 
                 statusEl.textContent = lang === "ar"
-                    ? `✅ عدد الشقق المتاحة: ${available.length}`
-                    : `✅ Available apartments: ${available.length}`;
+                    ? `✅ المتاحة: ${available.length} | ❌ المحجوزة في هذه الفترة: ${bookedCount}`
+                    : `✅ Available: ${available.length} | ❌ Booked in this period: ${bookedCount}`;
 
-                await loadAllApartmentCoverImages(available);
+                await loadAllApartmentCoverImages(allApartmentIds);
 
-                gridEl.innerHTML = available.map(id => cardHtml(id, checkIn, checkOut)).join("");
-                initRippleButtons();;
+                gridEl.innerHTML = allApartmentIds.map(id => {
+                    const ranges = conflictMap.get(Number(id)) || [];
+                    return cardHtml(Number(id), checkIn, checkOut, {
+                        isBookedForSelectedDates: conflictMap.has(Number(id)),
+                        ranges
+                    });
+                }).join("");
+
+                initRippleButtons();
             } catch (e) {
                 console.error(e);
                 statusEl.textContent = lang === "ar"
