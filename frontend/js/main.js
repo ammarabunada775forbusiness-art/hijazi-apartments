@@ -279,13 +279,13 @@ const APARTMENT_ROOM_PHOTO_PLAN = [
         noteEn: "Laundry or service area photos."
     },
     {
-        key: "corridor",
-        folder: "corridor",
-        count: 2,
-        titleAr: "الممر",
-        titleEn: "Corridor",
-        noteAr: "صور الممر ومدخل الشقة.",
-        noteEn: "Corridor and apartment entrance photos."
+        key: "others",
+        folder: "others",
+        count: 4,
+        titleAr: "أخرى",
+        titleEn: "Others",
+        noteAr: "صور عامة مثل الباب، المدخل، الممر، الدرج، المصعد، وأي تفاصيل إضافية.",
+        noteEn: "General photos such as door, entrance, corridor, stairs, elevator, and extra details."
     },
     {
         key: "balcony",
