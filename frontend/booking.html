@@ -2998,6 +2998,29 @@
                 0 0 0 3px rgba(212, 160, 23, 0.20),
                 inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
         }
+
+        /* ===== SHOW ALL APARTMENTS BOOKINGS IN BOOKING CALENDAR ===== */
+        .fc-event.selected-apartment-booking {
+            background: linear-gradient(135deg, #d4a017, #8a6508) !important;
+            color: #fff !important;
+        }
+
+        .fc-event.other-apartment-booking {
+            background: rgba(0, 0, 0, 0.78) !important;
+            color: #fff !important;
+            opacity: 0.88 !important;
+        }
+
+        .fc .fc-event-title {
+            white-space: normal !important;
+            line-height: 1.35 !important;
+        }
+
+        @media (max-width: 768px) {
+            .fc .fc-event-title {
+                font-size: 9px !important;
+            }
+        }
     </style>
 </head>
 
@@ -3249,8 +3272,15 @@
         };
 
         let currentSlide = 0;
+
+        /* حجوزات الشقة المختارة فقط - تستخدم لمنع التعارض عند الحجز */
         let bookedRanges = [];
         let bookedDaysSet = new Set();
+
+        /* حجوزات كل الشقق - تستخدم للعرض داخل التقويم فقط */
+        let calendarBookedRanges = [];
+        let calendarBookedDaysSet = new Set();
+
         let calendar = null;
 
         if (initialAptId) {
@@ -3976,6 +4006,23 @@
             }
         }
 
+        function buildCalendarBookedDaysSet() {
+            calendarBookedDaysSet = new Set();
+
+            for (const r of calendarBookedRanges) {
+                let cur = new Date(r.start);
+                const end = new Date(r.end);
+
+                cur.setHours(0, 0, 0, 0);
+                end.setHours(0, 0, 0, 0);
+
+                while (cur < end) {
+                    calendarBookedDaysSet.add(toISODateOnly(cur));
+                    cur = addDays(cur, 1);
+                }
+            }
+        }
+
         /* =========================================================
            فحص التداخل بين فترتي حجز
         ========================================================= */
@@ -3997,22 +4044,44 @@
            جلب الحجوزات الحالية للشقة من السيرفر
         ========================================================== */
         async function fetchBookedRanges() {
-            const id = getSelectedAptId();
-            if (!id) {
+            const selectedId = getSelectedAptId();
+
+            const res = await fetch(`${API_BASE}/calendar`);
+            const data = await res.json();
+            const arr = (data && data.success && Array.isArray(data.bookings)) ? data.bookings : [];
+
+            /* كل حجوزات الشقق للعرض داخل التقويم */
+            calendarBookedRanges = arr
+                .map(b => ({
+                    apartmentId: Number(b.apartmentId),
+                    apartmentLabel: b.apartmentLabel || `شقة رقم ${b.apartmentId}`,
+                    start: new Date(b.checkIn),
+                    end: new Date(b.checkOut)
+                }))
+                .filter(r =>
+                    r.apartmentId &&
+                    !isNaN(r.start.getTime()) &&
+                    !isNaN(r.end.getTime())
+                );
+
+            buildCalendarBookedDaysSet();
+
+            /* حجوزات الشقة المختارة فقط لفحص التعارض */
+            if (!selectedId) {
                 bookedRanges = [];
                 bookedDaysSet = new Set();
                 return [];
             }
 
-            const res = await fetch(`${API_BASE}/calendar?aptId=${id}`);
-            const data = await res.json();
-            const arr = (data && data.bookings) ? data.bookings : [];
-
-            bookedRanges = arr
-                .map(b => ({ start: new Date(b.checkIn), end: new Date(b.checkOut) }))
-                .filter(r => !isNaN(r.start.getTime()) && !isNaN(r.end.getTime()));
+            bookedRanges = calendarBookedRanges
+                .filter(r => Number(r.apartmentId) === Number(selectedId))
+                .map(r => ({
+                    start: r.start,
+                    end: r.end
+                }));
 
             buildBookedDaysSet();
+
             return bookedRanges;
         }
 
@@ -4217,12 +4286,32 @@
                 events: async (fetchInfo, successCallback, failureCallback) => {
                     try {
                         await fetchBookedRanges();
-                        const events = bookedRanges.map(r => ({
-                            title: lang === "ar" ? "محجوز" : "Booked",
-                            start: r.start,
-                            end: r.end,
-                            allDay: true
-                        }));
+
+                        const selectedId = getSelectedAptId();
+
+                        const events = calendarBookedRanges.map(r => {
+                            const label = r.apartmentLabel || (
+                                lang === "ar"
+                                    ? `شقة رقم ${r.apartmentId}`
+                                    : `Apartment ${r.apartmentId}`
+                            );
+
+                            return {
+                                title: lang === "ar"
+                                    ? `${label} محجوزة`
+                                    : `${label} booked`,
+                                start: r.start,
+                                end: r.end,
+                                allDay: true,
+                                classNames: Number(selectedId) === Number(r.apartmentId)
+                                    ? ["selected-apartment-booking"]
+                                    : ["other-apartment-booking"],
+                                extendedProps: {
+                                    apartmentId: r.apartmentId
+                                }
+                            };
+                        });
+
                         successCallback(events);
                     } catch (e) {
                         failureCallback(e);
@@ -4230,10 +4319,13 @@
                 },
                 dayCellDidMount: (info) => {
                     const dayISO = toISODateOnly(info.date);
-                    if (bookedDaysSet.has(dayISO)) {
-                        info.el.style.background = "rgba(200,145,22,0.35)";
+
+                    if (calendarBookedDaysSet.has(dayISO)) {
+                        info.el.style.background = "rgba(200,145,22,0.20)";
                         info.el.style.borderRadius = "6px";
-                        info.el.title = lang === "ar" ? "محجوز" : "Booked";
+                        info.el.title = lang === "ar"
+                            ? "يوجد حجز في هذا اليوم لإحدى الشقق"
+                            : "There is a booking on this day for one apartment";
                     }
                 },
                 selectable: true,

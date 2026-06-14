@@ -326,154 +326,31 @@ app.get("/availability", async (req, res) => {
     }
 });
 /* =========================================================
-   API: تقويم الشقة
+   API: تقويم الشقق
+   إذا أرسلت aptId يرجّع حجوزات شقة محددة
+   إذا لم ترسل aptId يرجّع حجوزات كل الشقق بدون بيانات العميل
 ========================================================= */
 app.get("/calendar", async (req, res) => {
     try {
-        const aptId = Number(req.query.aptId);
+        const aptId = req.query.aptId ? Number(req.query.aptId) : null;
 
-        if (!aptId) {
-            return res.status(400).json({
-                success: false,
-                message: "aptId is required",
-            });
-        }
+        const filter = aptId ? { apartmentId: aptId } : {};
 
-        const bookings = await Booking.find({ apartmentId: aptId })
-            .select("checkIn checkOut")
-            .sort({ checkIn: 1 });
+        const bookings = await Booking.find(filter)
+            .select("apartmentId apartmentLabel checkIn checkOut")
+            .sort({ apartmentId: 1, checkIn: 1 });
 
-        res.json({ success: true, bookings });
+        res.json({
+            success: true,
+            scope: aptId ? "single" : "all",
+            bookings,
+        });
     } catch (error) {
         console.error("CALENDAR ERROR:", error);
         res.status(500).json({
             success: false,
             message: "Error fetching calendar",
             error: error.message,
-        });
-    }
-});
-
-/* =========================================================
-   API: جلب الحجوزات
-========================================================= */
-app.get("/bookings", async (req, res) => {
-    try {
-        const aptId = req.query.aptId ? Number(req.query.aptId) : null;
-        const filter = aptId ? { apartmentId: aptId } : {};
-
-        const bookings = await Booking.find(filter).sort({ checkIn: 1 });
-
-        res.json({ success: true, bookings });
-    } catch (error) {
-        console.log("GET BOOKINGS ERROR:", error);
-        res.status(500).json({
-            success: false,
-            message: "Error fetching bookings",
-        });
-    }
-});
-
-/* =========================================================
-   API: إنشاء حجز جديد
-========================================================= */
-app.post("/bookings", async (req, res) => {
-    try {
-        const {
-            apartmentId,
-            apartmentLabel,
-            fullName,
-            email,
-            phone,
-            checkIn,
-            checkOut,
-            adults,
-            children,
-            currency,
-            totalPrice,
-            totalPriceText,
-            notes,
-            stayType,
-        } = req.body;
-
-        if (
-            apartmentId === undefined ||
-            !fullName ||
-            !email ||
-            !phone ||
-            !checkIn ||
-            !checkOut ||
-            adults === undefined ||
-            totalPrice === undefined
-        ) {
-            return res.status(400).json({
-                success: false,
-                message: "بيانات ناقصة. تأكد من تعبئة الحقول المطلوبة.",
-            });
-        }
-
-        const checkInDate = new Date(checkIn);
-        const checkOutDate = new Date(checkOut);
-
-        if (isNaN(checkInDate.getTime()) || isNaN(checkOutDate.getTime())) {
-            return res.status(400).json({
-                success: false,
-                message: "تواريخ غير صحيحة.",
-            });
-        }
-
-        if (checkOutDate <= checkInDate) {
-            return res.status(400).json({
-                success: false,
-                message: "تاريخ المغادرة لازم يكون بعد تاريخ الوصول.",
-            });
-        }
-
-        const conflict = await Booking.findOne({
-            apartmentId: Number(apartmentId),
-            checkIn: { $lt: checkOutDate },
-            checkOut: { $gt: checkInDate },
-        });
-
-        if (conflict) {
-            return res.status(409).json({
-                success: false,
-                message: "❌ هذا التاريخ محجوز بالفعل لهذه الشقة. اختر تاريخًا آخر.",
-            });
-        }
-
-        const booking = new Booking({
-            apartmentId: Number(apartmentId),
-            apartmentLabel: apartmentLabel || `شقة رقم ${apartmentId}`,
-            fullName,
-            email,
-            phone,
-            checkIn: checkInDate,
-            checkOut: checkOutDate,
-            adults: Number(adults),
-            children: Number(children || 0),
-            currency: currency || "JOD",
-            totalPrice: Number(totalPrice),
-            totalPriceText: totalPriceText || "",
-            notes: notes ? String(notes).trim().slice(0, 1000) : "",
-            stayType: stayType || "normal",
-        });
-
-        await booking.save();
-
-        sendBookingEmails(booking).catch((e) => {
-            console.log("SEND EMAILS ERROR:", e.message);
-        });
-
-        res.json({
-            success: true,
-            message: "✅ تم حفظ الحجز بنجاح",
-        });
-    } catch (error) {
-        console.log("SAVE BOOKING ERROR:", error);
-        res.status(500).json({
-            success: false,
-            message: "Error saving booking",
         });
     }
 });
