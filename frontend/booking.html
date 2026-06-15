@@ -4432,8 +4432,17 @@
                 const result = await res.json().catch(() => ({}));
 
                 if (!res.ok) {
+                    console.error("BOOKING FAILED:", {
+                        status: res.status,
+                        statusText: res.statusText,
+                        result
+                    });
+
                     showMessage(
-                        result.message || (lang === "ar" ? "صار خطأ أثناء الحجز" : "An error occurred while booking"),
+                        result.message ||
+                        (lang === "ar"
+                            ? `هنالك خطأ أثناء الحجز - كود الخطأ: ${res.status}`
+                            : `An error occurred while booking - Status: ${res.status}`),
                         "error"
                     );
                     return;
