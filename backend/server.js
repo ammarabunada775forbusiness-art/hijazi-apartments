@@ -43,6 +43,42 @@ app.get("/", (req, res) => {
     res.send("HIJAZI Apartments API Running");
 });
 
+app.get("/health", (req, res) => {
+    res.status(200).json({
+        success: true,
+        status: "ok",
+        service: "HIJAZI Apartments API",
+        time: new Date().toISOString()
+    });
+});
+
+app.get("/health/db", async (req, res) => {
+    try {
+        if (mongoose.connection.readyState !== 1) {
+            return res.status(503).json({
+                success: false,
+                status: "db_disconnected",
+                connectionState: mongoose.connection.readyState
+            });
+        }
+
+        await mongoose.connection.db.admin().ping();
+
+        res.status(200).json({
+            success: true,
+            status: "db_ok",
+            connectionState: mongoose.connection.readyState,
+            time: new Date().toISOString()
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            status: "db_error",
+            errorMessage: error.message
+        });
+    }
+});
+
 /* =========================================================
    حماية مسارات الأدمن
 ========================================================= */
