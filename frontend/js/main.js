@@ -299,6 +299,115 @@ const APARTMENT_ROOM_PHOTO_PLAN = [
 ];
 
 /* =========================================================
+   عدد الصور الفعلي لكل شقة ولكل غرفة
+   المفتاح الأول = رقم الشقة
+   المفتاح الداخلي = key تبع الغرفة من APARTMENT_ROOM_PHOTO_PLAN
+========================================================= */
+const APARTMENT_ROOM_COUNTS = {
+    1: {
+        living: 3,
+        guest: 5,
+        "bedroom-1": 6,
+        "bedroom-2": 3,
+        "bedroom-3": 5,
+        kitchen: 7,
+        "bathroom-1": 5,
+        "bathroom-2": 4,
+        "bathroom-3": 1,
+        laundry: 1,
+        others: 7,
+        balcony: 0
+    },
+
+    2: {
+        living: 4,
+        guest: 2,
+        "bedroom-1": 3,
+        "bedroom-2": 2,
+        "bedroom-3": 2,
+        kitchen: 3,
+        "bathroom-1": 2,
+        "bathroom-2": 2,
+        "bathroom-3": 2,
+        laundry: 2,
+        others: 4,
+        balcony: 2
+    },
+
+    3: {
+        living: 4,
+        guest: 2,
+        "bedroom-1": 3,
+        "bedroom-2": 2,
+        "bedroom-3": 2,
+        kitchen: 3,
+        "bathroom-1": 2,
+        "bathroom-2": 2,
+        "bathroom-3": 2,
+        laundry: 2,
+        others: 4,
+        balcony: 2
+    },
+
+    4: {
+        living: 4,
+        guest: 2,
+        "bedroom-1": 3,
+        "bedroom-2": 2,
+        "bedroom-3": 2,
+        kitchen: 3,
+        "bathroom-1": 2,
+        "bathroom-2": 2,
+        "bathroom-3": 2,
+        laundry: 2,
+        others: 4,
+        balcony: 2
+    },
+
+    5: {
+        living: 4,
+        guest: 2,
+        "bedroom-1": 3,
+        "bedroom-2": 2,
+        "bedroom-3": 2,
+        kitchen: 3,
+        "bathroom-1": 2,
+        "bathroom-2": 2,
+        "bathroom-3": 2,
+        laundry: 2,
+        others: 4,
+        balcony: 2
+    },
+
+    6: {
+        living: 4,
+        guest: 2,
+        "bedroom-1": 3,
+        "bedroom-2": 2,
+        "bedroom-3": 2,
+        kitchen: 3,
+        "bathroom-1": 2,
+        "bathroom-2": 2,
+        "bathroom-3": 2,
+        laundry: 2,
+        others: 4,
+        balcony: 1
+    }
+};
+
+function getApartmentRoomCount(aptId, room) {
+    const aptCounts = APARTMENT_ROOM_COUNTS[Number(aptId)] || {};
+
+    const count =
+        aptCounts[room.key] ??
+        aptCounts[room.folder] ??
+        room.count ??
+        0;
+
+    return Math.max(0, Number(count) || 0);
+}
+
+/* =========================================================
    نظام صور ديناميكي
    يكتشف الصور تلقائيًا حسب الملفات الموجودة داخل المجلدات
 ========================================================= */
@@ -312,7 +421,9 @@ function buildApartmentRooms(aptId, oneBalcony = false) {
     return APARTMENT_ROOM_PHOTO_PLAN.map(room => {
         const isBalcony = room.key === "balcony";
 
-        const images = Array.from({ length: room.count || 0 }, (_, index) => {
+        const imageCount = getApartmentRoomCount(aptId, room);
+
+        const images = Array.from({ length: imageCount }, (_, index) => {
             return buildApartmentPhotoPath(aptId, room.folder, index + 1, "webp");
         });
 
@@ -385,7 +496,7 @@ async function loadApartmentCoverImage(aptId) {
         return apt;
     }
 
-    const firstRoom = APARTMENT_ROOM_PHOTO_PLAN.find(room => (room.count || 0) > 0);
+    const firstRoom = APARTMENT_ROOM_PHOTO_PLAN.find(room => getApartmentRoomCount(aptId, room) > 0);
 
     if (firstRoom) {
         apt.images = [buildApartmentPhotoPath(aptId, firstRoom.folder, 1, "webp")];
