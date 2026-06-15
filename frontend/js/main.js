@@ -309,7 +309,7 @@ const APARTMENT_ROOM_COUNTS = {
         guest: 5,
         "bedroom-1": 6,
         "bedroom-2": 3,
-        "bedroom-3": 5,
+        "bedroom-3": 4,
         kitchen: 7,
         "bathroom-1": 5,
         "bathroom-2": 4,
@@ -320,18 +320,18 @@ const APARTMENT_ROOM_COUNTS = {
     },
 
     2: {
-        living: 4,
-        guest: 2,
-        "bedroom-1": 3,
-        "bedroom-2": 2,
-        "bedroom-3": 2,
-        kitchen: 3,
-        "bathroom-1": 2,
-        "bathroom-2": 2,
-        "bathroom-3": 2,
-        laundry: 2,
-        others: 4,
-        balcony: 2
+        living: 5,
+        guest: 5,
+        "bedroom-1": 5,
+        "bedroom-2": 6,
+        "bedroom-3": 3,
+        kitchen: 6,
+        "bathroom-1": 6,
+        "bathroom-2": 4,
+        "bathroom-3": 1,
+        laundry: 1,
+        others: 5,
+        balcony: 1
     },
 
     3: {
