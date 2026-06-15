@@ -302,9 +302,7 @@ const APARTMENT_ROOM_PHOTO_PLAN = [
    نظام صور ديناميكي
    يكتشف الصور تلقائيًا حسب الملفات الموجودة داخل المجلدات
 ========================================================= */
-
-const APARTMENT_IMAGE_EXTENSIONS = ["webp", "jpg", "jpeg", "png"];
-const APARTMENT_MAX_IMAGES_PER_ROOM = 30;
+const APARTMENT_IMAGE_EXTENSIONS = ["webp"];
 
 function buildApartmentPhotoPath(aptId, folder, index, ext = "webp") {
     return `images/apartments/apt-${aptId}/${folder}/${index}.${ext}`;
@@ -314,6 +312,10 @@ function buildApartmentRooms(aptId, oneBalcony = false) {
     return APARTMENT_ROOM_PHOTO_PLAN.map(room => {
         const isBalcony = room.key === "balcony";
 
+        const images = Array.from({ length: room.count || 0 }, (_, index) => {
+            return buildApartmentPhotoPath(aptId, room.folder, index + 1, "webp");
+        });
+
         return {
             key: room.key,
             folder: room.folder,
@@ -321,7 +323,7 @@ function buildApartmentRooms(aptId, oneBalcony = false) {
             titleEn: isBalcony && oneBalcony ? "Balcony" : room.titleEn,
             noteAr: isBalcony && oneBalcony ? "تحتوي هذه الشقة على شرفة واحدة." : room.noteAr,
             noteEn: isBalcony && oneBalcony ? "This apartment includes one balcony." : room.noteEn,
-            images: []
+            images
         };
     });
 }
@@ -355,46 +357,6 @@ function getApartmentImageSources(apt) {
     return getApartmentGalleryImages(apt).map(item => item.src);
 }
 
-function apartmentImageExists(url) {
-    return new Promise(resolve => {
-        const img = new Image();
-
-        img.onload = () => resolve(true);
-        img.onerror = () => resolve(false);
-
-        img.src = `${url}?probe=${Date.now()}`;
-    });
-}
-
-async function findExistingApartmentImage(aptId, folder, index) {
-    for (const ext of APARTMENT_IMAGE_EXTENSIONS) {
-        const src = buildApartmentPhotoPath(aptId, folder, index, ext);
-        const exists = await apartmentImageExists(src);
-
-        if (exists) {
-            return src;
-        }
-    }
-
-    return null;
-}
-
-async function detectApartmentRoomImages(aptId, folder) {
-    const images = [];
-
-    for (let i = 1; i <= APARTMENT_MAX_IMAGES_PER_ROOM; i++) {
-        const foundImage = await findExistingApartmentImage(aptId, folder, i);
-
-        if (!foundImage) {
-            break;
-        }
-
-        images.push(foundImage);
-    }
-
-    return images;
-}
-
 async function loadApartmentGallery(aptId, force = false) {
     const apt = HIJAZI_APARTMENTS[aptId];
 
@@ -404,26 +366,12 @@ async function loadApartmentGallery(aptId, force = false) {
         return apt;
     }
 
-    const roomsWithImages = await Promise.all(
-        APARTMENT_ROOM_PHOTO_PLAN.map(async room => {
-            const isBalcony = room.key === "balcony";
-            const images = await detectApartmentRoomImages(aptId, room.folder);
+    apt.rooms = buildApartmentRooms(aptId, apt.oneBalcony)
+        .filter(room => room.images.length > 0);
 
-            return {
-                key: room.key,
-                folder: room.folder,
-                titleAr: isBalcony && apt.oneBalcony ? "الشرفة" : room.titleAr,
-                titleEn: isBalcony && apt.oneBalcony ? "Balcony" : room.titleEn,
-                noteAr: isBalcony && apt.oneBalcony ? "تحتوي هذه الشقة على شرفة واحدة." : room.noteAr,
-                noteEn: isBalcony && apt.oneBalcony ? "This apartment includes one balcony." : room.noteEn,
-                images
-            };
-        })
-    );
-
-    apt.rooms = roomsWithImages.filter(room => room.images.length > 0);
     apt.images = getApartmentImageSources(apt);
     apt.galleryLoaded = true;
+    apt.coverLoaded = true;
 
     return apt;
 }
@@ -433,31 +381,27 @@ async function loadApartmentCoverImage(aptId) {
 
     if (!apt) return null;
 
-    if (apt.coverLoaded) {
+    if (apt.coverLoaded && apt.images && apt.images.length) {
         return apt;
     }
 
-    for (const room of APARTMENT_ROOM_PHOTO_PLAN) {
-        const firstImage = await findExistingApartmentImage(aptId, room.folder, 1);
+    const firstRoom = APARTMENT_ROOM_PHOTO_PLAN.find(room => (room.count || 0) > 0);
 
-        if (firstImage) {
-            apt.images = [firstImage];
-            apt.coverLoaded = true;
-            return apt;
-        }
+    if (firstRoom) {
+        apt.images = [buildApartmentPhotoPath(aptId, firstRoom.folder, 1, "webp")];
+    } else {
+        apt.images = [];
     }
 
-    apt.images = [];
     apt.coverLoaded = true;
     return apt;
 }
 
 async function loadAllApartmentCoverImages(ids) {
-    await Promise.all(
-        ids.map(id => loadApartmentCoverImage(Number(id)))
-    );
+    ids.forEach(id => {
+        loadApartmentCoverImage(Number(id));
+    });
 }
-
 Object.keys(HIJAZI_APARTMENTS).forEach(id => {
     const apt = HIJAZI_APARTMENTS[id];
     const aptId = Number(id);
