@@ -316,7 +316,7 @@ const APARTMENT_ROOM_COUNTS = {
         "bathroom-3": 1,
         laundry: 1,
         others: 7,
-        balcony: 0
+        balcony: 1
     },
 
     2: {
