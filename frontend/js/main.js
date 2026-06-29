@@ -23,7 +23,7 @@ const HIJAZI_APARTMENTS = {
         mapEmbed: "https://www.google.com/maps?q=%D9%88%D8%B3%D8%B7%20%D8%A7%D9%84%D8%A8%D9%84%D8%AF%20%D8%B9%D9%85%D8%A7%D9%86&z=15&output=embed",
         nameAr: "شقة رقم 1",
         nameEn: "Apartment 1",
-        price: 50,
+        price: 120,
         oneBalcony: false,
         descAr: "شقة مفروشة راقية مناسبة للإقامة الطبية والتنفيذية في عمّان.",
         descEn: "Elegant furnished apartment suitable for medical and executive stays in Amman.",
@@ -144,7 +144,7 @@ for (let i = 2; i <= 6; i++) {
     HIJAZI_APARTMENTS[i].id = i;
     HIJAZI_APARTMENTS[i].nameAr = `شقة رقم ${i}`;
     HIJAZI_APARTMENTS[i].nameEn = `Apartment ${i}`;
-    HIJAZI_APARTMENTS[i].price = [50, 55, 60, 65, 70][(i - 2) % 5];
+    HIJAZI_APARTMENTS[i].price = 120;
 }
 
 /* =========================================================
