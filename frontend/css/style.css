@@ -1556,3 +1556,30 @@ body.ltr-mode .seo-card {
     box-shadow: none !important;
     transform: none !important;
 }
+
+/* ===== MOBILE PERFORMANCE FIXES ===== */
+@media (max-width: 768px) {
+
+    .card:hover,
+    .review-card:hover,
+    .why-card:hover,
+    .luxury-seo-card:hover {
+        transform: none !important;
+    }
+
+    .card:hover img,
+    .airbnb-gallery-item:hover img,
+    .review-card:hover img {
+        transform: none !important;
+    }
+
+    .photo-tour-top-strip {
+        display: none !important;
+    }
+
+    .photo-tour-photo img,
+    .airbnb-gallery-item img,
+    .card img {
+        will-change: auto !important;
+    }
+}

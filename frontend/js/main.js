@@ -395,13 +395,30 @@ const APARTMENT_ROOM_COUNTS = {
     }
 };
 
-function getApartmentRoomCount(aptId, room) {
-    const aptCounts = APARTMENT_ROOM_COUNTS[Number(aptId)] || {};
+/* الشقق التي تم رفع صورها فعليًا */
+const APARTMENTS_WITH_PHOTOS = [1, 2, 3];
 
+function getApartmentRoomCount(aptId, room) {
+    const id = Number(aptId);
+
+    /*
+      مهم جدًا:
+      أي شقة غير موجودة هنا لن يحاول الموقع تحميل صورها.
+      لما ترفع صور الشقة 4 لاحقًا، فقط أضف رقم 4 فوق.
+    */
+    if (!APARTMENTS_WITH_PHOTOS.includes(id)) {
+        return 0;
+    }
+
+    const aptCounts = APARTMENT_ROOM_COUNTS[id] || {};
+
+    /*
+      لا نستخدم room.count كاحتياط؛ لأن هذا يسبب طلب صور غير موجودة.
+      لازم العدد يكون مكتوب صراحة داخل APARTMENT_ROOM_COUNTS.
+    */
     const count =
         aptCounts[room.key] ??
         aptCounts[room.folder] ??
-        room.count ??
         0;
 
     return Math.max(0, Number(count) || 0);

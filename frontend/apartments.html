@@ -2688,7 +2688,7 @@
             <div class="card-top-badge">${badgeLabel}</div>
 
             ${apt.images && apt.images[0]
-                    ? `<img src="${apt.images[0]}" alt="${aptName}">`
+                    ? `<img src="${apt.images[0]}" alt="${aptName}" loading="lazy" decoding="async" fetchpriority="low">`
                     : `<div class="card-image-missing">${lang === "ar" ? "الصورة غير مرفوعة بعد" : "Photo not uploaded yet"}</div>`
                 }
 
@@ -2892,11 +2892,13 @@
             onclick="goToAlbumPhoto(${index})"
         >
             <img
-                src="${item.src}"
-                alt="${title}"
-                loading="lazy"
-                onerror="this.parentElement.classList.add('image-missing'); this.remove();"
-            >
+    src="${item.src}"
+    alt="${title}"
+    loading="lazy"
+    decoding="async"
+    fetchpriority="low"
+    onerror="this.parentElement.classList.add('image-missing'); this.remove();"
+>
             <span class="photo-tour-photo-title">${title}</span>
         </button>
     `;
@@ -2923,42 +2925,18 @@
 
             const groupedRooms = groupAlbumItemsByRoom(currentAlbumItems);
 
-            albumTitle.textContent = lang === "ar" ? "جولة بالصور" : "Photo tour";
-            albumCounter.textContent = lang === "ar"
-                ? `${currentAlbumItems.length} صورة`
-                : `${currentAlbumItems.length} photos`;
+            if (albumTitle) {
+                albumTitle.textContent = lang === "ar" ? "جولة بالصور" : "Photo tour";
+            }
 
-            const topStripHtml = `
-        <div class="photo-tour-top-strip">
-            <div class="photo-tour-strip-inner">
-                ${currentAlbumItems.map((item, index) => {
-                const roomTitle = getAlbumItemRoomTitle(item);
+            if (albumCounter) {
+                albumCounter.textContent = lang === "ar"
+                    ? `${currentAlbumItems.length} صورة`
+                    : `${currentAlbumItems.length} photos`;
+            }
 
-                return `
-                        <button
-                            class="photo-tour-thumb-btn ${index === currentAlbumIndex ? "active" : ""}"
-                            type="button"
-                            data-album-thumb="${index}"
-                            onclick="goToAlbumPhoto(${index})"
-                        >
-                            <div class="photo-tour-thumb-img">
-                                <img
-                                    src="${item.src}"
-                                    alt="${roomTitle}"
-                                    loading="lazy"
-                                    onerror="this.parentElement.classList.add('image-missing'); this.remove();"
-                                >
-                            </div>
-                            <span class="photo-tour-thumb-label">${roomTitle}</span>
-                        </button>
-                    `;
-            }).join("")}
-            </div>
-        </div>
-    `;
-
-            const sectionsHtml = `
-        <div class="photo-tour-sections">
+            modalBody.innerHTML = `
+        <div class="photo-tour-sections photo-tour-sections-lite">
             ${groupedRooms.map(group => {
                 const roomTitle = lang === "ar" ? group.roomTitleAr : group.roomTitleEn;
                 const photosCountText = lang === "ar"
@@ -2988,10 +2966,7 @@
             }).join("")}
         </div>
     `;
-
-            modalBody.innerHTML = topStripHtml + sectionsHtml;
         }
-
         function setActiveAlbumPhoto(index) {
             if (!currentAlbumItems.length) return;
 
