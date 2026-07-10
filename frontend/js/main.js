@@ -148,26 +148,28 @@ for (let i = 2; i <= 6; i++) {
 }
 
 /* =========================================================
-   تخصيص موقع وخريطة مستقلة لكل شقة
+   موقع موحد لجميع الشقق - HIJAZI Apartments
 ========================================================= */
-HIJAZI_APARTMENTS[1].location = "الشميساني - قرب مستشفى الأردن";
-HIJAZI_APARTMENTS[1].mapEmbed = "https://www.google.com/maps?q=Jordan%20Hospital%20Amman&z=15&output=embed";
+const HIJAZI_SHARED_LOCATION_AR = "HIJAZI Apartments - شارع يوسف بن تاشفين، الشميساني، عمّان";
+const HIJAZI_SHARED_MAP_EMBED = "https://www.google.com/maps?q=31.97618730798579,35.89911515004555&z=18&output=embed";
 
-HIJAZI_APARTMENTS[2].location = "الشميساني - قرب المستشفى الإسلامي";
-HIJAZI_APARTMENTS[2].mapEmbed = "https://www.google.com/maps?q=Islamic%20Hospital%20Amman&z=15&output=embed";
+HIJAZI_APARTMENTS[1].location = HIJAZI_SHARED_LOCATION_AR;
+HIJAZI_APARTMENTS[1].mapEmbed = HIJAZI_SHARED_MAP_EMBED;
 
-HIJAZI_APARTMENTS[3].location = "العبدلي - قرب البوليفارد";
-HIJAZI_APARTMENTS[3].mapEmbed = "https://www.google.com/maps?q=The%20Boulevard%20Amman&z=15&output=embed";
+HIJAZI_APARTMENTS[2].location = HIJAZI_SHARED_LOCATION_AR;
+HIJAZI_APARTMENTS[2].mapEmbed = HIJAZI_SHARED_MAP_EMBED;
 
-HIJAZI_APARTMENTS[4].location = "الشميساني - قرب شارع الثقافة";
-HIJAZI_APARTMENTS[4].mapEmbed = "https://www.google.com/maps?q=Shmeisani%20Amman&z=15&output=embed";
+HIJAZI_APARTMENTS[3].location = HIJAZI_SHARED_LOCATION_AR;
+HIJAZI_APARTMENTS[3].mapEmbed = HIJAZI_SHARED_MAP_EMBED;
 
-HIJAZI_APARTMENTS[5].location = "العبدلي - قرب المستشفى التخصصي";
-HIJAZI_APARTMENTS[5].mapEmbed = "https://www.google.com/maps?q=Specialty%20Hospital%20Amman&z=15&output=embed";
+HIJAZI_APARTMENTS[4].location = HIJAZI_SHARED_LOCATION_AR;
+HIJAZI_APARTMENTS[4].mapEmbed = HIJAZI_SHARED_MAP_EMBED;
 
-HIJAZI_APARTMENTS[6].location = "الشميساني - قرب الكافيهات والخدمات";
-HIJAZI_APARTMENTS[6].mapEmbed = "https://www.google.com/maps?q=Shmeisani%20restaurants%20Amman&z=15&output=embed";
+HIJAZI_APARTMENTS[5].location = HIJAZI_SHARED_LOCATION_AR;
+HIJAZI_APARTMENTS[5].mapEmbed = HIJAZI_SHARED_MAP_EMBED;
 
+HIJAZI_APARTMENTS[6].location = HIJAZI_SHARED_LOCATION_AR;
+HIJAZI_APARTMENTS[6].mapEmbed = HIJAZI_SHARED_MAP_EMBED;
 /* =========================================================
    الشقة 6 تحتوي على شرفة واحدة فقط
 ========================================================= */
