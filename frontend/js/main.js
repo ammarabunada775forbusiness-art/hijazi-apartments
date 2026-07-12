@@ -398,7 +398,7 @@ const APARTMENT_ROOM_COUNTS = {
 };
 
 /* الشقق التي تم رفع صورها فعليًا */
-const APARTMENTS_WITH_PHOTOS = [1, 2, 3];
+const APARTMENTS_WITH_PHOTOS = [1, 2, 3, 4, 5, 6];
 
 function getApartmentRoomCount(aptId, room) {
     const id = Number(aptId);
