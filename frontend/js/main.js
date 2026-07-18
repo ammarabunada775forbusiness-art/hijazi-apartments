@@ -352,18 +352,18 @@ const APARTMENT_ROOM_COUNTS = {
     },
 
     4: {
-        living: 4,
-        guest: 2,
-        "bedroom-1": 3,
-        "bedroom-2": 2,
+        living: 3,
+        guest: 6,
+        "bedroom-1": 4,
+        "bedroom-2": 3,
         "bedroom-3": 2,
-        kitchen: 3,
-        "bathroom-1": 2,
+        kitchen: 4,
+        "bathroom-1": 7,
         "bathroom-2": 2,
-        "bathroom-3": 2,
-        laundry: 2,
-        others: 4,
-        balcony: 2
+        "bathroom-3": 1,
+        laundry: 1,
+        others: 8,
+        balcony: 1
     },
 
     5: {
@@ -398,7 +398,7 @@ const APARTMENT_ROOM_COUNTS = {
 };
 
 /* الشقق التي تم رفع صورها فعليًا */
-const APARTMENTS_WITH_PHOTOS = [1, 2, 3, 4, 5, 6];
+const APARTMENTS_WITH_PHOTOS = [1, 2, 3, 4, 5];
 
 function getApartmentRoomCount(aptId, room) {
     const id = Number(aptId);
