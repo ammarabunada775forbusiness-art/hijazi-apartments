@@ -12,7 +12,17 @@
    أسعار تحويل العملة
 ========================= */
 const rates = { USD: 1.41, SAR: 5.29 };
-
+/* =========================
+   أسعار الشقق بالدينار الأردني
+========================= */
+const APARTMENT_PRICES = {
+    1: 150,
+    2: 200,
+    3: 150,
+    4: 200,
+    5: 150,
+    6: 200
+};
 /* =========================
    بيانات الشقق المشتركة
 ========================= */
@@ -23,7 +33,7 @@ const HIJAZI_APARTMENTS = {
         mapEmbed: "https://www.google.com/maps?q=%D9%88%D8%B3%D8%B7%20%D8%A7%D9%84%D8%A8%D9%84%D8%AF%20%D8%B9%D9%85%D8%A7%D9%86&z=15&output=embed",
         nameAr: "شقة رقم 1",
         nameEn: "Apartment 1",
-        price: 120,
+        price: APARTMENT_PRICES[1],
         oneBalcony: false,
         descAr: "شقة مفروشة راقية مناسبة للإقامة الطبية والتنفيذية في عمّان.",
         descEn: "Elegant furnished apartment suitable for medical and executive stays in Amman.",
@@ -144,7 +154,7 @@ for (let i = 2; i <= 6; i++) {
     HIJAZI_APARTMENTS[i].id = i;
     HIJAZI_APARTMENTS[i].nameAr = `شقة رقم ${i}`;
     HIJAZI_APARTMENTS[i].nameEn = `Apartment ${i}`;
-    HIJAZI_APARTMENTS[i].price = 120;
+    HIJAZI_APARTMENTS[i].price = APARTMENT_PRICES[i];
 }
 
 /* =========================================================
