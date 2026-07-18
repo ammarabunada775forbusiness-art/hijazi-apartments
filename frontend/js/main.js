@@ -377,17 +377,17 @@ const APARTMENT_ROOM_COUNTS = {
     },
 
     5: {
-        living: 4,
-        guest: 2,
-        "bedroom-1": 3,
-        "bedroom-2": 2,
-        "bedroom-3": 2,
-        kitchen: 3,
-        "bathroom-1": 2,
-        "bathroom-2": 2,
-        "bathroom-3": 2,
-        laundry: 2,
-        others: 4,
+        living: 3,
+        guest: 3,
+        "bedroom-1": 5,
+        "bedroom-2": 3,
+        "bedroom-3": 4,
+        kitchen: 4,
+        "bathroom-1": 3,
+        "bathroom-2": 3,
+        "bathroom-3": 3,
+        laundry: 3,
+        others: 6,
         balcony: 2
     },
 
