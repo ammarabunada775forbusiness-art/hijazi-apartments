@@ -1752,17 +1752,46 @@
             cursor: pointer;
         }
 
+        /* Skeleton يبقى ظاهرًا حتى يكتمل تحميل الصورة فعليًا */
+        .photo-tour-photo::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(100deg,
+                    #ececec 20%,
+                    #fafafa 40%,
+                    #ececec 60%);
+            background-size: 220% 100%;
+            animation: album-skeleton-shimmer 1.35s ease-in-out infinite;
+            transition: opacity 0.25s ease;
+            pointer-events: none;
+        }
+
+        .photo-tour-photo.is-loaded::before,
+        .photo-tour-photo.image-missing::before {
+            opacity: 0;
+            animation: none;
+        }
+
         .photo-tour-photo.wide {
             grid-column: span 2;
             height: 360px;
         }
 
         .photo-tour-photo img {
+            position: relative;
+            z-index: 2;
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
-            transition: transform 0.35s ease;
+            opacity: 0;
+            transition: opacity 0.28s ease, transform 0.35s ease;
+        }
+
+        .photo-tour-photo.is-loaded img {
+            opacity: 1;
         }
 
         .photo-tour-photo:hover img {
@@ -1773,6 +1802,7 @@
             position: absolute;
             right: 12px;
             bottom: 12px;
+            z-index: 3;
             background: rgba(0, 0, 0, 0.62);
             color: #fff;
             padding: 7px 11px;
@@ -1786,6 +1816,7 @@
             content: "الصورة غير مرفوعة بعد";
             position: absolute;
             inset: 0;
+            z-index: 4;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1836,6 +1867,81 @@
             font-weight: 900;
             background: #f7f7f7;
             border-radius: 24px;
+        }
+
+        /* Skeleton يظهر فور فتح الألبوم لمنع الشاشة البيضاء */
+        .photo-album-loading {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 42px 24px 70px;
+        }
+
+        .photo-album-loading-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 30px;
+            margin-bottom: 24px;
+            color: #555;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .photo-album-loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid #e4e4e4;
+            border-top-color: #c89116;
+            border-radius: 50%;
+            animation: album-loader-spin 0.8s linear infinite;
+        }
+
+        .photo-album-loading-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .photo-album-loading-card {
+            height: 265px;
+            border-radius: 18px;
+            background: linear-gradient(100deg,
+                    #ececec 20%,
+                    #fafafa 40%,
+                    #ececec 60%);
+            background-size: 220% 100%;
+            animation: album-skeleton-shimmer 1.35s ease-in-out infinite;
+        }
+
+        .photo-album-loading-card.wide {
+            grid-column: span 2;
+            height: 360px;
+        }
+
+        @keyframes album-skeleton-shimmer {
+            0% {
+                background-position: 100% 0;
+            }
+
+            100% {
+                background-position: -100% 0;
+            }
+        }
+
+        @keyframes album-loader-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .photo-tour-photo::before,
+            .photo-album-loading-card,
+            .photo-album-loading-spinner {
+                animation: none;
+            }
         }
 
         @media (max-width: 900px) {
@@ -1908,9 +2014,21 @@
                 font-size: 14px;
             }
 
-            .photo-tour-photos {
+            .photo-tour-photos,
+            .photo-album-loading-grid {
                 grid-template-columns: 1fr;
                 gap: 12px;
+            }
+
+            .photo-album-loading {
+                padding: 28px 14px 50px;
+            }
+
+            .photo-album-loading-card,
+            .photo-album-loading-card.wide {
+                grid-column: span 1;
+                height: 260px;
+                border-radius: 16px;
             }
 
             .photo-tour-photo,
@@ -1928,7 +2046,9 @@
         @media (max-width: 480px) {
 
             .photo-tour-photo,
-            .photo-tour-photo.wide {
+            .photo-tour-photo.wide,
+            .photo-album-loading-card,
+            .photo-album-loading-card.wide {
                 height: 230px;
             }
 
@@ -2433,7 +2553,8 @@
             </div>
         </div>
     </div>
-    <div class="photo-album-modal" id="photoAlbumModal">
+    <div class="photo-album-modal" id="photoAlbumModal" role="dialog" aria-modal="true"
+        aria-labelledby="photoAlbumTitle" aria-busy="false">
         <div class="photo-album-header">
             <button class="album-close-btn" id="closePhotoAlbum" type="button">×</button>
             <div class="photo-album-title" id="photoAlbumTitle">جولة بالصور</div>
@@ -2744,6 +2865,7 @@
 
         let currentAlbumItems = [];
         let currentAlbumIndex = 0;
+        let albumRenderToken = 0;
 
         function getGalleryItemsForApartment(apt) {
             if (typeof getApartmentGalleryImages === "function") {
@@ -2881,27 +3003,81 @@
             return Array.from(map.values());
         }
 
+        function setPhotoAlbumBusy(isBusy) {
+            const modal = document.getElementById("photoAlbumModal");
+
+            if (modal) {
+                modal.setAttribute("aria-busy", isBusy ? "true" : "false");
+            }
+        }
+
+        function renderPhotoAlbumSkeleton() {
+            const lang = getCurrentLang();
+            const modalBody = document.querySelector("#photoAlbumModal .photo-album-body");
+            const albumTitle = document.getElementById("photoAlbumTitle");
+            const albumCounter = document.getElementById("photoAlbumCounter");
+
+            if (!modalBody) return;
+
+            if (albumTitle) {
+                albumTitle.textContent =
+                    lang === "ar" ? "جولة بالصور" : "Photo tour";
+            }
+
+            if (albumCounter) {
+                albumCounter.textContent =
+                    lang === "ar" ? "جاري التحميل..." : "Loading...";
+            }
+
+            setPhotoAlbumBusy(true);
+
+            modalBody.innerHTML = `
+                <div class="photo-album-loading" role="status" aria-live="polite">
+                    <div class="photo-album-loading-status">
+                        <span class="photo-album-loading-spinner" aria-hidden="true"></span>
+
+                        <span>
+                            ${lang === "ar"
+                    ? "جاري تجهيز ألبوم الصور..."
+                    : "Preparing the photo album..."}
+                        </span>
+                    </div>
+
+                    <div class="photo-album-loading-grid" aria-hidden="true">
+                        <div class="photo-album-loading-card wide"></div>
+                        <div class="photo-album-loading-card"></div>
+                        <div class="photo-album-loading-card"></div>
+                        <div class="photo-album-loading-card wide"></div>
+                    </div>
+                </div>
+            `;
+        }
+
         function renderTourPhoto(item, index, isWide = false) {
             const title = getAlbumItemTitle(item, index);
+            const isPriorityPhoto = index === currentAlbumIndex;
 
             return `
-        <button
-            class="photo-tour-photo ${isWide ? "wide" : ""}"
-            id="photo-tour-photo-${index}"
-            type="button"
-            onclick="goToAlbumPhoto(${index})"
-        >
-            <img
-    src="${item.src}"
-    alt="${title}"
-    loading="lazy"
-    decoding="async"
-    fetchpriority="low"
-    onerror="this.parentElement.classList.add('image-missing'); this.remove();"
->
-            <span class="photo-tour-photo-title">${title}</span>
-        </button>
-    `;
+                <button
+                    class="photo-tour-photo ${isWide ? "wide" : ""}"
+                    id="photo-tour-photo-${index}"
+                    type="button"
+                    onclick="goToAlbumPhoto(${index})"
+                    aria-label="${title}"
+                >
+                    <img
+                        src="${item.src}"
+                        alt="${title}"
+                        loading="${isPriorityPhoto ? "eager" : "lazy"}"
+                        decoding="async"
+                        fetchpriority="${isPriorityPhoto ? "high" : "low"}"
+                        onload="this.parentElement.classList.add('is-loaded');"
+                        onerror="this.parentElement.classList.remove('is-loaded'); this.parentElement.classList.add('image-missing'); this.remove();"
+                    >
+
+                    <span class="photo-tour-photo-title">${title}</span>
+                </button>
+            `;
         }
 
         function renderPhotoAlbumTour() {
@@ -2920,6 +3096,8 @@
                 </div>
             </div>
         `;
+
+                setPhotoAlbumBusy(false);
                 return;
             }
 
@@ -2966,7 +3144,10 @@
             }).join("")}
         </div>
     `;
+
+            setPhotoAlbumBusy(false);
         }
+
         function setActiveAlbumPhoto(index) {
             if (!currentAlbumItems.length) return;
 
@@ -2997,37 +3178,74 @@
             }
         }
 
+
+
         function openPhotoAlbum(index = 0) {
             const apt = getCurrentGalleryApartment();
 
             if (!apt) return;
 
             currentAlbumItems = getGalleryItemsForApartment(apt);
-            currentAlbumIndex = index;
+
+            currentAlbumIndex = Math.max(
+                0,
+                Math.min(index, currentAlbumItems.length - 1)
+            );
 
             const modal = document.getElementById("photoAlbumModal");
+
             if (!modal) return;
 
+            const renderToken = ++albumRenderToken;
+
             modal.style.display = "block";
+            modal.scrollTop = 0;
             document.body.style.overflow = "hidden";
 
-            renderPhotoAlbumTour();
+            renderPhotoAlbumSkeleton();
 
+            /*
+              نستخدم إطارين حتى يعرض المتصفح الـSkeleton
+              قبل بناء ألبوم الصور الكامل.
+            */
             requestAnimationFrame(() => {
-                goToAlbumPhoto(index);
+                requestAnimationFrame(() => {
+                    if (
+                        renderToken !== albumRenderToken ||
+                        modal.style.display !== "block"
+                    ) {
+                        return;
+                    }
+
+                    renderPhotoAlbumTour();
+
+                    requestAnimationFrame(() => {
+                        if (renderToken === albumRenderToken) {
+                            goToAlbumPhoto(currentAlbumIndex);
+                        }
+                    });
+                });
             });
         }
 
         function closePhotoAlbum() {
             const modal = document.getElementById("photoAlbumModal");
+
             if (!modal) return;
 
+            albumRenderToken += 1;
             modal.style.display = "none";
 
-            const detailsModal = document.getElementById("detailsModal");
-            const detailsStillOpen = detailsModal && detailsModal.style.display === "block";
+            setPhotoAlbumBusy(false);
 
-            document.body.style.overflow = detailsStillOpen ? "hidden" : "";
+            const detailsModal = document.getElementById("detailsModal");
+
+            const detailsStillOpen =
+                detailsModal &&
+                detailsModal.style.display === "block";
+
+            document.body.style.overflow =
+                detailsStillOpen ? "hidden" : "";
         }
 
         function nextAlbumPhoto() {
