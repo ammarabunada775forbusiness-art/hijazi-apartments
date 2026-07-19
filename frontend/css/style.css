@@ -1583,3 +1583,305 @@ body.ltr-mode .seo-card {
         will-change: auto !important;
     }
 }
+
+/* =========================================================
+   BILINGUAL RTL / LTR LAYOUT SYSTEM
+========================================================= */
+
+html[dir="rtl"] body {
+    direction: rtl;
+    text-align: right;
+}
+
+html[dir="ltr"] body {
+    direction: ltr;
+    text-align: left;
+}
+
+/* محاذاة النصوص حسب اتجاه اللغة */
+html[dir] body :is(.card-body,
+    .form-section,
+    #bookingForm,
+    .summary-box,
+    .modal-body,
+    .room-description,
+    .photo-tour-room-info,
+    .photo-album-body,
+    .photo-album-caption,
+    .footer-box,
+    .white-card,
+    .why-card,
+    .seo-card,
+    .faq-question,
+    .faq-pro-question,
+    .faq-pro-answer,
+    .availability-field,
+    .filter-field,
+    .gallery-hint) {
+    text-align: start !important;
+}
+
+/* حقول الإدخال والقوائم */
+html[dir="rtl"] body :is(.form-section input,
+    .form-section select,
+    .form-section textarea,
+    .booking-form-glass-current,
+    .booking-form-glass-option,
+    .currency-glass-current,
+    .currency-glass-option) {
+    direction: rtl !important;
+    text-align: right !important;
+}
+
+html[dir="ltr"] body :is(.form-section input,
+    .form-section select,
+    .form-section textarea,
+    .booking-form-glass-current,
+    .booking-form-glass-option,
+    .currency-glass-current,
+    .currency-glass-option) {
+    direction: ltr !important;
+    text-align: left !important;
+}
+
+/* البريد والهاتف والتاريخ تبقى أحرفها وأرقامها LTR */
+html[dir="rtl"] body :is(input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    .glass-date-input) {
+    direction: ltr !important;
+    text-align: right !important;
+    unicode-bidi: plaintext !important;
+}
+
+html[dir="ltr"] body :is(input[type="email"],
+    input[type="tel"],
+    input[type="date"],
+    .glass-date-input) {
+    direction: ltr !important;
+    text-align: left !important;
+    unicode-bidi: plaintext !important;
+}
+
+html[dir="rtl"] body input[type="date"]::-webkit-datetime-edit {
+    direction: ltr !important;
+    text-align: right !important;
+}
+
+html[dir="ltr"] body input[type="date"]::-webkit-datetime-edit {
+    direction: ltr !important;
+    text-align: left !important;
+}
+
+/* Placeholder */
+html[dir="rtl"] body .form-section :is(input, textarea)::placeholder {
+    text-align: right !important;
+}
+
+html[dir="ltr"] body .form-section :is(input, textarea)::placeholder {
+    text-align: left !important;
+}
+
+/* أيقونة حقل التاريخ */
+html[dir="rtl"] body .glass-date-input {
+    background-position: 14px center !important;
+    padding-left: 42px !important;
+    padding-right: 12px !important;
+}
+
+html[dir="ltr"] body .glass-date-input {
+    background-position: calc(100% - 14px) center !important;
+    padding-right: 42px !important;
+    padding-left: 12px !important;
+}
+
+/* سهم القوائم يكون في inline-end */
+html[dir] body :is(.booking-form-glass-current,
+    .currency-glass-current)::before {
+    order: 2;
+    flex: 0 0 auto;
+}
+
+/* عدادات البالغين والأطفال */
+html[dir="rtl"] body .hijazi-counter {
+    direction: rtl !important;
+}
+
+html[dir="ltr"] body .hijazi-counter {
+    direction: ltr !important;
+}
+
+/* =========================================================
+   BOOKING PAGE COLUMNS
+========================================================= */
+
+html[dir] body .apartment-preview-card {
+    grid-area: preview;
+}
+
+html[dir] body .booking-form-card {
+    grid-area: form;
+}
+
+/* العربي: الصور يسار والنموذج يمين */
+html[dir="rtl"] body .layout {
+    direction: ltr !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    grid-template-areas: "preview form" !important;
+}
+
+/* الإنجليزي: النموذج يسار والصور يمين */
+html[dir="ltr"] body .layout {
+    direction: ltr !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    grid-template-areas: "form preview" !important;
+}
+
+html[dir="rtl"] body .layout>.card {
+    direction: rtl;
+}
+
+html[dir="ltr"] body .layout>.card {
+    direction: ltr;
+}
+
+/* =========================================================
+   FULL PHOTO ALBUM
+========================================================= */
+
+html[dir] body .photo-tour-photos {
+    grid-area: photos;
+}
+
+html[dir] body .photo-tour-room-info {
+    grid-area: info;
+    text-align: start !important;
+}
+
+/* العربي: معلومات الغرفة يمين والصور يسار */
+html[dir="rtl"] body .photo-tour-section {
+    direction: ltr !important;
+    grid-template-columns: minmax(0, 1.45fr) 340px !important;
+    grid-template-areas: "photos info" !important;
+}
+
+/* الإنجليزي: معلومات الغرفة يسار والصور يمين */
+html[dir="ltr"] body .photo-tour-section {
+    direction: ltr !important;
+    grid-template-columns: 340px minmax(0, 1.45fr) !important;
+    grid-template-areas: "info photos" !important;
+}
+
+html[dir="rtl"] body .photo-tour-section>* {
+    direction: rtl;
+}
+
+html[dir="ltr"] body .photo-tour-section>* {
+    direction: ltr;
+}
+
+/* عناوين الصور */
+html[dir="rtl"] body :is(.airbnb-gallery-label,
+    .photo-tour-photo-title) {
+    right: 12px !important;
+    left: auto !important;
+    text-align: right !important;
+}
+
+html[dir="ltr"] body :is(.airbnb-gallery-label,
+    .photo-tour-photo-title) {
+    left: 12px !important;
+    right: auto !important;
+    text-align: left !important;
+}
+
+/* زر عرض جميع الصور */
+html[dir="rtl"] body .airbnb-show-all {
+    left: 12px !important;
+    right: auto !important;
+}
+
+html[dir="ltr"] body .airbnb-show-all {
+    right: 12px !important;
+    left: auto !important;
+}
+
+/* شارة كرت الشقة */
+html[dir="rtl"] body .card-top-badge {
+    right: 14px !important;
+    left: auto !important;
+}
+
+html[dir="ltr"] body .card-top-badge {
+    left: 14px !important;
+    right: auto !important;
+}
+
+/* عناوين حقول البحث */
+html[dir="rtl"] body .filter-field label {
+    right: 12px !important;
+    left: auto !important;
+}
+
+html[dir="ltr"] body .filter-field label {
+    left: 12px !important;
+    right: auto !important;
+}
+
+/* أسهم الصور والألبوم في العربي */
+html[dir="rtl"] body .slider-prev {
+    right: 12px !important;
+    left: auto !important;
+}
+
+html[dir="rtl"] body .slider-next {
+    left: 12px !important;
+    right: auto !important;
+}
+
+html[dir="rtl"] body .album-prev {
+    right: 18px !important;
+    left: auto !important;
+}
+
+html[dir="rtl"] body .album-next {
+    left: 18px !important;
+    right: auto !important;
+}
+
+html[dir="rtl"] body :is(.slider-btn, .album-nav) {
+    transform: translateY(-50%) scaleX(-1) !important;
+}
+
+/* الهاتف */
+@media (max-width: 900px) {
+    html[dir] body .layout {
+        grid-template-columns: minmax(0, 1fr) !important;
+        grid-template-areas:
+            "preview"
+            "form" !important;
+    }
+
+    html[dir] body .photo-tour-section {
+        display: flex !important;
+        flex-direction: column-reverse !important;
+        gap: 18px !important;
+    }
+
+    html[dir] body .photo-tour-room-info {
+        position: static !important;
+        text-align: start !important;
+    }
+}
+
+@media (max-width: 768px) {
+    html[dir="rtl"] body .album-prev {
+        right: 10px !important;
+        left: auto !important;
+    }
+
+    html[dir="rtl"] body .album-next {
+        left: 10px !important;
+        right: auto !important;
+    }
+}
