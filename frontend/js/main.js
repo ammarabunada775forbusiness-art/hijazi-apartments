@@ -158,6 +158,96 @@ for (let i = 2; i <= 6; i++) {
 }
 
 /* =========================================================
+   مرافق الشقق
+   عدّل أو احذف أو أضف أي عنصر حسب التجهيز الحقيقي للشقة
+========================================================= */
+
+const COMMON_APARTMENT_FEATURES = {
+    ar: [
+        "3 غرف نوم",
+        "3 حمامات",
+        "إنترنت Wi-Fi سريع",
+        "موقف سيارة",
+        "شاشتان Smart TV",
+        "غرفة معيشة",
+        "غرفة ضيوف",
+        "مطبخ مجهز بالكامل",
+        "غسالة ملابس",
+        "تكييف",
+        "مصعد",
+        "ماء ساخن"
+    ],
+
+    en: [
+        "3 Bedrooms",
+        "3 Bathrooms",
+        "High-speed Wi-Fi",
+        "Car parking",
+        "2 Smart TVs",
+        "Living room",
+        "Guest room",
+        "Fully equipped kitchen",
+        "Washing machine",
+        "Air conditioning",
+        "Elevator",
+        "Hot water"
+    ]
+};
+
+/*
+  الإضافات الخاصة بكل شقة.
+  تستطيع لاحقًا تخصيص كل شقة بإضافة عناصر داخل ar و en.
+*/
+const APARTMENT_FEATURE_OVERRIDES = {
+    1: {
+        ar: ["شرفتان"],
+        en: ["2 Balconies"]
+    },
+
+    2: {
+        ar: ["شرفتان"],
+        en: ["2 Balconies"]
+    },
+
+    3: {
+        ar: ["شرفتان"],
+        en: ["2 Balconies"]
+    },
+
+    4: {
+        ar: ["شرفتان"],
+        en: ["2 Balconies"]
+    },
+
+    5: {
+        ar: ["شرفتان"],
+        en: ["2 Balconies"]
+    },
+
+    6: {
+        ar: ["شرفة واحدة"],
+        en: ["1 Balcony"]
+    }
+};
+
+for (let apartmentId = 1; apartmentId <= 6; apartmentId++) {
+    const apartment = HIJAZI_APARTMENTS[apartmentId];
+    const extraFeatures = APARTMENT_FEATURE_OVERRIDES[apartmentId];
+
+    if (!apartment || !extraFeatures) continue;
+
+    apartment.featuresAr = [
+        ...COMMON_APARTMENT_FEATURES.ar,
+        ...extraFeatures.ar
+    ];
+
+    apartment.featuresEn = [
+        ...COMMON_APARTMENT_FEATURES.en,
+        ...extraFeatures.en
+    ];
+}
+
+/* =========================================================
    موقع موحد لجميع الشقق - HIJAZI Apartments
 ========================================================= */
 const HIJAZI_SHARED_LOCATION_AR = "HIJAZI Apartments - شارع يوسف بن تاشفين، الشميساني، عمّان";
@@ -311,6 +401,102 @@ const APARTMENT_ROOM_PHOTO_PLAN = [
 ];
 
 /* =========================================================
+   تفاصيل الغرف والمرافق
+   هذه النصوص منفصلة عن عدد الصور وأسماء مجلداتها
+========================================================= */
+
+const DEFAULT_APARTMENT_ROOM_DETAILS = {
+    living: {
+        noteAr: "جلسة مريحة للاستخدام اليومي مع شاشة Smart TV وتكييف.",
+        noteEn: "Comfortable daily seating area with a Smart TV and air conditioning."
+    },
+
+    guest: {
+        noteAr: "غرفة مستقلة لاستقبال الضيوف مع جلسة وشاشة Smart TV.",
+        noteEn: "Separate guest room with comfortable seating and a Smart TV."
+    },
+
+    "bedroom-1": {
+        noteAr: "غرفة نوم ماستر مع سرير مزدوج وخزائن وحمام خاص.",
+        noteEn: "Master bedroom with a double bed, wardrobes and a private bathroom."
+    },
+
+    "bedroom-2": {
+        noteAr: "غرفة نوم مع أسرّة مريحة وخزانة ملابس وتكييف.",
+        noteEn: "Bedroom with comfortable beds, a wardrobe and air conditioning."
+    },
+
+    "bedroom-3": {
+        noteAr: "غرفة نوم إضافية مناسبة للعائلة أو الإقامة الطويلة.",
+        noteEn: "Additional bedroom suitable for families and long stays."
+    },
+
+    kitchen: {
+        noteAr: "مطبخ مجهز بثلاجة وفرن وموقد وأدوات أساسية للاستخدام اليومي.",
+        noteEn: "Kitchen equipped with a refrigerator, oven, cooker and daily essentials."
+    },
+
+    "bathroom-1": {
+        noteAr: "حمام خاص لغرفة النوم الماستر مع دش وماء ساخن.",
+        noteEn: "Private master bathroom with a shower and hot water."
+    },
+
+    "bathroom-2": {
+        noteAr: "حمام كامل مجهز للاستخدام اليومي.",
+        noteEn: "Fully equipped bathroom for daily use."
+    },
+
+    "bathroom-3": {
+        noteAr: "حمام إضافي لخدمة غرف النوم والضيوف.",
+        noteEn: "Additional bathroom serving bedrooms and guests."
+    },
+
+    laundry: {
+        noteAr: "مساحة خدمات تحتوي على غسالة ملابس وتجهيزات التنظيف.",
+        noteEn: "Service area with a washing machine and cleaning facilities."
+    },
+
+    others: {
+        noteAr: "مدخل مرتب وممرات داخلية ومصعد للوصول إلى الشقة.",
+        noteEn: "Organized entrance, internal corridors and elevator access."
+    },
+
+    balcony: {
+        noteAr: "شرفة مناسبة للتهوية والإطلالة على المنطقة.",
+        noteEn: "Balcony providing ventilation and a view of the surrounding area."
+    }
+};
+
+/*
+  تخصيص اختياري لشقة محددة.
+  اكتب فقط الغرفة المختلفة، وسيستخدم الموقع التفاصيل العامة للباقي.
+
+  مثال:
+  5: {
+      living: {
+          noteAr: "غرفة معيشة كبيرة مع شاشتين.",
+          noteEn: "Large living room with two TVs."
+      }
+  }
+*/
+const APARTMENT_ROOM_DETAILS = {
+    1: {},
+    2: {},
+    3: {},
+    4: {},
+    5: {},
+    6: {}
+};
+
+function getApartmentRoomDetails(apartmentId, roomKey) {
+    return (
+        APARTMENT_ROOM_DETAILS[apartmentId]?.[roomKey] ||
+        DEFAULT_APARTMENT_ROOM_DETAILS[roomKey] ||
+        {}
+    );
+}
+
+/* =========================================================
    عدد الصور الفعلي لكل شقة ولكل غرفة
    المفتاح الأول = رقم الشقة
    المفتاح الداخلي = key تبع الغرفة من APARTMENT_ROOM_PHOTO_PLAN
@@ -451,6 +637,7 @@ function buildApartmentRooms(aptId, oneBalcony = false) {
         const isBalcony = room.key === "balcony";
 
         const imageCount = getApartmentRoomCount(aptId, room);
+        const roomDetails = getApartmentRoomDetails(aptId, room.key);
 
         const images = Array.from({ length: imageCount }, (_, index) => {
             return buildApartmentPhotoPath(aptId, room.folder, index + 1, "webp");
@@ -461,8 +648,13 @@ function buildApartmentRooms(aptId, oneBalcony = false) {
             folder: room.folder,
             titleAr: isBalcony && oneBalcony ? "الشرفة" : room.titleAr,
             titleEn: isBalcony && oneBalcony ? "Balcony" : room.titleEn,
-            noteAr: isBalcony && oneBalcony ? "تحتوي هذه الشقة على شرفة واحدة." : room.noteAr,
-            noteEn: isBalcony && oneBalcony ? "This apartment includes one balcony." : room.noteEn,
+            noteAr: isBalcony && oneBalcony
+                ? "شرفة واحدة مناسبة للتهوية والإطلالة على المنطقة."
+                : (roomDetails.noteAr || room.noteAr),
+
+            noteEn: isBalcony && oneBalcony
+                ? "One balcony providing ventilation and a view of the surrounding area."
+                : (roomDetails.noteEn || room.noteEn),
             images
         };
     });
@@ -506,8 +698,7 @@ async function loadApartmentGallery(aptId, force = false) {
         return apt;
     }
 
-    apt.rooms = buildApartmentRooms(aptId, apt.oneBalcony)
-        .filter(room => room.images.length > 0);
+    apt.rooms = buildApartmentRooms(aptId, apt.oneBalcony);
 
     apt.images = getApartmentImageSources(apt);
     apt.galleryLoaded = true;

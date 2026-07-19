@@ -2329,6 +2329,7 @@ html[dir="rtl"] body :is(.slider-btn, .album-nav) {
         display: -webkit-box;
         overflow: hidden;
         -webkit-line-clamp: 3;
+        line-clamp: 3;
         -webkit-box-orient: vertical;
     }
 
@@ -2468,7 +2469,9 @@ html[dir="rtl"] body :is(.slider-btn, .album-nav) {
         font-size: 11px !important;
         line-height: 1.55 !important;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
+        ;
     }
 
     html[dir] body .wrap .grid .location-line {
@@ -2626,7 +2629,9 @@ html[dir="rtl"] body :is(.slider-btn, .album-nav) {
         display: -webkit-box;
         overflow: hidden;
         -webkit-line-clamp: 3;
+        line-clamp: 3;
         -webkit-box-orient: vertical;
+        ;
     }
 
     html[dir] body #detailsModal p {
@@ -2745,5 +2750,455 @@ html[dir="rtl"] body :is(.slider-btn, .album-nav) {
     html[dir] body .wrap .grid .skeleton-image,
     html[dir] body .wrap .grid .card-image-missing {
         height: 165px !important;
+    }
+}
+
+
+/* =========================================================
+   MOBILE UX CORRECTIONS V2
+========================================================= */
+
+/* يمنع خروج الصفحة أفقيًا */
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden !important;
+}
+
+/* =========================================================
+   CUSTOM SCROLLBAR
+========================================================= */
+
+html,
+body,
+.modal,
+.modal-content,
+.photo-album-modal,
+.photo-album-body {
+    scrollbar-width: thin;
+    scrollbar-color: #c89116 #171717;
+}
+
+@media (min-width: 769px) {
+    html {
+        scrollbar-gutter: stable;
+    }
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+.modal::-webkit-scrollbar,
+.modal-content::-webkit-scrollbar,
+.photo-album-modal::-webkit-scrollbar,
+.photo-album-body::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+.modal::-webkit-scrollbar-track,
+.modal-content::-webkit-scrollbar-track,
+.photo-album-modal::-webkit-scrollbar-track,
+.photo-album-body::-webkit-scrollbar-track {
+    background: #171717;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+.modal::-webkit-scrollbar-thumb,
+.modal-content::-webkit-scrollbar-thumb,
+.photo-album-modal::-webkit-scrollbar-thumb,
+.photo-album-body::-webkit-scrollbar-thumb {
+    min-height: 45px;
+    border: 2px solid #171717;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #e0ad1f, #8a6508);
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
+.modal::-webkit-scrollbar-thumb:hover,
+.modal-content::-webkit-scrollbar-thumb:hover,
+.photo-album-modal::-webkit-scrollbar-thumb:hover,
+.photo-album-body::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #ffd36a, #b57e08);
+}
+
+/* إزالة الأسهم القديمة الظاهرة أعلى وأسفل الـScrollbar */
+html::-webkit-scrollbar-button,
+body::-webkit-scrollbar-button,
+.modal::-webkit-scrollbar-button,
+.modal-content::-webkit-scrollbar-button,
+.photo-album-modal::-webkit-scrollbar-button,
+.photo-album-body::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+/* =========================================================
+   NEW ROOM DETAILS
+========================================================= */
+
+html[dir] body .room-summary-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0 18px !important;
+    overflow: visible !important;
+}
+
+html[dir] body .room-detail-row {
+    min-width: 0;
+    padding: 12px 2px;
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 9px;
+    align-items: start;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.13);
+    background: transparent;
+}
+
+html[dir] body .room-detail-icon {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(212, 160, 23, 0.16);
+    border: 1px solid rgba(212, 160, 23, 0.45);
+    color: #ffd36a;
+    font-size: 13px;
+    font-weight: 950;
+}
+
+html[dir] body .room-detail-copy {
+    min-width: 0;
+}
+
+html[dir] body .room-detail-copy strong {
+    display: block;
+    margin-bottom: 3px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1.35;
+}
+
+html[dir] body .room-detail-copy p {
+    margin: 0 !important;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 11px !important;
+    line-height: 1.65;
+}
+
+html[dir] body .room-description {
+    margin-top: 10px !important;
+    color: rgba(255, 255, 255, 0.65) !important;
+    font-size: 11px !important;
+    line-height: 1.6 !important;
+}
+
+/* =========================================================
+   PHONE FIXES
+========================================================= */
+
+@media (max-width: 768px) {
+
+    /* الصفحة ونافذة التفاصيل */
+    html[dir] body #detailsModal,
+    html[dir] body #detailsModal .modal-content,
+    html[dir] body #detailsModal .modal-body,
+    html[dir] body #detailsModal .detail-grid,
+    html[dir] body #detailsModal .detail-grid>div {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        overflow-x: hidden !important;
+    }
+
+    html[dir] body #detailsModal .detail-grid {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 10px !important;
+    }
+
+    /* العنوان مكرر في رأس النافذة، لذلك نخفي النسخة الثانية */
+    html[dir] body #detailsModal #detailName {
+        display: none !important;
+    }
+
+    html[dir] body #detailsModal #detailDesc {
+        margin-top: 4px !important;
+        line-clamp: 4;
+        -webkit-line-clamp: 4;
+    }
+
+    /* صورة تفاصيل الشقة */
+    html[dir] body #detailsModal .airbnb-gallery-grid {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 5px !important;
+    }
+
+    html[dir] body #detailsModal .airbnb-gallery-item.main {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 2 / 1;
+        min-height: 165px !important;
+    }
+
+    html[dir] body #detailsModal .airbnb-gallery-item.main img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+
+    /* مرافق الشقة: شبكة مرتبة بدل الصف المقطوع */
+    html[dir] body #detailsModal .detail-features {
+        width: 100% !important;
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 6px !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        margin: 10px 0 !important;
+    }
+
+    html[dir] body #detailsModal .detail-features li {
+        width: 100% !important;
+        min-width: 0 !important;
+        padding: 7px 8px !important;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        white-space: normal !important;
+        border-radius: 10px !important;
+        font-size: 10px !important;
+        line-height: 1.35;
+    }
+
+    /* تفاصيل الغرف: قائمة واضحة وليست أعمدة أو مستطيلات */
+    html[dir] body #detailsModal .room-summary-grid,
+    html[dir] body .apartment-preview-card .room-summary-grid {
+        width: 100% !important;
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) !important;
+        gap: 0 !important;
+        overflow: visible !important;
+        padding: 0 !important;
+    }
+
+    html[dir] body #detailsModal .room-detail-row,
+    html[dir] body .apartment-preview-card .room-detail-row {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    /* =====================================================
+       غلاف الألبوم المغبش داخل صفحة الحجز فقط
+    ===================================================== */
+
+    html[dir] body .apartment-preview-card .booking-gallery-grid {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        position: relative !important;
+        overflow: hidden !important;
+        border-radius: 14px !important;
+        background: #111 !important;
+    }
+
+    html[dir] body .apartment-preview-card .booking-gallery-grid .airbnb-gallery-item.main {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 175px !important;
+        aspect-ratio: 2 / 1;
+        position: relative !important;
+        overflow: hidden !important;
+        cursor: pointer;
+    }
+
+    html[dir] body .apartment-preview-card .booking-gallery-grid .airbnb-gallery-item.main:not(.image-missing) img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        filter: blur(7px) brightness(0.42) saturate(0.85) !important;
+        transform: scale(1.08) !important;
+    }
+
+    html[dir] body .apartment-preview-card .booking-gallery-grid .airbnb-gallery-item.main:not(.image-missing)::after {
+        position: absolute;
+        inset: 0;
+        z-index: 5;
+        padding: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        text-align: center;
+        white-space: pre-line;
+        font-size: 15px;
+        font-weight: 950;
+        line-height: 1.7;
+        letter-spacing: 0;
+        background:
+            radial-gradient(circle at center,
+                rgba(212, 160, 23, 0.18),
+                rgba(0, 0, 0, 0.2) 45%,
+                rgba(0, 0, 0, 0.55));
+        pointer-events: none;
+    }
+
+    html[lang="ar"] body .apartment-preview-card .booking-gallery-grid .airbnb-gallery-item.main:not(.image-missing)::after {
+        content: "🖼️\A اضغط لعرض ألبوم الصور";
+    }
+
+    html[lang="en"] body .apartment-preview-card .booking-gallery-grid .airbnb-gallery-item.main:not(.image-missing)::after {
+        content: "🖼️\A Tap to open the photo album";
+    }
+
+    html[dir] body .apartment-preview-card .booking-gallery-grid .airbnb-gallery-label {
+        display: none !important;
+    }
+
+    html[dir] body .apartment-preview-card .gallery-hint {
+        display: none !important;
+    }
+
+    /* =====================================================
+       كروت صفحة الشقق
+    ===================================================== */
+
+    html[dir] body .wrap .grid {
+        width: calc(100% - 10px) !important;
+        max-width: 420px !important;
+        margin-inline: auto !important;
+        gap: 12px !important;
+    }
+
+    html[dir] body .wrap .grid>.card {
+        width: 100% !important;
+        max-width: 420px !important;
+        margin-inline: auto !important;
+        overflow: hidden !important;
+        border-radius: 18px !important;
+        background:
+            linear-gradient(180deg,
+                rgba(20, 20, 20, 0.94),
+                rgba(40, 34, 22, 0.92)) !important;
+        border: 1px solid rgba(212, 160, 23, 0.22) !important;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22) !important;
+    }
+
+    html[dir] body .wrap .grid>.card>img,
+    html[dir] body .wrap .grid .skeleton-image,
+    html[dir] body .wrap .grid .card-image-missing {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 160px !important;
+        aspect-ratio: 2 / 1;
+        object-fit: cover !important;
+    }
+
+    html[dir] body .wrap .grid .card-body {
+        padding: 12px !important;
+        background: transparent !important;
+    }
+
+    html[dir] body .wrap .grid .card h3 {
+        color: #fff !important;
+        font-size: 20px !important;
+    }
+
+    html[dir] body .wrap .grid .muted,
+    html[dir] body .wrap .grid .location-line {
+        color: rgba(255, 255, 255, 0.78) !important;
+    }
+
+    /* منع تقطيع نصف آخر شارة */
+    html[dir] body .wrap .grid .features {
+        width: 100% !important;
+        max-height: none !important;
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 5px !important;
+        overflow: visible !important;
+        margin: 8px 0 !important;
+    }
+
+    html[dir] body .wrap .grid .features li {
+        width: 100% !important;
+        min-width: 0 !important;
+        padding: 6px 7px !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        white-space: normal;
+        border-radius: 9px !important;
+        font-size: 9px !important;
+        line-height: 1.3;
+    }
+
+    html[dir] body .wrap .grid .features li:nth-child(n + 5) {
+        display: none !important;
+    }
+
+    html[dir] body .wrap .grid .card-price-box {
+        background: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    html[dir] body .wrap .grid .card-actions {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 7px !important;
+    }
+
+    html[dir] body .wrap .grid .card-actions button {
+        min-width: 0 !important;
+        min-height: 44px !important;
+        padding: 7px 6px !important;
+        font-size: 12px !important;
+    }
+
+    /* الخريطة */
+    html[dir] body #detailsModal .map-box iframe {
+        width: 100% !important;
+        height: 165px !important;
+    }
+
+    /* Scrollbar أنحف على الهاتف */
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar,
+    .modal::-webkit-scrollbar,
+    .modal-content::-webkit-scrollbar,
+    .photo-album-modal::-webkit-scrollbar,
+    .photo-album-body::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    html::-webkit-scrollbar-thumb,
+    body::-webkit-scrollbar-thumb,
+    .modal::-webkit-scrollbar-thumb,
+    .modal-content::-webkit-scrollbar-thumb,
+    .photo-album-modal::-webkit-scrollbar-thumb,
+    .photo-album-body::-webkit-scrollbar-thumb {
+        border-width: 1px;
+    }
+}
+
+@media (max-width: 380px) {
+
+    html[dir] body #detailsModal .detail-features,
+    html[dir] body .wrap .grid .features {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    html[dir] body .wrap .grid {
+        width: calc(100% - 6px) !important;
     }
 }

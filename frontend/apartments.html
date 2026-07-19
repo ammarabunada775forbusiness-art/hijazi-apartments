@@ -2933,22 +2933,25 @@
 
             if (!roomCards || !roomDescription || !roomGallery) return;
 
-            roomCards.innerHTML = apt.rooms.map(room => {
+            roomCards.innerHTML = (apt.rooms || []).map(room => {
                 const title = lang === "ar" ? room.titleAr : room.titleEn;
-                const count = room.images ? room.images.length : 0;
-                const countText = lang === "ar" ? `${count} صور` : `${count} photos`;
+                const note = lang === "ar" ? room.noteAr : room.noteEn;
 
                 return `
-    <div class="room-summary-pill">
-        ${title}
-        <span>${countText}</span>
-    </div>
-`;
+            <div class="room-detail-row">
+                <span class="room-detail-icon" aria-hidden="true">✓</span>
+
+                <div class="room-detail-copy">
+                    <strong>${title}</strong>
+                    <p>${note || ""}</p>
+                </div>
+            </div>
+        `;
             }).join("");
 
             roomDescription.textContent = lang === "ar"
-                ? "الصور مرتبة حسب الغرف. اضغط على أي صورة في المعرض لفتح الألبوم الكامل."
-                : "Photos are organized by room. Click any photo to open the full album.";
+                ? "توضح القائمة تجهيزات كل غرفة ومساحة داخل الشقة."
+                : "This list explains the facilities available in each room and area.";
 
             roomGallery.innerHTML = "";
         }
