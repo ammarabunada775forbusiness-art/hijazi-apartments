@@ -3060,7 +3060,11 @@
 
         <div class="layout">
 
-            <div class="card apartment-preview-card">
+            <details class="card apartment-preview-card" id="apartmentPreviewDetails" open>
+                <summary class="mobile-preview-summary" id="mobilePreviewSummary">
+                    صور وتفاصيل الشقة
+                </summary>
+
                 <div class="airbnb-gallery-grid booking-gallery-grid" id="sliderBox"></div>
 
                 <div class="card-body">
@@ -3103,7 +3107,7 @@
                         <p><strong id="summaryTotalLabel">السعر الإجمالي:</strong> <span id="summaryTotal">—</span></p>
                     </div>
                 </div>
-            </div>
+            </details>
 
             <div class="card booking-form-card">
                 <div class="form-section">
@@ -3137,29 +3141,50 @@
                         <input type="tel" id="phone" placeholder="059xxxxxxx" required>
                         <div class="field-error" id="phoneError"></div>
 
-                        <label id="checkInLabel" for="checkIn">تاريخ الوصول:</label>
-                        <input type="date" id="checkIn" required>
-                        <div class="field-error" id="checkInError"></div>
+                        <div class="mobile-form-pair">
+                            <div class="mobile-form-field">
+                                <label id="checkInLabel" for="checkIn">تاريخ الوصول:</label>
+                                <input type="date" id="checkIn" required>
+                                <div class="field-error" id="checkInError"></div>
+                            </div>
 
-                        <label id="checkOutLabel" for="checkOut">تاريخ المغادرة:</label>
-                        <input type="date" id="checkOut" required>
-                        <div class="hint" id="dateHint">لا يمكن اختيار فترة متداخلة مع الحجوزات الموجودة.</div>
-                        <div class="field-error" id="dateError"></div>
+                            <div class="mobile-form-field">
+                                <label id="checkOutLabel" for="checkOut">تاريخ المغادرة:</label>
+                                <input type="date" id="checkOut" required>
+                                <div class="field-error" id="dateError"></div>
+                            </div>
+                        </div>
+
+                        <div class="hint" id="dateHint">
+                            لا يمكن اختيار فترة متداخلة مع الحجوزات الموجودة.
+                        </div>
 
                         <div id="longStayNotice"></div>
 
-                        <label id="adultsLabel" for="adults">عدد البالغين:</label>
-                        <input type="number" id="adults" min="1" value="1" required>
-                        <div class="field-error" id="adultsError"></div>
+                        <div class="mobile-form-pair mobile-guests-pair">
+                            <div class="mobile-form-field">
+                                <label id="adultsLabel" for="adults">عدد البالغين:</label>
+                                <input type="number" id="adults" min="1" value="1" required>
+                                <div class="field-error" id="adultsError"></div>
+                            </div>
 
-                        <label id="childrenLabel" for="children">عدد الأطفال:</label>
-                        <input type="number" id="children" min="0" value="0">
-                        <div class="field-error" id="childrenError"></div>
+                            <div class="mobile-form-field">
+                                <label id="childrenLabel" for="children">عدد الأطفال:</label>
+                                <input type="number" id="children" min="0" value="0">
+                                <div class="field-error" id="childrenError"></div>
+                            </div>
+                        </div>
 
-                        <label id="notesLabel" for="notes">ملاحظات أو أسئلة إضافية:</label>
-                        <textarea id="notes" rows="4" maxlength="1000"
-                            placeholder="مثال: وقت الوصول المتوقع، طلبات خاصة، أو أي سؤال قبل تأكيد الحجز"></textarea>
-                        <div class="hint" id="notesHint">هذا الحقل اختياري.</div>
+                        <details class="optional-notes" id="optionalNotesDetails" open>
+                            <summary id="notesToggle">إضافة ملاحظات (اختياري)</summary>
+
+                            <div class="optional-notes-content">
+                                <label id="notesLabel" for="notes">ملاحظات أو أسئلة إضافية:</label>
+                                <textarea id="notes" rows="3" maxlength="1000"
+                                    placeholder="مثال: وقت الوصول المتوقع، طلبات خاصة، أو أي سؤال قبل تأكيد الحجز"></textarea>
+                                <div class="hint" id="notesHint">هذا الحقل اختياري.</div>
+                            </div>
+                        </details>
 
                         <p><span id="finalPriceLabel">السعر النهائي:</span> <span class="price" id="totalPrice">—</span>
                         </p>
@@ -3312,6 +3337,8 @@
                 document.getElementById("summaryChildrenLabel").textContent = "الأطفال:";
                 document.getElementById("summaryTotalLabel").textContent = "السعر الإجمالي:";
                 document.getElementById("formTitle").textContent = "نموذج الحجز";
+                document.getElementById("mobilePreviewSummary").textContent = "صور وتفاصيل الشقة";
+                document.getElementById("notesToggle").textContent = "إضافة ملاحظات (اختياري)";
                 document.getElementById("aptLabel").textContent = "الشقة المختارة:";
                 document.getElementById("fullNameLabel").textContent = "الاسم الكامل:";
                 document.getElementById("emailLabel").textContent = "البريد الإلكتروني:";
@@ -3360,6 +3387,8 @@
                 document.getElementById("summaryChildrenLabel").textContent = "Children:";
                 document.getElementById("summaryTotalLabel").textContent = "Total price:";
                 document.getElementById("formTitle").textContent = "Booking form";
+                document.getElementById("mobilePreviewSummary").textContent = "Apartment photos and details";
+                document.getElementById("notesToggle").textContent = "Add notes (optional)";
                 document.getElementById("aptLabel").textContent = "Selected apartment:";
                 document.getElementById("fullNameLabel").textContent = "Full name:";
                 document.getElementById("emailLabel").textContent = "Email:";
@@ -4241,7 +4270,7 @@
 
             calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: "dayGridMonth",
-                height: window.innerWidth <= 768 ? 470 : 520,
+                height: window.innerWidth <= 768 ? 420 : 520,
                 locale: lang === "ar" ? "ar" : "en",
                 direction: lang === "ar" ? "rtl" : "ltr",
 
@@ -4346,7 +4375,12 @@
             renderSharedFooter();
             renderWhatsAppWidget();
             applyBookingTranslations();
+            const isMobileBookingView = window.matchMedia("(max-width: 900px)").matches;
 
+            if (isMobileBookingView) {
+                document.getElementById("apartmentPreviewDetails")?.removeAttribute("open");
+                document.getElementById("optionalNotesDetails")?.removeAttribute("open");
+            }
             if (typeof gtag === "function") {
                 gtag('event', 'view_booking_page', {
                     event_category: 'booking',

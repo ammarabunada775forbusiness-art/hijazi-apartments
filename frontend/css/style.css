@@ -1885,3 +1885,865 @@ html[dir="rtl"] body :is(.slider-btn, .album-nav) {
         right: auto !important;
     }
 }
+
+
+/* =========================================================
+   MOBILE UX COMPACT SYSTEM
+========================================================= */
+
+/* يبقي التفاصيل مفتوحة طبيعيًا على الكمبيوتر */
+@media (min-width: 901px) {
+
+    html[dir] body .mobile-preview-summary,
+    html[dir] body .optional-notes>summary {
+        display: none !important;
+    }
+
+    html[dir] body .optional-notes {
+        border: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+
+@media (max-width: 900px) {
+
+    html[dir] body {
+        overflow-x: hidden;
+    }
+
+    /* نموذج الحجز أولًا، ثم تفاصيل الشقة */
+    html[dir] body .layout {
+        grid-template-columns: minmax(0, 1fr) !important;
+        grid-template-areas:
+            "form"
+            "preview" !important;
+        gap: 10px !important;
+    }
+
+    html[dir] body .layout>.card {
+        min-width: 0 !important;
+        border-radius: 16px !important;
+    }
+
+    /* زر فتح تفاصيل الشقة */
+    html[dir] body .mobile-preview-summary {
+        min-height: 48px;
+        padding: 0 14px;
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        list-style: none;
+        cursor: pointer;
+        background: linear-gradient(135deg, #d4a017, #755500);
+        color: #fff;
+        font-size: 14px;
+        font-weight: 900;
+        touch-action: manipulation;
+    }
+
+    html[dir] body .mobile-preview-summary::-webkit-details-marker,
+    html[dir] body .optional-notes>summary::-webkit-details-marker {
+        display: none;
+    }
+
+    html[dir] body .mobile-preview-summary::after {
+        content: "⌄";
+        font-size: 20px;
+        transition: transform 0.2s ease;
+    }
+
+    html[dir] body .apartment-preview-card[open]>.mobile-preview-summary::after {
+        transform: rotate(180deg);
+    }
+
+    /* صفوف التواريخ والضيوف */
+    html[dir] body .mobile-form-pair {
+        width: 100%;
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        align-items: start;
+        margin-top: 4px;
+    }
+
+    html[dir] body .mobile-form-field {
+        min-width: 0;
+        position: relative;
+    }
+
+    /* الملاحظات الاختيارية */
+    html[dir] body .optional-notes {
+        margin-top: 10px;
+        padding: 0 10px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 13px;
+        background: rgba(255, 255, 255, 0.07);
+    }
+
+    html[dir] body .optional-notes>summary {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.92);
+        font-size: 12px;
+        font-weight: 900;
+        list-style: none;
+        touch-action: manipulation;
+    }
+
+    html[dir] body .optional-notes>summary::after {
+        content: "+";
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    html[dir] body .optional-notes[open]>summary::after {
+        content: "−";
+    }
+
+    html[dir] body .optional-notes-content {
+        padding-bottom: 10px;
+    }
+
+    /* الألبوم الكامل */
+    html[dir] body .photo-album-header {
+        height: 52px !important;
+        grid-template-columns: 44px 1fr 58px !important;
+        padding: 0 8px !important;
+    }
+
+    html[dir] body .album-close-btn {
+        width: 38px !important;
+        height: 38px !important;
+        font-size: 25px !important;
+    }
+
+    html[dir] body .photo-tour-top-strip {
+        top: 52px !important;
+    }
+
+    html[dir] body .photo-tour-strip-inner {
+        padding: 8px 10px !important;
+        gap: 8px !important;
+    }
+
+    html[dir] body .photo-tour-thumb-btn {
+        width: 78px !important;
+    }
+
+    html[dir] body .photo-tour-thumb-img {
+        width: 78px !important;
+        height: 56px !important;
+        border-radius: 11px !important;
+    }
+
+    html[dir] body .photo-tour-thumb-label {
+        margin-top: 4px !important;
+        font-size: 9px !important;
+    }
+
+    html[dir] body .photo-tour-sections,
+    html[dir] body .photo-album-loading {
+        padding: 14px 10px 28px !important;
+    }
+
+    html[dir] body .photo-tour-section {
+        gap: 8px !important;
+        margin-bottom: 30px !important;
+        scroll-margin-top: 120px !important;
+    }
+
+    html[dir] body .photo-tour-room-info {
+        padding: 0 2px !important;
+    }
+
+    html[dir] body .photo-tour-room-info h2 {
+        margin-bottom: 5px !important;
+        font-size: 24px !important;
+        line-height: 1.25 !important;
+    }
+
+    html[dir] body .photo-tour-room-info p {
+        font-size: 12px !important;
+    }
+
+    html[dir] body .photo-tour-room-note {
+        display: none !important;
+    }
+
+    html[dir] body .photo-tour-photos,
+    html[dir] body .photo-album-loading-grid {
+        gap: 8px !important;
+    }
+
+    html[dir] body .photo-tour-photo,
+    html[dir] body .photo-tour-photo.wide,
+    html[dir] body .photo-album-loading-card,
+    html[dir] body .photo-album-loading-card.wide {
+        height: 180px !important;
+        border-radius: 13px !important;
+    }
+
+    html[dir] body .photo-tour-photo-title {
+        bottom: 8px !important;
+        padding: 5px 8px !important;
+        font-size: 10px !important;
+    }
+
+    html[dir] body .photo-album-loading-status {
+        min-height: 24px !important;
+        margin-bottom: 12px !important;
+        font-size: 12px !important;
+    }
+
+    html[dir] body .photo-album-stage {
+        min-height: 250px !important;
+        max-height: 55dvh !important;
+        border-radius: 14px !important;
+    }
+
+    html[dir] body .photo-album-stage img {
+        max-height: 55dvh !important;
+    }
+
+    html[dir] body .photo-album-body {
+        padding: 10px 8px 20px !important;
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* الهيدر العام */
+    html[dir] body .custom-navbar .container {
+        min-height: 56px !important;
+        padding: 7px 12px !important;
+    }
+
+    html[dir] body .navbar-brand {
+        max-width: calc(100vw - 75px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 16px !important;
+    }
+
+    html[dir] body .navbar-toggler {
+        min-width: 40px;
+        min-height: 40px;
+        padding: 5px 8px !important;
+    }
+
+    html[dir] body .page-header {
+        min-height: 0 !important;
+        padding: 82px 12px 16px !important;
+    }
+
+    html[dir] body .page-header h1 {
+        margin-bottom: 5px !important;
+        font-size: 24px !important;
+        line-height: 1.2 !important;
+    }
+
+    html[dir] body .page-header p {
+        font-size: 12px !important;
+        line-height: 1.5 !important;
+    }
+
+    html[dir] body .wrap {
+        margin: 8px auto !important;
+        padding: 0 10px 22px !important;
+    }
+
+    /* شريط الرجوع والعملة */
+    html[dir] body .wrap .top-bar {
+        max-width: 100% !important;
+        margin: 8px auto 10px !important;
+        padding: 8px !important;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+        gap: 8px !important;
+        align-items: stretch !important;
+        border-radius: 14px !important;
+    }
+
+    html[dir] body .top-bar-left,
+    html[dir] body .top-bar-right {
+        width: 100% !important;
+        min-width: 0 !important;
+        align-items: stretch !important;
+    }
+
+    /* يبقى الـlabel موجودًا لقارئ الشاشة */
+    html[dir] body .top-bar-right>label {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        padding: 0 !important;
+        margin: -1px !important;
+        overflow: hidden !important;
+        clip: rect(0, 0, 0, 0) !important;
+        white-space: nowrap !important;
+        border: 0 !important;
+    }
+
+    html[dir] body .back-btn,
+    html[dir] body .top-bar select,
+    html[dir] body .currency-glass-current {
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 44px !important;
+        height: 44px !important;
+        padding: 7px 9px !important;
+        border-radius: 11px !important;
+        font-size: 12px !important;
+        line-height: 1.2 !important;
+    }
+
+    html[dir] body .currency-glass-select {
+        width: 100% !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* نموذج الحجز المضغوط */
+    html[dir] body .layout {
+        gap: 10px !important;
+    }
+
+    html[dir] body .layout>.card.booking-form-card .form-section {
+        padding: 12px !important;
+    }
+
+    html[dir] body .layout>.card.booking-form-card #formTitle {
+        margin: 0 0 10px !important;
+        font-size: 22px !important;
+        line-height: 1.2 !important;
+    }
+
+    html[dir] body .layout>.card.booking-form-card .form-section label {
+        margin: 7px 0 4px !important;
+        font-size: 11px !important;
+        line-height: 1.3 !important;
+    }
+
+    html[dir] body .layout>.card.booking-form-card .form-section :is(input,
+        select,
+        .booking-form-glass-current) {
+        min-height: 44px !important;
+        height: 44px !important;
+        padding: 8px 10px !important;
+        border-radius: 11px !important;
+        font-size: 13px !important;
+    }
+
+    html[dir] body .layout>.card.booking-form-card .form-section textarea {
+        min-height: 70px !important;
+        max-height: 120px !important;
+        padding: 9px 10px !important;
+        border-radius: 11px !important;
+        font-size: 13px !important;
+        resize: vertical;
+    }
+
+    html[dir] body .layout>.card.booking-form-card .hint {
+        margin-top: 4px !important;
+        font-size: 10px !important;
+        line-height: 1.45 !important;
+    }
+
+    html[dir] body .layout>.card.booking-form-card .field-error {
+        margin-top: 3px !important;
+        font-size: 10px !important;
+        line-height: 1.3 !important;
+    }
+
+    html[dir] body .layout>.card.booking-form-card .hijazi-counter {
+        grid-template-columns: 44px minmax(0, 1fr) 44px !important;
+        gap: 6px !important;
+        margin-top: 3px !important;
+    }
+
+    html[dir] body .layout>.card.booking-form-card :is(.hijazi-counter-btn,
+        .hijazi-counter-value) {
+        width: auto !important;
+        height: 44px !important;
+        min-height: 44px !important;
+        border-radius: 11px !important;
+    }
+
+    html[dir] body .layout>.card.booking-form-card #bookingForm>p {
+        min-height: 42px;
+        margin: 10px 0 6px !important;
+        padding: 8px 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        border-radius: 11px;
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    html[dir] body .layout>.card.booking-form-card #submitBtn {
+        min-height: 48px !important;
+        margin-top: 6px !important;
+        border-radius: 12px !important;
+        font-size: 15px !important;
+    }
+
+    /* تفاصيل الشقة داخل صفحة الحجز */
+    html[dir] body .apartment-preview-card .airbnb-gallery-grid {
+        display: block !important;
+        position: relative !important;
+        padding: 6px !important;
+        border-radius: 14px !important;
+    }
+
+    html[dir] body .apartment-preview-card .airbnb-gallery-item.main {
+        display: block !important;
+        width: 100% !important;
+        height: 180px !important;
+        border-radius: 11px !important;
+    }
+
+    html[dir] body .apartment-preview-card .airbnb-gallery-item:not(.main) {
+        display: none !important;
+    }
+
+    html[dir] body .apartment-preview-card .card-body {
+        padding: 12px !important;
+    }
+
+    html[dir] body .apartment-preview-card .gallery-hint {
+        margin: 5px 0 10px !important;
+        font-size: 10px !important;
+    }
+
+    html[dir] body .apartment-preview-card #aptName {
+        font-size: 21px !important;
+    }
+
+    html[dir] body .apartment-preview-card #aptDesc {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+
+    html[dir] body .apartment-preview-card video {
+        max-height: 185px !important;
+    }
+
+    html[dir] body .apartment-preview-card .map-box iframe {
+        height: 180px !important;
+    }
+
+    html[dir] body .apartment-preview-card .summary-box {
+        padding: 10px !important;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 5px 10px;
+    }
+
+    html[dir] body .apartment-preview-card .summary-box p {
+        margin: 0 !important;
+        font-size: 11px !important;
+    }
+
+    /* تقويم الحجز */
+    html[dir] body #calendar {
+        font-size: 11px !important;
+    }
+
+    html[dir] body #calendar .fc-toolbar {
+        margin-bottom: 8px !important;
+        gap: 5px;
+        flex-wrap: wrap;
+    }
+
+    html[dir] body #calendar .fc-toolbar-title {
+        font-size: 16px !important;
+    }
+
+    html[dir] body #calendar .fc-button {
+        min-height: 40px !important;
+        padding: 5px 8px !important;
+        font-size: 11px !important;
+    }
+
+    /* صندوق بحث الشقق */
+    html[dir] body .wrap .box {
+        margin: 8px auto 10px !important;
+        padding: 10px !important;
+        border-radius: 14px !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    html[dir] body .wrap .box .row-box {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 7px !important;
+    }
+
+    html[dir] body .wrap .box .filter-field {
+        min-width: 0 !important;
+    }
+
+    html[dir] body .wrap .box .filter-field input,
+    html[dir] body .wrap .box .filter-field .flatpickr-input {
+        width: 100% !important;
+        min-width: 0 !important;
+        height: 42px !important;
+        min-height: 42px !important;
+        padding-top: 19px !important;
+        padding-bottom: 5px !important;
+        font-size: 12px !important;
+    }
+
+    html[dir] body .wrap .box .filter-actions {
+        margin-top: 8px !important;
+    }
+
+    html[dir] body .wrap .box .filter-btn {
+        width: 100% !important;
+        height: 44px !important;
+        border-radius: 11px !important;
+        font-size: 13px !important;
+    }
+
+    html[dir] body .wrap .box .filter-meta {
+        margin-top: 8px !important;
+        padding-top: 7px !important;
+        gap: 4px !important;
+        font-size: 11px !important;
+    }
+
+    /* كروت الشقق */
+    html[dir] body .wrap .grid {
+        gap: 10px !important;
+    }
+
+    html[dir] body .wrap .grid>.card {
+        border-radius: 17px !important;
+        content-visibility: auto;
+        contain-intrinsic-size: 480px;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    html[dir] body .wrap .grid>.card>img,
+    html[dir] body .wrap .grid .skeleton-image,
+    html[dir] body .wrap .grid .card-image-missing {
+        height: 175px !important;
+    }
+
+    html[dir] body .wrap .grid .card-top-badge {
+        top: 8px !important;
+        padding: 6px 9px !important;
+        font-size: 10px !important;
+    }
+
+    html[dir] body .wrap .grid .card-body {
+        padding: 12px !important;
+    }
+
+    html[dir] body .wrap .grid .pill {
+        margin-bottom: 5px !important;
+        padding: 4px 7px !important;
+        font-size: 9px !important;
+    }
+
+    html[dir] body .wrap .grid .card h3 {
+        margin-bottom: 5px !important;
+        font-size: 20px !important;
+        line-height: 1.25 !important;
+    }
+
+    html[dir] body .wrap .grid .muted {
+        display: -webkit-box;
+        overflow: hidden;
+        margin-bottom: 6px !important;
+        font-size: 11px !important;
+        line-height: 1.55 !important;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    html[dir] body .wrap .grid .location-line {
+        overflow: hidden;
+        margin: 5px 0 !important;
+        font-size: 11px !important;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    html[dir] body .wrap .grid .features {
+        max-height: 27px;
+        margin: 6px 0 !important;
+        gap: 5px !important;
+        overflow: hidden;
+    }
+
+    html[dir] body .wrap .grid .features li {
+        padding: 4px 7px !important;
+        font-size: 9px !important;
+    }
+
+    html[dir] body .wrap .grid .features li:nth-child(n + 4) {
+        display: none !important;
+    }
+
+    html[dir] body .wrap .grid .card-price-box {
+        margin-top: 7px !important;
+        padding: 8px 10px !important;
+        border-radius: 12px !important;
+    }
+
+    html[dir] body .wrap .grid .card-price-main {
+        margin-bottom: 2px !important;
+        font-size: 15px !important;
+    }
+
+    html[dir] body .wrap .grid .card-price-sub {
+        font-size: 10px !important;
+    }
+
+    /* الحجوزات القادمة تصبح صفًا أفقيًا قابلًا للسحب */
+    html[dir] body .wrap .grid .booking-conflict-box {
+        margin: 7px 0 !important;
+        padding: 7px !important;
+        font-size: 10px !important;
+    }
+
+    html[dir] body .wrap .grid .booking-periods-list {
+        display: flex !important;
+        gap: 5px !important;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    html[dir] body .wrap .grid .booking-periods-list::-webkit-scrollbar {
+        display: none;
+    }
+
+    html[dir] body .wrap .grid .booking-period-line {
+        flex: 0 0 auto;
+        padding: 4px 6px !important;
+        font-size: 9px !important;
+        white-space: nowrap;
+    }
+
+    html[dir] body .wrap .grid .card-actions {
+        margin-top: 8px !important;
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px !important;
+    }
+
+    html[dir] body .wrap .grid .card-actions button {
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 44px !important;
+        padding: 6px 7px !important;
+        border-radius: 11px !important;
+        font-size: 12px !important;
+        line-height: 1.2 !important;
+    }
+
+    /* نافذة تفاصيل الشقة */
+    html[dir] body #detailsModal {
+        padding: 0 !important;
+        overscroll-behavior: contain;
+    }
+
+    html[dir] body #detailsModal .modal-content {
+        width: 100% !important;
+        max-width: none !important;
+        min-height: 100dvh !important;
+        max-height: 100dvh !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        overflow-y: auto !important;
+    }
+
+    html[dir] body #detailsModal .modal-header {
+        min-height: 54px;
+        padding: 9px 12px !important;
+        position: sticky;
+        top: 0;
+        z-index: 30;
+    }
+
+    html[dir] body #detailsModal .modal-header h2 {
+        font-size: 18px !important;
+    }
+
+    html[dir] body #detailsModal .close-btn {
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 28px !important;
+    }
+
+    html[dir] body #detailsModal .modal-body {
+        padding: 10px !important;
+    }
+
+    html[dir] body #detailsModal .detail-grid {
+        gap: 10px !important;
+    }
+
+    html[dir] body #detailsModal .airbnb-gallery-grid {
+        display: block !important;
+        position: relative !important;
+        padding: 5px !important;
+        border-radius: 13px !important;
+    }
+
+    html[dir] body #detailsModal .airbnb-gallery-item.main {
+        display: block !important;
+        width: 100% !important;
+        height: 190px !important;
+        border-radius: 10px !important;
+    }
+
+    html[dir] body #detailsModal .airbnb-gallery-item:not(.main) {
+        display: none !important;
+    }
+
+    html[dir] body #detailsModal .gallery-hint {
+        margin: 5px 0 9px !important;
+        font-size: 10px !important;
+    }
+
+    html[dir] body #detailsModal #detailName {
+        margin-bottom: 5px !important;
+        font-size: 21px !important;
+    }
+
+    html[dir] body #detailsModal #detailDesc {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+
+    html[dir] body #detailsModal p {
+        margin: 5px 0 !important;
+        font-size: 12px !important;
+    }
+
+    html[dir] body #detailsModal .detail-features,
+    html[dir] body #detailsModal .room-summary-grid {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        gap: 6px !important;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    html[dir] body #detailsModal .detail-features::-webkit-scrollbar,
+    html[dir] body #detailsModal .room-summary-grid::-webkit-scrollbar {
+        display: none;
+    }
+
+    html[dir] body #detailsModal .detail-features li {
+        flex: 0 0 auto;
+        padding: 5px 8px !important;
+        font-size: 10px !important;
+        white-space: nowrap;
+    }
+
+    html[dir] body #detailsModal .room-card {
+        flex: 0 0 140px;
+        padding: 9px !important;
+        font-size: 11px !important;
+    }
+
+    html[dir] body #detailsModal .video-box video {
+        max-height: 190px !important;
+    }
+
+    html[dir] body #detailsModal .map-box {
+        margin-top: 10px !important;
+    }
+
+    html[dir] body #detailsModal .map-box iframe {
+        height: 175px !important;
+    }
+
+    html[dir] body #detailsModal .modal-book-btn {
+        min-height: 48px !important;
+        margin-top: 10px !important;
+        position: sticky;
+        bottom: max(8px, env(safe-area-inset-bottom));
+        z-index: 20;
+    }
+
+    /* أزرار اللمس */
+    html[dir] body :is(button,
+        .back-btn,
+        .mobile-preview-summary,
+        .optional-notes > summary,
+        .photo-tour-photo,
+        .photo-tour-thumb-btn) {
+        touch-action: manipulation;
+    }
+
+    /* تقليل العناصر المزعجة على شاشة الهاتف */
+    html[dir] body .whatsapp-label {
+        display: none !important;
+    }
+
+    html[dir] body .whatsapp-float {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    html[dir] body .scroll-top-btn {
+        width: 44px !important;
+        height: 44px !important;
+    }
+
+    /* إيقاف الخلفيات المتحركة الثقيلة على الهاتف */
+    html[dir] body :is(.booking-page-bg,
+        .apartments-page-bg,
+        .booking-gold-orb,
+        .gold-orb,
+        .booking-dust,
+        .gold-dust,
+        .page-header) {
+        animation: none !important;
+    }
+
+    html[dir] body .page-header::before,
+    html[dir] body .page-header::after,
+    html[dir] body .booking-page-bg::before,
+    html[dir] body .booking-page-bg::after,
+    html[dir] body .apartments-page-bg::before,
+    html[dir] body .apartments-page-bg::after {
+        animation: none !important;
+    }
+
+    html[dir] body .booking-luxury-shine,
+    html[dir] body .luxury-shine {
+        display: none !important;
+    }
+}
+
+@media (max-width: 480px) {
+
+    html[dir] body .photo-tour-photo,
+    html[dir] body .photo-tour-photo.wide,
+    html[dir] body .photo-album-loading-card,
+    html[dir] body .photo-album-loading-card.wide {
+        height: 168px !important;
+    }
+
+    html[dir] body .wrap .grid>.card>img,
+    html[dir] body .wrap .grid .skeleton-image,
+    html[dir] body .wrap .grid .card-image-missing {
+        height: 165px !important;
+    }
+}
