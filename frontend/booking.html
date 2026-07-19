@@ -3223,6 +3223,31 @@
             <div class="album-thumbs" id="albumThumbs"></div>
         </div>
     </div>
+    <div class="image-lightbox" id="imageLightbox" role="dialog" aria-modal="true" aria-hidden="true"
+        aria-label="Image viewer">
+        <button type="button" class="image-lightbox-close" id="imageLightboxClose" aria-label="Close image">
+            &times;
+        </button>
+
+        <button type="button" class="image-lightbox-nav image-lightbox-prev" id="imageLightboxPrev"
+            aria-label="Previous image">
+            ‹
+        </button>
+
+        <figure class="image-lightbox-stage">
+            <img id="imageLightboxImage" src="" alt="">
+
+            <figcaption class="image-lightbox-caption">
+                <span id="imageLightboxTitle"></span>
+                <span id="imageLightboxCounter"></span>
+            </figcaption>
+        </figure>
+
+        <button type="button" class="image-lightbox-nav image-lightbox-next" id="imageLightboxNext"
+            aria-label="Next image">
+            ›
+        </button>
+    </div>
     <div class="success-modal" id="successModal">
         <div class="success-content">
             <div class="success-head">
@@ -3657,25 +3682,21 @@
 
             if (!roomCards || !roomDescription || !roomGallery) return;
 
-            roomCards.innerHTML = (apt.rooms || []).map(room => {
+            roomCards.innerHTML = apt.rooms.map(room => {
                 const title = lang === "ar" ? room.titleAr : room.titleEn;
-                const note = lang === "ar" ? room.noteAr : room.noteEn;
+                const count = room.images ? room.images.length : 0;
+                const countText = lang === "ar" ? `${count} صور` : `${count} photos`;
 
                 return `
-            <div class="room-detail-row">
-                <span class="room-detail-icon" aria-hidden="true">✓</span>
-
-                <div class="room-detail-copy">
-                    <strong>${title}</strong>
-                    <p>${note || ""}</p>
-                </div>
-            </div>
-        `;
+        <div class="room-summary-pill">
+            ${title}
+            <span>${countText}</span>
+        </div>
+    `;
             }).join("");
-
             roomDescription.textContent = lang === "ar"
-                ? "توضح القائمة تجهيزات كل غرفة ومساحة داخل الشقة."
-                : "This list explains the facilities available in each room and area.";
+                ? "الصور مرتبة حسب الغرف. اضغط على أي صورة في المعرض لفتح الألبوم الكامل."
+                : "Photos are organized by room. Click any photo to open the full album.";
 
             roomGallery.innerHTML = "";
         }
@@ -3738,7 +3759,7 @@
             class="photo-tour-photo ${isWide ? "wide" : ""}"
             id="photo-tour-photo-${index}"
             type="button"
-            onclick="goToAlbumPhoto(${index})"
+            onclick="openImageLightbox(${index})"
         >
             <img
     src="${item.src}"
@@ -3845,7 +3866,148 @@
                 });
             }
         }
+        let imageLightboxTouchStartX = 0;
 
+        function updateImageLightbox() {
+            const item = currentAlbumItems[currentAlbumIndex];
+            if (!item) return;
+
+            const lang = getCurrentLang();
+            const lightboxImage = document.getElementById("imageLightboxImage");
+            const lightboxTitle = document.getElementById("imageLightboxTitle");
+            const lightboxCounter = document.getElementById("imageLightboxCounter");
+            const previousButton = document.getElementById("imageLightboxPrev");
+            const nextButton = document.getElementById("imageLightboxNext");
+
+            const itemTitle = getAlbumItemTitle(item, currentAlbumIndex);
+
+            if (lightboxImage) {
+                lightboxImage.src = item.src;
+                lightboxImage.alt = itemTitle;
+            }
+
+            if (lightboxTitle) {
+                lightboxTitle.textContent = itemTitle;
+            }
+
+            if (lightboxCounter) {
+                lightboxCounter.textContent =
+                    `${currentAlbumIndex + 1} / ${currentAlbumItems.length}`;
+            }
+
+            if (previousButton) {
+                previousButton.textContent = lang === "ar" ? "›" : "‹";
+            }
+
+            if (nextButton) {
+                nextButton.textContent = lang === "ar" ? "‹" : "›";
+            }
+        }
+
+        function openImageLightbox(index) {
+            if (!currentAlbumItems.length) return;
+
+            setActiveAlbumPhoto(index);
+            updateImageLightbox();
+
+            const lightbox = document.getElementById("imageLightbox");
+            if (!lightbox) return;
+
+            lightbox.classList.add("open");
+            lightbox.setAttribute("aria-hidden", "false");
+
+            document.getElementById("imageLightboxClose")?.focus();
+        }
+
+        function closeImageLightbox() {
+            const lightbox = document.getElementById("imageLightbox");
+            const lightboxImage = document.getElementById("imageLightboxImage");
+
+            if (!lightbox) return;
+
+            lightbox.classList.remove("open");
+            lightbox.setAttribute("aria-hidden", "true");
+
+            if (lightboxImage) {
+                lightboxImage.removeAttribute("src");
+            }
+        }
+
+        function showNextLightboxImage() {
+            if (!currentAlbumItems.length) return;
+
+            setActiveAlbumPhoto(
+                (currentAlbumIndex + 1) % currentAlbumItems.length
+            );
+
+            updateImageLightbox();
+        }
+
+        function showPreviousLightboxImage() {
+            if (!currentAlbumItems.length) return;
+
+            setActiveAlbumPhoto(
+                (currentAlbumIndex - 1 + currentAlbumItems.length) %
+                currentAlbumItems.length
+            );
+
+            updateImageLightbox();
+        }
+
+        window.openImageLightbox = openImageLightbox;
+
+        const imageLightboxElement = document.getElementById("imageLightbox");
+
+        document
+            .getElementById("imageLightboxClose")
+            ?.addEventListener("click", closeImageLightbox);
+
+        document
+            .getElementById("imageLightboxPrev")
+            ?.addEventListener("click", showPreviousLightboxImage);
+
+        document
+            .getElementById("imageLightboxNext")
+            ?.addEventListener("click", showNextLightboxImage);
+
+        imageLightboxElement?.addEventListener("click", function (event) {
+            if (event.target === imageLightboxElement) {
+                closeImageLightbox();
+            }
+        });
+
+        imageLightboxElement?.addEventListener(
+            "touchstart",
+            function (event) {
+                imageLightboxTouchStartX = event.changedTouches[0].clientX;
+            },
+            { passive: true }
+        );
+
+        imageLightboxElement?.addEventListener(
+            "touchend",
+            function (event) {
+                const touchEndX = event.changedTouches[0].clientX;
+                const distance = touchEndX - imageLightboxTouchStartX;
+
+                if (Math.abs(distance) < 45) return;
+
+                const isRTL = getCurrentLang() === "ar";
+
+                if (distance < 0) {
+                    if (isRTL) {
+                        showPreviousLightboxImage();
+                    } else {
+                        showNextLightboxImage();
+                    }
+                } else if (isRTL) {
+                    showNextLightboxImage();
+                } else {
+                    showPreviousLightboxImage();
+                }
+            },
+            { passive: true }
+        );
         function openPhotoAlbum(index = 0) {
             const apt = getCurrentGalleryApartment();
 
@@ -3905,14 +4067,55 @@
         }
 
         document.addEventListener("keydown", function (e) {
-            const modal = document.getElementById("photoAlbumModal");
+            const lightbox = document.getElementById("imageLightbox");
+            const isLightboxOpen = lightbox?.classList.contains("open");
 
+            if (isLightboxOpen) {
+                const isRTL = getCurrentLang() === "ar";
+
+                if (e.key === "Escape") {
+                    closeImageLightbox();
+                    return;
+                }
+
+                if (e.key === "ArrowRight") {
+                    if (isRTL) {
+                        showPreviousLightboxImage();
+                    } else {
+                        showNextLightboxImage();
+                    }
+
+                    return;
+                }
+
+                if (e.key === "ArrowLeft") {
+                    if (isRTL) {
+                        showNextLightboxImage();
+                    } else {
+                        showPreviousLightboxImage();
+                    }
+
+                    return;
+                }
+
+                return;
+            }
+
+            const modal = document.getElementById("photoAlbumModal");
             if (!modal || modal.style.display !== "block") return;
 
-            if (e.key === "Escape") closePhotoAlbum();
-            if (e.key === "ArrowRight") nextAlbumPhoto();
-            if (e.key === "ArrowLeft") prevAlbumPhoto();
-        });
+            if (e.key === "Escape") {
+                closePhotoAlbum();
+            }
+
+            if (e.key === "ArrowRight") {
+                nextAlbumPhoto();
+            }
+
+            if (e.key === "ArrowLeft") {
+                prevAlbumPhoto();
+            }
+        });;
 
         /* =========================================================
            عرض تفاصيل الشقة المختارة
