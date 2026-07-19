@@ -2960,15 +2960,12 @@
 
             roomCards.innerHTML = apt.rooms.map(room => {
                 const title = lang === "ar" ? room.titleAr : room.titleEn;
-                const count = room.images ? room.images.length : 0;
-                const countText = lang === "ar" ? `${count} صور` : `${count} photos`;
 
                 return `
-    <div class="room-summary-pill">
-        ${title}
-        <span>${countText}</span>
-    </div>
-`;
+            <div class="room-summary-pill">
+                ${title}
+            </div>
+        `;
             }).join("");
 
             roomDescription.textContent = lang === "ar"
@@ -3083,26 +3080,24 @@
             const isPriorityPhoto = index === currentAlbumIndex;
 
             return `
-                <button
-                    class="photo-tour-photo ${isWide ? "wide" : ""}"
-                    id="photo-tour-photo-${index}"
-                    type="button"
-                    onclick="openImageLightbox(${index})"
-                    aria-label="${title}"
-                >
-                    <img
-                        src="${item.src}"
-                        alt="${title}"
-                        loading="${isPriorityPhoto ? "eager" : "lazy"}"
-                        decoding="async"
-                        fetchpriority="${isPriorityPhoto ? "high" : "low"}"
-                        onload="this.parentElement.classList.add('is-loaded');"
-                        onerror="this.parentElement.classList.remove('is-loaded'); this.parentElement.classList.add('image-missing'); this.remove();"
-                    >
-
-                    <span class="photo-tour-photo-title">${title}</span>
-                </button>
-            `;
+        <button
+            class="photo-tour-photo ${isWide ? "wide" : ""}"
+            id="photo-tour-photo-${index}"
+            type="button"
+            onclick="openImageLightbox(${index})"
+            aria-label="${title}"
+        >
+            <img
+                src="${item.src}"
+                alt="${title}"
+                loading="${isPriorityPhoto ? "eager" : "lazy"}"
+                decoding="async"
+                fetchpriority="${isPriorityPhoto ? "high" : "low"}"
+                onload="this.parentElement.classList.add('is-loaded');"
+                onerror="this.parentElement.classList.remove('is-loaded'); this.parentElement.classList.add('image-missing'); this.remove();"
+            >
+        </button>
+    `;
         }
 
         function renderPhotoAlbumTour() {
