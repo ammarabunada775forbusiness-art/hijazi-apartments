@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,110 +9,655 @@
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        :root { --gold:#c89116; --ink:#111; --muted:#68707b; --line:#e6e8eb; --paper:#fff; --bg:#f4f5f7; --danger:#b42318; --success:#197044; --blue:#175cd3; }
-        * { box-sizing:border-box; }
-        body { margin:0; min-height:100vh; background:var(--bg); color:var(--ink); font-family:"Segoe UI",Tahoma,Arial,sans-serif; }
-        button,input,select,textarea { font:inherit; }
-        .app-header { padding:24px clamp(16px,4vw,54px); color:#fff; background:linear-gradient(115deg,#000 0%,#17130a 48%,#8b6207 100%); display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap; }
-        .brand h1 { margin:0; font-size:clamp(24px,3vw,36px); }
-        .brand p { margin:7px 0 0; color:#e8e8e8; }
-        .header-actions { display:flex; gap:10px; flex-wrap:wrap; }
-        .shell { max-width:1450px; margin:0 auto; padding:22px 16px 50px; }
-        .btn { border:0; border-radius:10px; min-height:44px; padding:10px 16px; cursor:pointer; font-weight:800; transition:.15s; }
-        .btn:hover { transform:translateY(-1px); }
-        .btn:disabled { opacity:.55; cursor:wait; transform:none; }
-        .btn-primary { background:var(--gold); color:#fff; }
-        .btn-dark { background:#111; color:#fff; }
-        .btn-light { background:#fff; color:#111; border:1px solid var(--line); }
-        .btn-danger { background:#fff1f0; color:var(--danger); border:1px solid #fecdca; }
-        .btn-small { min-height:36px; padding:7px 11px; font-size:13px; }
-        .tabs { display:flex; gap:8px; margin-bottom:18px; background:#fff; border:1px solid var(--line); border-radius:14px; padding:7px; width:fit-content; }
-        .tab-btn { background:transparent; color:#444; }
-        .tab-btn.active { background:#111; color:#fff; }
-        .tab-panel { display:none; }
-        .tab-panel.active { display:block; }
-        .notice { display:none; margin-bottom:16px; padding:13px 15px; border-radius:12px; font-weight:700; line-height:1.7; }
-        .notice.show { display:block; }
-        .notice.success { background:#ecfdf3; color:var(--success); border:1px solid #abefc6; }
-        .notice.error { background:#fef3f2; color:var(--danger); border:1px solid #fecdca; }
-        .notice.info { background:#eff8ff; color:var(--blue); border:1px solid #b2ddff; }
-        .stats-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-bottom:18px; }
-        .card { background:var(--paper); border:1px solid var(--line); border-radius:16px; box-shadow:0 6px 24px rgba(16,24,40,.045); }
-        .stat-card { padding:18px; }
-        .stat-label { color:var(--muted); font-weight:700; font-size:14px; }
-        .stat-value { margin-top:7px; font-size:30px; font-weight:900; }
-        .section-card { padding:20px; margin-bottom:18px; }
-        .section-head { display:flex; justify-content:space-between; align-items:start; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
-        .section-head h2 { margin:0; font-size:21px; }
-        .section-head p { margin:5px 0 0; color:var(--muted); line-height:1.7; font-size:14px; }
-        .form-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:13px; }
-        .field { display:flex; flex-direction:column; gap:6px; }
-        .field.span-2 { grid-column:span 2; }
-        .field.span-4 { grid-column:span 4; }
-        .field label { font-size:13px; font-weight:800; color:#333; }
-        input,select,textarea { width:100%; min-height:44px; border:1px solid #ccd0d5; border-radius:10px; padding:10px 11px; background:#fff; color:#111; outline:none; }
-        input:focus,select:focus,textarea:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(200,145,22,.13); }
-        textarea { min-height:86px; resize:vertical; }
-        .form-actions { display:flex; align-items:end; gap:10px; }
-        .filter-grid { display:grid; grid-template-columns:1.4fr repeat(3,1fr) auto; gap:12px; align-items:end; }
-        .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:14px; }
-        table { width:100%; min-width:1120px; border-collapse:collapse; }
-        th,td { padding:12px 10px; border-bottom:1px solid var(--line); text-align:center; font-size:13px; vertical-align:middle; }
-        th { background:#111; color:#fff; white-space:nowrap; }
-        tbody tr:last-child td { border-bottom:0; }
-        tbody tr:hover td { background:#fffdf7; }
-        .empty { padding:32px; color:var(--muted); }
-        .badge { display:inline-flex; align-items:center; justify-content:center; min-width:78px; padding:5px 9px; border-radius:999px; font-size:12px; font-weight:900; }
-        .source-website { color:#6941c6; background:#f4f3ff; }
-        .source-manual { color:#067647; background:#ecfdf3; }
-        .source-airbnb { color:#c11574; background:#fdf2fa; }
-        .source-booking { color:#175cd3; background:#eff8ff; }
-        .status-pending { color:#b54708; background:#fffaeb; }
-        .status-confirmed { color:#067647; background:#ecfdf3; }
-        .status-cancelled { color:#b42318; background:#fef3f2; }
-        .status-blocked { color:#344054; background:#f2f4f7; }
-        .status-select { min-width:105px; min-height:36px; padding:6px 8px; font-size:12px; }
-        .row-actions { display:flex; gap:6px; justify-content:center; }
-        .apartments-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
-        .apartment-card { padding:18px; }
-        .apartment-title { display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom:15px; }
-        .apartment-title h3 { margin:0; }
-        .connection-box { padding:14px; border:1px solid var(--line); border-radius:12px; margin-top:12px; }
-        .connection-title { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px; }
-        .connection-title strong { font-size:15px; }
-        .inline-check { display:flex; align-items:center; gap:6px; font-size:13px; font-weight:700; }
-        .inline-check input { width:17px; min-height:17px; accent-color:var(--gold); }
-        .connection-status { margin:8px 0 0; color:var(--muted); font-size:12px; line-height:1.6; }
-        .url-row { display:grid; grid-template-columns:1fr auto; gap:7px; margin-top:8px; }
-        .url-row input { direction:ltr; text-align:left; font-size:12px; background:#f8f9fa; }
-        .apartment-actions { display:flex; gap:9px; margin-top:14px; flex-wrap:wrap; }
-        .login-overlay { position:fixed; inset:0; z-index:999999; display:grid; place-items:center; padding:18px; background:rgba(0,0,0,.78); backdrop-filter:blur(7px); }
-        .login-overlay.hidden { display:none; }
-        .login-card { width:min(430px,100%); background:#fff; border-radius:18px; padding:25px; }
-        .login-card h2 { margin:0 0 7px; }
-        .login-card p { color:var(--muted); line-height:1.7; }
-        .login-card .field { margin-top:12px; }
-        .login-card .btn { width:100%; margin-top:17px; }
-        .login-error { min-height:22px; margin-top:10px; color:var(--danger); font-weight:700; font-size:13px; }
-        @media (max-width:1050px) { .stats-grid{grid-template-columns:repeat(2,1fr)} .form-grid{grid-template-columns:repeat(2,1fr)} .field.span-4{grid-column:span 2} .filter-grid{grid-template-columns:repeat(2,1fr)} .apartments-grid{grid-template-columns:1fr} }
-        @media (max-width:650px) { .app-header{align-items:flex-start} .header-actions,.header-actions .btn{width:100%} .stats-grid,.form-grid,.filter-grid{grid-template-columns:1fr} .field.span-2,.field.span-4{grid-column:span 1} .form-actions,.form-actions .btn{width:100%} .tabs{width:100%} .tabs .btn{flex:1} .url-row{grid-template-columns:1fr} }
+        :root {
+            --gold: #c89116;
+            --ink: #111;
+            --muted: #68707b;
+            --line: #e6e8eb;
+            --paper: #fff;
+            --bg: #f4f5f7;
+            --danger: #b42318;
+            --success: #197044;
+            --blue: #175cd3;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        .app-header {
+            padding: 24px clamp(16px, 4vw, 54px);
+            color: #fff;
+            background: linear-gradient(115deg, #000 0%, #17130a 48%, #8b6207 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .brand h1 {
+            margin: 0;
+            font-size: clamp(24px, 3vw, 36px);
+        }
+
+        .brand p {
+            margin: 7px 0 0;
+            color: #e8e8e8;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .shell {
+            max-width: 1450px;
+            margin: 0 auto;
+            padding: 22px 16px 50px;
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 10px;
+            min-height: 44px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-weight: 800;
+            transition: .15s;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: .55;
+            cursor: wait;
+            transform: none;
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: #fff;
+        }
+
+        .btn-dark {
+            background: #111;
+            color: #fff;
+        }
+
+        .btn-light {
+            background: #fff;
+            color: #111;
+            border: 1px solid var(--line);
+        }
+
+        .btn-danger {
+            background: #fff1f0;
+            color: var(--danger);
+            border: 1px solid #fecdca;
+        }
+
+        .btn-small {
+            min-height: 36px;
+            padding: 7px 11px;
+            font-size: 13px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 7px;
+            width: fit-content;
+        }
+
+        .tab-btn {
+            background: transparent;
+            color: #444;
+        }
+
+        .tab-btn.active {
+            background: #111;
+            color: #fff;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .notice {
+            display: none;
+            margin-bottom: 16px;
+            padding: 13px 15px;
+            border-radius: 12px;
+            font-weight: 700;
+            line-height: 1.7;
+        }
+
+        .notice.show {
+            display: block;
+        }
+
+        .notice.success {
+            background: #ecfdf3;
+            color: var(--success);
+            border: 1px solid #abefc6;
+        }
+
+        .notice.error {
+            background: #fef3f2;
+            color: var(--danger);
+            border: 1px solid #fecdca;
+        }
+
+        .notice.info {
+            background: #eff8ff;
+            color: var(--blue);
+            border: 1px solid #b2ddff;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .card {
+            background: var(--paper);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            box-shadow: 0 6px 24px rgba(16, 24, 40, .045);
+        }
+
+        .stat-card {
+            padding: 18px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .stat-value {
+            margin-top: 7px;
+            font-size: 30px;
+            font-weight: 900;
+        }
+
+        .section-card {
+            padding: 20px;
+            margin-bottom: 18px;
+        }
+
+        .section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .section-head h2 {
+            margin: 0;
+            font-size: 21px;
+        }
+
+        .section-head p {
+            margin: 5px 0 0;
+            color: var(--muted);
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 13px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .field.span-2 {
+            grid-column: span 2;
+        }
+
+        .field.span-4 {
+            grid-column: span 4;
+        }
+
+        .field label {
+            font-size: 13px;
+            font-weight: 800;
+            color: #333;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            min-height: 44px;
+            border: 1px solid #ccd0d5;
+            border-radius: 10px;
+            padding: 10px 11px;
+            background: #fff;
+            color: #111;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(200, 145, 22, .13);
+        }
+
+        textarea {
+            min-height: 86px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            align-items: end;
+            gap: 10px;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: 1.4fr repeat(3, 1fr) auto;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+        }
+
+        table {
+            width: 100%;
+            min-width: 1120px;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px 10px;
+            border-bottom: 1px solid var(--line);
+            text-align: center;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        th {
+            background: #111;
+            color: #fff;
+            white-space: nowrap;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        tbody tr:hover td {
+            background: #fffdf7;
+        }
+
+        .empty {
+            padding: 32px;
+            color: var(--muted);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 78px;
+            padding: 5px 9px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .source-website {
+            color: #6941c6;
+            background: #f4f3ff;
+        }
+
+        .source-manual {
+            color: #067647;
+            background: #ecfdf3;
+        }
+
+        .source-airbnb {
+            color: #c11574;
+            background: #fdf2fa;
+        }
+
+        .source-booking {
+            color: #175cd3;
+            background: #eff8ff;
+        }
+
+        .status-pending {
+            color: #b54708;
+            background: #fffaeb;
+        }
+
+        .status-confirmed {
+            color: #067647;
+            background: #ecfdf3;
+        }
+
+        .status-cancelled {
+            color: #b42318;
+            background: #fef3f2;
+        }
+
+        .status-blocked {
+            color: #344054;
+            background: #f2f4f7;
+        }
+
+        .status-select {
+            min-width: 105px;
+            min-height: 36px;
+            padding: 6px 8px;
+            font-size: 12px;
+        }
+
+        .row-actions {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .apartments-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .apartment-card {
+            padding: 18px;
+        }
+
+        .apartment-title {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .apartment-title h3 {
+            margin: 0;
+        }
+
+        .connection-box {
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            margin-top: 12px;
+        }
+
+        .connection-airbnb {
+            border-color: rgba(255, 56, 92, .38);
+            background: linear-gradient(180deg, rgba(255, 56, 92, .07), #fff 58%);
+            box-shadow: inset -4px 0 0 #ff385c;
+        }
+
+        .connection-airbnb .connection-title strong {
+            color: #ff385c;
+        }
+
+        .connection-airbnb .inline-check input {
+            accent-color: #ff385c;
+        }
+
+        .connection-airbnb input[data-field="airbnbUrl"]:focus {
+            border-color: #ff385c;
+            box-shadow: 0 0 0 3px rgba(255, 56, 92, .13);
+        }
+
+        .connection-booking {
+            border-color: rgba(0, 59, 149, .38);
+            background: linear-gradient(180deg, rgba(0, 59, 149, .07), #fff 58%);
+            box-shadow: inset -4px 0 0 #003b95;
+        }
+
+        .connection-booking .connection-title strong {
+            color: #003b95;
+        }
+
+        .connection-booking .inline-check input {
+            accent-color: #003b95;
+        }
+
+        .connection-booking input[data-field="bookingUrl"]:focus {
+            border-color: #003b95;
+            box-shadow: 0 0 0 3px rgba(0, 59, 149, .13);
+        }
+
+        .connection-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .connection-title strong {
+            font-size: 15px;
+        }
+
+        .inline-check {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .inline-check input {
+            width: 17px;
+            min-height: 17px;
+            accent-color: var(--gold);
+        }
+
+        .connection-status {
+            margin: 8px 0 0;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .url-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 7px;
+            margin-top: 8px;
+        }
+
+        .url-row input {
+            direction: ltr;
+            text-align: left;
+            font-size: 12px;
+            background: #f8f9fa;
+        }
+
+        .apartment-actions {
+            display: flex;
+            gap: 9px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+
+        .login-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 999999;
+            display: grid;
+            place-items: center;
+            padding: 18px;
+            background: rgba(0, 0, 0, .78);
+            backdrop-filter: blur(7px);
+        }
+
+        .login-overlay.hidden {
+            display: none;
+        }
+
+        .login-card {
+            width: min(430px, 100%);
+            background: #fff;
+            border-radius: 18px;
+            padding: 25px;
+        }
+
+        .login-card h2 {
+            margin: 0 0 7px;
+        }
+
+        .login-card p {
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .login-card .field {
+            margin-top: 12px;
+        }
+
+        .login-card .btn {
+            width: 100%;
+            margin-top: 17px;
+        }
+
+        .login-error {
+            min-height: 22px;
+            margin-top: 10px;
+            color: var(--danger);
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        @media (max-width:1050px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .field.span-4 {
+                grid-column: span 2
+            }
+
+            .filter-grid {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .apartments-grid {
+                grid-template-columns: 1fr
+            }
+        }
+
+        @media (max-width:650px) {
+            .app-header {
+                align-items: flex-start
+            }
+
+            .header-actions,
+            .header-actions .btn {
+                width: 100%
+            }
+
+            .stats-grid,
+            .form-grid,
+            .filter-grid {
+                grid-template-columns: 1fr
+            }
+
+            .field.span-2,
+            .field.span-4 {
+                grid-column: span 1
+            }
+
+            .form-actions,
+            .form-actions .btn {
+                width: 100%
+            }
+
+            .tabs {
+                width: 100%
+            }
+
+            .tabs .btn {
+                flex: 1
+            }
+
+            .url-row {
+                grid-template-columns: 1fr
+            }
+        }
     </style>
 </head>
+
 <body>
     <div class="login-overlay" id="loginOverlay">
         <form class="login-card" id="loginForm">
             <h2>تسجيل دخول الإدارة</h2>
             <p>أدخل بيانات الأدمن المحفوظة في Render. لن تُحفظ كلمة المرور في المتصفح.</p>
-            <div class="field"><label for="adminUser">اسم المستخدم</label><input id="adminUser" autocomplete="username" required></div>
-            <div class="field"><label for="adminPass">كلمة المرور</label><input id="adminPass" type="password" autocomplete="current-password" required></div>
+            <div class="field"><label for="adminUser">اسم المستخدم</label><input id="adminUser" autocomplete="username"
+                    required></div>
+            <div class="field"><label for="adminPass">كلمة المرور</label><input id="adminPass" type="password"
+                    autocomplete="current-password" required></div>
             <div class="login-error" id="loginError"></div>
             <button class="btn btn-primary" type="submit">دخول إلى النظام</button>
         </form>
     </div>
 
     <header class="app-header">
-        <div class="brand"><h1>HIJAZI PMS</h1><p>نظام إدارة الشقق والحجوزات والمزامنة</p></div>
-        <div class="header-actions"><button class="btn btn-primary" id="syncAllBtn" type="button">مزامنة جميع التقاويم</button><button class="btn btn-light" id="logoutBtn" type="button">تسجيل الخروج</button></div>
+        <div class="brand">
+            <h1>HIJAZI PMS</h1>
+            <p>نظام إدارة الشقق والحجوزات والمزامنة</p>
+        </div>
+        <div class="header-actions"><button class="btn btn-primary" id="syncAllBtn" type="button">مزامنة جميع
+                التقاويم</button><button class="btn btn-light" id="logoutBtn" type="button">تسجيل الخروج</button></div>
     </header>
 
     <main class="shell">
@@ -123,125 +669,249 @@
 
         <section class="tab-panel active" id="bookingsPanel">
             <div class="stats-grid">
-                <div class="card stat-card"><div class="stat-label">الحجوزات الفعالة</div><div class="stat-value" id="activeCount">0</div></div>
-                <div class="card stat-card"><div class="stat-label">الوصول اليوم</div><div class="stat-value" id="arrivalsCount">0</div></div>
-                <div class="card stat-card"><div class="stat-label">الشقق المشغولة الآن</div><div class="stat-value" id="occupiedCount">0</div></div>
-                <div class="card stat-card"><div class="stat-label">حجوزات المنصات</div><div class="stat-value" id="platformCount">0</div></div>
+                <div class="card stat-card">
+                    <div class="stat-label">الحجوزات الفعالة</div>
+                    <div class="stat-value" id="activeCount">0</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-label">الوصول اليوم</div>
+                    <div class="stat-value" id="arrivalsCount">0</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-label">الشقق المشغولة الآن</div>
+                    <div class="stat-value" id="occupiedCount">0</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-label">حجوزات المنصات</div>
+                    <div class="stat-value" id="platformCount">0</div>
+                </div>
             </div>
 
             <section class="card section-card">
-                <div class="section-head"><div><h2>إضافة حجز</h2><p>للحجز الهاتفي أو الشخصي، ويمكن أيضًا تسجيل حجز Airbnb أو Booking يدويًا.</p></div></div>
+                <div class="section-head">
+                    <div>
+                        <h2>إضافة حجز</h2>
+                        <p>للحجز الهاتفي أو الشخصي، ويمكن أيضًا تسجيل حجز Airbnb أو Booking يدويًا.</p>
+                    </div>
+                </div>
                 <form id="manualBookingForm" class="form-grid">
-                    <div class="field"><label for="manualApartment">الشقة *</label><select id="manualApartment" required></select></div>
-                    <div class="field"><label for="manualSource">المصدر *</label><select id="manualSource"><option value="manual">حجز يدوي / هاتفي</option><option value="airbnb">Airbnb</option><option value="booking">Booking.com</option></select></div>
-                    <div class="field"><label for="manualCheckIn">الدخول *</label><input id="manualCheckIn" type="date" required></div>
-                    <div class="field"><label for="manualCheckOut">الخروج *</label><input id="manualCheckOut" type="date" required></div>
-                    <div class="field"><label for="manualName">اسم العميل</label><input id="manualName" placeholder="مثال: أحمد محمد"></div>
-                    <div class="field"><label for="manualPhone">الهاتف</label><input id="manualPhone" type="tel" placeholder="07xxxxxxxx"></div>
-                    <div class="field"><label for="manualEmail">البريد</label><input id="manualEmail" type="email" placeholder="name@example.com"></div>
-                    <div class="field"><label for="manualReference">رقم الحجز في المنصة</label><input id="manualReference" placeholder="اختياري"></div>
-                    <div class="field"><label for="manualAdults">البالغون</label><input id="manualAdults" type="number" min="0" value="1"></div>
-                    <div class="field"><label for="manualChildren">الأطفال</label><input id="manualChildren" type="number" min="0" value="0"></div>
-                    <div class="field"><label for="manualPrice">السعر الإجمالي (JOD)</label><input id="manualPrice" type="number" min="0" step="0.01" value="0"></div>
-                    <div class="field"><label for="manualStatus">الحالة</label><select id="manualStatus"><option value="confirmed">مؤكد</option><option value="pending">بانتظار التأكيد</option></select></div>
-                    <div class="field span-4"><label for="manualNotes">ملاحظات</label><textarea id="manualNotes" placeholder="أي تفاصيل مهمة عن الحجز..."></textarea></div>
-                    <div class="form-actions field span-4"><button class="btn btn-primary" id="addBookingBtn" type="submit">إضافة الحجز وإغلاق التواريخ</button></div>
+                    <div class="field"><label for="manualApartment">الشقة *</label><select id="manualApartment"
+                            required></select></div>
+                    <div class="field"><label for="manualSource">المصدر *</label><select id="manualSource">
+                            <option value="manual">حجز يدوي / هاتفي</option>
+                            <option value="airbnb">Airbnb</option>
+                            <option value="booking">Booking.com</option>
+                        </select></div>
+                    <div class="field"><label for="manualCheckIn">الدخول *</label><input id="manualCheckIn" type="date"
+                            required></div>
+                    <div class="field"><label for="manualCheckOut">الخروج *</label><input id="manualCheckOut"
+                            type="date" required></div>
+                    <div class="field"><label for="manualName">اسم العميل</label><input id="manualName"
+                            placeholder="مثال: أحمد محمد"></div>
+                    <div class="field"><label for="manualPhone">الهاتف</label><input id="manualPhone" type="tel"
+                            placeholder="07xxxxxxxx"></div>
+                    <div class="field"><label for="manualEmail">البريد</label><input id="manualEmail" type="email"
+                            placeholder="name@example.com"></div>
+                    <div class="field"><label for="manualReference">رقم الحجز في المنصة</label><input
+                            id="manualReference" placeholder="اختياري"></div>
+                    <div class="field"><label for="manualAdults">البالغون</label><input id="manualAdults" type="number"
+                            min="0" value="1"></div>
+                    <div class="field"><label for="manualChildren">الأطفال</label><input id="manualChildren"
+                            type="number" min="0" value="0"></div>
+                    <div class="field"><label for="manualPrice">السعر الإجمالي (JOD) — يُحسب تلقائيًا ويمكن
+                            تعديله</label><input id="manualPrice" type="number" min="0" step="0.01" value="0"></div>
+                    <div class="field"><label for="manualStatus">الحالة</label><select id="manualStatus">
+                            <option value="confirmed">مؤكد</option>
+                            <option value="pending">بانتظار التأكيد</option>
+                        </select></div>
+                    <div class="field span-4"><label for="manualNotes">ملاحظات</label><textarea id="manualNotes"
+                            placeholder="أي تفاصيل مهمة عن الحجز..."></textarea></div>
+                    <div class="form-actions field span-4"><button class="btn btn-primary" id="addBookingBtn"
+                            type="submit">إضافة الحجز وإغلاق التواريخ</button></div>
                 </form>
             </section>
 
             <section class="card section-card">
-                <div class="section-head"><div><h2>كل الحجوزات</h2><p id="bookingCountText">جاري التحميل...</p></div><button class="btn btn-dark btn-small" id="refreshBtn" type="button">تحديث</button></div>
+                <div class="section-head">
+                    <div>
+                        <h2>كل الحجوزات</h2>
+                        <p id="bookingCountText">جاري التحميل...</p>
+                    </div><button class="btn btn-dark btn-small" id="refreshBtn" type="button">تحديث</button>
+                </div>
                 <div class="filter-grid">
-                    <div class="field"><label for="searchBox">بحث</label><input id="searchBox" placeholder="الاسم، الهاتف، البريد أو رقم الحجز"></div>
-                    <div class="field"><label for="apartmentFilter">الشقة</label><select id="apartmentFilter"><option value="">كل الشقق</option></select></div>
-                    <div class="field"><label for="sourceFilter">المصدر</label><select id="sourceFilter"><option value="">كل المصادر</option><option value="website">الموقع</option><option value="manual">يدوي</option><option value="airbnb">Airbnb</option><option value="booking">Booking.com</option></select></div>
-                    <div class="field"><label for="statusFilter">الحالة</label><select id="statusFilter"><option value="">كل الحالات</option><option value="pending">بانتظار التأكيد</option><option value="confirmed">مؤكد</option><option value="blocked">محجوب</option><option value="cancelled">ملغي</option></select></div>
+                    <div class="field"><label for="searchBox">بحث</label><input id="searchBox"
+                            placeholder="الاسم، الهاتف، البريد أو رقم الحجز"></div>
+                    <div class="field"><label for="apartmentFilter">الشقة</label><select id="apartmentFilter">
+                            <option value="">كل الشقق</option>
+                        </select></div>
+                    <div class="field"><label for="sourceFilter">المصدر</label><select id="sourceFilter">
+                            <option value="">كل المصادر</option>
+                            <option value="website">الموقع</option>
+                            <option value="manual">يدوي</option>
+                            <option value="airbnb">Airbnb</option>
+                            <option value="booking">Booking.com</option>
+                        </select></div>
+                    <div class="field"><label for="statusFilter">الحالة</label><select id="statusFilter">
+                            <option value="">كل الحالات</option>
+                            <option value="pending">بانتظار التأكيد</option>
+                            <option value="confirmed">مؤكد</option>
+                            <option value="blocked">محجوب</option>
+                            <option value="cancelled">ملغي</option>
+                        </select></div>
                     <button class="btn btn-light" id="clearFiltersBtn" type="button">مسح الفلاتر</button>
                 </div>
                 <div class="table-wrap" style="margin-top:15px">
-                    <table><thead><tr><th>الشقة</th><th>المصدر</th><th>العميل</th><th>الهاتف</th><th>الدخول</th><th>الخروج</th><th>الليالي</th><th>السعر</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="bookingsBody"></tbody></table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>الشقة</th>
+                                <th>المصدر</th>
+                                <th>العميل</th>
+                                <th>الهاتف</th>
+                                <th>الدخول</th>
+                                <th>الخروج</th>
+                                <th>الليالي</th>
+                                <th>السعر</th>
+                                <th>الحالة</th>
+                                <th>إجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookingsBody"></tbody>
+                    </table>
                 </div>
             </section>
         </section>
 
         <section class="tab-panel" id="apartmentsPanel">
             <section class="card section-card">
-                <div class="section-head"><div><h2>إضافة شقة جديدة</h2><p>يمكنك زيادة العدد عن 6 بدون تعديل الكود.</p></div></div>
+                <div class="section-head">
+                    <div>
+                        <h2>إضافة شقة جديدة</h2>
+                        <p>يمكنك زيادة العدد عن 6 بدون تعديل الكود.</p>
+                    </div>
+                </div>
                 <form id="addApartmentForm" class="form-grid">
-                    <div class="field"><label for="newApartmentId">رقم الشقة</label><input id="newApartmentId" type="number" min="1" placeholder="يُحدد تلقائيًا إن تركته فارغًا"></div>
-                    <div class="field span-2"><label for="newApartmentLabel">اسم الشقة</label><input id="newApartmentLabel" placeholder="مثال: شقة رقم 7 - الشميساني"></div>
-                    <div class="form-actions field"><button class="btn btn-primary" type="submit">إضافة الشقة</button></div>
+                    <div class="field"><label for="newApartmentId">رقم الشقة</label><input id="newApartmentId"
+                            type="number" min="1" placeholder="يُحدد تلقائيًا إن تركته فارغًا"></div>
+                    <div class="field span-2"><label for="newApartmentLabel">اسم الشقة</label><input
+                            id="newApartmentLabel" placeholder="مثال: شقة رقم 7 - الشميساني"></div>
+                    <div class="form-actions field"><button class="btn btn-primary" type="submit">إضافة الشقة</button>
+                    </div>
                 </form>
             </section>
-            <div class="notice info show">لكل شقة: ضع رابط التصدير الذي تأخذه من Airbnb وBooking في خانة الاستيراد هنا. ثم انسخ رابط HIJAZI الخاص بكل منصة وضعه داخل المنصة كـ Import Calendar.</div>
+            <div class="notice info show">لكل شقة: ضع رابط التصدير الذي تأخذه من Airbnb وBooking في خانة الاستيراد هنا.
+                ثم انسخ رابط HIJAZI الخاص بكل منصة وضعه داخل المنصة كـ Import Calendar.</div>
             <div class="apartments-grid" id="apartmentsGrid"></div>
         </section>
     </main>
 
     <script>
         const API_BASE = "https://api.hijazi-apartments.com";
-        const SOURCE_LABELS = { website:"الموقع", manual:"يدوي", airbnb:"Airbnb", booking:"Booking.com" };
-        const STATUS_LABELS = { pending:"بانتظار التأكيد", confirmed:"مؤكد", cancelled:"ملغي", blocked:"محجوب" };
+        const APARTMENT_PRICES_JOD = {
+            1: 150,
+            2: 200,
+            3: 150,
+            4: 200,
+            5: 150,
+            6: 200
+        };
+        const SOURCE_LABELS = { website: "الموقع", manual: "يدوي", airbnb: "Airbnb", booking: "Booking.com" };
+        const STATUS_LABELS = { pending: "بانتظار التأكيد", confirmed: "مؤكد", cancelled: "ملغي", blocked: "محجوب" };
         let adminUser = "", adminPass = "", allBookings = [], apartments = [];
         const notice = document.getElementById("notice"), loginOverlay = document.getElementById("loginOverlay"), loginError = document.getElementById("loginError");
 
-        function basicToken(value) { const bytes=new TextEncoder().encode(value); let binary=""; bytes.forEach(byte=>{binary+=String.fromCharCode(byte)}); return btoa(binary); }
-        function authHeaders() { return { Authorization:`Basic ${basicToken(`${adminUser}:${adminPass}`)}`, "Content-Type":"application/json" }; }
-        async function api(path,options={}) { const response=await fetch(`${API_BASE}${path}`,{...options,headers:{...authHeaders(),...(options.headers||{})}}); if(response.status===401){loginOverlay.classList.remove("hidden");throw new Error("بيانات الدخول غير صحيحة.")} const data=await response.json().catch(()=>({})); if(!response.ok)throw new Error(data.message||"حدث خطأ في الاتصال بالسيرفر."); return data; }
-        function showNotice(message,type="success") { notice.textContent=message; notice.className=`notice show ${type}`; window.scrollTo({top:0,behavior:"smooth"}); clearTimeout(showNotice.timer); showNotice.timer=setTimeout(()=>notice.classList.remove("show"),6500); }
-        function escapeHtml(value) { return String(value??"").replace(/[&<>'"]/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[char]); }
-        function dateOnly(value) { return value?String(value).slice(0,10):""; }
-        function todayInAmman() { const parts=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Amman",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()); const map=Object.fromEntries(parts.map(part=>[part.type,part.value])); return `${map.year}-${map.month}-${map.day}`; }
-        function nightsBetween(checkIn,checkOut) { const start=new Date(`${dateOnly(checkIn)}T00:00:00Z`),end=new Date(`${dateOnly(checkOut)}T00:00:00Z`); return Math.max(0,Math.round((end-start)/86400000)); }
-        function setButtonLoading(button,loading,text="جاري التنفيذ...") { if(loading){button.dataset.originalText=button.textContent;button.textContent=text;button.disabled=true}else{button.textContent=button.dataset.originalText||button.textContent;button.disabled=false} }
+        function basicToken(value) { const bytes = new TextEncoder().encode(value); let binary = ""; bytes.forEach(byte => { binary += String.fromCharCode(byte) }); return btoa(binary); }
+        function authHeaders() { return { Authorization: `Basic ${basicToken(`${adminUser}:${adminPass}`)}`, "Content-Type": "application/json" }; }
+        async function api(path, options = {}) { const response = await fetch(`${API_BASE}${path}`, { ...options, headers: { ...authHeaders(), ...(options.headers || {}) } }); if (response.status === 401) { loginOverlay.classList.remove("hidden"); throw new Error("بيانات الدخول غير صحيحة.") } const data = await response.json().catch(() => ({})); if (!response.ok) throw new Error(data.message || "حدث خطأ في الاتصال بالسيرفر."); return data; }
+        function showNotice(message, type = "success") { notice.textContent = message; notice.className = `notice show ${type}`; window.scrollTo({ top: 0, behavior: "smooth" }); clearTimeout(showNotice.timer); showNotice.timer = setTimeout(() => notice.classList.remove("show"), 6500); }
+        function escapeHtml(value) { return String(value ?? "").replace(/[&<>'"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" })[char]); }
+        function dateOnly(value) { return value ? String(value).slice(0, 10) : ""; }
+        function todayInAmman() { const parts = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Amman", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date()); const map = Object.fromEntries(parts.map(part => [part.type, part.value])); return `${map.year}-${map.month}-${map.day}`; }
+        function nightsBetween(checkIn, checkOut) { const start = new Date(`${dateOnly(checkIn)}T00:00:00Z`), end = new Date(`${dateOnly(checkOut)}T00:00:00Z`); return Math.max(0, Math.round((end - start) / 86400000)); }
+        function updateManualPrice() {
+            const apartmentId = Number(document.getElementById("manualApartment").value);
+            const checkIn = document.getElementById("manualCheckIn").value;
+            const checkOut = document.getElementById("manualCheckOut").value;
+            const priceInput = document.getElementById("manualPrice");
+            const nightlyPrice = APARTMENT_PRICES_JOD[apartmentId];
+
+            if (!nightlyPrice || !checkIn || !checkOut) {
+                priceInput.value = "0";
+                return;
+            }
+
+            const nights = nightsBetween(checkIn, checkOut);
+            priceInput.value = nights > 0 ? String(nightlyPrice * nights) : "0";
+        }
+        function setButtonLoading(button, loading, text = "جاري التنفيذ...") { if (loading) { button.dataset.originalText = button.textContent; button.textContent = text; button.disabled = true } else { button.textContent = button.dataset.originalText || button.textContent; button.disabled = false } }
 
         function populateApartmentSelects() {
-            const options=apartments.filter(a=>a.active).map(a=>`<option value="${a.apartmentId}">${escapeHtml(a.label)}</option>`).join("");
-            document.getElementById("manualApartment").innerHTML=options||'<option value="">لا توجد شقق فعالة</option>';
-            document.getElementById("apartmentFilter").innerHTML=`<option value="">كل الشقق</option>${options}`;
+            const options = apartments.filter(a => a.active).map(a => `<option value="${a.apartmentId}">${escapeHtml(a.label)}</option>`).join("");
+            document.getElementById("manualApartment").innerHTML = options || '<option value="">لا توجد شقق فعالة</option>';
+            document.getElementById("apartmentFilter").innerHTML = `<option value="">كل الشقق</option>${options}`;
         }
 
         function updateStats() {
-            const today=todayInAmman(),active=allBookings.filter(b=>(b.status||"pending")!=="cancelled");
-            document.getElementById("activeCount").textContent=active.length;
-            document.getElementById("arrivalsCount").textContent=active.filter(b=>dateOnly(b.checkIn)===today).length;
-            document.getElementById("occupiedCount").textContent=new Set(active.filter(b=>dateOnly(b.checkIn)<=today&&dateOnly(b.checkOut)>today).map(b=>b.apartmentId)).size;
-            document.getElementById("platformCount").textContent=active.filter(b=>["airbnb","booking"].includes(b.source)).length;
+            const today = todayInAmman(), active = allBookings.filter(b => (b.status || "pending") !== "cancelled");
+            document.getElementById("activeCount").textContent = active.length;
+            document.getElementById("arrivalsCount").textContent = active.filter(b => dateOnly(b.checkIn) === today).length;
+            document.getElementById("occupiedCount").textContent = new Set(active.filter(b => dateOnly(b.checkIn) <= today && dateOnly(b.checkOut) > today).map(b => b.apartmentId)).size;
+            document.getElementById("platformCount").textContent = active.filter(b => ["airbnb", "booking"].includes(b.source)).length;
         }
 
         function renderBookings() {
-            const query=document.getElementById("searchBox").value.trim().toLowerCase(),apt=document.getElementById("apartmentFilter").value,source=document.getElementById("sourceFilter").value,status=document.getElementById("statusFilter").value;
-            const filtered=allBookings.filter(b=>{const s=b.source||"website",st=b.status||"pending",hay=[b.fullName,b.phone,b.email,b.sourceReference].join(" ").toLowerCase(); return(!query||hay.includes(query))&&(!apt||String(b.apartmentId)===apt)&&(!source||s===source)&&(!status||st===status)});
-            document.getElementById("bookingCountText").textContent=`المعروض ${filtered.length} من أصل ${allBookings.length} حجز`;
-            const body=document.getElementById("bookingsBody");
-            if(!filtered.length){body.innerHTML='<tr><td colspan="10" class="empty">لا توجد حجوزات مطابقة.</td></tr>';return}
-            body.innerHTML=filtered.map(b=>{const s=b.source||"website",st=b.status||"pending",price=b.totalPriceText||(b.totalPrice?`${b.totalPrice} ${b.currency||"JOD"}`:"—");return `<tr><td>${escapeHtml(b.apartmentLabel||`شقة ${b.apartmentId}`)}</td><td><span class="badge source-${s}">${SOURCE_LABELS[s]}</span></td><td title="${escapeHtml(b.email||"")}">${escapeHtml(b.fullName||"حجز بدون اسم")}</td><td>${escapeHtml(b.phone||"—")}</td><td>${dateOnly(b.checkIn)}</td><td>${dateOnly(b.checkOut)}</td><td>${nightsBetween(b.checkIn,b.checkOut)}</td><td>${escapeHtml(price)}</td><td><select class="status-select status-${st}" data-booking-status="${b._id}">${Object.entries(STATUS_LABELS).map(([v,l])=>`<option value="${v}" ${v===st?"selected":""}>${l}</option>`).join("")}</select></td><td><div class="row-actions"><button class="btn btn-danger btn-small" data-delete-booking="${b._id}" type="button">حذف</button></div></td></tr>`}).join("");
+            const query = document.getElementById("searchBox").value.trim().toLowerCase(), apt = document.getElementById("apartmentFilter").value, source = document.getElementById("sourceFilter").value, status = document.getElementById("statusFilter").value;
+            const filtered = allBookings.filter(b => { const s = b.source || "website", st = b.status || "pending", hay = [b.fullName, b.phone, b.email, b.sourceReference].join(" ").toLowerCase(); return (!query || hay.includes(query)) && (!apt || String(b.apartmentId) === apt) && (!source || s === source) && (!status || st === status) });
+            document.getElementById("bookingCountText").textContent = `المعروض ${filtered.length} من أصل ${allBookings.length} حجز`;
+            const body = document.getElementById("bookingsBody");
+            if (!filtered.length) { body.innerHTML = '<tr><td colspan="10" class="empty">لا توجد حجوزات مطابقة.</td></tr>'; return }
+            body.innerHTML = filtered.map(b => { const s = b.source || "website", st = b.status || "pending", price = b.totalPriceText || (b.totalPrice ? `${b.totalPrice} ${b.currency || "JOD"}` : "—"); return `<tr><td>${escapeHtml(b.apartmentLabel || `شقة ${b.apartmentId}`)}</td><td><span class="badge source-${s}">${SOURCE_LABELS[s]}</span></td><td title="${escapeHtml(b.email || "")}">${escapeHtml(b.fullName || "حجز بدون اسم")}</td><td>${escapeHtml(b.phone || "—")}</td><td>${dateOnly(b.checkIn)}</td><td>${dateOnly(b.checkOut)}</td><td>${nightsBetween(b.checkIn, b.checkOut)}</td><td>${escapeHtml(price)}</td><td><select class="status-select status-${st}" data-booking-status="${b._id}">${Object.entries(STATUS_LABELS).map(([v, l]) => `<option value="${v}" ${v === st ? "selected" : ""}>${l}</option>`).join("")}</select></td><td><div class="row-actions"><button class="btn btn-danger btn-small" data-delete-booking="${b._id}" type="button">حذف</button></div></td></tr>` }).join("");
         }
 
-        function syncStatusText(c) { if(!c?.lastSyncedAt)return"لم تتم المزامنة بعد."; const time=new Date(c.lastSyncedAt).toLocaleString("ar-JO",{timeZone:"Asia/Amman"}); return `${c.lastSyncStatus==="success"?"نجحت":"فشلت"} آخر مزامنة: ${time}${c.lastSyncMessage?` — ${c.lastSyncMessage}`:""}`; }
+        function syncStatusText(c) { if (!c?.lastSyncedAt) return "لم تتم المزامنة بعد."; const time = new Date(c.lastSyncedAt).toLocaleString("ar-JO", { timeZone: "Asia/Amman" }); return `${c.lastSyncStatus === "success" ? "نجحت" : "فشلت"} آخر مزامنة: ${time}${c.lastSyncMessage ? ` — ${c.lastSyncMessage}` : ""}`; }
         function renderApartments() {
-            const grid=document.getElementById("apartmentsGrid"); if(!apartments.length){grid.innerHTML='<div class="card apartment-card">لا توجد شقق.</div>';return}
-            grid.innerHTML=apartments.map(a=>`<article class="card apartment-card" data-apartment-card="${a._id}"><div class="apartment-title"><h3>الشقة ${a.apartmentId}</h3><label class="inline-check"><input type="checkbox" data-field="active" ${a.active?"checked":""}> فعالة للحجز</label></div><div class="field"><label>اسم الشقة داخل النظام</label><input data-field="label" value="${escapeHtml(a.label)}"></div>${["airbnb","booking"].map(s=>{const c=a.calendars?.[s]||{},title=s==="airbnb"?"Airbnb":"Booking.com";return `<div class="connection-box"><div class="connection-title"><strong>${title}</strong><label class="inline-check"><input type="checkbox" data-field="${s}Enabled" ${c.enabled?"checked":""}> تفعيل الاستيراد</label></div><div class="field"><label>رابط التقويم المُصدّر من ${title}</label><input data-field="${s}Url" value="${escapeHtml(c.url||"")}" dir="ltr" placeholder="https://...ics"></div><p class="connection-status">${escapeHtml(syncStatusText(c))}</p><div class="field" style="margin-top:10px"><label>رابط HIJAZI الذي تضعه داخل ${title}</label><div class="url-row"><input readonly value="${escapeHtml(a.exportUrls?.[s]||"")}" data-export-url="${s}"><button class="btn btn-dark btn-small" data-copy-url="${s}" type="button">نسخ</button></div></div></div>`}).join("")}<div class="apartment-actions"><button class="btn btn-primary" data-save-apartment type="button">حفظ الإعدادات</button><button class="btn btn-dark" data-sync-apartment type="button">مزامنة هذه الشقة</button></div></article>`).join("");
+            const grid = document.getElementById("apartmentsGrid"); if (!apartments.length) { grid.innerHTML = '<div class="card apartment-card">لا توجد شقق.</div>'; return }
+            grid.innerHTML = apartments.map(a => `<article class="card apartment-card" data-apartment-card="${a._id}"><div class="apartment-title"><h3>الشقة ${a.apartmentId}</h3><label class="inline-check"><input type="checkbox" data-field="active" ${a.active ? "checked" : ""}> فعالة للحجز</label></div><div class="field"><label>اسم الشقة داخل النظام</label><input data-field="label" value="${escapeHtml(a.label)}"></div>${["airbnb", "booking"].map(s => { const c = a.calendars?.[s] || {}, title = s === "airbnb" ? "Airbnb" : "Booking.com"; return `<div class="connection-box connection-${s}"><div class="connection-title"><strong>${title}</strong><label class="inline-check"><input type="checkbox" data-field="${s}Enabled" ${c.enabled ? "checked" : ""}> تفعيل الاستيراد</label></div><div class="field"><label>رابط التقويم المُصدّر من ${title}</label><input data-field="${s}Url" value="${escapeHtml(c.url || "")}" dir="ltr" placeholder="https://...ics"></div><p class="connection-status">${escapeHtml(syncStatusText(c))}</p><div class="field" style="margin-top:10px"><label>رابط HIJAZI الذي تضعه داخل ${title}</label><div class="url-row"><input readonly value="${escapeHtml(a.exportUrls?.[s] || "")}" data-export-url="${s}"><button class="btn btn-dark btn-small" data-copy-url="${s}" type="button">نسخ</button></div></div></div>` }).join("")}<div class="apartment-actions"><button class="btn btn-primary" data-save-apartment type="button">حفظ الإعدادات</button><button class="btn btn-dark" data-sync-apartment type="button">مزامنة هذه الشقة</button></div></article>`).join("");
         }
 
-        async function loadAll() { const [bd,ad]=await Promise.all([api("/admin/bookings"),api("/admin/apartments")]); allBookings=bd.bookings||[];apartments=ad.apartments||[];populateApartmentSelects();updateStats();renderBookings();renderApartments(); }
+        async function loadAll() { const [bd, ad] = await Promise.all([api("/admin/bookings"), api("/admin/apartments")]); allBookings = bd.bookings || []; apartments = ad.apartments || []; populateApartmentSelects(); updateStats(); renderBookings(); renderApartments(); }
 
-        document.getElementById("loginForm").addEventListener("submit",async e=>{e.preventDefault();adminUser=document.getElementById("adminUser").value.trim();adminPass=document.getElementById("adminPass").value;loginError.textContent="جاري التحقق...";try{await loadAll();loginError.textContent="";loginOverlay.classList.add("hidden");document.getElementById("adminPass").value=""}catch(error){loginError.textContent=error.message}});
-        document.getElementById("logoutBtn").addEventListener("click",()=>{adminUser="";adminPass="";loginOverlay.classList.remove("hidden")});
-        document.querySelectorAll(".tab-btn").forEach(button=>button.addEventListener("click",()=>{document.querySelectorAll(".tab-btn,.tab-panel").forEach(item=>item.classList.remove("active"));button.classList.add("active");document.getElementById(button.dataset.tab).classList.add("active")}));
-        ["searchBox","apartmentFilter","sourceFilter","statusFilter"].forEach(id=>document.getElementById(id).addEventListener(id==="searchBox"?"input":"change",renderBookings));
-        document.getElementById("clearFiltersBtn").addEventListener("click",()=>{["searchBox","apartmentFilter","sourceFilter","statusFilter"].forEach(id=>{document.getElementById(id).value=""});renderBookings()});
-        document.getElementById("refreshBtn").addEventListener("click",async e=>{setButtonLoading(e.currentTarget,true,"جاري التحديث...");try{await loadAll();showNotice("تم تحديث البيانات.")}catch(error){showNotice(error.message,"error")}finally{setButtonLoading(e.currentTarget,false)}});
+        document.getElementById("loginForm").addEventListener("submit", async e => { e.preventDefault(); adminUser = document.getElementById("adminUser").value.trim(); adminPass = document.getElementById("adminPass").value; loginError.textContent = "جاري التحقق..."; try { await loadAll(); loginError.textContent = ""; loginOverlay.classList.add("hidden"); document.getElementById("adminPass").value = "" } catch (error) { loginError.textContent = error.message } });
+        document.getElementById("logoutBtn").addEventListener("click", () => { adminUser = ""; adminPass = ""; loginOverlay.classList.remove("hidden") });
+        document.querySelectorAll(".tab-btn").forEach(button => button.addEventListener("click", () => { document.querySelectorAll(".tab-btn,.tab-panel").forEach(item => item.classList.remove("active")); button.classList.add("active"); document.getElementById(button.dataset.tab).classList.add("active") }));
+        ["searchBox", "apartmentFilter", "sourceFilter", "statusFilter"].forEach(id => document.getElementById(id).addEventListener(id === "searchBox" ? "input" : "change", renderBookings));
+        document.getElementById("clearFiltersBtn").addEventListener("click", () => { ["searchBox", "apartmentFilter", "sourceFilter", "statusFilter"].forEach(id => { document.getElementById(id).value = "" }); renderBookings() });
+        document.getElementById("refreshBtn").addEventListener("click", async e => { setButtonLoading(e.currentTarget, true, "جاري التحديث..."); try { await loadAll(); showNotice("تم تحديث البيانات.") } catch (error) { showNotice(error.message, "error") } finally { setButtonLoading(e.currentTarget, false) } });
 
-        document.getElementById("manualBookingForm").addEventListener("submit",async e=>{e.preventDefault();const button=document.getElementById("addBookingBtn");setButtonLoading(button,true,"جاري إضافة الحجز...");try{const payload={apartmentId:Number(document.getElementById("manualApartment").value),source:document.getElementById("manualSource").value,checkIn:document.getElementById("manualCheckIn").value,checkOut:document.getElementById("manualCheckOut").value,fullName:document.getElementById("manualName").value,phone:document.getElementById("manualPhone").value,email:document.getElementById("manualEmail").value,sourceReference:document.getElementById("manualReference").value,adults:Number(document.getElementById("manualAdults").value||0),children:Number(document.getElementById("manualChildren").value||0),totalPrice:Number(document.getElementById("manualPrice").value||0),currency:"JOD",status:document.getElementById("manualStatus").value,notes:document.getElementById("manualNotes").value};await api("/admin/bookings",{method:"POST",body:JSON.stringify(payload)});e.currentTarget.reset();document.getElementById("manualAdults").value=1;document.getElementById("manualChildren").value=0;document.getElementById("manualPrice").value=0;await loadAll();showNotice("✅ تم إضافة الحجز وإغلاق التواريخ بنجاح.")}catch(error){showNotice(error.message,"error")}finally{setButtonLoading(button,false)}});
-        document.getElementById("bookingsBody").addEventListener("change",async e=>{const id=e.target.dataset.bookingStatus;if(!id)return;try{await api(`/admin/bookings/${id}`,{method:"PATCH",body:JSON.stringify({status:e.target.value})});await loadAll();showNotice("تم تحديث حالة الحجز.")}catch(error){showNotice(error.message,"error");await loadAll()}});
-        document.getElementById("bookingsBody").addEventListener("click",async e=>{const id=e.target.dataset.deleteBooking;if(!id||!confirm("هل أنت متأكد من حذف هذا الحجز نهائيًا؟"))return;setButtonLoading(e.target,true,"...");try{await api(`/admin/bookings/${id}`,{method:"DELETE"});await loadAll();showNotice("تم حذف الحجز.")}catch(error){showNotice(error.message,"error");setButtonLoading(e.target,false)}});
-        document.getElementById("addApartmentForm").addEventListener("submit",async e=>{e.preventDefault();const button=e.currentTarget.querySelector("button[type=submit]");setButtonLoading(button,true,"جاري الإضافة...");try{const id=document.getElementById("newApartmentId").value;await api("/admin/apartments",{method:"POST",body:JSON.stringify({apartmentId:id?Number(id):undefined,label:document.getElementById("newApartmentLabel").value})});e.currentTarget.reset();await loadAll();showNotice("تمت إضافة الشقة إلى النظام.")}catch(error){showNotice(error.message,"error")}finally{setButtonLoading(button,false)}});
+        document.getElementById("manualBookingForm").addEventListener("submit", async e => { e.preventDefault(); const button = document.getElementById("addBookingBtn"); setButtonLoading(button, true, "جاري إضافة الحجز..."); try { const payload = { apartmentId: Number(document.getElementById("manualApartment").value), source: document.getElementById("manualSource").value, checkIn: document.getElementById("manualCheckIn").value, checkOut: document.getElementById("manualCheckOut").value, fullName: document.getElementById("manualName").value, phone: document.getElementById("manualPhone").value, email: document.getElementById("manualEmail").value, sourceReference: document.getElementById("manualReference").value, adults: Number(document.getElementById("manualAdults").value || 0), children: Number(document.getElementById("manualChildren").value || 0), totalPrice: Number(document.getElementById("manualPrice").value || 0), currency: "JOD", status: document.getElementById("manualStatus").value, notes: document.getElementById("manualNotes").value }; await api("/admin/bookings", { method: "POST", body: JSON.stringify(payload) }); e.currentTarget.reset(); document.getElementById("manualAdults").value = 1; document.getElementById("manualChildren").value = 0; document.getElementById("manualPrice").value = 0; await loadAll(); showNotice("✅ تم إضافة الحجز وإغلاق التواريخ بنجاح.") } catch (error) { showNotice(error.message, "error") } finally { setButtonLoading(button, false) } });
+        document.getElementById("bookingsBody").addEventListener("change", async e => { const id = e.target.dataset.bookingStatus; if (!id) return; try { await api(`/admin/bookings/${id}`, { method: "PATCH", body: JSON.stringify({ status: e.target.value }) }); await loadAll(); showNotice("تم تحديث حالة الحجز.") } catch (error) { showNotice(error.message, "error"); await loadAll() } });
+        document.getElementById("bookingsBody").addEventListener("click", async e => { const id = e.target.dataset.deleteBooking; if (!id || !confirm("هل أنت متأكد من حذف هذا الحجز نهائيًا؟")) return; setButtonLoading(e.target, true, "..."); try { await api(`/admin/bookings/${id}`, { method: "DELETE" }); await loadAll(); showNotice("تم حذف الحجز.") } catch (error) { showNotice(error.message, "error"); setButtonLoading(e.target, false) } });
+        document.getElementById("addApartmentForm").addEventListener("submit", async e => { e.preventDefault(); const button = e.currentTarget.querySelector("button[type=submit]"); setButtonLoading(button, true, "جاري الإضافة..."); try { const id = document.getElementById("newApartmentId").value; await api("/admin/apartments", { method: "POST", body: JSON.stringify({ apartmentId: id ? Number(id) : undefined, label: document.getElementById("newApartmentLabel").value }) }); e.currentTarget.reset(); await loadAll(); showNotice("تمت إضافة الشقة إلى النظام.") } catch (error) { showNotice(error.message, "error") } finally { setButtonLoading(button, false) } });
 
-        document.getElementById("apartmentsGrid").addEventListener("click",async e=>{const card=e.target.closest("[data-apartment-card]");if(!card)return;const apartment=apartments.find(item=>item._id===card.dataset.apartmentCard);if(!apartment)return;if(e.target.dataset.copyUrl){const input=card.querySelector(`[data-export-url="${e.target.dataset.copyUrl}"]`);try{await navigator.clipboard.writeText(input.value)}catch{input.select();document.execCommand("copy")}showNotice("تم نسخ رابط التقويم.");return}if(e.target.hasAttribute("data-save-apartment")){setButtonLoading(e.target,true,"جاري الحفظ...");try{const payload={label:card.querySelector('[data-field="label"]').value,active:card.querySelector('[data-field="active"]').checked,calendars:{airbnb:{url:card.querySelector('[data-field="airbnbUrl"]').value,enabled:card.querySelector('[data-field="airbnbEnabled"]').checked},booking:{url:card.querySelector('[data-field="bookingUrl"]').value,enabled:card.querySelector('[data-field="bookingEnabled"]').checked}}};await api(`/admin/apartments/${apartment._id}`,{method:"PUT",body:JSON.stringify(payload)});await loadAll();showNotice("تم حفظ إعدادات الشقة.")}catch(error){showNotice(error.message,"error");setButtonLoading(e.target,false)}return}if(e.target.hasAttribute("data-sync-apartment")){setButtonLoading(e.target,true,"جاري المزامنة...");try{const data=await api("/admin/sync",{method:"POST",body:JSON.stringify({apartmentId:apartment.apartmentId})});await loadAll();const errors=data.results?.filter(r=>r.status==="error")||[];showNotice(errors.length?errors.map(i=>i.message).join(" — "):"تمت مزامنة الشقة.",errors.length?"error":"success")}catch(error){showNotice(error.message,"error");setButtonLoading(e.target,false)}}});
-        document.getElementById("syncAllBtn").addEventListener("click",async e=>{setButtonLoading(e.currentTarget,true,"جاري المزامنة...");try{const data=await api("/admin/sync",{method:"POST",body:"{}"});await loadAll();const successes=data.results?.filter(r=>r.status==="success").length||0,errors=data.results?.filter(r=>r.status==="error")||[];showNotice(errors.length?`نجحت ${successes} مزامنة، وفشلت ${errors.length}: ${errors.map(i=>i.message).join(" — ")}`:`تمت المزامنة بنجاح (${successes} تقويم).`,errors.length?"error":"success")}catch(error){showNotice(error.message,"error")}finally{setButtonLoading(e.currentTarget,false)}});
+        document.getElementById("apartmentsGrid").addEventListener("click", async e => { const card = e.target.closest("[data-apartment-card]"); if (!card) return; const apartment = apartments.find(item => item._id === card.dataset.apartmentCard); if (!apartment) return; if (e.target.dataset.copyUrl) { const input = card.querySelector(`[data-export-url="${e.target.dataset.copyUrl}"]`); try { await navigator.clipboard.writeText(input.value) } catch { input.select(); document.execCommand("copy") } showNotice("تم نسخ رابط التقويم."); return } if (e.target.hasAttribute("data-save-apartment")) { setButtonLoading(e.target, true, "جاري الحفظ..."); try { const payload = { label: card.querySelector('[data-field="label"]').value, active: card.querySelector('[data-field="active"]').checked, calendars: { airbnb: { url: card.querySelector('[data-field="airbnbUrl"]').value, enabled: card.querySelector('[data-field="airbnbEnabled"]').checked }, booking: { url: card.querySelector('[data-field="bookingUrl"]').value, enabled: card.querySelector('[data-field="bookingEnabled"]').checked } } }; await api(`/admin/apartments/${apartment._id}`, { method: "PUT", body: JSON.stringify(payload) }); await loadAll(); showNotice("تم حفظ إعدادات الشقة.") } catch (error) { showNotice(error.message, "error"); setButtonLoading(e.target, false) } return } if (e.target.hasAttribute("data-sync-apartment")) { setButtonLoading(e.target, true, "جاري المزامنة..."); try { const data = await api("/admin/sync", { method: "POST", body: JSON.stringify({ apartmentId: apartment.apartmentId }) }); await loadAll(); const errors = data.results?.filter(r => r.status === "error") || []; showNotice(errors.length ? errors.map(i => i.message).join(" — ") : "تمت مزامنة الشقة.", errors.length ? "error" : "success") } catch (error) { showNotice(error.message, "error"); setButtonLoading(e.target, false) } } });
+        document.getElementById("syncAllBtn").addEventListener("click", async e => { setButtonLoading(e.currentTarget, true, "جاري المزامنة..."); try { const data = await api("/admin/sync", { method: "POST", body: "{}" }); await loadAll(); const successes = data.results?.filter(r => r.status === "success").length || 0, errors = data.results?.filter(r => r.status === "error") || []; showNotice(errors.length ? `نجحت ${successes} مزامنة، وفشلت ${errors.length}: ${errors.map(i => i.message).join(" — ")}` : `تمت المزامنة بنجاح (${successes} تقويم).`, errors.length ? "error" : "success") } catch (error) { showNotice(error.message, "error") } finally { setButtonLoading(e.currentTarget, false) } });
 
-        const today=todayInAmman();document.getElementById("manualCheckIn").min=today;document.getElementById("manualCheckOut").min=today;document.getElementById("manualCheckIn").addEventListener("change",e=>{document.getElementById("manualCheckOut").min=e.target.value||today});
+        const today = todayInAmman();
+        const manualCheckIn = document.getElementById("manualCheckIn");
+        const manualCheckOut = document.getElementById("manualCheckOut");
+
+        manualCheckIn.min = today;
+        manualCheckOut.min = today;
+
+        manualCheckIn.addEventListener("change", event => {
+            manualCheckOut.min = event.target.value || today;
+
+            if (manualCheckOut.value && manualCheckOut.value <= event.target.value) {
+                manualCheckOut.value = "";
+            }
+
+            updateManualPrice();
+        });
+
+        ["manualApartment", "manualCheckOut"].forEach(id => {
+            document.getElementById(id).addEventListener("change", updateManualPrice);
+        });
     </script>
 </body>
+
 </html>
