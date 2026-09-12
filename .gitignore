@@ -1,6 +1,9 @@
 node_modules/
 backend/node_modules/
 .env
+.env.*
+!.env.example
+npm-debug.log*
 .DS_Store
 frontend/videos/
 *.mp4

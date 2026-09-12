@@ -2,8 +2,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const Booking = require("./models/Booking");
+const Apartment = require("./models/Apartment");
 const basicAuth = require("basic-auth");
 const { Resend } = require("resend");
+const { buildIcalFeed, fetchCalendarEvents, validateCalendarUrl } = require("./services/ical");
 require("dotenv").config();
 
 const app = express();
@@ -11,13 +13,36 @@ const app = express();
 /* =========================================================
    إعدادات CORS وقراءة JSON
 ========================================================= */
-app.use(
-    cors({
-        origin: "*",
-        methods: ["GET", "POST", "DELETE"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-    })
-);
+const configuredOrigins = String(process.env.ALLOWED_ORIGINS || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+const defaultOrigins = [
+    "https://hijazi-apartments.com",
+    "https://www.hijazi-apartments.com",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500"
+];
+
+function isAllowedOrigin(origin) {
+    if (!origin) return true;
+    if ([...defaultOrigins, ...configuredOrigins].includes(origin)) return true;
+
+    try {
+        return new URL(origin).hostname.endsWith(".vercel.app");
+    } catch {
+        return false;
+    }
+}
+
+app.use(cors({
+    origin(origin, callback) {
+        callback(null, isAllowedOrigin(origin));
+    },
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
 app.use(express.json());
 
 app.use((req, res, next) => {
@@ -32,13 +57,19 @@ mongoose
         serverSelectionTimeoutMS: 15000,
         family: 4
     })
-    .then(() => console.log("MongoDB Connected Successfully"))
+    .then(async () => {
+        console.log("MongoDB Connected Successfully");
+        await ensureDefaultApartments();
+        runScheduledCalendarSync().catch((error) => {
+            console.log("INITIAL CALENDAR SYNC ERROR:", error.message);
+        });
+    })
     .catch((err) => console.log("MongoDB Connection Error:", err));
 
 /* =========================================================
    إعداد Resend لإرسال الإيميلات
 ========================================================= */
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 /* =========================================================
    مسار الجذر للتجربة
@@ -166,6 +197,35 @@ function calculateNights(checkIn, checkOut) {
 }
 
 /* =========================================================
+   تجهيز الشقق الست الحالية أول مرة بدون تغيير بياناتها لاحقًا
+========================================================= */
+async function ensureDefaultApartments() {
+    const count = await Apartment.countDocuments();
+    if (count > 0) return;
+
+    await Apartment.insertMany(
+        Array.from({ length: 6 }, (_, index) => ({
+            apartmentId: index + 1,
+            label: `شقة رقم ${index + 1}`,
+            active: true
+        }))
+    );
+}
+
+/* =========================================================
+   جلب الشقق الفعالة مع fallback يحافظ على عمل الموقع القديم
+========================================================= */
+async function getActiveApartments() {
+    await ensureDefaultApartments();
+    return Apartment.find({ active: true }).sort({ apartmentId: 1 });
+}
+
+/* =========================================================
+   شرط موحّد للحجوزات التي تغلق التواريخ
+========================================================= */
+const ACTIVE_BOOKING_FILTER = { status: { $ne: "cancelled" } };
+
+/* =========================================================
    رسالة نصية مختصرة للحجز
 ========================================================= */
 function bookingText(booking) {
@@ -259,7 +319,7 @@ async function sendBookingEmails(booking) {
     const adminTo = process.env.ADMIN_EMAIL;
     const enableCustomerEmail = process.env.ENABLE_CUSTOMER_EMAIL === "true";
 
-    if (!process.env.RESEND_API_KEY || !from || !adminTo) {
+    if (!resend || !from || !adminTo) {
         console.log("Email skipped: missing RESEND_API_KEY / RESEND_FROM / ADMIN_EMAIL");
         return;
     }
@@ -298,8 +358,6 @@ async function sendBookingEmails(booking) {
 /* =========================================================
    جميع أرقام الشقق المعتمدة
 ========================================================= */
-const APARTMENT_IDS = [1, 2, 3, 4, 5, 6];
-
 /* =========================================================
    API: فحص الشقق المتاحة
    يرجّع المتاح + المحجوز + فترات الحجز المتعارضة
@@ -332,7 +390,12 @@ app.get("/availability", async (req, res) => {
             });
         }
 
+        const apartments = await getActiveApartments();
+        const apartmentIds = apartments.map((apartment) => apartment.apartmentId);
+
         const conflicts = await Booking.find({
+            ...ACTIVE_BOOKING_FILTER,
+            apartmentId: { $in: apartmentIds },
             checkIn: { $lt: checkOutDate },
             checkOut: { $gt: checkInDate },
         })
@@ -340,7 +403,7 @@ app.get("/availability", async (req, res) => {
             .sort({ apartmentId: 1, checkIn: 1 });
 
         const bookedSet = new Set(conflicts.map((b) => Number(b.apartmentId)));
-        const available = APARTMENT_IDS.filter((id) => !bookedSet.has(id));
+        const available = apartmentIds.filter((id) => !bookedSet.has(id));
 
         const bookedRanges = conflicts.map((b) => ({
             apartmentId: Number(b.apartmentId),
@@ -374,7 +437,9 @@ app.get("/calendar", async (req, res) => {
     try {
         const aptId = req.query.aptId ? Number(req.query.aptId) : null;
 
-        const filter = aptId ? { apartmentId: aptId } : {};
+        const filter = aptId
+            ? { ...ACTIVE_BOOKING_FILTER, apartmentId: aptId }
+            : { ...ACTIVE_BOOKING_FILTER };
 
         const bookings = await Booking.find(filter)
             .select("apartmentId apartmentLabel checkIn checkOut")
@@ -402,7 +467,9 @@ app.get("/calendar", async (req, res) => {
 app.get("/bookings", async (req, res) => {
     try {
         const aptId = req.query.aptId ? Number(req.query.aptId) : null;
-        const filter = aptId ? { apartmentId: aptId } : {};
+        const filter = aptId
+            ? { ...ACTIVE_BOOKING_FILTER, apartmentId: aptId }
+            : { ...ACTIVE_BOOKING_FILTER };
 
         const bookings = await Booking.find(filter)
             .select("apartmentId apartmentLabel checkIn checkOut")
@@ -490,7 +557,21 @@ app.post("/bookings", async (req, res) => {
             });
         }
 
+        await ensureDefaultApartments();
+        const apartment = await Apartment.findOne({
+            apartmentId: Number(apartmentId),
+            active: true
+        });
+
+        if (!apartment) {
+            return res.status(400).json({
+                success: false,
+                message: "الشقة المختارة غير موجودة أو غير متاحة للحجز.",
+            });
+        }
+
         const conflict = await Booking.findOne({
+            ...ACTIVE_BOOKING_FILTER,
             apartmentId: Number(apartmentId),
             checkIn: { $lt: checkOutDate },
             checkOut: { $gt: checkInDate },
@@ -518,6 +599,8 @@ app.post("/bookings", async (req, res) => {
             totalPriceText: totalPriceText || "",
             notes: notes ? String(notes).trim().slice(0, 1000) : "",
             stayType: stayType || "normal",
+            source: "website",
+            status: "pending"
         });
 
         await booking.save();
@@ -548,6 +631,335 @@ app.post("/bookings", async (req, res) => {
 });
 
 /* =========================================================
+   مزامنة تقويم خارجي لشقة واحدة ومصدر واحد
+========================================================= */
+async function syncApartmentCalendar(apartment, source) {
+    const connection = apartment.calendars[source];
+
+    if (!connection || !connection.enabled || !connection.url) {
+        return { source, status: "skipped", imported: 0, message: "الرابط غير مفعّل." };
+    }
+
+    try {
+        const events = await fetchCalendarEvents(connection.url, source);
+        const syncedAt = new Date();
+        const externalUids = [];
+
+        for (const event of events) {
+            externalUids.push(event.externalUid);
+
+            await Booking.findOneAndUpdate(
+                {
+                    apartmentId: apartment.apartmentId,
+                    source,
+                    externalUid: event.externalUid
+                },
+                {
+                    $set: {
+                        apartmentLabel: apartment.label,
+                        checkIn: event.checkIn,
+                        checkOut: event.checkOut,
+                        status: "confirmed",
+                        sourceReference: event.sourceReference,
+                        lastSyncedAt: syncedAt
+                    },
+                    $setOnInsert: {
+                        fullName: source === "airbnb" ? "حجز Airbnb" : "حجز Booking.com",
+                        email: "",
+                        phone: "",
+                        adults: 0,
+                        children: 0,
+                        currency: "JOD",
+                        totalPrice: 0,
+                        totalPriceText: "",
+                        notes: event.summary,
+                        stayType: calculateNights(event.checkIn, event.checkOut) >= 30 ? "long" : "normal"
+                    }
+                },
+                { upsert: true, new: true, setDefaultsOnInsert: true }
+            );
+        }
+
+        const today = new Date();
+        today.setUTCHours(0, 0, 0, 0);
+
+        const missingFilter = {
+            apartmentId: apartment.apartmentId,
+            source,
+            externalUid: { $ne: "" },
+            checkOut: { $gte: today },
+            status: { $ne: "cancelled" }
+        };
+
+        if (externalUids.length) {
+            missingFilter.externalUid = { $nin: externalUids };
+        }
+
+        await Booking.updateMany(missingFilter, {
+            $set: { status: "cancelled", lastSyncedAt: syncedAt }
+        });
+
+        connection.lastSyncedAt = syncedAt;
+        connection.lastSyncStatus = "success";
+        connection.lastSyncMessage = `تمت قراءة ${events.length} فترة حجز.`;
+        await apartment.save();
+
+        return {
+            source,
+            status: "success",
+            imported: events.length,
+            message: connection.lastSyncMessage
+        };
+    } catch (error) {
+        connection.lastSyncedAt = new Date();
+        connection.lastSyncStatus = "error";
+        connection.lastSyncMessage = String(error.message || "فشل مزامنة التقويم.").slice(0, 300);
+        await apartment.save();
+        throw error;
+    }
+}
+
+/* =========================================================
+   API عام: تصدير تقويم HIJAZI إلى منصة محددة
+   نستثني حجوزات المنصة نفسها لتقليل الدوران والتكرار
+========================================================= */
+app.get("/ical/:apartmentId/:token/:target", async (req, res) => {
+    try {
+        const apartmentId = Number(req.params.apartmentId);
+        const target = String(req.params.target).replace(/\.ics$/i, "");
+
+        if (!["airbnb", "booking"].includes(target)) {
+            return res.status(404).send("Calendar not found");
+        }
+
+        const apartment = await Apartment.findOne({
+            apartmentId,
+            calendarToken: req.params.token,
+            active: true
+        });
+
+        if (!apartment) {
+            return res.status(404).send("Calendar not found");
+        }
+
+        const bookings = await Booking.find({
+            ...ACTIVE_BOOKING_FILTER,
+            apartmentId,
+            source: { $ne: target }
+        }).sort({ checkIn: 1 });
+
+        const feed = buildIcalFeed(apartment, bookings, target);
+        res.set({
+            "Content-Type": "text/calendar; charset=utf-8",
+            "Content-Disposition": `inline; filename="hijazi-apartment-${apartmentId}-${target}.ics"`,
+            "Cache-Control": "no-store"
+        });
+        res.send(feed);
+    } catch (error) {
+        console.log("ICAL EXPORT ERROR:", error);
+        res.status(500).send("Calendar export error");
+    }
+});
+
+/* =========================================================
+   API: جلب الشقق وإعدادات الربط وروابط التصدير للأدمن
+========================================================= */
+app.get("/admin/apartments", requireAdmin, async (req, res) => {
+    try {
+        await ensureDefaultApartments();
+        const apartments = await Apartment.find().sort({ apartmentId: 1 });
+        const apiBase = String(process.env.PUBLIC_API_URL || `${req.protocol}://${req.get("host")}`).replace(/\/$/, "");
+
+        res.json({
+            success: true,
+            apartments: apartments.map((apartment) => ({
+                ...apartment.toObject(),
+                exportUrls: {
+                    airbnb: `${apiBase}/ical/${apartment.apartmentId}/${apartment.calendarToken}/airbnb.ics`,
+                    booking: `${apiBase}/ical/${apartment.apartmentId}/${apartment.calendarToken}/booking.ics`
+                }
+            }))
+        });
+    } catch (error) {
+        console.log("ADMIN GET APARTMENTS ERROR:", error);
+        res.status(500).json({ success: false, message: "تعذر جلب إعدادات الشقق." });
+    }
+});
+
+/* =========================================================
+   API: إضافة شقة جديدة للنظام
+========================================================= */
+app.post("/admin/apartments", requireAdmin, async (req, res) => {
+    try {
+        const lastApartment = await Apartment.findOne().sort({ apartmentId: -1 });
+        const requestedId = Number(req.body.apartmentId);
+        const apartmentId = Number.isInteger(requestedId) && requestedId > 0
+            ? requestedId
+            : (lastApartment?.apartmentId || 0) + 1;
+
+        const apartment = await Apartment.create({
+            apartmentId,
+            label: String(req.body.label || `شقة رقم ${apartmentId}`).trim().slice(0, 100),
+            active: req.body.active !== false
+        });
+
+        res.status(201).json({ success: true, apartment });
+    } catch (error) {
+        if (error.code === 11000) {
+            return res.status(409).json({ success: false, message: "رقم الشقة مستخدم مسبقًا." });
+        }
+        console.log("ADMIN CREATE APARTMENT ERROR:", error);
+        res.status(500).json({ success: false, message: "تعذر إضافة الشقة." });
+    }
+});
+
+/* =========================================================
+   API: تعديل اسم الشقة وحالتها وروابط تقاويمها
+========================================================= */
+app.put("/admin/apartments/:id", requireAdmin, async (req, res) => {
+    try {
+        const apartment = await Apartment.findById(req.params.id);
+        if (!apartment) {
+            return res.status(404).json({ success: false, message: "الشقة غير موجودة." });
+        }
+
+        if (req.body.label !== undefined) {
+            const label = String(req.body.label).trim();
+            if (!label) {
+                return res.status(400).json({ success: false, message: "اسم الشقة مطلوب." });
+            }
+            apartment.label = label.slice(0, 100);
+        }
+
+        if (req.body.active !== undefined) {
+            apartment.active = Boolean(req.body.active);
+        }
+
+        for (const source of ["airbnb", "booking"]) {
+            const incoming = req.body.calendars?.[source];
+            if (!incoming) continue;
+
+            const url = String(incoming.url || "").trim();
+            if (url) await validateCalendarUrl(url, source);
+
+            apartment.calendars[source].url = url;
+            apartment.calendars[source].enabled = Boolean(incoming.enabled && url);
+            apartment.calendars[source].lastSyncStatus = "never";
+            apartment.calendars[source].lastSyncMessage = "";
+        }
+
+        await apartment.save();
+        res.json({ success: true, apartment, message: "✅ تم حفظ إعدادات الشقة." });
+    } catch (error) {
+        console.log("ADMIN UPDATE APARTMENT ERROR:", error);
+        res.status(400).json({ success: false, message: error.message || "تعذر حفظ الإعدادات." });
+    }
+});
+
+/* =========================================================
+   API: مزامنة شقة واحدة أو جميع الشقق الآن
+========================================================= */
+app.post("/admin/sync", requireAdmin, async (req, res) => {
+    try {
+        const filter = req.body.apartmentId
+            ? { apartmentId: Number(req.body.apartmentId), active: true }
+            : { active: true };
+        const apartments = await Apartment.find(filter).sort({ apartmentId: 1 });
+        const results = [];
+
+        for (const apartment of apartments) {
+            for (const source of ["airbnb", "booking"]) {
+                try {
+                    const result = await syncApartmentCalendar(apartment, source);
+                    results.push({ apartmentId: apartment.apartmentId, ...result });
+                } catch (error) {
+                    results.push({
+                        apartmentId: apartment.apartmentId,
+                        source,
+                        status: "error",
+                        imported: 0,
+                        message: error.message
+                    });
+                }
+            }
+        }
+
+        res.json({
+            success: !results.some((result) => result.status === "error"),
+            results
+        });
+    } catch (error) {
+        console.log("ADMIN SYNC ERROR:", error);
+        res.status(500).json({ success: false, message: "تعذر تشغيل المزامنة." });
+    }
+});
+
+/* =========================================================
+   API: إضافة حجز يدوي أو حجز منصة من لوحة الإدارة
+========================================================= */
+app.post("/admin/bookings", requireAdmin, async (req, res) => {
+    try {
+        const apartmentId = Number(req.body.apartmentId);
+        const checkInDate = new Date(req.body.checkIn);
+        const checkOutDate = new Date(req.body.checkOut);
+        const allowedSources = ["manual", "airbnb", "booking"];
+        const source = allowedSources.includes(req.body.source) ? req.body.source : "manual";
+
+        if (!Number.isInteger(apartmentId) || Number.isNaN(checkInDate.getTime()) || Number.isNaN(checkOutDate.getTime())) {
+            return res.status(400).json({ success: false, message: "رقم الشقة وتاريخا الدخول والخروج مطلوبة." });
+        }
+
+        if (checkOutDate <= checkInDate) {
+            return res.status(400).json({ success: false, message: "تاريخ الخروج يجب أن يكون بعد تاريخ الدخول." });
+        }
+
+        const apartment = await Apartment.findOne({ apartmentId, active: true });
+        if (!apartment) {
+            return res.status(400).json({ success: false, message: "الشقة غير موجودة أو غير فعالة." });
+        }
+
+        const conflict = await Booking.findOne({
+            ...ACTIVE_BOOKING_FILTER,
+            apartmentId,
+            checkIn: { $lt: checkOutDate },
+            checkOut: { $gt: checkInDate }
+        });
+
+        if (conflict) {
+            return res.status(409).json({
+                success: false,
+                message: `هذه الفترة تتعارض مع حجز موجود (${formatDate(conflict.checkIn)} إلى ${formatDate(conflict.checkOut)}).`
+            });
+        }
+
+        const booking = await Booking.create({
+            apartmentId,
+            apartmentLabel: apartment.label,
+            fullName: String(req.body.fullName || "حجز يدوي").trim().slice(0, 150),
+            email: String(req.body.email || "").trim().slice(0, 200),
+            phone: String(req.body.phone || "").trim().slice(0, 50),
+            checkIn: checkInDate,
+            checkOut: checkOutDate,
+            adults: Math.max(0, Number(req.body.adults || 0)),
+            children: Math.max(0, Number(req.body.children || 0)),
+            currency: String(req.body.currency || "JOD").slice(0, 10),
+            totalPrice: Math.max(0, Number(req.body.totalPrice || 0)),
+            totalPriceText: String(req.body.totalPriceText || "").trim().slice(0, 100),
+            notes: String(req.body.notes || "").trim().slice(0, 1000),
+            stayType: calculateNights(checkInDate, checkOutDate) >= 30 ? "long" : "normal",
+            source,
+            status: req.body.status === "pending" ? "pending" : "confirmed",
+            sourceReference: String(req.body.sourceReference || "").trim().slice(0, 250)
+        });
+
+        res.status(201).json({ success: true, booking, message: "✅ تم إضافة الحجز." });
+    } catch (error) {
+        console.log("ADMIN CREATE BOOKING ERROR:", error);
+        res.status(500).json({ success: false, message: "تعذر إضافة الحجز." });
+    }
+});
+
+/* =========================================================
    API: جلب الحجوزات للأدمن
 ========================================================= */
 app.get("/admin/bookings", requireAdmin, async (req, res) => {
@@ -560,6 +972,33 @@ app.get("/admin/bookings", requireAdmin, async (req, res) => {
             success: false,
             message: "Error fetching bookings",
         });
+    }
+});
+
+/* =========================================================
+   API: تحديث حالة الحجز للأدمن
+========================================================= */
+app.patch("/admin/bookings/:id", requireAdmin, async (req, res) => {
+    try {
+        const allowedStatuses = ["pending", "confirmed", "cancelled", "blocked"];
+        if (!allowedStatuses.includes(req.body.status)) {
+            return res.status(400).json({ success: false, message: "حالة الحجز غير صحيحة." });
+        }
+
+        const booking = await Booking.findByIdAndUpdate(
+            req.params.id,
+            { $set: { status: req.body.status } },
+            { new: true, runValidators: true }
+        );
+
+        if (!booking) {
+            return res.status(404).json({ success: false, message: "الحجز غير موجود." });
+        }
+
+        res.json({ success: true, booking, message: "✅ تم تحديث حالة الحجز." });
+    } catch (error) {
+        console.log("UPDATE BOOKING STATUS ERROR:", error);
+        res.status(500).json({ success: false, message: "تعذر تحديث حالة الحجز." });
     }
 });
 
@@ -590,6 +1029,40 @@ app.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
         });
     }
 });
+
+/* =========================================================
+   مزامنة دورية للتقاويم المفعّلة أثناء عمل خدمة Render
+========================================================= */
+let calendarSyncRunning = false;
+
+async function runScheduledCalendarSync() {
+    if (calendarSyncRunning || mongoose.connection.readyState !== 1) return;
+    calendarSyncRunning = true;
+
+    try {
+        const apartments = await Apartment.find({ active: true });
+        for (const apartment of apartments) {
+            for (const source of ["airbnb", "booking"]) {
+                if (!apartment.calendars[source]?.enabled) continue;
+
+                try {
+                    await syncApartmentCalendar(apartment, source);
+                } catch (error) {
+                    console.log(`SCHEDULED SYNC ERROR apartment=${apartment.apartmentId} source=${source}:`, error.message);
+                }
+            }
+        }
+    } finally {
+        calendarSyncRunning = false;
+    }
+}
+
+const syncIntervalMinutes = Math.max(5, Number(process.env.ICAL_SYNC_MINUTES || 15));
+const syncTimer = setInterval(
+    () => runScheduledCalendarSync().catch((error) => console.log("CALENDAR SYNC TIMER ERROR:", error.message)),
+    syncIntervalMinutes * 60 * 1000
+);
+syncTimer.unref();
 
 /* =========================================================
    تشغيل السيرفر

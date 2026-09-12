@@ -579,4 +579,28 @@ This project is private/business work for HIJAZI Apartments.
 All rights reserved.
 
 
+\---
+
+\## HIJAZI PMS
+
+لوحة الإدارة تدعم إدارة عدد متغير من الشقق، وإضافة الحجوزات اليدوية، وتصنيف الحجوزات حسب المصدر (`website`, `manual`, `airbnb`, `booking`) والحالة. كما تدعم استيراد تقاويم Airbnb وBooking بصيغة iCal وتصدير رابط منفصل لكل منصة.
+
+إعدادات Render الجديدة الاختيارية موجودة في `backend/.env.example`:
+
+\* `PUBLIC_API_URL`: رابط الـAPI العام المستخدم لبناء روابط iCal.
+
+\* `ALLOWED_ORIGINS`: دومينات الواجهة المسموح لها بالاتصال بالـAPI.
+
+\* `ICAL_SYNC_MINUTES`: مدة المزامنة الدورية بالدقائق، والافتراضي 15 دقيقة.
+
+للتأكد من سلامة الباك إند قبل النشر:
+
+```bash
+cd backend
+npm ci
+npm run check
+npm test
+```
+
+
 
