@@ -1,635 +1,247 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-    <!-- Favicon (Google + Browsers) -->
-
-    <!-- Google (الأهم) -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>HIJAZI PMS - نظام إدارة الحجوزات</title>
     <link rel="icon" href="favicon.ico">
-
-    <!-- Browsers (PNG) -->
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
-
-    <!-- Apple (اختياري) -->
-    <link rel="apple-touch-icon" href="favicon.png">
-
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="google-site-verification" content="CQow9HEGehI7vI8t4xQ3J6aqW_cw58dW8eZ8o8htyf4" />
-    <title>HIJAZI Apartments - Admin</title>
-    <link rel="stylesheet" href="css/style.css" />
-
+    <link rel="stylesheet" href="css/style.css">
     <style>
-        body {
-            margin: 0;
-            background: #f7f7f7;
-            color: #111;
-            overflow-x: hidden;
-        }
-
-        header {
-            padding: 32px 20px 26px;
-            color: #fff;
-            background: linear-gradient(90deg, #c89116, #000);
-            text-align: center;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 34px;
-            font-weight: 900;
-        }
-
-        .muted {
-            color: #f3f3f3;
-            font-size: 14px;
-            opacity: 0.95;
-            margin-top: 8px;
-            line-height: 1.8;
-        }
-
-        .container {
-            max-width: 1250px;
-            margin: 24px auto;
-            padding: 0 16px 30px;
-        }
-
-        .top-box {
-            background: #111;
-            color: #fff;
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 18px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, .08);
-        }
-
-        .toolbar {
-            display: flex;
-            gap: 12px;
-            align-items: end;
-            flex-wrap: wrap;
-        }
-
-        .field {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            flex: 1 1 220px;
-        }
-
-        .field label {
-            font-size: 13px;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        select,
-        input {
-            padding: 11px 12px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            min-width: 180px;
-            font-size: 14px;
-            min-height: 46px;
-            box-sizing: border-box;
-            width: 100%;
-            outline: none;
-        }
-
-        .btn {
-            padding: 11px 16px;
-            border: none;
-            cursor: pointer;
-            border-radius: 10px;
-            font-weight: 700;
-            transition: .2s;
-            min-height: 46px;
-        }
-
-        .btn-refresh {
-            background: #c89116;
-            color: #fff;
-        }
-
-        .btn-refresh:hover {
-            background: #000;
-        }
-
-        .btn-delete {
-            background: #c89116;
-            color: #fff;
-        }
-
-        .btn-delete:hover {
-            background: #000;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-            gap: 16px;
-            margin-bottom: 18px;
-        }
-
-        .stat-card {
-            background: #fff;
-            border-radius: 16px;
-            padding: 18px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, .06);
-            border: 1px solid #eee;
-        }
-
-        .stat-card h3 {
-            margin: 0 0 8px;
-            font-size: 15px;
-            color: #555;
-        }
-
-        .stat-number {
-            font-size: 28px;
-            font-weight: 800;
-            color: #111;
-        }
-
-        .status-line {
-            margin: 10px 0 18px;
-            color: #444;
-            font-size: 14px;
-            font-weight: 600;
-            line-height: 1.8;
-        }
-
-        .table-wrap {
-            background: #fff;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, .06);
-            border: 1px solid #eee;
-        }
-
-        .table-scroll {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            min-width: 950px;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 12px 10px;
-            font-size: 14px;
-            text-align: center;
-            border-bottom: 1px solid #eee;
-            vertical-align: middle;
-        }
-
-        th {
-            background: #000;
-            color: #fff;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-
-        td {
-            color: #000;
-            background: #fff;
-        }
-
-        tr:hover td {
-            background: #fcfcfc;
-        }
-
-        .empty-row {
-            padding: 20px;
-            color: #777;
-            text-align: center;
-        }
-
-        body.ltr-mode .field,
-        body.ltr-mode .status-line,
-        body.ltr-mode .muted {
-            text-align: left;
-        }
-
-        @media (max-width: 900px) {
-            header {
-                padding: 26px 16px 22px;
-            }
-
-            header h1 {
-                font-size: 28px;
-            }
-
-            .container {
-                padding: 0 14px 24px;
-            }
-
-            .toolbar {
-                align-items: stretch;
-            }
-
-            .field {
-                width: 100%;
-                flex: 1 1 100%;
-            }
-
-            .btn {
-                width: 100%;
-            }
-
-            .top-box {
-                padding: 14px;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
-            .stat-card {
-                padding: 16px;
-            }
-
-            .stat-number {
-                font-size: 24px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            header h1 {
-                font-size: 24px;
-            }
-
-            .muted {
-                font-size: 13px;
-            }
-
-            .status-line {
-                font-size: 13px;
-            }
-
-            th,
-            td {
-                font-size: 13px;
-                padding: 10px 8px;
-            }
-        }
+        :root { --gold:#c89116; --ink:#111; --muted:#68707b; --line:#e6e8eb; --paper:#fff; --bg:#f4f5f7; --danger:#b42318; --success:#197044; --blue:#175cd3; }
+        * { box-sizing:border-box; }
+        body { margin:0; min-height:100vh; background:var(--bg); color:var(--ink); font-family:"Segoe UI",Tahoma,Arial,sans-serif; }
+        button,input,select,textarea { font:inherit; }
+        .app-header { padding:24px clamp(16px,4vw,54px); color:#fff; background:linear-gradient(115deg,#000 0%,#17130a 48%,#8b6207 100%); display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap; }
+        .brand h1 { margin:0; font-size:clamp(24px,3vw,36px); }
+        .brand p { margin:7px 0 0; color:#e8e8e8; }
+        .header-actions { display:flex; gap:10px; flex-wrap:wrap; }
+        .shell { max-width:1450px; margin:0 auto; padding:22px 16px 50px; }
+        .btn { border:0; border-radius:10px; min-height:44px; padding:10px 16px; cursor:pointer; font-weight:800; transition:.15s; }
+        .btn:hover { transform:translateY(-1px); }
+        .btn:disabled { opacity:.55; cursor:wait; transform:none; }
+        .btn-primary { background:var(--gold); color:#fff; }
+        .btn-dark { background:#111; color:#fff; }
+        .btn-light { background:#fff; color:#111; border:1px solid var(--line); }
+        .btn-danger { background:#fff1f0; color:var(--danger); border:1px solid #fecdca; }
+        .btn-small { min-height:36px; padding:7px 11px; font-size:13px; }
+        .tabs { display:flex; gap:8px; margin-bottom:18px; background:#fff; border:1px solid var(--line); border-radius:14px; padding:7px; width:fit-content; }
+        .tab-btn { background:transparent; color:#444; }
+        .tab-btn.active { background:#111; color:#fff; }
+        .tab-panel { display:none; }
+        .tab-panel.active { display:block; }
+        .notice { display:none; margin-bottom:16px; padding:13px 15px; border-radius:12px; font-weight:700; line-height:1.7; }
+        .notice.show { display:block; }
+        .notice.success { background:#ecfdf3; color:var(--success); border:1px solid #abefc6; }
+        .notice.error { background:#fef3f2; color:var(--danger); border:1px solid #fecdca; }
+        .notice.info { background:#eff8ff; color:var(--blue); border:1px solid #b2ddff; }
+        .stats-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-bottom:18px; }
+        .card { background:var(--paper); border:1px solid var(--line); border-radius:16px; box-shadow:0 6px 24px rgba(16,24,40,.045); }
+        .stat-card { padding:18px; }
+        .stat-label { color:var(--muted); font-weight:700; font-size:14px; }
+        .stat-value { margin-top:7px; font-size:30px; font-weight:900; }
+        .section-card { padding:20px; margin-bottom:18px; }
+        .section-head { display:flex; justify-content:space-between; align-items:start; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
+        .section-head h2 { margin:0; font-size:21px; }
+        .section-head p { margin:5px 0 0; color:var(--muted); line-height:1.7; font-size:14px; }
+        .form-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:13px; }
+        .field { display:flex; flex-direction:column; gap:6px; }
+        .field.span-2 { grid-column:span 2; }
+        .field.span-4 { grid-column:span 4; }
+        .field label { font-size:13px; font-weight:800; color:#333; }
+        input,select,textarea { width:100%; min-height:44px; border:1px solid #ccd0d5; border-radius:10px; padding:10px 11px; background:#fff; color:#111; outline:none; }
+        input:focus,select:focus,textarea:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(200,145,22,.13); }
+        textarea { min-height:86px; resize:vertical; }
+        .form-actions { display:flex; align-items:end; gap:10px; }
+        .filter-grid { display:grid; grid-template-columns:1.4fr repeat(3,1fr) auto; gap:12px; align-items:end; }
+        .table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:14px; }
+        table { width:100%; min-width:1120px; border-collapse:collapse; }
+        th,td { padding:12px 10px; border-bottom:1px solid var(--line); text-align:center; font-size:13px; vertical-align:middle; }
+        th { background:#111; color:#fff; white-space:nowrap; }
+        tbody tr:last-child td { border-bottom:0; }
+        tbody tr:hover td { background:#fffdf7; }
+        .empty { padding:32px; color:var(--muted); }
+        .badge { display:inline-flex; align-items:center; justify-content:center; min-width:78px; padding:5px 9px; border-radius:999px; font-size:12px; font-weight:900; }
+        .source-website { color:#6941c6; background:#f4f3ff; }
+        .source-manual { color:#067647; background:#ecfdf3; }
+        .source-airbnb { color:#c11574; background:#fdf2fa; }
+        .source-booking { color:#175cd3; background:#eff8ff; }
+        .status-pending { color:#b54708; background:#fffaeb; }
+        .status-confirmed { color:#067647; background:#ecfdf3; }
+        .status-cancelled { color:#b42318; background:#fef3f2; }
+        .status-blocked { color:#344054; background:#f2f4f7; }
+        .status-select { min-width:105px; min-height:36px; padding:6px 8px; font-size:12px; }
+        .row-actions { display:flex; gap:6px; justify-content:center; }
+        .apartments-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+        .apartment-card { padding:18px; }
+        .apartment-title { display:flex; justify-content:space-between; gap:10px; align-items:center; margin-bottom:15px; }
+        .apartment-title h3 { margin:0; }
+        .connection-box { padding:14px; border:1px solid var(--line); border-radius:12px; margin-top:12px; }
+        .connection-title { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px; }
+        .connection-title strong { font-size:15px; }
+        .inline-check { display:flex; align-items:center; gap:6px; font-size:13px; font-weight:700; }
+        .inline-check input { width:17px; min-height:17px; accent-color:var(--gold); }
+        .connection-status { margin:8px 0 0; color:var(--muted); font-size:12px; line-height:1.6; }
+        .url-row { display:grid; grid-template-columns:1fr auto; gap:7px; margin-top:8px; }
+        .url-row input { direction:ltr; text-align:left; font-size:12px; background:#f8f9fa; }
+        .apartment-actions { display:flex; gap:9px; margin-top:14px; flex-wrap:wrap; }
+        .login-overlay { position:fixed; inset:0; z-index:999999; display:grid; place-items:center; padding:18px; background:rgba(0,0,0,.78); backdrop-filter:blur(7px); }
+        .login-overlay.hidden { display:none; }
+        .login-card { width:min(430px,100%); background:#fff; border-radius:18px; padding:25px; }
+        .login-card h2 { margin:0 0 7px; }
+        .login-card p { color:var(--muted); line-height:1.7; }
+        .login-card .field { margin-top:12px; }
+        .login-card .btn { width:100%; margin-top:17px; }
+        .login-error { min-height:22px; margin-top:10px; color:var(--danger); font-weight:700; font-size:13px; }
+        @media (max-width:1050px) { .stats-grid{grid-template-columns:repeat(2,1fr)} .form-grid{grid-template-columns:repeat(2,1fr)} .field.span-4{grid-column:span 2} .filter-grid{grid-template-columns:repeat(2,1fr)} .apartments-grid{grid-template-columns:1fr} }
+        @media (max-width:650px) { .app-header{align-items:flex-start} .header-actions,.header-actions .btn{width:100%} .stats-grid,.form-grid,.filter-grid{grid-template-columns:1fr} .field.span-2,.field.span-4{grid-column:span 1} .form-actions,.form-actions .btn{width:100%} .tabs{width:100%} .tabs .btn{flex:1} .url-row{grid-template-columns:1fr} }
     </style>
 </head>
-
 <body>
+    <div class="login-overlay" id="loginOverlay">
+        <form class="login-card" id="loginForm">
+            <h2>تسجيل دخول الإدارة</h2>
+            <p>أدخل بيانات الأدمن المحفوظة في Render. لن تُحفظ كلمة المرور في المتصفح.</p>
+            <div class="field"><label for="adminUser">اسم المستخدم</label><input id="adminUser" autocomplete="username" required></div>
+            <div class="field"><label for="adminPass">كلمة المرور</label><input id="adminPass" type="password" autocomplete="current-password" required></div>
+            <div class="login-error" id="loginError"></div>
+            <button class="btn btn-primary" type="submit">دخول إلى النظام</button>
+        </form>
+    </div>
 
-    <header>
-        <h1 id="adminTitle">لوحة الإدارة - HIJAZI Apartments</h1>
-        <p class="muted" id="adminSubtitle">عرض الحجوزات وإدارتها</p>
+    <header class="app-header">
+        <div class="brand"><h1>HIJAZI PMS</h1><p>نظام إدارة الشقق والحجوزات والمزامنة</p></div>
+        <div class="header-actions"><button class="btn btn-primary" id="syncAllBtn" type="button">مزامنة جميع التقاويم</button><button class="btn btn-light" id="logoutBtn" type="button">تسجيل الخروج</button></div>
     </header>
 
-    <div class="container">
+    <main class="shell">
+        <div class="notice" id="notice"></div>
+        <nav class="tabs" aria-label="أقسام النظام">
+            <button class="btn tab-btn active" type="button" data-tab="bookingsPanel">الحجوزات</button>
+            <button class="btn tab-btn" type="button" data-tab="apartmentsPanel">الشقق والربط</button>
+        </nav>
 
-        <div class="top-box">
-            <div class="toolbar">
-                <div class="field">
-                    <label id="filterLabel" for="aptFilter">فلتر الشقة</label>
-                    <select id="aptFilter">
-                        <option value="">الكل</option>
-                        <option value="1">شقة 1</option>
-                        <option value="2">شقة 2</option>
-                        <option value="3">شقة 3</option>
-                        <option value="4">شقة 4</option>
-                        <option value="5">شقة 5</option>
-                        <option value="6">شقة 6</option>
-                    </select>
+        <section class="tab-panel active" id="bookingsPanel">
+            <div class="stats-grid">
+                <div class="card stat-card"><div class="stat-label">الحجوزات الفعالة</div><div class="stat-value" id="activeCount">0</div></div>
+                <div class="card stat-card"><div class="stat-label">الوصول اليوم</div><div class="stat-value" id="arrivalsCount">0</div></div>
+                <div class="card stat-card"><div class="stat-label">الشقق المشغولة الآن</div><div class="stat-value" id="occupiedCount">0</div></div>
+                <div class="card stat-card"><div class="stat-label">حجوزات المنصات</div><div class="stat-value" id="platformCount">0</div></div>
+            </div>
+
+            <section class="card section-card">
+                <div class="section-head"><div><h2>إضافة حجز</h2><p>للحجز الهاتفي أو الشخصي، ويمكن أيضًا تسجيل حجز Airbnb أو Booking يدويًا.</p></div></div>
+                <form id="manualBookingForm" class="form-grid">
+                    <div class="field"><label for="manualApartment">الشقة *</label><select id="manualApartment" required></select></div>
+                    <div class="field"><label for="manualSource">المصدر *</label><select id="manualSource"><option value="manual">حجز يدوي / هاتفي</option><option value="airbnb">Airbnb</option><option value="booking">Booking.com</option></select></div>
+                    <div class="field"><label for="manualCheckIn">الدخول *</label><input id="manualCheckIn" type="date" required></div>
+                    <div class="field"><label for="manualCheckOut">الخروج *</label><input id="manualCheckOut" type="date" required></div>
+                    <div class="field"><label for="manualName">اسم العميل</label><input id="manualName" placeholder="مثال: أحمد محمد"></div>
+                    <div class="field"><label for="manualPhone">الهاتف</label><input id="manualPhone" type="tel" placeholder="07xxxxxxxx"></div>
+                    <div class="field"><label for="manualEmail">البريد</label><input id="manualEmail" type="email" placeholder="name@example.com"></div>
+                    <div class="field"><label for="manualReference">رقم الحجز في المنصة</label><input id="manualReference" placeholder="اختياري"></div>
+                    <div class="field"><label for="manualAdults">البالغون</label><input id="manualAdults" type="number" min="0" value="1"></div>
+                    <div class="field"><label for="manualChildren">الأطفال</label><input id="manualChildren" type="number" min="0" value="0"></div>
+                    <div class="field"><label for="manualPrice">السعر الإجمالي (JOD)</label><input id="manualPrice" type="number" min="0" step="0.01" value="0"></div>
+                    <div class="field"><label for="manualStatus">الحالة</label><select id="manualStatus"><option value="confirmed">مؤكد</option><option value="pending">بانتظار التأكيد</option></select></div>
+                    <div class="field span-4"><label for="manualNotes">ملاحظات</label><textarea id="manualNotes" placeholder="أي تفاصيل مهمة عن الحجز..."></textarea></div>
+                    <div class="form-actions field span-4"><button class="btn btn-primary" id="addBookingBtn" type="submit">إضافة الحجز وإغلاق التواريخ</button></div>
+                </form>
+            </section>
+
+            <section class="card section-card">
+                <div class="section-head"><div><h2>كل الحجوزات</h2><p id="bookingCountText">جاري التحميل...</p></div><button class="btn btn-dark btn-small" id="refreshBtn" type="button">تحديث</button></div>
+                <div class="filter-grid">
+                    <div class="field"><label for="searchBox">بحث</label><input id="searchBox" placeholder="الاسم، الهاتف، البريد أو رقم الحجز"></div>
+                    <div class="field"><label for="apartmentFilter">الشقة</label><select id="apartmentFilter"><option value="">كل الشقق</option></select></div>
+                    <div class="field"><label for="sourceFilter">المصدر</label><select id="sourceFilter"><option value="">كل المصادر</option><option value="website">الموقع</option><option value="manual">يدوي</option><option value="airbnb">Airbnb</option><option value="booking">Booking.com</option></select></div>
+                    <div class="field"><label for="statusFilter">الحالة</label><select id="statusFilter"><option value="">كل الحالات</option><option value="pending">بانتظار التأكيد</option><option value="confirmed">مؤكد</option><option value="blocked">محجوب</option><option value="cancelled">ملغي</option></select></div>
+                    <button class="btn btn-light" id="clearFiltersBtn" type="button">مسح الفلاتر</button>
                 </div>
-
-                <div class="field">
-                    <label id="searchLabel" for="searchBox">بحث بالاسم أو الهاتف</label>
-                    <input id="searchBox" type="text" placeholder="اكتب اسم أو رقم هاتف..." />
+                <div class="table-wrap" style="margin-top:15px">
+                    <table><thead><tr><th>الشقة</th><th>المصدر</th><th>العميل</th><th>الهاتف</th><th>الدخول</th><th>الخروج</th><th>الليالي</th><th>السعر</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="bookingsBody"></tbody></table>
                 </div>
+            </section>
+        </section>
 
-                <button class="btn btn-refresh" id="refreshBtn" type="button">تحديث</button>
-            </div>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3 id="totalBookingsLabel">إجمالي الحجوزات</h3>
-                <div class="stat-number" id="totalBookings">0</div>
-            </div>
-
-            <div class="stat-card">
-                <h3 id="filteredBookingsLabel">الحجوزات المعروضة</h3>
-                <div class="stat-number" id="filteredBookings">0</div>
-            </div>
-
-            <div class="stat-card">
-                <h3 id="bookedApartmentsLabel">عدد الشقق المحجوزة</h3>
-                <div class="stat-number" id="bookedApartments">0</div>
-            </div>
-        </div>
-
-        <div id="status" class="status-line">جاري تحميل الحجوزات...</div>
-
-        <div class="table-wrap">
-            <div class="table-scroll">
-                <table>
-                    <thead>
-                        <tr>
-                            <th id="thApt">الشقة</th>
-                            <th id="thName">الاسم</th>
-                            <th id="thPhone">الهاتف</th>
-                            <th id="thEmail">البريد</th>
-                            <th id="thCheckIn">الدخول</th>
-                            <th id="thCheckOut">الخروج</th>
-                            <th id="thGuests">أشخاص</th>
-                            <th id="thPrice">السعر</th>
-                            <th id="thAction">إجراء</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody"></tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
+        <section class="tab-panel" id="apartmentsPanel">
+            <section class="card section-card">
+                <div class="section-head"><div><h2>إضافة شقة جديدة</h2><p>يمكنك زيادة العدد عن 6 بدون تعديل الكود.</p></div></div>
+                <form id="addApartmentForm" class="form-grid">
+                    <div class="field"><label for="newApartmentId">رقم الشقة</label><input id="newApartmentId" type="number" min="1" placeholder="يُحدد تلقائيًا إن تركته فارغًا"></div>
+                    <div class="field span-2"><label for="newApartmentLabel">اسم الشقة</label><input id="newApartmentLabel" placeholder="مثال: شقة رقم 7 - الشميساني"></div>
+                    <div class="form-actions field"><button class="btn btn-primary" type="submit">إضافة الشقة</button></div>
+                </form>
+            </section>
+            <div class="notice info show">لكل شقة: ضع رابط التصدير الذي تأخذه من Airbnb وBooking في خانة الاستيراد هنا. ثم انسخ رابط HIJAZI الخاص بكل منصة وضعه داخل المنصة كـ Import Calendar.</div>
+            <div class="apartments-grid" id="apartmentsGrid"></div>
+        </section>
+    </main>
 
     <script>
         const API_BASE = "https://api.hijazi-apartments.com";
+        const SOURCE_LABELS = { website:"الموقع", manual:"يدوي", airbnb:"Airbnb", booking:"Booking.com" };
+        const STATUS_LABELS = { pending:"بانتظار التأكيد", confirmed:"مؤكد", cancelled:"ملغي", blocked:"محجوب" };
+        let adminUser = "", adminPass = "", allBookings = [], apartments = [];
+        const notice = document.getElementById("notice"), loginOverlay = document.getElementById("loginOverlay"), loginError = document.getElementById("loginError");
 
-        let ADMIN_USER = "";
-        let ADMIN_PASS = "";
+        function basicToken(value) { const bytes=new TextEncoder().encode(value); let binary=""; bytes.forEach(byte=>{binary+=String.fromCharCode(byte)}); return btoa(binary); }
+        function authHeaders() { return { Authorization:`Basic ${basicToken(`${adminUser}:${adminPass}`)}`, "Content-Type":"application/json" }; }
+        async function api(path,options={}) { const response=await fetch(`${API_BASE}${path}`,{...options,headers:{...authHeaders(),...(options.headers||{})}}); if(response.status===401){loginOverlay.classList.remove("hidden");throw new Error("بيانات الدخول غير صحيحة.")} const data=await response.json().catch(()=>({})); if(!response.ok)throw new Error(data.message||"حدث خطأ في الاتصال بالسيرفر."); return data; }
+        function showNotice(message,type="success") { notice.textContent=message; notice.className=`notice show ${type}`; window.scrollTo({top:0,behavior:"smooth"}); clearTimeout(showNotice.timer); showNotice.timer=setTimeout(()=>notice.classList.remove("show"),6500); }
+        function escapeHtml(value) { return String(value??"").replace(/[&<>'"]/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"})[char]); }
+        function dateOnly(value) { return value?String(value).slice(0,10):""; }
+        function todayInAmman() { const parts=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Amman",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()); const map=Object.fromEntries(parts.map(part=>[part.type,part.value])); return `${map.year}-${map.month}-${map.day}`; }
+        function nightsBetween(checkIn,checkOut) { const start=new Date(`${dateOnly(checkIn)}T00:00:00Z`),end=new Date(`${dateOnly(checkOut)}T00:00:00Z`); return Math.max(0,Math.round((end-start)/86400000)); }
+        function setButtonLoading(button,loading,text="جاري التنفيذ...") { if(loading){button.dataset.originalText=button.textContent;button.textContent=text;button.disabled=true}else{button.textContent=button.dataset.originalText||button.textContent;button.disabled=false} }
 
-        function getAdminTexts() {
-            return {
-                ar: {
-                    title: "لوحة الإدارة - HIJAZI Apartments",
-                    subtitle: "عرض الحجوزات وإدارتها",
-                    filterLabel: "فلتر الشقة",
-                    searchLabel: "بحث بالاسم أو الهاتف",
-                    searchPlaceholder: "اكتب اسم أو رقم هاتف...",
-                    refresh: "تحديث",
-                    totalBookings: "إجمالي الحجوزات",
-                    filteredBookings: "الحجوزات المعروضة",
-                    bookedApartments: "عدد الشقق المحجوزة",
-                    loading: "جاري تحميل الحجوزات...",
-                    noBookings: "لا توجد حجوزات مطابقة حالياً",
-                    displayedCount: "عدد الحجوزات المعروضة",
-                    apt: "الشقة",
-                    name: "الاسم",
-                    phone: "الهاتف",
-                    email: "البريد",
-                    checkIn: "الدخول",
-                    checkOut: "الخروج",
-                    guests: "أشخاص",
-                    price: "السعر",
-                    action: "إجراء",
-                    delete: "حذف",
-                    usernamePrompt: "أدخل اسم المستخدم (Admin Username):",
-                    passwordPrompt: "أدخل كلمة المرور (Admin Password):",
-                    needUsername: "لازم تدخل اسم المستخدم.",
-                    needPassword: "لازم تدخل كلمة المرور.",
-                    wrongCreds: "❌ بيانات الدخول غير صحيحة. جرّب مرة ثانية.",
-                    unauthorized: "❌ غير مصرح. أدخل بيانات الأدمن من جديد.",
-                    confirmDelete: "متأكد بدك تحذف هذا الحجز؟",
-                    deleted: "✅ تم الحذف",
-                    serverError: "تعذر تحميل الحجوزات. حاول مرة أخرى بعد قليل.",
-                    deleteError: "تعذر الحذف. تأكد أن السيرفر شغال."
-                },
-                en: {
-                    title: "Admin Dashboard - HIJAZI Apartments",
-                    subtitle: "View and manage bookings",
-                    filterLabel: "Apartment filter",
-                    searchLabel: "Search by name or phone",
-                    searchPlaceholder: "Type a name or phone number...",
-                    refresh: "Refresh",
-                    totalBookings: "Total bookings",
-                    filteredBookings: "Displayed bookings",
-                    bookedApartments: "Booked apartments",
-                    loading: "Loading bookings...",
-                    noBookings: "No matching bookings found",
-                    displayedCount: "Displayed bookings",
-                    apt: "Apartment",
-                    name: "Name",
-                    phone: "Phone",
-                    email: "Email",
-                    checkIn: "Check-in",
-                    checkOut: "Check-out",
-                    guests: "Guests",
-                    price: "Price",
-                    action: "Action",
-                    delete: "Delete",
-                    usernamePrompt: "Enter admin username:",
-                    passwordPrompt: "Enter admin password:",
-                    needUsername: "Admin username is required.",
-                    needPassword: "Admin password is required.",
-                    wrongCreds: "❌ Invalid login details. Please try again.",
-                    unauthorized: "❌ Unauthorized. Enter admin credentials again.",
-                    confirmDelete: "Are you sure you want to delete this booking?",
-                    deleted: "✅ Deleted successfully",
-                    serverError: "Unable to load bookings. Please try again later.",
-                    deleteError: "Unable to delete. Make sure the server is running."
-                }
-            };
+        function populateApartmentSelects() {
+            const options=apartments.filter(a=>a.active).map(a=>`<option value="${a.apartmentId}">${escapeHtml(a.label)}</option>`).join("");
+            document.getElementById("manualApartment").innerHTML=options||'<option value="">لا توجد شقق فعالة</option>';
+            document.getElementById("apartmentFilter").innerHTML=`<option value="">كل الشقق</option>${options}`;
         }
 
-        const currentLang = localStorage.getItem("siteLang") || "ar";
-        const T = getAdminTexts()[currentLang];
-
-        function applyAdminTranslations() {
-            document.documentElement.lang = currentLang;
-            document.documentElement.dir = currentLang === "ar" ? "rtl" : "ltr";
-            document.body.classList.toggle("ltr-mode", currentLang === "en");
-
-            document.getElementById("adminTitle").textContent = T.title;
-            document.getElementById("adminSubtitle").textContent = T.subtitle;
-            document.getElementById("filterLabel").textContent = T.filterLabel;
-            document.getElementById("searchLabel").textContent = T.searchLabel;
-            document.getElementById("searchBox").placeholder = T.searchPlaceholder;
-            document.getElementById("refreshBtn").textContent = T.refresh;
-            document.getElementById("totalBookingsLabel").textContent = T.totalBookings;
-            document.getElementById("filteredBookingsLabel").textContent = T.filteredBookings;
-            document.getElementById("bookedApartmentsLabel").textContent = T.bookedApartments;
-            document.getElementById("thApt").textContent = T.apt;
-            document.getElementById("thName").textContent = T.name;
-            document.getElementById("thPhone").textContent = T.phone;
-            document.getElementById("thEmail").textContent = T.email;
-            document.getElementById("thCheckIn").textContent = T.checkIn;
-            document.getElementById("thCheckOut").textContent = T.checkOut;
-            document.getElementById("thGuests").textContent = T.guests;
-            document.getElementById("thPrice").textContent = T.price;
-            document.getElementById("thAction").textContent = T.action;
-
-            document.querySelector('#aptFilter option[value=""]').textContent = currentLang === "ar" ? "الكل" : "All";
-            for (let i = 1; i <= 6; i++) {
-                document.querySelector(`#aptFilter option[value="${i}"]`).textContent = currentLang === "ar" ? `شقة ${i}` : `Apartment ${i}`;
-            }
+        function updateStats() {
+            const today=todayInAmman(),active=allBookings.filter(b=>(b.status||"pending")!=="cancelled");
+            document.getElementById("activeCount").textContent=active.length;
+            document.getElementById("arrivalsCount").textContent=active.filter(b=>dateOnly(b.checkIn)===today).length;
+            document.getElementById("occupiedCount").textContent=new Set(active.filter(b=>dateOnly(b.checkIn)<=today&&dateOnly(b.checkOut)>today).map(b=>b.apartmentId)).size;
+            document.getElementById("platformCount").textContent=active.filter(b=>["airbnb","booking"].includes(b.source)).length;
         }
 
-        function askCredentials(message = "") {
-            if (message) alert(message);
-
-            ADMIN_USER = prompt(T.usernamePrompt, ADMIN_USER || "");
-            if (ADMIN_USER === null || ADMIN_USER.trim() === "") {
-                return askCredentials(T.needUsername);
-            }
-
-            ADMIN_PASS = prompt(T.passwordPrompt);
-            if (ADMIN_PASS === null || ADMIN_PASS.trim() === "") {
-                return askCredentials(T.needPassword);
-            }
-
-            ADMIN_USER = ADMIN_USER.trim();
-            ADMIN_PASS = ADMIN_PASS.trim();
+        function renderBookings() {
+            const query=document.getElementById("searchBox").value.trim().toLowerCase(),apt=document.getElementById("apartmentFilter").value,source=document.getElementById("sourceFilter").value,status=document.getElementById("statusFilter").value;
+            const filtered=allBookings.filter(b=>{const s=b.source||"website",st=b.status||"pending",hay=[b.fullName,b.phone,b.email,b.sourceReference].join(" ").toLowerCase(); return(!query||hay.includes(query))&&(!apt||String(b.apartmentId)===apt)&&(!source||s===source)&&(!status||st===status)});
+            document.getElementById("bookingCountText").textContent=`المعروض ${filtered.length} من أصل ${allBookings.length} حجز`;
+            const body=document.getElementById("bookingsBody");
+            if(!filtered.length){body.innerHTML='<tr><td colspan="10" class="empty">لا توجد حجوزات مطابقة.</td></tr>';return}
+            body.innerHTML=filtered.map(b=>{const s=b.source||"website",st=b.status||"pending",price=b.totalPriceText||(b.totalPrice?`${b.totalPrice} ${b.currency||"JOD"}`:"—");return `<tr><td>${escapeHtml(b.apartmentLabel||`شقة ${b.apartmentId}`)}</td><td><span class="badge source-${s}">${SOURCE_LABELS[s]}</span></td><td title="${escapeHtml(b.email||"")}">${escapeHtml(b.fullName||"حجز بدون اسم")}</td><td>${escapeHtml(b.phone||"—")}</td><td>${dateOnly(b.checkIn)}</td><td>${dateOnly(b.checkOut)}</td><td>${nightsBetween(b.checkIn,b.checkOut)}</td><td>${escapeHtml(price)}</td><td><select class="status-select status-${st}" data-booking-status="${b._id}">${Object.entries(STATUS_LABELS).map(([v,l])=>`<option value="${v}" ${v===st?"selected":""}>${l}</option>`).join("")}</select></td><td><div class="row-actions"><button class="btn btn-danger btn-small" data-delete-booking="${b._id}" type="button">حذف</button></div></td></tr>`}).join("");
         }
 
-        function authHeaders() {
-            const token = btoa(`${ADMIN_USER}:${ADMIN_PASS}`);
-            return {
-                Authorization: `Basic ${token}`,
-                "Content-Type": "application/json",
-            };
+        function syncStatusText(c) { if(!c?.lastSyncedAt)return"لم تتم المزامنة بعد."; const time=new Date(c.lastSyncedAt).toLocaleString("ar-JO",{timeZone:"Asia/Amman"}); return `${c.lastSyncStatus==="success"?"نجحت":"فشلت"} آخر مزامنة: ${time}${c.lastSyncMessage?` — ${c.lastSyncMessage}`:""}`; }
+        function renderApartments() {
+            const grid=document.getElementById("apartmentsGrid"); if(!apartments.length){grid.innerHTML='<div class="card apartment-card">لا توجد شقق.</div>';return}
+            grid.innerHTML=apartments.map(a=>`<article class="card apartment-card" data-apartment-card="${a._id}"><div class="apartment-title"><h3>الشقة ${a.apartmentId}</h3><label class="inline-check"><input type="checkbox" data-field="active" ${a.active?"checked":""}> فعالة للحجز</label></div><div class="field"><label>اسم الشقة داخل النظام</label><input data-field="label" value="${escapeHtml(a.label)}"></div>${["airbnb","booking"].map(s=>{const c=a.calendars?.[s]||{},title=s==="airbnb"?"Airbnb":"Booking.com";return `<div class="connection-box"><div class="connection-title"><strong>${title}</strong><label class="inline-check"><input type="checkbox" data-field="${s}Enabled" ${c.enabled?"checked":""}> تفعيل الاستيراد</label></div><div class="field"><label>رابط التقويم المُصدّر من ${title}</label><input data-field="${s}Url" value="${escapeHtml(c.url||"")}" dir="ltr" placeholder="https://...ics"></div><p class="connection-status">${escapeHtml(syncStatusText(c))}</p><div class="field" style="margin-top:10px"><label>رابط HIJAZI الذي تضعه داخل ${title}</label><div class="url-row"><input readonly value="${escapeHtml(a.exportUrls?.[s]||"")}" data-export-url="${s}"><button class="btn btn-dark btn-small" data-copy-url="${s}" type="button">نسخ</button></div></div></div>`}).join("")}<div class="apartment-actions"><button class="btn btn-primary" data-save-apartment type="button">حفظ الإعدادات</button><button class="btn btn-dark" data-sync-apartment type="button">مزامنة هذه الشقة</button></div></article>`).join("");
         }
 
-        const tbody = document.getElementById("tbody");
-        const statusEl = document.getElementById("status");
-        const aptFilter = document.getElementById("aptFilter");
-        const searchBox = document.getElementById("searchBox");
-        const refreshBtn = document.getElementById("refreshBtn");
+        async function loadAll() { const [bd,ad]=await Promise.all([api("/admin/bookings"),api("/admin/apartments")]); allBookings=bd.bookings||[];apartments=ad.apartments||[];populateApartmentSelects();updateStats();renderBookings();renderApartments(); }
 
-        const totalBookingsEl = document.getElementById("totalBookings");
-        const filteredBookingsEl = document.getElementById("filteredBookings");
-        const bookedApartmentsEl = document.getElementById("bookedApartments");
+        document.getElementById("loginForm").addEventListener("submit",async e=>{e.preventDefault();adminUser=document.getElementById("adminUser").value.trim();adminPass=document.getElementById("adminPass").value;loginError.textContent="جاري التحقق...";try{await loadAll();loginError.textContent="";loginOverlay.classList.add("hidden");document.getElementById("adminPass").value=""}catch(error){loginError.textContent=error.message}});
+        document.getElementById("logoutBtn").addEventListener("click",()=>{adminUser="";adminPass="";loginOverlay.classList.remove("hidden")});
+        document.querySelectorAll(".tab-btn").forEach(button=>button.addEventListener("click",()=>{document.querySelectorAll(".tab-btn,.tab-panel").forEach(item=>item.classList.remove("active"));button.classList.add("active");document.getElementById(button.dataset.tab).classList.add("active")}));
+        ["searchBox","apartmentFilter","sourceFilter","statusFilter"].forEach(id=>document.getElementById(id).addEventListener(id==="searchBox"?"input":"change",renderBookings));
+        document.getElementById("clearFiltersBtn").addEventListener("click",()=>{["searchBox","apartmentFilter","sourceFilter","statusFilter"].forEach(id=>{document.getElementById(id).value=""});renderBookings()});
+        document.getElementById("refreshBtn").addEventListener("click",async e=>{setButtonLoading(e.currentTarget,true,"جاري التحديث...");try{await loadAll();showNotice("تم تحديث البيانات.")}catch(error){showNotice(error.message,"error")}finally{setButtonLoading(e.currentTarget,false)}});
 
-        let allBookings = [];
+        document.getElementById("manualBookingForm").addEventListener("submit",async e=>{e.preventDefault();const button=document.getElementById("addBookingBtn");setButtonLoading(button,true,"جاري إضافة الحجز...");try{const payload={apartmentId:Number(document.getElementById("manualApartment").value),source:document.getElementById("manualSource").value,checkIn:document.getElementById("manualCheckIn").value,checkOut:document.getElementById("manualCheckOut").value,fullName:document.getElementById("manualName").value,phone:document.getElementById("manualPhone").value,email:document.getElementById("manualEmail").value,sourceReference:document.getElementById("manualReference").value,adults:Number(document.getElementById("manualAdults").value||0),children:Number(document.getElementById("manualChildren").value||0),totalPrice:Number(document.getElementById("manualPrice").value||0),currency:"JOD",status:document.getElementById("manualStatus").value,notes:document.getElementById("manualNotes").value};await api("/admin/bookings",{method:"POST",body:JSON.stringify(payload)});e.currentTarget.reset();document.getElementById("manualAdults").value=1;document.getElementById("manualChildren").value=0;document.getElementById("manualPrice").value=0;await loadAll();showNotice("✅ تم إضافة الحجز وإغلاق التواريخ بنجاح.")}catch(error){showNotice(error.message,"error")}finally{setButtonLoading(button,false)}});
+        document.getElementById("bookingsBody").addEventListener("change",async e=>{const id=e.target.dataset.bookingStatus;if(!id)return;try{await api(`/admin/bookings/${id}`,{method:"PATCH",body:JSON.stringify({status:e.target.value})});await loadAll();showNotice("تم تحديث حالة الحجز.")}catch(error){showNotice(error.message,"error");await loadAll()}});
+        document.getElementById("bookingsBody").addEventListener("click",async e=>{const id=e.target.dataset.deleteBooking;if(!id||!confirm("هل أنت متأكد من حذف هذا الحجز نهائيًا؟"))return;setButtonLoading(e.target,true,"...");try{await api(`/admin/bookings/${id}`,{method:"DELETE"});await loadAll();showNotice("تم حذف الحجز.")}catch(error){showNotice(error.message,"error");setButtonLoading(e.target,false)}});
+        document.getElementById("addApartmentForm").addEventListener("submit",async e=>{e.preventDefault();const button=e.currentTarget.querySelector("button[type=submit]");setButtonLoading(button,true,"جاري الإضافة...");try{const id=document.getElementById("newApartmentId").value;await api("/admin/apartments",{method:"POST",body:JSON.stringify({apartmentId:id?Number(id):undefined,label:document.getElementById("newApartmentLabel").value})});e.currentTarget.reset();await loadAll();showNotice("تمت إضافة الشقة إلى النظام.")}catch(error){showNotice(error.message,"error")}finally{setButtonLoading(button,false)}});
 
-        function fmtDate(d) {
-            const date = new Date(d);
-            if (isNaN(date.getTime())) return "";
-            return date.toISOString().slice(0, 10);
-        }
+        document.getElementById("apartmentsGrid").addEventListener("click",async e=>{const card=e.target.closest("[data-apartment-card]");if(!card)return;const apartment=apartments.find(item=>item._id===card.dataset.apartmentCard);if(!apartment)return;if(e.target.dataset.copyUrl){const input=card.querySelector(`[data-export-url="${e.target.dataset.copyUrl}"]`);try{await navigator.clipboard.writeText(input.value)}catch{input.select();document.execCommand("copy")}showNotice("تم نسخ رابط التقويم.");return}if(e.target.hasAttribute("data-save-apartment")){setButtonLoading(e.target,true,"جاري الحفظ...");try{const payload={label:card.querySelector('[data-field="label"]').value,active:card.querySelector('[data-field="active"]').checked,calendars:{airbnb:{url:card.querySelector('[data-field="airbnbUrl"]').value,enabled:card.querySelector('[data-field="airbnbEnabled"]').checked},booking:{url:card.querySelector('[data-field="bookingUrl"]').value,enabled:card.querySelector('[data-field="bookingEnabled"]').checked}}};await api(`/admin/apartments/${apartment._id}`,{method:"PUT",body:JSON.stringify(payload)});await loadAll();showNotice("تم حفظ إعدادات الشقة.")}catch(error){showNotice(error.message,"error");setButtonLoading(e.target,false)}return}if(e.target.hasAttribute("data-sync-apartment")){setButtonLoading(e.target,true,"جاري المزامنة...");try{const data=await api("/admin/sync",{method:"POST",body:JSON.stringify({apartmentId:apartment.apartmentId})});await loadAll();const errors=data.results?.filter(r=>r.status==="error")||[];showNotice(errors.length?errors.map(i=>i.message).join(" — "):"تمت مزامنة الشقة.",errors.length?"error":"success")}catch(error){showNotice(error.message,"error");setButtonLoading(e.target,false)}}});
+        document.getElementById("syncAllBtn").addEventListener("click",async e=>{setButtonLoading(e.currentTarget,true,"جاري المزامنة...");try{const data=await api("/admin/sync",{method:"POST",body:"{}"});await loadAll();const successes=data.results?.filter(r=>r.status==="success").length||0,errors=data.results?.filter(r=>r.status==="error")||[];showNotice(errors.length?`نجحت ${successes} مزامنة، وفشلت ${errors.length}: ${errors.map(i=>i.message).join(" — ")}`:`تمت المزامنة بنجاح (${successes} تقويم).`,errors.length?"error":"success")}catch(error){showNotice(error.message,"error")}finally{setButtonLoading(e.currentTarget,false)}});
 
-        function updateStats(filtered) {
-            totalBookingsEl.textContent = allBookings.length;
-            filteredBookingsEl.textContent = filtered.length;
-
-            const uniqueApts = new Set(filtered.map(b => b.apartmentId).filter(Boolean));
-            bookedApartmentsEl.textContent = uniqueApts.size;
-        }
-
-        function render() {
-            const apt = aptFilter.value;
-            const q = searchBox.value.trim().toLowerCase();
-
-            const filtered = allBookings.filter((b) => {
-                const matchApt = !apt || String(b.apartmentId) === apt;
-                const matchQ =
-                    !q ||
-                    (b.fullName || "").toLowerCase().includes(q) ||
-                    (b.phone || "").toLowerCase().includes(q);
-                return matchApt && matchQ;
-            });
-
-            updateStats(filtered);
-
-            if (filtered.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="9" class="empty-row">${T.noBookings}</td>
-                    </tr>
-                `;
-            } else {
-                tbody.innerHTML = filtered.map((b) => `
-                    <tr>
-                        <td>${b.apartmentId ?? ""}</td>
-                        <td>${b.fullName ?? ""}</td>
-                        <td>${b.phone ?? ""}</td>
-                        <td>${b.email ?? ""}</td>
-                        <td>${fmtDate(b.checkIn)}</td>
-                        <td>${fmtDate(b.checkOut)}</td>
-                        <td>${(b.adults ?? 0) + (b.children ?? 0)}</td>
-                        <td>${b.totalPriceText ?? (b.totalPrice ?? "")}</td>
-                        <td>
-                            <button class="btn btn-delete" onclick="delBooking('${b._id}')" type="button">${T.delete}</button>
-                        </td>
-                    </tr>
-                `).join("");
-            }
-
-            statusEl.textContent = `${T.displayedCount}: ${filtered.length}`;
-        }
-
-        async function load() {
-            statusEl.textContent = T.loading;
-
-            try {
-                const res = await fetch(`${API_BASE}/admin/bookings`, {
-                    method: "GET",
-                    headers: authHeaders(),
-                });
-
-                if (res.status === 401) {
-                    askCredentials(T.wrongCreds);
-                    return load();
-                }
-
-                const data = await res.json();
-
-                if (!res.ok) {
-                    statusEl.textContent = data.message || T.serverError;
-                    return;
-                }
-
-                allBookings = data.bookings || [];
-                render();
-            } catch (e) {
-                console.error(e);
-                statusEl.textContent = T.serverError;
-            }
-        }
-
-        async function delBooking(id) {
-            if (!confirm(T.confirmDelete)) return;
-
-            try {
-                const res = await fetch(`${API_BASE}/admin/bookings/${id}`, {
-                    method: "DELETE",
-                    headers: authHeaders(),
-                });
-
-                if (res.status === 401) {
-                    askCredentials(T.unauthorized);
-                    return delBooking(id);
-                }
-
-                const data = await res.json();
-                if (!res.ok) {
-                    alert(data.message || T.deleteError);
-                    return;
-                }
-
-                alert(data.message || T.deleted);
-                await load();
-            } catch (e) {
-                console.error(e);
-                alert(T.deleteError);
-            }
-        }
-
-        window.delBooking = delBooking;
-
-        aptFilter.addEventListener("change", render);
-        searchBox.addEventListener("input", render);
-        refreshBtn.addEventListener("click", load);
-
-        applyAdminTranslations();
-        askCredentials();
-        load();
+        const today=todayInAmman();document.getElementById("manualCheckIn").min=today;document.getElementById("manualCheckOut").min=today;document.getElementById("manualCheckIn").addEventListener("change",e=>{document.getElementById("manualCheckOut").min=e.target.value||today});
     </script>
-
 </body>
-
 </html>
