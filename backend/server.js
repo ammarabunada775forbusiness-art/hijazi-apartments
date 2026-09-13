@@ -10,6 +10,9 @@ require("dotenv").config();
 
 const app = express();
 
+/* Render يعمل خلف Proxy؛ هذا يجعل req.ip يرجّع IP الحقيقي */
+app.set("trust proxy", 1);
+
 /* =========================================================
    إعدادات CORS وقراءة JSON
 ========================================================= */
@@ -117,7 +120,39 @@ app.get("/health/db", async (req, res) => {
 /* =========================================================
    حماية مسارات الأدمن
 ========================================================= */
+/* =========================================================
+   حماية الأدمن من محاولات تسجيل الدخول المتكررة
+========================================================= */
+const ADMIN_LOGIN_WINDOW_MS = 15 * 60 * 1000;
+const ADMIN_MAX_FAILED_ATTEMPTS = 8;
+const adminFailedAttempts = new Map();
+
+function getAdminClientKey(req) {
+    return req.ip || req.socket.remoteAddress || "unknown";
+}
+
 function requireAdmin(req, res, next) {
+    const clientKey = getAdminClientKey(req);
+    const now = Date.now();
+    const previousAttempt = adminFailedAttempts.get(clientKey);
+
+    if (
+        previousAttempt?.blockedUntil &&
+        previousAttempt.blockedUntil > now
+    ) {
+        const retryAfterSeconds = Math.ceil(
+            (previousAttempt.blockedUntil - now) / 1000
+        );
+
+        res.set("Retry-After", String(retryAfterSeconds));
+
+        return res.status(429).json({
+            success: false,
+            message:
+                "تم إيقاف محاولات الدخول مؤقتًا بسبب تكرار البيانات الخاطئة. حاول بعد 15 دقيقة."
+        });
+    }
+
     const user = basicAuth(req);
 
     const ok =
@@ -126,10 +161,47 @@ function requireAdmin(req, res, next) {
         user.pass === process.env.ADMIN_PASS;
 
     if (!ok) {
-        res.set("WWW-Authenticate", 'Basic realm="HIJAZI Admin"');
-        return res.status(401).send("Authentication required.");
+        const attemptExpired =
+            !previousAttempt ||
+            now - previousAttempt.firstFailedAt >
+            ADMIN_LOGIN_WINDOW_MS;
+
+        const nextAttempt = attemptExpired
+            ? {
+                count: 1,
+                firstFailedAt: now,
+                blockedUntil: 0
+            }
+            : {
+                ...previousAttempt,
+                count: previousAttempt.count + 1
+            };
+
+        if (
+            nextAttempt.count >=
+            ADMIN_MAX_FAILED_ATTEMPTS
+        ) {
+            nextAttempt.blockedUntil =
+                now + ADMIN_LOGIN_WINDOW_MS;
+        }
+
+        adminFailedAttempts.set(
+            clientKey,
+            nextAttempt
+        );
+
+        res.set(
+            "WWW-Authenticate",
+            'Basic realm="HIJAZI Admin"'
+        );
+
+        return res.status(401).json({
+            success: false,
+            message: "اسم المستخدم أو كلمة المرور غير صحيحة."
+        });
     }
 
+    adminFailedAttempts.delete(clientKey);
     next();
 }
 
@@ -352,6 +424,80 @@ async function sendBookingEmails(booking) {
         } catch (e) {
             console.log("Customer email exception:", e.message);
         }
+    }
+}
+
+
+/* =========================================================
+   إرسال تنبيه عند فشل مزامنة Airbnb أو Booking
+   مع منع تكرار نفس التنبيه خلال 6 ساعات
+========================================================= */
+const syncFailureAlertTimes = new Map();
+const SYNC_FAILURE_ALERT_COOLDOWN_MS =
+    6 * 60 * 60 * 1000;
+
+async function sendSyncFailureEmail({
+    apartmentId,
+    source,
+    message
+}) {
+    const from = process.env.RESEND_FROM;
+    const adminTo = process.env.ADMIN_EMAIL;
+
+    if (!resend || !from || !adminTo) {
+        console.log(
+            "Sync failure email skipped: missing email settings"
+        );
+        return;
+    }
+
+    const alertKey = `${apartmentId}:${source}`;
+    const lastAlertTime =
+        syncFailureAlertTimes.get(alertKey) || 0;
+
+    if (
+        Date.now() - lastAlertTime <
+        SYNC_FAILURE_ALERT_COOLDOWN_MS
+    ) {
+        return;
+    }
+
+    const sourceTitle =
+        source === "airbnb"
+            ? "Airbnb"
+            : "Booking.com";
+
+    try {
+        await resend.emails.send({
+            from,
+            to: adminTo,
+            subject:
+                `فشل مزامنة ${sourceTitle} - الشقة ${apartmentId}`,
+            text:
+                `تنبيه من HIJAZI PMS\n\n` +
+                `الشقة: ${apartmentId}\n` +
+                `المنصة: ${sourceTitle}\n` +
+                `الخطأ: ${message || "خطأ غير معروف"}\n` +
+                `الوقت: ${new Date().toLocaleString(
+                    "ar-JO",
+                    { timeZone: "Asia/Amman" }
+                )}\n\n` +
+                `افتح لوحة الإدارة وافحص رابط التقويم.`
+        });
+
+        syncFailureAlertTimes.set(
+            alertKey,
+            Date.now()
+        );
+
+        console.log(
+            `Sync failure alert sent for apartment=${apartmentId} source=${source}`
+        );
+    } catch (error) {
+        console.log(
+            "SYNC FAILURE EMAIL ERROR:",
+            error.message
+        );
     }
 }
 
@@ -981,6 +1127,11 @@ app.post("/admin/sync", requireAdmin, async (req, res) => {
                         imported: 0,
                         message: error.message
                     });
+                    await sendSyncFailureEmail({
+                        apartmentId: apartment.apartmentId,
+                        source,
+                        message: error.message
+                    });
                 }
             }
         }
@@ -1155,7 +1306,16 @@ async function runScheduledCalendarSync() {
                 try {
                     await syncApartmentCalendar(apartment, source);
                 } catch (error) {
-                    console.log(`SCHEDULED SYNC ERROR apartment=${apartment.apartmentId} source=${source}:`, error.message);
+                    console.log(
+                        `SCHEDULED SYNC ERROR apartment=${apartment.apartmentId} source=${source}:`,
+                        error.message
+                    );
+
+                    await sendSyncFailureEmail({
+                        apartmentId: apartment.apartmentId,
+                        source,
+                        message: error.message
+                    });
                 }
             }
         }
