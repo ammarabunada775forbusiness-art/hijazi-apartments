@@ -3043,6 +3043,364 @@
                 width: 100%;
             }
         }
+
+        /* =========================================================
+           HIJAZI custom dropdowns
+           Native select popups are controlled by the browser, so the
+           visible control and popup are rendered by our own component.
+        ========================================================= */
+        .hijazi-select {
+            position: relative;
+            width: 100%;
+        }
+
+        .hijazi-native-select {
+            position: absolute !important;
+            inset: 0 auto auto 0 !important;
+            width: 1px !important;
+            height: 1px !important;
+            min-height: 1px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+
+        .hijazi-select-trigger {
+            position: relative;
+            width: 100%;
+            min-height: 44px;
+            padding: 10px 14px 10px 44px;
+            color: #101828;
+            background: #fff;
+            border: 1px solid #d0d5dd;
+            border-radius: 12px;
+            box-shadow: 0 1px 2px rgba(16, 24, 40, .05);
+            cursor: pointer;
+            text-align: right;
+            font: inherit;
+            font-weight: 700;
+            line-height: 1.35;
+            transition: border-color .18s, box-shadow .18s, background .18s;
+        }
+
+        .hijazi-select-trigger::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            width: 8px;
+            height: 8px;
+            border-left: 2px solid #8b6207;
+            border-bottom: 2px solid #8b6207;
+            transform: translateY(-65%) rotate(-45deg);
+            transition: transform .18s;
+        }
+
+        .hijazi-select.is-open .hijazi-select-trigger {
+            border-color: #c89116;
+            box-shadow: 0 0 0 3px rgba(200, 145, 22, .14);
+        }
+
+        .hijazi-select.is-open .hijazi-select-trigger::after {
+            transform: translateY(-25%) rotate(135deg);
+        }
+
+        .hijazi-select-trigger:disabled {
+            color: #98a2b3;
+            background: #f2f4f7;
+            cursor: not-allowed;
+        }
+
+        .hijazi-select.is-compact .hijazi-select-trigger {
+            min-width: 112px;
+            min-height: 36px;
+            padding-top: 7px;
+            padding-bottom: 7px;
+            font-size: 12px;
+        }
+
+        .hijazi-select-menu {
+            position: fixed;
+            z-index: 10050;
+            display: none;
+            max-height: min(320px, calc(100vh - 24px));
+            padding: 7px;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            color: #101828;
+            background: rgba(255, 255, 255, .98);
+            border: 1px solid #e2c36d;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(16, 24, 40, .20), 0 0 0 1px rgba(255, 255, 255, .7) inset;
+            backdrop-filter: blur(18px) saturate(150%);
+            -webkit-backdrop-filter: blur(18px) saturate(150%);
+        }
+
+        .hijazi-select-menu.show {
+            display: grid;
+            gap: 3px;
+            animation: hijaziMenuIn .16s ease-out;
+        }
+
+        @keyframes hijaziMenuIn {
+            from {
+                opacity: 0;
+                transform: translateY(-5px) scale(.985);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .hijazi-select-option {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            min-height: 40px;
+            padding: 9px 12px;
+            color: #101828;
+            background: transparent;
+            border: 0;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: right;
+            font: inherit;
+            font-weight: 700;
+        }
+
+        .hijazi-select-option:hover,
+        .hijazi-select-option:focus-visible {
+            color: #6f5005;
+            background: #fff8e7;
+            outline: none;
+        }
+
+        .hijazi-select-option.is-selected {
+            color: #6f5005;
+            background: #fff4ce;
+            box-shadow: inset -3px 0 0 #c89116;
+        }
+
+        .hijazi-select-option.is-selected::after {
+            content: "✓";
+            margin-right: auto;
+            color: #8b6207;
+            font-weight: 900;
+        }
+
+        .hijazi-option-dot {
+            flex: 0 0 10px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #98a2b3;
+            box-shadow: 0 0 0 3px rgba(152, 162, 179, .13);
+        }
+
+        .tone-status-pending {
+            color: #b54708;
+            background: #fffaeb;
+            border-color: #fedf89;
+        }
+
+        .hijazi-select-option[data-tone="status-pending"] .hijazi-option-dot {
+            background: #f79009;
+        }
+
+        .tone-status-confirmed {
+            color: #067647;
+            background: #ecfdf3;
+            border-color: #abefc6;
+        }
+
+        .hijazi-select-option[data-tone="status-confirmed"] .hijazi-option-dot {
+            background: #12b76a;
+        }
+
+        .tone-status-cancelled {
+            color: #b42318;
+            background: #fef3f2;
+            border-color: #fecdca;
+        }
+
+        .hijazi-select-option[data-tone="status-cancelled"] .hijazi-option-dot {
+            background: #f04438;
+        }
+
+        .tone-status-blocked {
+            color: #344054;
+            background: #f2f4f7;
+            border-color: #d0d5dd;
+        }
+
+        .hijazi-select-option[data-tone="status-blocked"] .hijazi-option-dot {
+            background: #667085;
+        }
+
+        .tone-source-airbnb {
+            color: #c11574;
+            background: #fff6f8;
+            border-color: #ffc2cf;
+        }
+
+        .hijazi-select-option[data-tone="source-airbnb"] .hijazi-option-dot {
+            background: #ff385c;
+        }
+
+        .tone-source-booking {
+            color: #003b95;
+            background: #f5faff;
+            border-color: #b2ddff;
+        }
+
+        .hijazi-select-option[data-tone="source-booking"] .hijazi-option-dot {
+            background: #003b95;
+        }
+
+        .tone-source-manual {
+            color: #067647;
+            background: #ecfdf3;
+            border-color: #abefc6;
+        }
+
+        .hijazi-select-option[data-tone="source-manual"] .hijazi-option-dot {
+            background: #12b76a;
+        }
+
+        .tone-source-website {
+            color: #6941c6;
+            background: #f4f3ff;
+            border-color: #d9d6fe;
+        }
+
+        .hijazi-select-option[data-tone="source-website"] .hijazi-option-dot {
+            background: #7f56d9;
+        }
+
+        /* Platform identity inside sync health cards. */
+        .health-source.health-source-airbnb {
+            background: linear-gradient(145deg, #fff, #fff4f7) !important;
+            border: 1px solid #ffc2cf !important;
+            border-right: 5px solid #ff385c !important;
+        }
+
+        .health-source.health-source-booking {
+            background: linear-gradient(145deg, #fff, #f1f8ff) !important;
+            border: 1px solid #b2ddff !important;
+            border-right: 5px solid #003b95 !important;
+        }
+
+        .health-source-airbnb .health-source-title strong {
+            color: #d71948 !important;
+        }
+
+        .health-source-booking .health-source-title strong {
+            color: #003b95 !important;
+        }
+
+        .health-source button[data-sync-source="airbnb"] {
+            color: #fff !important;
+            background: #ff385c !important;
+        }
+
+        .health-source button[data-sync-source="airbnb"]:hover {
+            background: #df2146 !important;
+        }
+
+        .health-source button[data-sync-source="booking"] {
+            color: #fff !important;
+            background: #003b95 !important;
+        }
+
+        .health-source button[data-sync-source="booking"]:hover {
+            background: #002b6d !important;
+        }
+
+        /* A calmer, better-spaced calendar toolbar. */
+        #adminCalendar .fc-header-toolbar {
+            gap: 14px;
+            margin-bottom: 16px !important;
+            padding: 12px;
+            background: #f8fafc;
+            border: 1px solid #eaecf0;
+            border-radius: 16px;
+        }
+
+        #adminCalendar .fc-toolbar-chunk {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        #adminCalendar .fc-button-group {
+            display: inline-flex;
+            gap: 6px;
+        }
+
+        #adminCalendar .fc-button-group>.fc-button,
+        #adminCalendar .fc-button {
+            min-height: 39px;
+            margin: 0 !important;
+            padding: 7px 12px !important;
+            border-radius: 10px !important;
+            box-shadow: none !important;
+        }
+
+        #adminCalendar .fc-button-primary:not(:disabled) {
+            color: #344054 !important;
+            background: #fff !important;
+            border: 1px solid #d0d5dd !important;
+        }
+
+        #adminCalendar .fc-button-primary:hover,
+        #adminCalendar .fc-button-primary:focus,
+        #adminCalendar .fc-button-primary.fc-button-active {
+            color: #fff !important;
+            background: linear-gradient(135deg, #d4a017, #8a6508) !important;
+            border-color: #b9870f !important;
+        }
+
+        #adminCalendar .fc-toolbar-title {
+            font-size: clamp(18px, 2vw, 24px) !important;
+        }
+
+        #adminCalendar .fc-daygrid-day-frame {
+            min-height: 112px;
+        }
+
+        #adminCalendar .fc-event {
+            margin: 2px 4px !important;
+            padding: 3px 6px !important;
+            border-radius: 8px !important;
+            box-shadow: 0 4px 10px rgba(16, 24, 40, .14);
+            font-weight: 800;
+        }
+
+        @media (max-width: 760px) {
+            #adminCalendar .fc-header-toolbar {
+                display: grid;
+                grid-template-columns: 1fr;
+                justify-items: stretch;
+            }
+
+            #adminCalendar .fc-toolbar-chunk {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            #adminCalendar .fc-toolbar-chunk:nth-child(2) {
+                grid-row: 1;
+            }
+
+            #adminCalendar .fc-daygrid-day-frame {
+                min-height: 88px;
+            }
+        }
     </style>
 </head>
 
@@ -3890,6 +4248,8 @@
                     </tr>
                 `;
             }).join("");
+
+            refreshHijaziSelects(body);
         }
 
         /* =========================================================
@@ -3908,6 +4268,185 @@
             select.classList.add(
                 `status-${select.value || "pending"}`
             );
+
+            syncHijaziSelect(select);
+        }
+
+        /* =========================================================
+           قوائم HIJAZI المخصصة لكل حقول select في صفحة الأدمن
+        ========================================================= */
+        let activeHijaziSelect = null;
+        let activeHijaziTrigger = null;
+
+        function getHijaziSelectTone(select, value) {
+            const statusValues = ["pending", "confirmed", "cancelled", "blocked"];
+            const sourceValues = ["website", "manual", "airbnb", "booking"];
+
+            if (select.classList.contains("status-select") || select.id === "statusFilter") {
+                return statusValues.includes(value) ? `status-${value}` : "";
+            }
+
+            if (["manualSource", "sourceFilter"].includes(select.id)) {
+                return sourceValues.includes(value) ? `source-${value}` : "";
+            }
+
+            return "";
+        }
+
+        function closeHijaziSelect() {
+            document.getElementById("hijaziSelectMenu")?.classList.remove("show");
+            activeHijaziTrigger?.closest(".hijazi-select")?.classList.remove("is-open");
+            activeHijaziTrigger?.setAttribute("aria-expanded", "false");
+            activeHijaziSelect = null;
+            activeHijaziTrigger = null;
+        }
+
+        function getHijaziMenu() {
+            let menu = document.getElementById("hijaziSelectMenu");
+
+            if (!menu) {
+                menu = document.createElement("div");
+                menu.id = "hijaziSelectMenu";
+                menu.className = "hijazi-select-menu";
+                menu.setAttribute("role", "listbox");
+                document.body.appendChild(menu);
+            }
+
+            return menu;
+        }
+
+        function positionHijaziMenu(trigger, menu) {
+            const rect = trigger.getBoundingClientRect();
+            const gap = 7;
+            const edge = 10;
+            const width = Math.max(190, rect.width);
+            const safeWidth = Math.min(width, window.innerWidth - edge * 2);
+
+            menu.style.width = `${safeWidth}px`;
+            menu.style.left = `${Math.max(edge, Math.min(rect.left, window.innerWidth - safeWidth - edge))}px`;
+            menu.style.top = `${rect.bottom + gap}px`;
+
+            const menuRect = menu.getBoundingClientRect();
+
+            if (menuRect.bottom > window.innerHeight - edge && rect.top > menuRect.height + gap + edge) {
+                menu.style.top = `${rect.top - menuRect.height - gap}px`;
+            }
+        }
+
+        function updateHijaziTrigger(select) {
+            if (!select) return;
+
+            const wrapper = select.closest(".hijazi-select");
+            const trigger = wrapper?.querySelector(".hijazi-select-trigger");
+
+            if (!trigger) return;
+
+            const selectedOption = select.options[select.selectedIndex];
+            const tone = getHijaziSelectTone(select, select.value);
+
+            trigger.textContent = selectedOption?.textContent?.trim() || "اختر";
+            trigger.disabled = select.disabled;
+            trigger.className = "hijazi-select-trigger" + (tone ? ` tone-${tone}` : "");
+        }
+
+        function syncHijaziSelect(select) {
+            if (select?.dataset.hijaziEnhanced === "true") {
+                updateHijaziTrigger(select);
+            }
+        }
+
+        function openHijaziSelect(select, trigger) {
+            if (select.disabled) return;
+
+            if (activeHijaziSelect === select) {
+                closeHijaziSelect();
+                return;
+            }
+
+            closeHijaziSelect();
+
+            const menu = getHijaziMenu();
+            menu.innerHTML = "";
+
+            Array.from(select.options).forEach(option => {
+                const item = document.createElement("button");
+                const tone = getHijaziSelectTone(select, option.value);
+
+                item.type = "button";
+                item.className = "hijazi-select-option" + (option.selected ? " is-selected" : "");
+                item.dataset.value = option.value;
+                item.dataset.tone = tone;
+                item.setAttribute("role", "option");
+                item.setAttribute("aria-selected", option.selected ? "true" : "false");
+                item.disabled = option.disabled;
+
+                if (tone) {
+                    const dot = document.createElement("span");
+                    dot.className = "hijazi-option-dot";
+                    item.appendChild(dot);
+                }
+
+                const label = document.createElement("span");
+                label.textContent = option.textContent.trim();
+                item.appendChild(label);
+
+                item.addEventListener("click", () => {
+                    if (select.value !== option.value) {
+                        select.value = option.value;
+                        select.dispatchEvent(new Event("change", { bubbles: true }));
+                    }
+
+                    updateHijaziTrigger(select);
+                    closeHijaziSelect();
+                });
+
+                menu.appendChild(item);
+            });
+
+            activeHijaziSelect = select;
+            activeHijaziTrigger = trigger;
+            trigger.closest(".hijazi-select")?.classList.add("is-open");
+            trigger.setAttribute("aria-expanded", "true");
+            menu.classList.add("show");
+            positionHijaziMenu(trigger, menu);
+
+            menu.querySelector(".is-selected")?.scrollIntoView({ block: "nearest" });
+        }
+
+        function enhanceHijaziSelect(select) {
+            if (!select || select.dataset.hijaziEnhanced === "true") {
+                updateHijaziTrigger(select);
+                return;
+            }
+
+            const wrapper = document.createElement("div");
+            const trigger = document.createElement("button");
+
+            wrapper.className = "hijazi-select" + (select.classList.contains("status-select") ? " is-compact" : "");
+            trigger.type = "button";
+            trigger.className = "hijazi-select-trigger";
+            trigger.setAttribute("aria-haspopup", "listbox");
+            trigger.setAttribute("aria-expanded", "false");
+
+            select.parentNode.insertBefore(wrapper, select);
+            wrapper.appendChild(select);
+            wrapper.appendChild(trigger);
+
+            select.classList.add("hijazi-native-select");
+            select.dataset.hijaziEnhanced = "true";
+
+            trigger.addEventListener("click", event => {
+                event.stopPropagation();
+                openHijaziSelect(select, trigger);
+            });
+
+            select.addEventListener("change", () => updateHijaziTrigger(select));
+            updateHijaziTrigger(select);
+        }
+
+        function refreshHijaziSelects(root = document) {
+            root.querySelectorAll("select").forEach(enhanceHijaziSelect);
+            document.querySelectorAll("select[data-hijazi-enhanced='true']").forEach(updateHijaziTrigger);
         }
 
         /* =========================================================
@@ -4020,6 +4559,10 @@
 
             applyStatusSelectColor(
                 document.getElementById("editBookingStatus")
+            );
+
+            refreshHijaziSelects(
+                document.getElementById("editBookingDialog")
             );
 
             const dialog =
@@ -4217,9 +4760,9 @@
                 dayMaxEvents: window.innerWidth <= 650 ? 2 : 4,
 
                 headerToolbar: {
-                    start: "prev,next today",
+                    start: "dayGridMonth,listMonth",
                     center: "title",
-                    end: "dayGridMonth,listMonth"
+                    end: "today prev,next"
                 },
 
                 buttonText: {
@@ -4809,6 +5352,7 @@ ${connections}
             renderApartments();
             renderSyncHealth();
             renderAdminCalendar();
+            refreshHijaziSelects();
         }
 
         document.getElementById("loginForm").addEventListener("submit", async e => { e.preventDefault(); adminUser = document.getElementById("adminUser").value.trim(); adminPass = document.getElementById("adminPass").value; loginError.textContent = "جاري التحقق..."; try { await loadAll(); loginError.textContent = ""; loginOverlay.classList.add("hidden"); document.getElementById("adminPass").value = "" } catch (error) { loginError.textContent = error.message } });
@@ -4843,6 +5387,7 @@ ${connections}
 
             renderBookings();
             renderAdminCalendar();
+            refreshHijaziSelects();
         });
         document.getElementById("refreshBtn").addEventListener("click", async e => {
             const button = e.currentTarget;
@@ -5499,6 +6044,23 @@ ${connections}
         applyStatusSelectColor(
             document.getElementById("manualStatus")
         );
+
+        document.addEventListener("click", event => {
+            const menu = document.getElementById("hijaziSelectMenu");
+
+            if (!menu?.contains(event.target)) {
+                closeHijaziSelect();
+            }
+        });
+
+        document.addEventListener("keydown", event => {
+            if (event.key === "Escape") closeHijaziSelect();
+        });
+
+        window.addEventListener("resize", closeHijaziSelect);
+        window.addEventListener("scroll", closeHijaziSelect, true);
+
+        refreshHijaziSelects();
     </script>
 </body>
 
