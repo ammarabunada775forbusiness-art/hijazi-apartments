@@ -893,6 +893,595 @@
                 grid-template-columns: 1fr
             }
         }
+
+        /* =========================================================
+   HIJAZI PMS - GLASSMORPHISM THEME
+   ستايل زجاجي مطابق لهوية موقع HIJAZI Apartments
+========================================================= */
+
+        :root {
+            --gold: #d4a017;
+            --gold-dark: #8a6508;
+            --gold-light: #f2cf69;
+            --ink: #151515;
+            --muted: #656565;
+            --line: rgba(255, 255, 255, 0.62);
+            --paper: rgba(255, 255, 255, 0.58);
+            --bg: transparent;
+        }
+
+        /* ===== الخلفية الذهبية المتحركة ===== */
+
+        html {
+            background: #f2eee5;
+        }
+
+        body {
+            position: relative;
+            isolation: isolate;
+            overflow-x: hidden;
+            background: transparent;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 12% 18%,
+                    rgba(212, 160, 23, 0.34),
+                    transparent 25%),
+                radial-gradient(circle at 88% 30%,
+                    rgba(0, 0, 0, 0.16),
+                    transparent 29%),
+                radial-gradient(circle at 52% 82%,
+                    rgba(212, 160, 23, 0.24),
+                    transparent 31%),
+                linear-gradient(135deg,
+                    #ffffff 0%,
+                    #eeeae0 44%,
+                    #ffffff 72%,
+                    #ddd6c6 100%);
+            background-size: 170% 170%;
+            animation: adminGlassBackground 18s ease-in-out infinite alternate;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.52;
+            background-image:
+                radial-gradient(rgba(212, 160, 23, 0.85) 1.4px, transparent 1.4px),
+                radial-gradient(rgba(17, 17, 17, 0.55) 1.3px, transparent 1.3px),
+                radial-gradient(rgba(255, 255, 255, 0.95) 1.6px, transparent 1.6px);
+            background-size:
+                38px 38px,
+                71px 71px,
+                113px 113px;
+            background-position:
+                0 0,
+                24px 31px,
+                57px 79px;
+            animation: adminGlassDust 34s linear infinite;
+        }
+
+        .app-header,
+        .shell {
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes adminGlassBackground {
+            0% {
+                background-position: 0% 20%;
+            }
+
+            100% {
+                background-position: 100% 80%;
+            }
+        }
+
+        @keyframes adminGlassDust {
+            from {
+                background-position:
+                    0 0,
+                    24px 31px,
+                    57px 79px;
+            }
+
+            to {
+                background-position:
+                    150px 220px,
+                    -130px 180px,
+                    220px -160px;
+            }
+        }
+
+        /* ===== الهيدر ===== */
+
+        .app-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding-top: 19px;
+            padding-bottom: 19px;
+            background:
+                linear-gradient(110deg,
+                    rgba(5, 5, 5, 0.95),
+                    rgba(24, 20, 12, 0.91) 53%,
+                    rgba(126, 87, 4, 0.90));
+            border-bottom: 1px solid rgba(212, 160, 23, 0.46);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.28);
+            backdrop-filter: blur(18px) saturate(145%);
+            -webkit-backdrop-filter: blur(18px) saturate(145%);
+        }
+
+        .brand h1 {
+            color: var(--gold);
+            letter-spacing: 0.5px;
+            text-shadow: 0 4px 20px rgba(212, 160, 23, 0.22);
+        }
+
+        .brand p {
+            color: rgba(255, 255, 255, 0.82);
+        }
+
+        /* ===== الحاوية الرئيسية ===== */
+
+        .shell {
+            padding-top: 28px;
+        }
+
+        /* ===== الزجاج العام ===== */
+
+        .card,
+        .tabs,
+        .table-wrap,
+        .admin-calendar-shell {
+            border: 1px solid rgba(255, 255, 255, 0.70);
+            background: rgba(255, 255, 255, 0.56);
+            box-shadow:
+                0 18px 48px rgba(29, 24, 13, 0.13),
+                inset 0 1px 0 rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(18px) saturate(142%);
+            -webkit-backdrop-filter: blur(18px) saturate(142%);
+        }
+
+        .card {
+            border-radius: 22px;
+        }
+
+        .section-card {
+            border-color: rgba(255, 255, 255, 0.78);
+        }
+
+        .section-head h2,
+        .admin-calendar-head h3,
+        .apartment-title h3 {
+            color: #17130a;
+        }
+
+        .section-head p,
+        .admin-calendar-head p {
+            color: #69645b;
+        }
+
+        /* ===== بطاقات الإحصائيات ===== */
+
+        .stat-card {
+            position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(145deg,
+                    rgba(255, 255, 255, 0.70),
+                    rgba(255, 255, 255, 0.38));
+            transition:
+                transform 0.22s ease,
+                box-shadow 0.22s ease;
+        }
+
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg,
+                    transparent,
+                    var(--gold),
+                    var(--gold-light),
+                    transparent);
+        }
+
+        .stat-card::after {
+            content: "";
+            position: absolute;
+            width: 95px;
+            height: 95px;
+            top: -52px;
+            left: -32px;
+            border-radius: 50%;
+            background: rgba(212, 160, 23, 0.20);
+            filter: blur(10px);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 22px 52px rgba(29, 24, 13, 0.17),
+                inset 0 1px 0 rgba(255, 255, 255, 0.88);
+        }
+
+        .stat-label {
+            color: #6f685b;
+        }
+
+        .stat-value {
+            color: #17130a;
+            text-shadow: 0 3px 16px rgba(212, 160, 23, 0.16);
+        }
+
+        /* ===== التبويبات ===== */
+
+        .tabs {
+            padding: 7px;
+            border-color: rgba(212, 160, 23, 0.32);
+            background: rgba(15, 14, 11, 0.79);
+            box-shadow: 0 13px 32px rgba(0, 0, 0, 0.18);
+        }
+
+        .tab-btn {
+            color: rgba(255, 255, 255, 0.84);
+        }
+
+        .tab-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.10);
+        }
+
+        .tab-btn.active {
+            color: #fff;
+            background: linear-gradient(135deg, #d4a017, #946a07);
+            box-shadow: 0 9px 22px rgba(212, 160, 23, 0.28);
+        }
+
+        /* ===== الأزرار ===== */
+
+        .btn {
+            box-shadow: 0 7px 17px rgba(24, 20, 11, 0.10);
+        }
+
+        .btn-primary {
+            color: #fff;
+            background: linear-gradient(135deg, #d9a715, #946a07);
+            box-shadow: 0 10px 23px rgba(190, 135, 9, 0.27);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #e2b329, #a77909);
+            box-shadow: 0 13px 27px rgba(190, 135, 9, 0.34);
+        }
+
+        .btn-dark {
+            color: #fff;
+            background: rgba(13, 13, 13, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.13);
+        }
+
+        .btn-dark:hover {
+            background: #000;
+        }
+
+        .btn-light {
+            color: #17130a;
+            background: rgba(255, 255, 255, 0.67);
+            border: 1px solid rgba(255, 255, 255, 0.86);
+        }
+
+        .btn-light:hover {
+            background: rgba(255, 255, 255, 0.88);
+        }
+
+        .btn-danger {
+            color: #b42318;
+            background: rgba(255, 238, 237, 0.72);
+            border: 1px solid rgba(240, 98, 88, 0.34);
+        }
+
+        /* ===== حقول الإدخال ===== */
+
+        input,
+        select,
+        textarea {
+            color: #17130a;
+            background: rgba(255, 255, 255, 0.62);
+            border: 1px solid rgba(84, 73, 48, 0.22);
+            box-shadow:
+                inset 0 1px 1px rgba(255, 255, 255, 0.75),
+                0 5px 13px rgba(28, 23, 12, 0.045);
+            backdrop-filter: blur(9px);
+            -webkit-backdrop-filter: blur(9px);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #888278;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--gold);
+            background: rgba(255, 255, 255, 0.82);
+            box-shadow:
+                0 0 0 3px rgba(212, 160, 23, 0.16),
+                0 8px 18px rgba(35, 29, 14, 0.08);
+        }
+
+        select option {
+            color: #111;
+            background: #fff;
+        }
+
+        /* ===== جدول الحجوزات ===== */
+
+        .table-wrap {
+            overflow: auto;
+            border-radius: 17px;
+            background: rgba(255, 255, 255, 0.34);
+        }
+
+        th {
+            color: #fff;
+            background: rgba(13, 13, 13, 0.89);
+            border-color: rgba(255, 255, 255, 0.10);
+        }
+
+        td {
+            background: rgba(255, 255, 255, 0.28);
+            border-color: rgba(77, 68, 49, 0.11);
+        }
+
+        tbody tr:hover td {
+            background: rgba(212, 160, 23, 0.11);
+        }
+
+        /* ===== تقويم الأدمن ===== */
+
+        .admin-calendar-shell {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.76);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.27);
+        }
+
+        .calendar-legend {
+            padding: 6px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .legend-item {
+            color: #29251d;
+            background: rgba(255, 255, 255, 0.60);
+            border-color: rgba(255, 255, 255, 0.86);
+            box-shadow: 0 5px 13px rgba(19, 16, 10, 0.06);
+        }
+
+        #adminCalendar .fc-scrollgrid {
+            overflow: hidden;
+            border-radius: 17px;
+            border-color: rgba(45, 39, 27, 0.18);
+            background: rgba(255, 255, 255, 0.30);
+        }
+
+        #adminCalendar .fc-scrollgrid td,
+        #adminCalendar .fc-scrollgrid th {
+            border-color: rgba(55, 48, 34, 0.13);
+        }
+
+        #adminCalendar .fc-daygrid-day {
+            background: rgba(255, 255, 255, 0.29);
+        }
+
+        #adminCalendar .fc-day-other {
+            background: rgba(236, 232, 222, 0.25);
+        }
+
+        #adminCalendar .fc-day-today {
+            background: rgba(212, 160, 23, 0.18) !important;
+        }
+
+        #adminCalendar .fc-col-header-cell {
+            background: rgba(15, 15, 15, 0.90);
+        }
+
+        #adminCalendar .fc-button-primary {
+            background: rgba(15, 15, 15, 0.90);
+            box-shadow: 0 7px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        #adminCalendar .fc-button-primary:hover,
+        #adminCalendar .fc-button-primary:focus,
+        #adminCalendar .fc-button-primary.fc-button-active {
+            background: linear-gradient(135deg, #d4a017, #936a08);
+        }
+
+        /* ===== بطاقات الشقق والربط ===== */
+
+        .apartment-card {
+            background:
+                linear-gradient(145deg,
+                    rgba(255, 255, 255, 0.67),
+                    rgba(255, 255, 255, 0.38));
+        }
+
+        .connection-box {
+            border-color: rgba(255, 255, 255, 0.71);
+            background: rgba(255, 255, 255, 0.34);
+            backdrop-filter: blur(12px) saturate(135%);
+            -webkit-backdrop-filter: blur(12px) saturate(135%);
+        }
+
+        .connection-airbnb {
+            border-color: rgba(255, 56, 92, 0.35);
+            background:
+                linear-gradient(145deg,
+                    rgba(255, 56, 92, 0.12),
+                    rgba(255, 255, 255, 0.38));
+            box-shadow:
+                inset -4px 0 0 #ff385c,
+                0 10px 24px rgba(255, 56, 92, 0.07);
+        }
+
+        .connection-booking {
+            border-color: rgba(0, 59, 149, 0.35);
+            background:
+                linear-gradient(145deg,
+                    rgba(0, 59, 149, 0.12),
+                    rgba(255, 255, 255, 0.38));
+            box-shadow:
+                inset -4px 0 0 #003b95,
+                0 10px 24px rgba(0, 59, 149, 0.07);
+        }
+
+        .url-row input {
+            background: rgba(247, 247, 247, 0.64);
+        }
+
+        /* ===== نافذة تفاصيل الحجز ===== */
+
+        .booking-details-dialog {
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.69);
+            background: rgba(255, 255, 255, 0.72);
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.31);
+            backdrop-filter: blur(22px) saturate(145%);
+            -webkit-backdrop-filter: blur(22px) saturate(145%);
+        }
+
+        .booking-dialog-head {
+            background:
+                linear-gradient(110deg,
+                    rgba(7, 7, 7, 0.95),
+                    rgba(31, 25, 12, 0.93),
+                    rgba(139, 98, 7, 0.91));
+        }
+
+        .booking-detail-item {
+            background: rgba(255, 255, 255, 0.48);
+            border-color: rgba(74, 65, 46, 0.13);
+        }
+
+        /* ===== شاشة تسجيل الدخول ===== */
+
+        .login-overlay {
+            background:
+                radial-gradient(circle at 20% 20%,
+                    rgba(212, 160, 23, 0.24),
+                    transparent 30%),
+                radial-gradient(circle at 80% 75%,
+                    rgba(212, 160, 23, 0.18),
+                    transparent 29%),
+                rgba(0, 0, 0, 0.82);
+            backdrop-filter: blur(13px);
+            -webkit-backdrop-filter: blur(13px);
+        }
+
+        .login-card {
+            color: #fff;
+            border: 1px solid rgba(212, 160, 23, 0.31);
+            background:
+                linear-gradient(145deg,
+                    rgba(29, 27, 22, 0.78),
+                    rgba(7, 7, 7, 0.70));
+            box-shadow:
+                0 28px 80px rgba(0, 0, 0, 0.43),
+                inset 0 1px 0 rgba(255, 255, 255, 0.13);
+            backdrop-filter: blur(24px) saturate(145%);
+            -webkit-backdrop-filter: blur(24px) saturate(145%);
+        }
+
+        .login-card h2 {
+            color: var(--gold-light);
+        }
+
+        .login-card p {
+            color: rgba(255, 255, 255, 0.72);
+        }
+
+        .login-card .field label {
+            color: rgba(255, 255, 255, 0.90);
+        }
+
+        .login-card input {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.11);
+            border-color: rgba(255, 255, 255, 0.22);
+        }
+
+        .login-card input:focus {
+            background: rgba(255, 255, 255, 0.16);
+        }
+
+        .login-error {
+            color: #ffb4ab;
+        }
+
+        /* ===== تحسين الهاتف ===== */
+
+        @media (max-width: 650px) {
+            .app-header {
+                position: relative;
+                padding: 18px 15px;
+            }
+
+            .brand h1 {
+                font-size: 26px;
+            }
+
+            .shell {
+                padding: 18px 10px 40px;
+            }
+
+            .card {
+                border-radius: 18px;
+            }
+
+            .section-card,
+            .apartment-card {
+                padding: 15px;
+            }
+
+            .admin-calendar-shell {
+                padding: 12px;
+                border-radius: 17px;
+            }
+
+            .stat-card {
+                padding: 16px;
+            }
+
+            .tabs {
+                position: sticky;
+                top: 8px;
+                z-index: 900;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            body::before,
+            body::after {
+                animation: none;
+            }
+        }
     </style>
 </head>
 
