@@ -271,15 +271,59 @@ function calculateNights(checkIn, checkOut) {
 /* =========================================================
    تجهيز الشقق الست الحالية أول مرة بدون تغيير بياناتها لاحقًا
 ========================================================= */
-async function ensureDefaultApartments() {
-    const count = await Apartment.countDocuments();
-    if (count > 0) return;
+const DEFAULT_APARTMENTS = [
+    { apartmentId: 1, label: "شقة رقم 1", nightlyPriceJod: 150 },
+    { apartmentId: 2, label: "شقة رقم 2", nightlyPriceJod: 200 },
+    { apartmentId: 3, label: "شقة رقم 3", nightlyPriceJod: 150 },
+    { apartmentId: 4, label: "شقة رقم 4", nightlyPriceJod: 200 },
+    { apartmentId: 5, label: "شقة رقم 5", nightlyPriceJod: 150 },
+    { apartmentId: 6, label: "شقة رقم 6", nightlyPriceJod: 200 }
+];
 
-    await Apartment.insertMany(
-        Array.from({ length: 6 }, (_, index) => ({
-            apartmentId: index + 1,
-            label: `شقة رقم ${index + 1}`,
-            active: true
+/* =========================================================
+   تجهيز الشقق الأساسية وترحيل أسعارها القديمة تلقائيًا
+========================================================= */
+async function ensureDefaultApartments() {
+    await Apartment.bulkWrite(
+        DEFAULT_APARTMENTS.map(apartment => ({
+            updateOne: {
+                filter: {
+                    apartmentId: apartment.apartmentId
+                },
+
+                update: {
+                    $setOnInsert: {
+                        apartmentId: apartment.apartmentId,
+                        label: apartment.label,
+                        active: true,
+                        nightlyPriceJod: apartment.nightlyPriceJod
+                    }
+                },
+
+                upsert: true
+            }
+        }))
+    );
+
+    /* إضافة السعر للشقق الموجودة مسبقًا بدون تغيير أي سعر محفوظ */
+    await Apartment.bulkWrite(
+        DEFAULT_APARTMENTS.map(apartment => ({
+            updateOne: {
+                filter: {
+                    apartmentId: apartment.apartmentId,
+
+                    $or: [
+                        { nightlyPriceJod: { $exists: false } },
+                        { nightlyPriceJod: null }
+                    ]
+                },
+
+                update: {
+                    $set: {
+                        nightlyPriceJod: apartment.nightlyPriceJod
+                    }
+                }
+            }
         }))
     );
 }
@@ -908,6 +952,34 @@ app.get("/ical/:apartmentId/:token/:target", async (req, res) => {
 });
 
 /* =========================================================
+   API عام: أسعار الشقق الفعالة للموقع
+   لا يعرض روابط التقويم أو الرموز السرية
+========================================================= */
+app.get("/apartments/public", async (req, res) => {
+    try {
+        await ensureDefaultApartments();
+
+        const apartments = await Apartment.find({
+            active: true
+        })
+            .select("apartmentId label nightlyPriceJod")
+            .sort({ apartmentId: 1 });
+
+        res.json({
+            success: true,
+            apartments
+        });
+    } catch (error) {
+        console.log("PUBLIC APARTMENTS ERROR:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "تعذر جلب أسعار الشقق."
+        });
+    }
+});
+
+/* =========================================================
    API: جلب الشقق وإعدادات الربط وروابط التصدير للأدمن
 ========================================================= */
 app.get("/admin/apartments", requireAdmin, async (req, res) => {
@@ -937,25 +1009,59 @@ app.get("/admin/apartments", requireAdmin, async (req, res) => {
 ========================================================= */
 app.post("/admin/apartments", requireAdmin, async (req, res) => {
     try {
-        const lastApartment = await Apartment.findOne().sort({ apartmentId: -1 });
+        const lastApartment = await Apartment.findOne()
+            .sort({ apartmentId: -1 });
+
         const requestedId = Number(req.body.apartmentId);
-        const apartmentId = Number.isInteger(requestedId) && requestedId > 0
-            ? requestedId
-            : (lastApartment?.apartmentId || 0) + 1;
+
+        const apartmentId =
+            Number.isInteger(requestedId) && requestedId > 0
+                ? requestedId
+                : (lastApartment?.apartmentId || 0) + 1;
+
+        const nightlyPriceJod = Number(req.body.nightlyPriceJod);
+
+        if (
+            !Number.isFinite(nightlyPriceJod) ||
+            nightlyPriceJod < 0
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: "سعر الليلة غير صحيح."
+            });
+        }
 
         const apartment = await Apartment.create({
             apartmentId,
-            label: String(req.body.label || `شقة رقم ${apartmentId}`).trim().slice(0, 100),
+
+            label: String(
+                req.body.label || `شقة رقم ${apartmentId}`
+            )
+                .trim()
+                .slice(0, 100),
+
+            nightlyPriceJod,
             active: req.body.active !== false
         });
 
-        res.status(201).json({ success: true, apartment });
+        res.status(201).json({
+            success: true,
+            apartment
+        });
     } catch (error) {
         if (error.code === 11000) {
-            return res.status(409).json({ success: false, message: "رقم الشقة مستخدم مسبقًا." });
+            return res.status(409).json({
+                success: false,
+                message: "رقم الشقة مستخدم مسبقًا."
+            });
         }
+
         console.log("ADMIN CREATE APARTMENT ERROR:", error);
-        res.status(500).json({ success: false, message: "تعذر إضافة الشقة." });
+
+        res.status(500).json({
+            success: false,
+            message: "تعذر إضافة الشقة."
+        });
     }
 });
 
@@ -979,6 +1085,22 @@ app.put("/admin/apartments/:id", requireAdmin, async (req, res) => {
 
         if (req.body.active !== undefined) {
             apartment.active = Boolean(req.body.active);
+        }
+
+        if (req.body.nightlyPriceJod !== undefined) {
+            const nightlyPriceJod = Number(req.body.nightlyPriceJod);
+
+            if (
+                !Number.isFinite(nightlyPriceJod) ||
+                nightlyPriceJod < 0
+            ) {
+                return res.status(400).json({
+                    success: false,
+                    message: "سعر الليلة غير صحيح."
+                });
+            }
+
+            apartment.nightlyPriceJod = nightlyPriceJod;
         }
 
         for (const source of ["airbnb", "booking"]) {

@@ -14,7 +14,11 @@ const calendarConnectionSchema = new mongoose.Schema(
             enum: ["never", "success", "error"],
             default: "never"
         },
-        lastSyncMessage: { type: String, default: "", trim: true }
+        lastSyncMessage: {
+            type: String,
+            default: "",
+            trim: true
+        }
     },
     { _id: false }
 );
@@ -24,9 +28,32 @@ const calendarConnectionSchema = new mongoose.Schema(
 ========================================================= */
 const apartmentSchema = new mongoose.Schema(
     {
-        apartmentId: { type: Number, required: true, unique: true, min: 1 },
-        label: { type: String, required: true, trim: true },
-        active: { type: Boolean, default: true, index: true },
+        apartmentId: {
+            type: Number,
+            required: true,
+            unique: true,
+            min: 1
+        },
+
+        label: {
+            type: String,
+            required: true,
+            trim: true
+        },
+
+        active: {
+            type: Boolean,
+            default: true,
+            index: true
+        },
+
+        /* سعر الليلة الأساسي بالدينار */
+        nightlyPriceJod: {
+            type: Number,
+            required: true,
+            default: 0,
+            min: 0
+        },
 
         // رمز سري داخل رابط التصدير حتى لا يمكن تخمين التقويم بسهولة
         calendarToken: {
@@ -36,8 +63,15 @@ const apartmentSchema = new mongoose.Schema(
         },
 
         calendars: {
-            airbnb: { type: calendarConnectionSchema, default: () => ({}) },
-            booking: { type: calendarConnectionSchema, default: () => ({}) }
+            airbnb: {
+                type: calendarConnectionSchema,
+                default: () => ({})
+            },
+
+            booking: {
+                type: calendarConnectionSchema,
+                default: () => ({})
+            }
         }
     },
     { timestamps: true }

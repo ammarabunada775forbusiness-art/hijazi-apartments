@@ -157,6 +157,60 @@ for (let i = 2; i <= 6; i++) {
     HIJAZI_APARTMENTS[i].price = APARTMENT_PRICES[i];
 }
 
+
+/* =========================================================
+   جلب أسعار الشقق من HIJAZI PMS
+   الأسعار الموجودة أعلى الملف تبقى احتياطية عند تعذر الاتصال
+========================================================= */
+const HIJAZI_PUBLIC_API_BASE =
+    "https://api.hijazi-apartments.com";
+
+async function loadApartmentPricesFromPms() {
+    try {
+        const response = await fetch(
+            `${HIJAZI_PUBLIC_API_BASE}/apartments/public`,
+            {
+                cache: "no-store"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("تعذر جلب أسعار الشقق.");
+        }
+
+        const data = await response.json();
+
+        for (const apartment of data.apartments || []) {
+            const apartmentId =
+                Number(apartment.apartmentId);
+
+            const nightlyPriceJod =
+                Number(apartment.nightlyPriceJod);
+
+            if (
+                HIJAZI_APARTMENTS[apartmentId] &&
+                Number.isFinite(nightlyPriceJod) &&
+                nightlyPriceJod >= 0
+            ) {
+                APARTMENT_PRICES[apartmentId] =
+                    nightlyPriceJod;
+
+                HIJAZI_APARTMENTS[apartmentId].price =
+                    nightlyPriceJod;
+            }
+        }
+
+        return true;
+    } catch (error) {
+        console.warn(
+            "PMS PRICES FALLBACK:",
+            error.message
+        );
+
+        return false;
+    }
+}
+
 /* =========================================================
    موقع موحد لجميع الشقق - HIJAZI Apartments
 ========================================================= */

@@ -3381,7 +3381,7 @@
     <div id="sharedFooter"></div>
     <div id="sharedWhatsApp"></div>
 
-    <script src="js/main.js?v=2"></script>
+    <script src="js/main.js?v=3"></script>
     <script>
         const API_BASE = "https://api.hijazi-apartments.com";
 
@@ -4812,6 +4812,7 @@
                 });
             }
 
+            await loadApartmentPricesFromPms();
             await renderApartmentDetails();
             await refreshCalendar();
             updatePrice();

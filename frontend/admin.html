@@ -2899,12 +2899,31 @@
                     </div>
                 </div>
                 <form id="addApartmentForm" class="form-grid">
-                    <div class="field"><label for="newApartmentId">رقم الشقة</label><input id="newApartmentId"
-                            type="number" min="1" placeholder="يُحدد تلقائيًا إن تركته فارغًا"></div>
-                    <div class="field span-2"><label for="newApartmentLabel">اسم الشقة</label><input
-                            id="newApartmentLabel" placeholder="مثال: شقة رقم 7 - الشميساني"></div>
-                    <div class="form-actions field"><button class="btn btn-primary" type="submit">إضافة
-                            الشقة</button>
+                    <div class="field">
+                        <label for="newApartmentId">رقم الشقة</label>
+
+                        <input id="newApartmentId" type="number" min="1" placeholder="يُحدد تلقائيًا إن تركته فارغًا">
+                    </div>
+
+                    <div class="field">
+                        <label for="newApartmentLabel">اسم الشقة</label>
+
+                        <input id="newApartmentLabel" placeholder="مثال: شقة رقم 7 - الشميساني">
+                    </div>
+
+                    <div class="field">
+                        <label for="newApartmentPrice">
+                            سعر الليلة (JOD) *
+                        </label>
+
+                        <input id="newApartmentPrice" type="number" min="0" step="0.01" placeholder="مثال: 150"
+                            required>
+                    </div>
+
+                    <div class="form-actions field">
+                        <button class="btn btn-primary" type="submit">
+                            إضافة الشقة
+                        </button>
                     </div>
                 </form>
             </section>
@@ -2989,14 +3008,7 @@
 
     <script>
         const API_BASE = "https://api.hijazi-apartments.com";
-        const APARTMENT_PRICES_JOD = {
-            1: 150,
-            2: 200,
-            3: 150,
-            4: 200,
-            5: 150,
-            6: 200
-        };
+
         const SOURCE_LABELS = { website: "الموقع", manual: "يدوي", airbnb: "Airbnb", booking: "Booking.com" };
         const STATUS_LABELS = { pending: "بانتظار التأكيد", confirmed: "مؤكد", cancelled: "ملغي", blocked: "محجوب" };
         const SOURCE_COLORS = {
@@ -3021,19 +3033,43 @@
         function todayInAmman() { const parts = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Amman", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date()); const map = Object.fromEntries(parts.map(part => [part.type, part.value])); return `${map.year}-${map.month}-${map.day}`; }
         function nightsBetween(checkIn, checkOut) { const start = new Date(`${dateOnly(checkIn)}T00:00:00Z`), end = new Date(`${dateOnly(checkOut)}T00:00:00Z`); return Math.max(0, Math.round((end - start) / 86400000)); }
         function updateManualPrice() {
-            const apartmentId = Number(document.getElementById("manualApartment").value);
-            const checkIn = document.getElementById("manualCheckIn").value;
-            const checkOut = document.getElementById("manualCheckOut").value;
-            const priceInput = document.getElementById("manualPrice");
-            const nightlyPrice = APARTMENT_PRICES_JOD[apartmentId];
+            const apartmentId = Number(
+                document.getElementById("manualApartment").value
+            );
 
-            if (!nightlyPrice || !checkIn || !checkOut) {
+            const checkIn =
+                document.getElementById("manualCheckIn").value;
+
+            const checkOut =
+                document.getElementById("manualCheckOut").value;
+
+            const priceInput =
+                document.getElementById("manualPrice");
+
+            const apartment = apartments.find(
+                item => Number(item.apartmentId) === apartmentId
+            );
+
+            const nightlyPrice = Number(
+                apartment?.nightlyPriceJod
+            );
+
+            if (
+                !Number.isFinite(nightlyPrice) ||
+                nightlyPrice < 0 ||
+                !checkIn ||
+                !checkOut
+            ) {
                 priceInput.value = "0";
                 return;
             }
 
             const nights = nightsBetween(checkIn, checkOut);
-            priceInput.value = nights > 0 ? String(nightlyPrice * nights) : "0";
+
+            priceInput.value =
+                nights > 0
+                    ? String(nightlyPrice * nights)
+                    : "0";
         }
         function setButtonLoading(button, loading, text = "جاري التنفيذ...") { if (loading) { button.dataset.originalText = button.textContent; button.textContent = text; button.disabled = true } else { button.textContent = button.dataset.originalText || button.textContent; button.disabled = false } }
 
@@ -3778,14 +3814,27 @@
                 </div>
 
                 <div class="field">
-                    <label>اسم الشقة داخل النظام</label>
-                    <input
-                        data-field="label"
-                        value="${escapeHtml(a.label)}"
-                    >
-                </div>
+    <label>اسم الشقة داخل النظام</label>
 
-                ${connections}
+    <input
+        data-field="label"
+        value="${escapeHtml(a.label)}"
+    >
+</div>
+
+<div class="field">
+    <label>سعر الليلة الأساسي (JOD)</label>
+
+    <input
+        data-field="nightlyPriceJod"
+        type="number"
+        min="0"
+        step="0.01"
+        value="${Number(a.nightlyPriceJod || 0)}"
+    >
+</div>
+
+${connections}
 
                 <div class="apartment-actions">
                     <button
@@ -3912,7 +3961,10 @@
                     method: "POST",
                     body: JSON.stringify({
                         apartmentId: id ? Number(id) : undefined,
-                        label: document.getElementById("newApartmentLabel").value
+                        label: document.getElementById("newApartmentLabel").value,
+                        nightlyPriceJod: Number(
+                            document.getElementById("newApartmentPrice").value
+                        )
                     })
                 });
 
@@ -3989,6 +4041,11 @@
                 try {
                     const payload = {
                         label: card.querySelector('[data-field="label"]').value,
+                        nightlyPriceJod: Number(
+                            card.querySelector(
+                                '[data-field="nightlyPriceJod"]'
+                            ).value
+                        ),
                         active: card.querySelector('[data-field="active"]').checked,
                         calendars: {
                             airbnb: {
