@@ -3401,6 +3401,174 @@
                 min-height: 88px;
             }
         }
+
+        /* ===== سجل العمليات والتقارير ===== */
+        .section-actions {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            flex-wrap: wrap;
+        }
+
+        .activity-stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .activity-stat {
+            padding: 16px;
+            border: 1px solid #e4e7ec;
+            border-radius: 15px;
+            background: #fff;
+            box-shadow: 0 7px 20px rgba(16, 24, 40, .05);
+        }
+
+        .activity-stat span {
+            display: block;
+            margin-bottom: 6px;
+            color: #667085;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .activity-stat strong {
+            color: #101828;
+            font-size: 24px;
+        }
+
+        .activity-filters {
+            display: grid;
+            grid-template-columns: minmax(220px, 1.5fr) minmax(190px, .8fr) auto;
+            gap: 12px;
+            align-items: end;
+            margin-bottom: 18px;
+        }
+
+        .activity-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .activity-item {
+            display: grid;
+            grid-template-columns: 46px minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 13px;
+            padding: 14px;
+            border: 1px solid #e4e7ec;
+            border-radius: 15px;
+            background: #fff;
+            transition: border-color .18s, transform .18s, box-shadow .18s;
+        }
+
+        .activity-item:hover {
+            transform: translateY(-1px);
+            border-color: #e2c36d;
+            box-shadow: 0 9px 24px rgba(16, 24, 40, .07);
+        }
+
+        .activity-icon {
+            display: grid;
+            place-items: center;
+            width: 46px;
+            height: 46px;
+            border-radius: 13px;
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        .activity-booking .activity-icon {
+            color: #067647;
+            background: #ecfdf3;
+        }
+
+        .activity-apartment .activity-icon {
+            color: #6941c6;
+            background: #f4f3ff;
+        }
+
+        .activity-sync .activity-icon {
+            color: #175cd3;
+            background: #eff8ff;
+        }
+
+        .activity-system .activity-icon {
+            color: #344054;
+            background: #f2f4f7;
+        }
+
+        .activity-content strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #101828;
+            line-height: 1.55;
+        }
+
+        .activity-meta {
+            display: flex;
+            gap: 7px 12px;
+            flex-wrap: wrap;
+            color: #667085;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .activity-category {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 82px;
+            padding: 6px 9px;
+            border: 1px solid #e4e7ec;
+            border-radius: 999px;
+            color: #475467;
+            background: #f9fafb;
+            font-size: 11px;
+            font-weight: 900;
+        }
+
+        .activity-empty {
+            padding: 34px 18px;
+            border: 1px dashed #d0d5dd;
+            border-radius: 15px;
+            color: #667085;
+            background: #f9fafb;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        @media (max-width: 850px) {
+            .activity-stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .activity-filters {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .activity-filters .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 560px) {
+
+            .activity-stats,
+            .activity-filters {
+                grid-template-columns: 1fr;
+            }
+
+            .activity-item {
+                grid-template-columns: 42px minmax(0, 1fr);
+            }
+
+            .activity-category {
+                grid-column: 1 / -1;
+                justify-self: start;
+            }
+        }
     </style>
 </head>
 
@@ -3435,6 +3603,7 @@
         <nav class="tabs" aria-label="أقسام النظام">
             <button class="btn tab-btn active" type="button" data-tab="bookingsPanel">الحجوزات</button>
             <button class="btn tab-btn" type="button" data-tab="apartmentsPanel">الشقق والربط</button>
+            <button class="btn tab-btn" type="button" data-tab="activityPanel">سجل العمليات</button>
         </nav>
 
         <section class="tab-panel active" id="bookingsPanel">
@@ -3551,7 +3720,11 @@
                     <div>
                         <h2>كل الحجوزات</h2>
                         <p id="bookingCountText">جاري التحميل...</p>
-                    </div><button class="btn btn-dark btn-small" id="refreshBtn" type="button">تحديث</button>
+                    </div>
+                    <div class="section-actions">
+                        <button class="btn btn-light btn-small" id="exportBookingsBtn" type="button">تصدير CSV</button>
+                        <button class="btn btn-dark btn-small" id="refreshBtn" type="button">تحديث</button>
+                    </div>
                 </div>
                 <div class="filter-grid">
                     <div class="field"><label for="searchBox">بحث</label><input id="searchBox"
@@ -3674,6 +3847,53 @@
                 هنا.
                 ثم انسخ رابط HIJAZI الخاص بكل منصة وضعه داخل المنصة كـ Import Calendar.</div>
             <div class="apartments-grid" id="apartmentsGrid"></div>
+        </section>
+
+        <section class="tab-panel" id="activityPanel">
+            <section class="card section-card">
+                <div class="section-head">
+                    <div>
+                        <h2>سجل عمليات الأدمن</h2>
+                        <p>يوثق تعديلات الحجوزات والشقق والمزامنة، بدون كلمات المرور أو روابط التقويم السرية.</p>
+                    </div>
+                    <div class="section-actions">
+                        <button class="btn btn-light btn-small" id="exportActivityBtn" type="button">تصدير السجل
+                            CSV</button>
+                        <button class="btn btn-dark btn-small" id="refreshActivityBtn" type="button">تحديث
+                            السجل</button>
+                    </div>
+                </div>
+
+                <div class="activity-stats">
+                    <div class="activity-stat"><span>آخر العمليات المعروضة</span><strong
+                            id="activityTotalCount">0</strong></div>
+                    <div class="activity-stat"><span>عمليات اليوم</span><strong id="activityTodayCount">0</strong></div>
+                    <div class="activity-stat"><span>عمليات الحجوزات</span><strong id="activityBookingCount">0</strong>
+                    </div>
+                    <div class="activity-stat"><span>عمليات المزامنة</span><strong id="activitySyncCount">0</strong>
+                    </div>
+                </div>
+
+                <div class="activity-filters">
+                    <div class="field">
+                        <label for="activitySearch">بحث في السجل</label>
+                        <input id="activitySearch" placeholder="ابحث بالعملية أو الشقة أو المصدر">
+                    </div>
+                    <div class="field">
+                        <label for="activityCategoryFilter">نوع العملية</label>
+                        <select id="activityCategoryFilter">
+                            <option value="">كل العمليات</option>
+                            <option value="booking">الحجوزات</option>
+                            <option value="apartment">الشقق</option>
+                            <option value="sync">المزامنة</option>
+                            <option value="system">النظام</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-light" id="clearActivityFiltersBtn" type="button">مسح الفلاتر</button>
+                </div>
+
+                <div class="activity-list" id="activityList"></div>
+            </section>
         </section>
     </main>
 
@@ -3858,6 +4078,13 @@
 
         const SOURCE_LABELS = { website: "الموقع", manual: "يدوي", airbnb: "Airbnb", booking: "Booking.com" };
         const STATUS_LABELS = { pending: "بانتظار التأكيد", confirmed: "مؤكد", cancelled: "ملغي", blocked: "محجوب" };
+        const ACTIVITY_CATEGORY_LABELS = {
+            booking: "الحجوزات",
+            apartment: "الشقق",
+            sync: "المزامنة",
+            system: "النظام"
+        };
+        const ACTIVITY_ICONS = { booking: "ح", apartment: "ش", sync: "↻", system: "ن" };
         const SOURCE_COLORS = {
             website: "#6941c6",
             manual: "#067647",
@@ -3868,6 +4095,7 @@
         let adminPass = "";
         let allBookings = [];
         let apartments = [];
+        let allActivities = [];
         let adminCalendar = null;
         let editingBookingId = null;
         const notice = document.getElementById("notice"), loginOverlay = document.getElementById("loginOverlay"), loginError = document.getElementById("loginError");
@@ -3880,6 +4108,155 @@
         function dateOnly(value) { return value ? String(value).slice(0, 10) : ""; }
         function todayInAmman() { const parts = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Amman", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date()); const map = Object.fromEntries(parts.map(part => [part.type, part.value])); return `${map.year}-${map.month}-${map.day}`; }
         function nightsBetween(checkIn, checkOut) { const start = new Date(`${dateOnly(checkIn)}T00:00:00Z`), end = new Date(`${dateOnly(checkOut)}T00:00:00Z`); return Math.max(0, Math.round((end - start) / 86400000)); }
+
+        /* يرجع التاريخ حسب توقيت عمّان حتى تكون إحصائية اليوم دقيقة. */
+        function dateInAmman(value) {
+            if (!value) return "";
+            const parts = new Intl.DateTimeFormat("en-CA", {
+                timeZone: "Asia/Amman",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit"
+            }).formatToParts(new Date(value));
+            const map = Object.fromEntries(parts.map(part => [part.type, part.value]));
+            return `${map.year}-${map.month}-${map.day}`;
+        }
+
+        function formatActivityDate(value) {
+            if (!value) return "—";
+            return new Intl.DateTimeFormat("ar-JO", {
+                timeZone: "Asia/Amman",
+                dateStyle: "medium",
+                timeStyle: "short"
+            }).format(new Date(value));
+        }
+
+        function getFilteredActivities() {
+            const query = document.getElementById("activitySearch").value.trim().toLowerCase();
+            const category = document.getElementById("activityCategoryFilter").value;
+
+            return allActivities.filter(activity => {
+                const searchable = [
+                    activity.description,
+                    activity.action,
+                    activity.apartmentId,
+                    activity.source,
+                    activity.adminUser
+                ].join(" ").toLowerCase();
+
+                return (!query || searchable.includes(query)) &&
+                    (!category || activity.category === category);
+            });
+        }
+
+        function renderActivity() {
+            const list = document.getElementById("activityList");
+            if (!list) return;
+
+            const today = todayInAmman();
+            const filtered = getFilteredActivities();
+
+            document.getElementById("activityTotalCount").textContent = allActivities.length;
+            document.getElementById("activityTodayCount").textContent =
+                allActivities.filter(item => dateInAmman(item.createdAt) === today).length;
+            document.getElementById("activityBookingCount").textContent =
+                allActivities.filter(item => item.category === "booking").length;
+            document.getElementById("activitySyncCount").textContent =
+                allActivities.filter(item => item.category === "sync").length;
+
+            if (!filtered.length) {
+                list.innerHTML = '<div class="activity-empty">لا توجد عمليات مطابقة حاليًا.</div>';
+                return;
+            }
+
+            list.innerHTML = filtered.map(activity => {
+                const category = ACTIVITY_CATEGORY_LABELS[activity.category]
+                    ? activity.category
+                    : "system";
+                const source = SOURCE_LABELS[activity.source] || activity.source || "";
+
+                return `
+                    <article class="activity-item activity-${category}">
+                        <div class="activity-icon" aria-hidden="true">${ACTIVITY_ICONS[category]}</div>
+                        <div class="activity-content">
+                            <strong>${escapeHtml(activity.description || "عملية إدارية")}</strong>
+                            <div class="activity-meta">
+                                <span>${escapeHtml(formatActivityDate(activity.createdAt))}</span>
+                                ${activity.apartmentId ? `<span>شقة ${activity.apartmentId}</span>` : ""}
+                                ${source ? `<span>${escapeHtml(source)}</span>` : ""}
+                                <span>بواسطة ${escapeHtml(activity.adminUser || "admin")}</span>
+                            </div>
+                        </div>
+                        <span class="activity-category">${ACTIVITY_CATEGORY_LABELS[category]}</span>
+                    </article>
+                `;
+            }).join("");
+        }
+
+        function csvCell(value) {
+            return `"${String(value ?? "").replace(/"/g, '""')}"`;
+        }
+
+        function downloadCsv(fileName, headers, rows) {
+            const content = [headers, ...rows]
+                .map(row => row.map(csvCell).join(","))
+                .join("\r\n");
+            const blob = new Blob(["\ufeff", content], { type: "text/csv;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+        }
+
+        function exportBookingsCsv() {
+            const bookings = getFilteredCalendarBookings();
+            if (!bookings.length) return showNotice("لا توجد حجوزات مطابقة لتصديرها.", "error");
+
+            downloadCsv(
+                `hijazi-bookings-${todayInAmman()}.csv`,
+                ["الشقة", "المصدر", "العميل", "الهاتف", "البريد", "الدخول", "الخروج", "الليالي", "السعر", "العملة", "الحالة", "رقم المنصة", "الملاحظات"],
+                bookings.map(booking => [
+                    booking.apartmentLabel || `شقة ${booking.apartmentId}`,
+                    SOURCE_LABELS[booking.source] || booking.source,
+                    booking.fullName,
+                    booking.phone,
+                    booking.email,
+                    dateOnly(booking.checkIn),
+                    dateOnly(booking.checkOut),
+                    nightsBetween(booking.checkIn, booking.checkOut),
+                    booking.totalPrice,
+                    booking.currency || "JOD",
+                    STATUS_LABELS[booking.status] || booking.status,
+                    booking.sourceReference,
+                    booking.notes
+                ])
+            );
+            showNotice(`تم تصدير ${bookings.length} حجز.`);
+        }
+
+        function exportActivityCsv() {
+            const activities = getFilteredActivities();
+            if (!activities.length) return showNotice("لا توجد عمليات مطابقة لتصديرها.", "error");
+
+            downloadCsv(
+                `hijazi-activity-${todayInAmman()}.csv`,
+                ["التاريخ", "النوع", "الوصف", "الشقة", "المصدر", "المستخدم", "رمز العملية"],
+                activities.map(activity => [
+                    formatActivityDate(activity.createdAt),
+                    ACTIVITY_CATEGORY_LABELS[activity.category] || activity.category,
+                    activity.description,
+                    activity.apartmentId || "",
+                    SOURCE_LABELS[activity.source] || activity.source,
+                    activity.adminUser,
+                    activity.action
+                ])
+            );
+            showNotice(`تم تصدير ${activities.length} عملية.`);
+        }
         function updateManualPrice() {
             const apartmentId = Number(
                 document.getElementById("manualApartment").value
@@ -5338,13 +5715,15 @@ ${connections}
         }
 
         async function loadAll() {
-            const [bookingsData, apartmentsData] = await Promise.all([
+            const [bookingsData, apartmentsData, activityData] = await Promise.all([
                 api("/admin/bookings"),
-                api("/admin/apartments")
+                api("/admin/apartments"),
+                api("/admin/activity?limit=250")
             ]);
 
             allBookings = bookingsData.bookings || [];
             apartments = apartmentsData.apartments || [];
+            allActivities = activityData.activities || [];
 
             populateApartmentSelects();
             updateStats();
@@ -5352,6 +5731,7 @@ ${connections}
             renderApartments();
             renderSyncHealth();
             renderAdminCalendar();
+            renderActivity();
             refreshHijaziSelects();
         }
 
@@ -5397,6 +5777,39 @@ ${connections}
             try {
                 await loadAll();
                 showNotice("تم تحديث البيانات.");
+            } catch (error) {
+                showNotice(error.message, "error");
+            } finally {
+                setButtonLoading(button, false);
+            }
+        });
+
+        document.getElementById("exportBookingsBtn").addEventListener("click", exportBookingsCsv);
+        document.getElementById("exportActivityBtn").addEventListener("click", exportActivityCsv);
+
+        ["activitySearch", "activityCategoryFilter"].forEach(id => {
+            document.getElementById(id).addEventListener(
+                id === "activitySearch" ? "input" : "change",
+                renderActivity
+            );
+        });
+
+        document.getElementById("clearActivityFiltersBtn").addEventListener("click", () => {
+            document.getElementById("activitySearch").value = "";
+            document.getElementById("activityCategoryFilter").value = "";
+            renderActivity();
+            refreshHijaziSelects();
+        });
+
+        document.getElementById("refreshActivityBtn").addEventListener("click", async event => {
+            const button = event.currentTarget;
+            setButtonLoading(button, true, "جاري التحديث...");
+
+            try {
+                const data = await api("/admin/activity?limit=250");
+                allActivities = data.activities || [];
+                renderActivity();
+                showNotice("تم تحديث سجل العمليات.");
             } catch (error) {
                 showNotice(error.message, "error");
             } finally {

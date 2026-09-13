@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const Booking = require("./models/Booking");
 const Apartment = require("./models/Apartment");
+const ActivityLog = require("./models/ActivityLog");
 const basicAuth = require("basic-auth");
 const { Resend } = require("resend");
 const { buildIcalFeed, fetchCalendarEvents, validateCalendarUrl } = require("./services/ical");
@@ -202,7 +203,29 @@ function requireAdmin(req, res, next) {
     }
 
     adminFailedAttempts.delete(clientKey);
+    req.adminUser = user.name;
     next();
+}
+
+/* يسجل العملية، ولا يعطل الطلب الأساسي إذا تعذر حفظ السجل. */
+async function recordAdminActivity(req, entry) {
+    try {
+        await ActivityLog.create({
+            category: entry.category || "system",
+            action: String(entry.action || "system.action").slice(0, 80),
+            description: String(entry.description || "عملية إدارية").slice(0, 500),
+            targetType: entry.targetType || entry.category || "system",
+            targetId: String(entry.targetId || "").slice(0, 150),
+            apartmentId: Number.isFinite(Number(entry.apartmentId))
+                ? Number(entry.apartmentId)
+                : null,
+            source: String(entry.source || "").slice(0, 30),
+            adminUser: String(req.adminUser || process.env.ADMIN_USER || "admin").slice(0, 100),
+            details: entry.details || {}
+        });
+    } catch (error) {
+        console.log("ADMIN ACTIVITY LOG ERROR:", error.message);
+    }
 }
 
 app.get("/admin/db-test", requireAdmin, async (req, res) => {
@@ -1005,6 +1028,31 @@ app.get("/admin/apartments", requireAdmin, async (req, res) => {
 });
 
 /* =========================================================
+   API: جلب آخر سجل عمليات الأدمن
+========================================================= */
+app.get("/admin/activity", requireAdmin, async (req, res) => {
+    try {
+        const requestedLimit = Number(req.query.limit || 250);
+        const limit = Number.isFinite(requestedLimit)
+            ? Math.min(500, Math.max(20, Math.floor(requestedLimit)))
+            : 250;
+        const allowedCategories = ["booking", "apartment", "sync", "system"];
+        const category = String(req.query.category || "").trim();
+        const filter = allowedCategories.includes(category) ? { category } : {};
+
+        const activities = await ActivityLog.find(filter)
+            .sort({ createdAt: -1 })
+            .limit(limit)
+            .lean();
+
+        res.json({ success: true, activities, limit });
+    } catch (error) {
+        console.log("ADMIN GET ACTIVITY ERROR:", error);
+        res.status(500).json({ success: false, message: "تعذر جلب سجل العمليات." });
+    }
+});
+
+/* =========================================================
    API: إضافة شقة جديدة للنظام
 ========================================================= */
 app.post("/admin/apartments", requireAdmin, async (req, res) => {
@@ -1044,6 +1092,16 @@ app.post("/admin/apartments", requireAdmin, async (req, res) => {
             active: req.body.active !== false
         });
 
+        await recordAdminActivity(req, {
+            category: "apartment",
+            action: "apartment.created",
+            targetType: "apartment",
+            targetId: apartment._id,
+            apartmentId: apartment.apartmentId,
+            description: `تمت إضافة ${apartment.label} إلى PMS.`,
+            details: { nightlyPriceJod: apartment.nightlyPriceJod, active: apartment.active }
+        });
+
         res.status(201).json({
             success: true,
             apartment
@@ -1074,6 +1132,14 @@ app.put("/admin/apartments/:id", requireAdmin, async (req, res) => {
         if (!apartment) {
             return res.status(404).json({ success: false, message: "الشقة غير موجودة." });
         }
+
+        const previousApartment = {
+            label: apartment.label,
+            active: apartment.active,
+            nightlyPriceJod: apartment.nightlyPriceJod,
+            airbnbEnabled: Boolean(apartment.calendars?.airbnb?.enabled),
+            bookingEnabled: Boolean(apartment.calendars?.booking?.enabled)
+        };
 
         if (req.body.label !== undefined) {
             const label = String(req.body.label).trim();
@@ -1117,6 +1183,26 @@ app.put("/admin/apartments/:id", requireAdmin, async (req, res) => {
         }
 
         await apartment.save();
+
+        await recordAdminActivity(req, {
+            category: "apartment",
+            action: "apartment.updated",
+            targetType: "apartment",
+            targetId: apartment._id,
+            apartmentId: apartment.apartmentId,
+            description: `تم تحديث إعدادات ${apartment.label}.`,
+            details: {
+                before: previousApartment,
+                after: {
+                    label: apartment.label,
+                    active: apartment.active,
+                    nightlyPriceJod: apartment.nightlyPriceJod,
+                    airbnbEnabled: Boolean(apartment.calendars?.airbnb?.enabled),
+                    bookingEnabled: Boolean(apartment.calendars?.booking?.enabled)
+                }
+            }
+        });
+
         res.json({ success: true, apartment, message: "✅ تم حفظ إعدادات الشقة." });
     } catch (error) {
         console.log("ADMIN UPDATE APARTMENT ERROR:", error);
@@ -1165,6 +1251,16 @@ app.delete("/admin/apartments/:id", requireAdmin, async (req, res) => {
 
         await Apartment.deleteOne({
             _id: apartment._id
+        });
+
+        await recordAdminActivity(req, {
+            category: "apartment",
+            action: "apartment.deleted",
+            targetType: "apartment",
+            targetId: apartment._id,
+            apartmentId: apartment.apartmentId,
+            description: `تم حذف ${apartment.label} من PMS.`,
+            details: { nightlyPriceJod: apartment.nightlyPriceJod }
         });
 
         res.json({
@@ -1258,6 +1354,22 @@ app.post("/admin/sync", requireAdmin, async (req, res) => {
             }
         }
 
+        const successfulCount = results.filter(result => result.status === "success").length;
+        const failedCount = results.filter(result => result.status === "error").length;
+
+        await recordAdminActivity(req, {
+            category: "sync",
+            action: "sync.manual",
+            targetType: "sync",
+            targetId: requestedApartmentId ? `apartment-${requestedApartmentId}` : "all-apartments",
+            apartmentId: requestedApartmentId,
+            source: requestedSource,
+            description: requestedApartmentId
+                ? `تم تشغيل مزامنة يدوية للشقة ${requestedApartmentId}${requestedSource ? ` مع ${requestedSource === "airbnb" ? "Airbnb" : "Booking.com"}` : ""}.`
+                : "تم تشغيل مزامنة يدوية لجميع الشقق.",
+            details: { successfulCount, failedCount, calendarsChecked: results.length }
+        });
+
         res.json({
             success: !results.some(
                 result => result.status === "error"
@@ -1332,6 +1444,23 @@ app.post("/admin/bookings", requireAdmin, async (req, res) => {
             sourceReference: String(req.body.sourceReference || "").trim().slice(0, 250)
         });
 
+        await recordAdminActivity(req, {
+            category: "booking",
+            action: "booking.created",
+            targetType: "booking",
+            targetId: booking._id,
+            apartmentId: booking.apartmentId,
+            source: booking.source,
+            description: `تمت إضافة حجز جديد لـ${booking.apartmentLabel || `الشقة ${booking.apartmentId}`}.`,
+            details: {
+                checkIn: booking.checkIn,
+                checkOut: booking.checkOut,
+                status: booking.status,
+                totalPrice: booking.totalPrice,
+                currency: booking.currency
+            }
+        });
+
         res.status(201).json({ success: true, booking, message: "✅ تم إضافة الحجز." });
     } catch (error) {
         console.log("ADMIN CREATE BOOKING ERROR:", error);
@@ -1373,6 +1502,15 @@ app.put("/admin/bookings/:id", requireAdmin, async (req, res) => {
         const isImportedPlatformBooking =
             ["airbnb", "booking"].includes(booking.source) &&
             Boolean(booking.externalUid);
+
+        const previousBooking = {
+            apartmentId: booking.apartmentId,
+            checkIn: booking.checkIn,
+            checkOut: booking.checkOut,
+            status: booking.status,
+            totalPrice: booking.totalPrice,
+            currency: booking.currency
+        };
 
         let apartmentId = booking.apartmentId;
         let checkInDate = new Date(booking.checkIn);
@@ -1520,6 +1658,28 @@ app.put("/admin/bookings/:id", requireAdmin, async (req, res) => {
 
         await booking.save();
 
+        await recordAdminActivity(req, {
+            category: "booking",
+            action: "booking.updated",
+            targetType: "booking",
+            targetId: booking._id,
+            apartmentId: booking.apartmentId,
+            source: booking.source,
+            description: `تم تعديل حجز ${booking.apartmentLabel || `الشقة ${booking.apartmentId}`}.`,
+            details: {
+                platformFieldsLocked: isImportedPlatformBooking,
+                before: previousBooking,
+                after: {
+                    apartmentId: booking.apartmentId,
+                    checkIn: booking.checkIn,
+                    checkOut: booking.checkOut,
+                    status: booking.status,
+                    totalPrice: booking.totalPrice,
+                    currency: booking.currency
+                }
+            }
+        });
+
         res.json({
             success: true,
             booking,
@@ -1578,6 +1738,8 @@ app.patch("/admin/bookings/:id", requireAdmin, async (req, res) => {
             });
         }
 
+        const previousStatus = booking.status;
+
         booking.status = req.body.status;
         booking.cancelledAt =
             req.body.status === "cancelled"
@@ -1585,6 +1747,17 @@ app.patch("/admin/bookings/:id", requireAdmin, async (req, res) => {
                 : null;
 
         await booking.save();
+
+        await recordAdminActivity(req, {
+            category: "booking",
+            action: "booking.status_changed",
+            targetType: "booking",
+            targetId: booking._id,
+            apartmentId: booking.apartmentId,
+            source: booking.source,
+            description: `تم تغيير حالة حجز ${booking.apartmentLabel || `الشقة ${booking.apartmentId}`} من ${previousStatus} إلى ${booking.status}.`,
+            details: { previousStatus, status: booking.status }
+        });
 
         res.json({
             success: true,
@@ -1636,6 +1809,22 @@ app.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
         }
 
         await Booking.deleteOne({ _id: booking._id });
+
+        await recordAdminActivity(req, {
+            category: "booking",
+            action: "booking.deleted",
+            targetType: "booking",
+            targetId: booking._id,
+            apartmentId: booking.apartmentId,
+            source: booking.source,
+            description: `تم حذف حجز ملغي لـ${booking.apartmentLabel || `الشقة ${booking.apartmentId}`} نهائيًا.`,
+            details: {
+                checkIn: booking.checkIn,
+                checkOut: booking.checkOut,
+                totalPrice: booking.totalPrice,
+                currency: booking.currency
+            }
+        });
 
         res.json({
             success: true,
