@@ -1472,8 +1472,148 @@
 
         function syncStatusText(c) { if (!c?.lastSyncedAt) return "لم تتم المزامنة بعد."; const time = new Date(c.lastSyncedAt).toLocaleString("ar-JO", { timeZone: "Asia/Amman" }); return `${c.lastSyncStatus === "success" ? "نجحت" : "فشلت"} آخر مزامنة: ${time}${c.lastSyncMessage ? ` — ${c.lastSyncMessage}` : ""}`; }
         function renderApartments() {
-            const grid = document.getElementById("apartmentsGrid"); if (!apartments.length) { grid.innerHTML = '<div class="card apartment-card">لا توجد شقق.</div>'; return }
-            grid.innerHTML = apartments.map(a => `<article class="card apartment-card" data-apartment-card="${a._id}"><div class="apartment-title"><h3>الشقة ${a.apartmentId}</h3><label class="inline-check"><input type="checkbox" data-field="active" ${a.active ? "checked" : ""}> فعالة للحجز</label></div><div class="field"><label>اسم الشقة داخل النظام</label><input data-field="label" value="${escapeHtml(a.label)}"></div>${["airbnb", "booking"].map(s => { const c = a.calendars?.[s] || {}, title = s === "airbnb" ? "Airbnb" : "Booking.com"; return `<div class="connection-box connection-${s}"><div class="connection-title"><strong>${title}</strong><label class="inline-check"><input type="checkbox" data-field="${s}Enabled" ${c.enabled ? "checked" : ""}> تفعيل الاستيراد</label></div><div class="field"><label>رابط التقويم المُصدّر من ${title}</label><input data-field="${s}Url" value="${escapeHtml(c.url || "")}" dir="ltr" placeholder="https://...ics"></div><p class="connection-status">${escapeHtml(syncStatusText(c))}</p><div class="field" style="margin-top:10px"><label>رابط HIJAZI الذي تضعه داخل ${title}</label><div class="url-row"><input readonly value="${escapeHtml(a.exportUrls?.[s] || "")}" data-export-url="${s}"><button class="btn btn-dark btn-small" data-copy-url="${s}" type="button">نسخ</button></div></div></div>` }).join("")}<div class="apartment-actions"><button class="btn btn-primary" data-save-apartment type="button">حفظ الإعدادات</button><button class="btn btn-dark" data-sync-apartment type="button">مزامنة هذه الشقة</button></div></article>`).join("");
+            const grid = document.getElementById("apartmentsGrid");
+
+            if (!apartments.length) {
+                grid.innerHTML = '<div class="card apartment-card">لا توجد شقق.</div>';
+                return;
+            }
+
+            grid.innerHTML = apartments.map(a => {
+                const protectedApartment =
+                    Number(a.apartmentId) >= 1 && Number(a.apartmentId) <= 6;
+
+                const connections = ["airbnb", "booking"].map(s => {
+                    const c = a.calendars?.[s] || {};
+                    const title = s === "airbnb" ? "Airbnb" : "Booking.com";
+
+                    return `
+                <div class="connection-box connection-${s}">
+                    <div class="connection-title">
+                        <strong>${title}</strong>
+
+                        <label class="inline-check">
+                            <input
+                                type="checkbox"
+                                data-field="${s}Enabled"
+                                ${c.enabled ? "checked" : ""}
+                            >
+                            تفعيل الاستيراد
+                        </label>
+                    </div>
+
+                    <div class="field">
+                        <label>رابط التقويم المُصدّر من ${title}</label>
+                        <input
+                            data-field="${s}Url"
+                            value="${escapeHtml(c.url || "")}"
+                            dir="ltr"
+                            placeholder="https://...ics"
+                        >
+                    </div>
+
+                    <p class="connection-status">
+                        ${escapeHtml(syncStatusText(c))}
+                    </p>
+
+                    <div class="field" style="margin-top:10px">
+                        <label>رابط HIJAZI الذي تضعه داخل ${title}</label>
+
+                        <div class="url-row">
+                            <input
+                                readonly
+                                value="${escapeHtml(a.exportUrls?.[s] || "")}"
+                                data-export-url="${s}"
+                            >
+
+                            <button
+                                class="btn btn-dark btn-small"
+                                data-copy-url="${s}"
+                                type="button"
+                            >
+                                نسخ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+                }).join("");
+
+                const deleteControl = protectedApartment
+                    ? `
+                <span style="
+                    display:inline-flex;
+                    align-items:center;
+                    padding:8px 12px;
+                    border-radius:10px;
+                    background:#f4f5f7;
+                    color:#68707b;
+                    font-weight:800;
+                    font-size:13px;
+                ">
+                    🔒 شقة أساسية محمية
+                </span>
+            `
+                    : `
+                <button
+                    class="btn btn-danger"
+                    data-delete-apartment
+                    type="button"
+                >
+                    حذف الشقة
+                </button>
+            `;
+
+                return `
+            <article
+                class="card apartment-card"
+                data-apartment-card="${a._id}"
+            >
+                <div class="apartment-title">
+                    <h3>الشقة ${a.apartmentId}</h3>
+
+                    <label class="inline-check">
+                        <input
+                            type="checkbox"
+                            data-field="active"
+                            ${a.active ? "checked" : ""}
+                        >
+                        فعالة للحجز
+                    </label>
+                </div>
+
+                <div class="field">
+                    <label>اسم الشقة داخل النظام</label>
+                    <input
+                        data-field="label"
+                        value="${escapeHtml(a.label)}"
+                    >
+                </div>
+
+                ${connections}
+
+                <div class="apartment-actions">
+                    <button
+                        class="btn btn-primary"
+                        data-save-apartment
+                        type="button"
+                    >
+                        حفظ الإعدادات
+                    </button>
+
+                    <button
+                        class="btn btn-dark"
+                        data-sync-apartment
+                        type="button"
+                    >
+                        مزامنة هذه الشقة
+                    </button>
+
+                    ${deleteControl}
+                </div>
+            </article>
+        `;
+            }).join("");
         }
 
         async function loadAll() {
@@ -1514,12 +1654,206 @@
         });
         document.getElementById("refreshBtn").addEventListener("click", async e => { setButtonLoading(e.currentTarget, true, "جاري التحديث..."); try { await loadAll(); showNotice("تم تحديث البيانات.") } catch (error) { showNotice(error.message, "error") } finally { setButtonLoading(e.currentTarget, false) } });
 
-        document.getElementById("manualBookingForm").addEventListener("submit", async e => { e.preventDefault(); const button = document.getElementById("addBookingBtn"); setButtonLoading(button, true, "جاري إضافة الحجز..."); try { const payload = { apartmentId: Number(document.getElementById("manualApartment").value), source: document.getElementById("manualSource").value, checkIn: document.getElementById("manualCheckIn").value, checkOut: document.getElementById("manualCheckOut").value, fullName: document.getElementById("manualName").value, phone: document.getElementById("manualPhone").value, email: document.getElementById("manualEmail").value, sourceReference: document.getElementById("manualReference").value, adults: Number(document.getElementById("manualAdults").value || 0), children: Number(document.getElementById("manualChildren").value || 0), totalPrice: Number(document.getElementById("manualPrice").value || 0), currency: "JOD", status: document.getElementById("manualStatus").value, notes: document.getElementById("manualNotes").value }; await api("/admin/bookings", { method: "POST", body: JSON.stringify(payload) }); e.currentTarget.reset(); document.getElementById("manualAdults").value = 1; document.getElementById("manualChildren").value = 0; document.getElementById("manualPrice").value = 0; await loadAll(); showNotice("✅ تم إضافة الحجز وإغلاق التواريخ بنجاح.") } catch (error) { showNotice(error.message, "error") } finally { setButtonLoading(button, false) } });
+        document.getElementById("manualBookingForm").addEventListener("submit", async e => {
+            e.preventDefault();
+
+            const form = e.currentTarget;
+            const button = document.getElementById("addBookingBtn");
+
+            setButtonLoading(button, true, "جاري إضافة الحجز...");
+
+            try {
+                const payload = {
+                    apartmentId: Number(document.getElementById("manualApartment").value),
+                    source: document.getElementById("manualSource").value,
+                    checkIn: document.getElementById("manualCheckIn").value,
+                    checkOut: document.getElementById("manualCheckOut").value,
+                    fullName: document.getElementById("manualName").value,
+                    phone: document.getElementById("manualPhone").value,
+                    email: document.getElementById("manualEmail").value,
+                    sourceReference: document.getElementById("manualReference").value,
+                    adults: Number(document.getElementById("manualAdults").value || 0),
+                    children: Number(document.getElementById("manualChildren").value || 0),
+                    totalPrice: Number(document.getElementById("manualPrice").value || 0),
+                    currency: "JOD",
+                    status: document.getElementById("manualStatus").value,
+                    notes: document.getElementById("manualNotes").value
+                };
+
+                await api("/admin/bookings", {
+                    method: "POST",
+                    body: JSON.stringify(payload)
+                });
+
+                form.reset();
+                document.getElementById("manualAdults").value = 1;
+                document.getElementById("manualChildren").value = 0;
+                document.getElementById("manualPrice").value = 0;
+
+                await loadAll();
+                showNotice("✅ تم إضافة الحجز وإغلاق التواريخ بنجاح.");
+            } catch (error) {
+                showNotice(error.message, "error");
+            } finally {
+                setButtonLoading(button, false);
+            }
+        });
         document.getElementById("bookingsBody").addEventListener("change", async e => { const id = e.target.dataset.bookingStatus; if (!id) return; try { await api(`/admin/bookings/${id}`, { method: "PATCH", body: JSON.stringify({ status: e.target.value }) }); await loadAll(); showNotice("تم تحديث حالة الحجز.") } catch (error) { showNotice(error.message, "error"); await loadAll() } });
         document.getElementById("bookingsBody").addEventListener("click", async e => { const id = e.target.dataset.deleteBooking; if (!id || !confirm("هل أنت متأكد من حذف هذا الحجز نهائيًا؟")) return; setButtonLoading(e.target, true, "..."); try { await api(`/admin/bookings/${id}`, { method: "DELETE" }); await loadAll(); showNotice("تم حذف الحجز.") } catch (error) { showNotice(error.message, "error"); setButtonLoading(e.target, false) } });
-        document.getElementById("addApartmentForm").addEventListener("submit", async e => { e.preventDefault(); const button = e.currentTarget.querySelector("button[type=submit]"); setButtonLoading(button, true, "جاري الإضافة..."); try { const id = document.getElementById("newApartmentId").value; await api("/admin/apartments", { method: "POST", body: JSON.stringify({ apartmentId: id ? Number(id) : undefined, label: document.getElementById("newApartmentLabel").value }) }); e.currentTarget.reset(); await loadAll(); showNotice("تمت إضافة الشقة إلى النظام.") } catch (error) { showNotice(error.message, "error") } finally { setButtonLoading(button, false) } });
+        document.getElementById("addApartmentForm").addEventListener("submit", async e => {
+            e.preventDefault();
 
-        document.getElementById("apartmentsGrid").addEventListener("click", async e => { const card = e.target.closest("[data-apartment-card]"); if (!card) return; const apartment = apartments.find(item => item._id === card.dataset.apartmentCard); if (!apartment) return; if (e.target.dataset.copyUrl) { const input = card.querySelector(`[data-export-url="${e.target.dataset.copyUrl}"]`); try { await navigator.clipboard.writeText(input.value) } catch { input.select(); document.execCommand("copy") } showNotice("تم نسخ رابط التقويم."); return } if (e.target.hasAttribute("data-save-apartment")) { setButtonLoading(e.target, true, "جاري الحفظ..."); try { const payload = { label: card.querySelector('[data-field="label"]').value, active: card.querySelector('[data-field="active"]').checked, calendars: { airbnb: { url: card.querySelector('[data-field="airbnbUrl"]').value, enabled: card.querySelector('[data-field="airbnbEnabled"]').checked }, booking: { url: card.querySelector('[data-field="bookingUrl"]').value, enabled: card.querySelector('[data-field="bookingEnabled"]').checked } } }; await api(`/admin/apartments/${apartment._id}`, { method: "PUT", body: JSON.stringify(payload) }); await loadAll(); showNotice("تم حفظ إعدادات الشقة.") } catch (error) { showNotice(error.message, "error"); setButtonLoading(e.target, false) } return } if (e.target.hasAttribute("data-sync-apartment")) { setButtonLoading(e.target, true, "جاري المزامنة..."); try { const data = await api("/admin/sync", { method: "POST", body: JSON.stringify({ apartmentId: apartment.apartmentId }) }); await loadAll(); const errors = data.results?.filter(r => r.status === "error") || []; showNotice(errors.length ? errors.map(i => i.message).join(" — ") : "تمت مزامنة الشقة.", errors.length ? "error" : "success") } catch (error) { showNotice(error.message, "error"); setButtonLoading(e.target, false) } } });
+            const form = e.currentTarget;
+            const button = form.querySelector("button[type=submit]");
+
+            setButtonLoading(button, true, "جاري الإضافة...");
+
+            try {
+                const id = document.getElementById("newApartmentId").value;
+
+                await api("/admin/apartments", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        apartmentId: id ? Number(id) : undefined,
+                        label: document.getElementById("newApartmentLabel").value
+                    })
+                });
+
+                form.reset();
+                await loadAll();
+                showNotice("✅ تمت إضافة الشقة إلى النظام.");
+            } catch (error) {
+                showNotice(error.message, "error");
+            } finally {
+                setButtonLoading(button, false);
+            }
+        });
+
+        document.getElementById("apartmentsGrid").addEventListener("click", async e => {
+            const card = e.target.closest("[data-apartment-card]");
+            if (!card) return;
+
+            const apartment = apartments.find(
+                item => item._id === card.dataset.apartmentCard
+            );
+
+            if (!apartment) return;
+
+            if (e.target.dataset.copyUrl) {
+                const input = card.querySelector(
+                    `[data-export-url="${e.target.dataset.copyUrl}"]`
+                );
+
+                try {
+                    await navigator.clipboard.writeText(input.value);
+                } catch {
+                    input.select();
+                    document.execCommand("copy");
+                }
+
+                showNotice("تم نسخ رابط التقويم.");
+                return;
+            }
+
+            if (e.target.hasAttribute("data-delete-apartment")) {
+                if (Number(apartment.apartmentId) <= 6) {
+                    showNotice(
+                        "الشقق الأساسية من 1 إلى 6 محمية ولا يمكن حذفها.",
+                        "error"
+                    );
+                    return;
+                }
+
+                const approved = confirm(
+                    `هل أنت متأكد من حذف الشقة ${apartment.apartmentId} نهائيًا؟`
+                );
+
+                if (!approved) return;
+
+                const button = e.target;
+                setButtonLoading(button, true, "جاري الحذف...");
+
+                try {
+                    const data = await api(
+                        `/admin/apartments/${apartment._id}`,
+                        { method: "DELETE" }
+                    );
+
+                    await loadAll();
+                    showNotice(data.message || "✅ تم حذف الشقة.");
+                } catch (error) {
+                    showNotice(error.message, "error");
+
+                    if (document.body.contains(button)) {
+                        setButtonLoading(button, false);
+                    }
+                }
+
+                return;
+            }
+
+            if (e.target.hasAttribute("data-save-apartment")) {
+                setButtonLoading(e.target, true, "جاري الحفظ...");
+
+                try {
+                    const payload = {
+                        label: card.querySelector('[data-field="label"]').value,
+                        active: card.querySelector('[data-field="active"]').checked,
+                        calendars: {
+                            airbnb: {
+                                url: card.querySelector('[data-field="airbnbUrl"]').value,
+                                enabled: card.querySelector('[data-field="airbnbEnabled"]').checked
+                            },
+                            booking: {
+                                url: card.querySelector('[data-field="bookingUrl"]').value,
+                                enabled: card.querySelector('[data-field="bookingEnabled"]').checked
+                            }
+                        }
+                    };
+
+                    await api(`/admin/apartments/${apartment._id}`, {
+                        method: "PUT",
+                        body: JSON.stringify(payload)
+                    });
+
+                    await loadAll();
+                    showNotice("تم حفظ إعدادات الشقة.");
+                } catch (error) {
+                    showNotice(error.message, "error");
+                    setButtonLoading(e.target, false);
+                }
+
+                return;
+            }
+
+            if (e.target.hasAttribute("data-sync-apartment")) {
+                setButtonLoading(e.target, true, "جاري المزامنة...");
+
+                try {
+                    const data = await api("/admin/sync", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            apartmentId: apartment.apartmentId
+                        })
+                    });
+
+                    await loadAll();
+
+                    const errors =
+                        data.results?.filter(result => result.status === "error") || [];
+
+                    showNotice(
+                        errors.length
+                            ? errors.map(item => item.message).join(" — ")
+                            : "تمت مزامنة الشقة.",
+                        errors.length ? "error" : "success"
+                    );
+                } catch (error) {
+                    showNotice(error.message, "error");
+                    setButtonLoading(e.target, false);
+                }
+            }
+        });
         document.getElementById("syncAllBtn").addEventListener("click", async e => { setButtonLoading(e.currentTarget, true, "جاري المزامنة..."); try { const data = await api("/admin/sync", { method: "POST", body: "{}" }); await loadAll(); const successes = data.results?.filter(r => r.status === "success").length || 0, errors = data.results?.filter(r => r.status === "error") || []; showNotice(errors.length ? `نجحت ${successes} مزامنة، وفشلت ${errors.length}: ${errors.map(i => i.message).join(" — ")}` : `تمت المزامنة بنجاح (${successes} تقويم).`, errors.length ? "error" : "success") } catch (error) { showNotice(error.message, "error") } finally { setButtonLoading(e.currentTarget, false) } });
         /* تشغيل تقويم الأدمن بعد تجهيز الصفحة */
         initializeAdminCalendar();

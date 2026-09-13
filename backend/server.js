@@ -857,6 +857,61 @@ app.put("/admin/apartments/:id", requireAdmin, async (req, res) => {
 });
 
 /* =========================================================
+   API: حذف شقة إضافية مع حماية الشقق الأساسية 1 إلى 6
+========================================================= */
+app.delete("/admin/apartments/:id", requireAdmin, async (req, res) => {
+    try {
+        if (!mongoose.isValidObjectId(req.params.id)) {
+            return res.status(400).json({
+                success: false,
+                message: "معرّف الشقة غير صحيح."
+            });
+        }
+
+        const apartment = await Apartment.findById(req.params.id);
+
+        if (!apartment) {
+            return res.status(404).json({
+                success: false,
+                message: "الشقة غير موجودة."
+            });
+        }
+
+        if (apartment.apartmentId >= 1 && apartment.apartmentId <= 6) {
+            return res.status(403).json({
+                success: false,
+                message: "الشقق الأساسية من 1 إلى 6 محمية ولا يمكن حذفها."
+            });
+        }
+
+        const bookingsCount = await Booking.countDocuments({
+            apartmentId: apartment.apartmentId
+        });
+
+        if (bookingsCount > 0) {
+            return res.status(409).json({
+                success: false,
+                message: `لا يمكن حذف الشقة ${apartment.apartmentId} لأنها تحتوي على ${bookingsCount} حجز. أوقف تفعيلها بدل حذفها للمحافظة على سجل الحجوزات.`
+            });
+        }
+
+        await Apartment.deleteOne({ _id: apartment._id });
+
+        res.json({
+            success: true,
+            message: `✅ تم حذف الشقة ${apartment.apartmentId} نهائيًا.`
+        });
+    } catch (error) {
+        console.log("ADMIN DELETE APARTMENT ERROR:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "تعذر حذف الشقة."
+        });
+    }
+});
+
+/* =========================================================
    API: مزامنة شقة واحدة أو جميع الشقق الآن
 ========================================================= */
 app.post("/admin/sync", requireAdmin, async (req, res) => {
