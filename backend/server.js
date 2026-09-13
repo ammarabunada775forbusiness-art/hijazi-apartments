@@ -1356,56 +1356,297 @@ app.get("/admin/bookings", requireAdmin, async (req, res) => {
 });
 
 /* =========================================================
-   API: تحديث حالة الحجز للأدمن
+   API: تعديل بيانات حجز من لوحة الإدارة
+   الحجز المستورد من منصة يبقى مقفولًا في الشقة والتواريخ والحالة
 ========================================================= */
-app.patch("/admin/bookings/:id", requireAdmin, async (req, res) => {
+app.put("/admin/bookings/:id", requireAdmin, async (req, res) => {
     try {
-        const allowedStatuses = ["pending", "confirmed", "cancelled", "blocked"];
-        if (!allowedStatuses.includes(req.body.status)) {
-            return res.status(400).json({ success: false, message: "حالة الحجز غير صحيحة." });
-        }
-
-        const booking = await Booking.findByIdAndUpdate(
-            req.params.id,
-            { $set: { status: req.body.status } },
-            { new: true, runValidators: true }
-        );
+        const booking = await Booking.findById(req.params.id);
 
         if (!booking) {
-            return res.status(404).json({ success: false, message: "الحجز غير موجود." });
+            return res.status(404).json({
+                success: false,
+                message: "الحجز غير موجود."
+            });
         }
 
-        res.json({ success: true, booking, message: "✅ تم تحديث حالة الحجز." });
+        const isImportedPlatformBooking =
+            ["airbnb", "booking"].includes(booking.source) &&
+            Boolean(booking.externalUid);
+
+        let apartmentId = booking.apartmentId;
+        let checkInDate = new Date(booking.checkIn);
+        let checkOutDate = new Date(booking.checkOut);
+
+        if (!isImportedPlatformBooking) {
+            apartmentId = Number(req.body.apartmentId);
+            checkInDate = new Date(req.body.checkIn);
+            checkOutDate = new Date(req.body.checkOut);
+
+            if (
+                !Number.isInteger(apartmentId) ||
+                Number.isNaN(checkInDate.getTime()) ||
+                Number.isNaN(checkOutDate.getTime())
+            ) {
+                return res.status(400).json({
+                    success: false,
+                    message: "رقم الشقة وتاريخا الدخول والخروج مطلوبة."
+                });
+            }
+
+            if (checkOutDate <= checkInDate) {
+                return res.status(400).json({
+                    success: false,
+                    message: "تاريخ الخروج يجب أن يكون بعد تاريخ الدخول."
+                });
+            }
+
+            const apartment = await Apartment.findOne({
+                apartmentId,
+                active: true
+            });
+
+            if (!apartment) {
+                return res.status(400).json({
+                    success: false,
+                    message: "الشقة غير موجودة أو غير فعالة."
+                });
+            }
+
+            const conflict = await Booking.findOne({
+                _id: { $ne: booking._id },
+                ...ACTIVE_BOOKING_FILTER,
+                apartmentId,
+                checkIn: { $lt: checkOutDate },
+                checkOut: { $gt: checkInDate }
+            });
+
+            if (conflict) {
+                return res.status(409).json({
+                    success: false,
+                    message:
+                        `هذه الفترة تتعارض مع حجز موجود (${formatDate(conflict.checkIn)} إلى ${formatDate(conflict.checkOut)}).`
+                });
+            }
+
+            booking.apartmentId = apartmentId;
+            booking.apartmentLabel = apartment.label;
+            booking.checkIn = checkInDate;
+            booking.checkOut = checkOutDate;
+            booking.stayType =
+                calculateNights(checkInDate, checkOutDate) >= 30
+                    ? "long"
+                    : "normal";
+
+            if (req.body.status !== undefined) {
+                const allowedStatuses = [
+                    "pending",
+                    "confirmed",
+                    "cancelled",
+                    "blocked"
+                ];
+
+                if (!allowedStatuses.includes(req.body.status)) {
+                    return res.status(400).json({
+                        success: false,
+                        message: "حالة الحجز غير صحيحة."
+                    });
+                }
+
+                booking.status = req.body.status;
+                booking.cancelledAt =
+                    req.body.status === "cancelled"
+                        ? new Date()
+                        : null;
+            }
+        }
+
+        const numberFields = ["adults", "children", "totalPrice"];
+
+        for (const field of numberFields) {
+            if (req.body[field] === undefined) continue;
+
+            const value = Number(req.body[field]);
+
+            if (!Number.isFinite(value) || value < 0) {
+                return res.status(400).json({
+                    success: false,
+                    message: "القيم الرقمية في الحجز غير صحيحة."
+                });
+            }
+
+            booking[field] = value;
+
+            if (field === "totalPrice") {
+                booking.totalPriceText = "";
+            }
+        }
+
+        if (req.body.fullName !== undefined) {
+            booking.fullName = String(req.body.fullName)
+                .trim()
+                .slice(0, 150);
+        }
+
+        if (req.body.email !== undefined) {
+            booking.email = String(req.body.email)
+                .trim()
+                .slice(0, 200);
+        }
+
+        if (req.body.phone !== undefined) {
+            booking.phone = String(req.body.phone)
+                .trim()
+                .slice(0, 50);
+        }
+
+        if (req.body.currency !== undefined) {
+            booking.currency = String(req.body.currency || "JOD")
+                .trim()
+                .slice(0, 10);
+        }
+
+        if (req.body.notes !== undefined) {
+            booking.notes = String(req.body.notes)
+                .trim()
+                .slice(0, 1000);
+        }
+
+        if (req.body.sourceReference !== undefined) {
+            booking.sourceReference = String(req.body.sourceReference)
+                .trim()
+                .slice(0, 250);
+        }
+
+        await booking.save();
+
+        res.json({
+            success: true,
+            booking,
+            lockedByPlatform: isImportedPlatformBooking,
+            message: isImportedPlatformBooking
+                ? "✅ تم حفظ بيانات العميل والسعر والملاحظات. الشقة والتواريخ والحالة تبقى من المنصة."
+                : "✅ تم حفظ تعديلات الحجز."
+        });
     } catch (error) {
-        console.log("UPDATE BOOKING STATUS ERROR:", error);
-        res.status(500).json({ success: false, message: "تعذر تحديث حالة الحجز." });
+        console.log("UPDATE BOOKING ERROR:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "تعذر تعديل الحجز."
+        });
     }
 });
 
 /* =========================================================
-   API: حذف حجز للأدمن
+   API: تحديث حالة الحجز للأدمن
 ========================================================= */
-app.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
+app.patch("/admin/bookings/:id", requireAdmin, async (req, res) => {
     try {
-        const { id } = req.params;
-        const deleted = await Booking.findByIdAndDelete(id);
+        const allowedStatuses = [
+            "pending",
+            "confirmed",
+            "cancelled",
+            "blocked"
+        ];
 
-        if (!deleted) {
-            return res.status(404).json({
+        if (!allowedStatuses.includes(req.body.status)) {
+            return res.status(400).json({
                 success: false,
-                message: "Booking not found",
+                message: "حالة الحجز غير صحيحة."
             });
         }
 
+        const booking = await Booking.findById(req.params.id);
+
+        if (!booking) {
+            return res.status(404).json({
+                success: false,
+                message: "الحجز غير موجود."
+            });
+        }
+
+        const isImportedPlatformBooking =
+            ["airbnb", "booking"].includes(booking.source) &&
+            Boolean(booking.externalUid);
+
+        if (isImportedPlatformBooking) {
+            return res.status(409).json({
+                success: false,
+                message:
+                    `هذا الحجز مستورد من ${booking.source === "airbnb" ? "Airbnb" : "Booking.com"}. غيّر حالته أو ألغِه من المنصة نفسها.`
+            });
+        }
+
+        booking.status = req.body.status;
+        booking.cancelledAt =
+            req.body.status === "cancelled"
+                ? new Date()
+                : null;
+
+        await booking.save();
+
         res.json({
             success: true,
-            message: "✅ Booking deleted",
+            booking,
+            message: "✅ تم تحديث حالة الحجز."
+        });
+    } catch (error) {
+        console.log("UPDATE BOOKING STATUS ERROR:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "تعذر تحديث حالة الحجز."
+        });
+    }
+});
+
+/* =========================================================
+   API: حذف نهائي آمن
+   لا نحذف حجز منصة، والحجز المحلي يجب إلغاؤه أولًا
+========================================================= */
+app.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
+    try {
+        const booking = await Booking.findById(req.params.id);
+
+        if (!booking) {
+            return res.status(404).json({
+                success: false,
+                message: "الحجز غير موجود."
+            });
+        }
+
+        const isImportedPlatformBooking =
+            ["airbnb", "booking"].includes(booking.source) &&
+            Boolean(booking.externalUid);
+
+        if (isImportedPlatformBooking) {
+            return res.status(409).json({
+                success: false,
+                message:
+                    `لا يمكن حذف حجز ${booking.source === "airbnb" ? "Airbnb" : "Booking.com"} المستورد من PMS. ألغِه من المنصة نفسها.`
+            });
+        }
+
+        if (booking.status !== "cancelled") {
+            return res.status(409).json({
+                success: false,
+                message: "ألغِ الحجز أولًا، وبعدها يمكنك حذفه نهائيًا."
+            });
+        }
+
+        await Booking.deleteOne({ _id: booking._id });
+
+        res.json({
+            success: true,
+            message: "✅ تم حذف الحجز الملغي نهائيًا."
         });
     } catch (error) {
         console.log("DELETE BOOKING ERROR:", error);
+
         res.status(500).json({
             success: false,
-            message: "Error deleting booking",
+            message: "تعذر حذف الحجز."
         });
     }
 });

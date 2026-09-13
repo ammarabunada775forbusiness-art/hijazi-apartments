@@ -185,7 +185,7 @@
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 14px;
             margin-bottom: 18px;
         }
@@ -2657,22 +2657,396 @@
                 animation: none !important;
             }
         }
+
+        /* =========================================================
+           HIJAZI PMS - WHITE ADMIN THEME
+           واجهة واضحة بدون تزجيج
+        ========================================================= */
+
+        html,
+        body {
+            background: #f4f5f7 !important;
+            color: #111 !important;
+        }
+
+        .booking-page-bg {
+            display: none !important;
+        }
+
+        .app-header {
+            position: relative !important;
+            z-index: 2 !important;
+            color: #fff !important;
+            background: linear-gradient(110deg, #050505, #1d170b 58%, #8b6207) !important;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .18) !important;
+        }
+
+        .app-header h1,
+        .app-header p {
+            color: #fff !important;
+        }
+
+        .shell {
+            position: relative !important;
+            z-index: 1 !important;
+        }
+
+        .card,
+        .section-card,
+        .apartment-card,
+        .sync-apartment-card,
+        .conflict-zone,
+        .admin-calendar-shell,
+        .health-source,
+        .health-summary-item,
+        .calendar-legend,
+        .table-wrap {
+            color: #111 !important;
+            background: #fff !important;
+            border-color: #e4e7ec !important;
+            box-shadow: 0 8px 24px rgba(16, 24, 40, .07) !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        .card h2,
+        .card h3,
+        .card p,
+        .section-head h2,
+        .section-head p,
+        .sync-apartment-card h3,
+        .sync-apartment-card p,
+        .health-source strong,
+        .health-source p,
+        .health-source span,
+        .conflict-zone h3,
+        .conflict-zone p,
+        .apartment-card h3,
+        .apartment-card p,
+        .field label,
+        .inline-check,
+        .connection-status,
+        .stat-label,
+        .stat-value {
+            color: #111 !important;
+            text-shadow: none !important;
+        }
+
+        .section-head p,
+        .connection-status,
+        .health-source-message,
+        .health-source-time,
+        .conflict-dates,
+        .login-card p {
+            color: #667085 !important;
+        }
+
+        .tabs {
+            border: 1px solid #d0d5dd !important;
+            background: #fff !important;
+            box-shadow: 0 7px 20px rgba(16, 24, 40, .06) !important;
+        }
+
+        .tab-btn {
+            color: #344054 !important;
+            background: transparent !important;
+        }
+
+        .tab-btn:hover {
+            color: #111 !important;
+            background: #f2f4f7 !important;
+        }
+
+        .tab-btn.active {
+            color: #fff !important;
+            background: linear-gradient(135deg, #d4a017, #8a6508) !important;
+            box-shadow: 0 7px 17px rgba(200, 145, 22, .23) !important;
+        }
+
+        input,
+        select,
+        textarea {
+            color: #101828 !important;
+            background-color: #fff !important;
+            border: 1px solid #d0d5dd !important;
+            box-shadow: 0 1px 2px rgba(16, 24, 40, .05) !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #98a2b3 !important;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            color: #101828 !important;
+            background-color: #fff !important;
+            border-color: #c89116 !important;
+            box-shadow: 0 0 0 3px rgba(200, 145, 22, .14) !important;
+        }
+
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            padding-left: 42px !important;
+            background-image:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238b6207' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: left 14px center !important;
+            background-size: 16px !important;
+        }
+
+        select option {
+            color: #111 !important;
+            background: #fff !important;
+        }
+
+        input[type="number"] {
+            appearance: textfield;
+            -moz-appearance: textfield;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            margin: 0;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .btn {
+            border: 0 !important;
+            box-shadow: none !important;
+        }
+
+        .btn-primary {
+            color: #fff !important;
+            background: linear-gradient(135deg, #d4a017, #8a6508) !important;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #e0ab20, #6f5005) !important;
+        }
+
+        .btn-dark {
+            color: #fff !important;
+            background: #111 !important;
+        }
+
+        .btn-dark:hover {
+            background: #2d2d2d !important;
+        }
+
+        .btn-light {
+            color: #111 !important;
+            background: #fff !important;
+            border: 1px solid #d0d5dd !important;
+        }
+
+        .btn-light:hover {
+            background: #f2f4f7 !important;
+        }
+
+        .btn-danger {
+            color: #b42318 !important;
+            background: #fef3f2 !important;
+            border: 1px solid #fecdca !important;
+        }
+
+        .btn-danger:hover {
+            color: #fff !important;
+            background: #b42318 !important;
+        }
+
+        .btn-warning {
+            color: #93370d !important;
+            background: #fffaeb !important;
+            border: 1px solid #fedf89 !important;
+        }
+
+        .table-wrap {
+            overflow: auto !important;
+        }
+
+        table {
+            color: #111 !important;
+            background: #fff !important;
+        }
+
+        th {
+            color: #fff !important;
+            background: #111 !important;
+            border-color: #344054 !important;
+        }
+
+        td {
+            color: #101828 !important;
+            background: #fff !important;
+            border-color: #eaecf0 !important;
+        }
+
+        tbody tr:hover td {
+            background: #fffaf0 !important;
+        }
+
+        .source-website {
+            color: #6941c6 !important;
+            background: #f4f3ff !important;
+        }
+
+        .source-manual {
+            color: #067647 !important;
+            background: #ecfdf3 !important;
+        }
+
+        .source-airbnb {
+            color: #c11574 !important;
+            background: #fdf2fa !important;
+        }
+
+        .source-booking {
+            color: #175cd3 !important;
+            background: #eff8ff !important;
+        }
+
+        .status-select.status-pending,
+        .status-pending {
+            color: #b54708 !important;
+            background-color: #fffaeb !important;
+            border-color: #fedf89 !important;
+        }
+
+        .status-select.status-confirmed,
+        .status-confirmed {
+            color: #067647 !important;
+            background-color: #ecfdf3 !important;
+            border-color: #abefc6 !important;
+        }
+
+        .status-select.status-cancelled,
+        .status-cancelled {
+            color: #b42318 !important;
+            background-color: #fef3f2 !important;
+            border-color: #fecdca !important;
+        }
+
+        .status-select.status-blocked,
+        .status-blocked {
+            color: #344054 !important;
+            background-color: #f2f4f7 !important;
+            border-color: #d0d5dd !important;
+        }
+
+        .connection-airbnb {
+            border: 1px solid #ffc2cf !important;
+            border-right: 5px solid #ff385c !important;
+            background: #fff8fa !important;
+        }
+
+        .connection-booking {
+            border: 1px solid #b2ddff !important;
+            border-right: 5px solid #003b95 !important;
+            background: #f5faff !important;
+        }
+
+        #adminCalendar .fc-scrollgrid,
+        #adminCalendar .fc-daygrid-day {
+            background: #fff !important;
+        }
+
+        #adminCalendar .fc-day-other {
+            background: #f9fafb !important;
+        }
+
+        #adminCalendar .fc-daygrid-day-number,
+        #adminCalendar .fc-toolbar-title {
+            color: #111 !important;
+        }
+
+        .booking-details-dialog,
+        .booking-edit-dialog {
+            color: #111 !important;
+            background: #fff !important;
+            border: 1px solid #e4e7ec !important;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, .25) !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        .booking-dialog-body,
+        .booking-detail-item {
+            color: #111 !important;
+            background: #fff !important;
+        }
+
+        .booking-detail-item {
+            border-color: #eaecf0 !important;
+        }
+
+        .booking-detail-item span {
+            color: #667085 !important;
+        }
+
+        .edit-booking-warning {
+            display: none;
+            margin-bottom: 14px;
+            padding: 11px 13px;
+            border: 1px solid #fedf89;
+            border-radius: 10px;
+            color: #93370d;
+            background: #fffaeb;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .edit-booking-warning.show {
+            display: block;
+        }
+
+        .edit-booking-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 9px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        .login-overlay {
+            background: rgba(0, 0, 0, .82) !important;
+            backdrop-filter: blur(5px) !important;
+        }
+
+        .login-overlay.hidden {
+            display: none !important;
+        }
+
+        .login-card {
+            color: #111 !important;
+            background: #fff !important;
+            border: 1px solid #e4e7ec !important;
+            box-shadow: 0 24px 70px rgba(0, 0, 0, .30) !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        .login-card h2,
+        .login-card .field label {
+            color: #111 !important;
+        }
+
+        @media (max-width: 650px) {
+
+            .edit-booking-actions,
+            .edit-booking-actions .btn {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
 <body>
-
-    <!-- =========================================================
-     نفس خلفية نموذج الحجز في موقع HIJAZI
-========================================================= -->
-    <div class="booking-page-bg" aria-hidden="true">
-        <span class="booking-gold-orb booking-orb-1"></span>
-        <span class="booking-gold-orb booking-orb-2"></span>
-        <span class="booking-gold-orb booking-orb-3"></span>
-        <span class="booking-luxury-shine"></span>
-        <span class="booking-dust booking-dust-1"></span>
-        <span class="booking-dust booking-dust-2"></span>
-    </div>
 
     <div class="login-overlay" id="loginOverlay">
         <form class="login-card" id="loginForm">
@@ -2692,8 +3066,10 @@
             <h1>HIJAZI PMS</h1>
             <p>نظام إدارة الشقق والحجوزات والمزامنة</p>
         </div>
-        <div class="header-actions"><button class="btn btn-primary" id="syncAllBtn" type="button">مزامنة جميع
-                التقاويم</button><button class="btn btn-light" id="logoutBtn" type="button">تسجيل الخروج</button></div>
+        <div class="header-actions">
+            <button class="btn btn-primary" id="syncAllBtn" type="button">مزامنة الآن</button>
+            <button class="btn btn-light" id="logoutBtn" type="button">تسجيل الخروج</button>
+        </div>
     </header>
 
     <main class="shell">
@@ -2720,6 +3096,14 @@
                 <div class="card stat-card">
                     <div class="stat-label">حجوزات المنصات</div>
                     <div class="stat-value" id="platformCount">0</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-label">الإيرادات المؤكدة المسجلة</div>
+                    <div class="stat-value" id="revenueCount">0 JOD</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-label">إشغال الـ30 يوم القادمة</div>
+                    <div class="stat-value" id="occupancyRate">0%</div>
                 </div>
             </div>
 
@@ -2792,7 +3176,8 @@
                             type="number" min="0" value="0"></div>
                     <div class="field"><label for="manualPrice">السعر الإجمالي (JOD) — يُحسب تلقائيًا ويمكن
                             تعديله</label><input id="manualPrice" type="number" min="0" step="0.01" value="0"></div>
-                    <div class="field"><label for="manualStatus">الحالة</label><select id="manualStatus">
+                    <div class="field"><label for="manualStatus">الحالة</label><select
+                            class="status-select status-confirmed" id="manualStatus">
                             <option value="confirmed">مؤكد</option>
                             <option value="pending">بانتظار التأكيد</option>
                         </select></div>
@@ -3006,6 +3391,110 @@
         </div>
     </dialog>
 
+    <!-- =========================================================
+         نافذة تعديل بيانات الحجز
+    ========================================================== -->
+    <dialog class="booking-details-dialog booking-edit-dialog" id="editBookingDialog">
+        <div class="booking-dialog-head">
+            <h3>تعديل بيانات الحجز</h3>
+
+            <button class="booking-dialog-close" id="closeEditBookingBtn" type="button" aria-label="إغلاق">×</button>
+        </div>
+
+        <form class="booking-dialog-body" id="editBookingForm">
+            <div class="edit-booking-warning" id="editBookingWarning">
+                هذا الحجز مستورد من منصة خارجية. تستطيع إضافة بيانات العميل والسعر والملاحظات،
+                لكن الشقة والتواريخ والحالة تُدار من المنصة نفسها.
+            </div>
+
+            <div class="form-grid">
+                <div class="field">
+                    <label for="editBookingApartment">الشقة</label>
+                    <select id="editBookingApartment" required></select>
+                </div>
+
+                <div class="field">
+                    <label for="editBookingStatus">الحالة</label>
+                    <select class="status-select" id="editBookingStatus">
+                        <option value="pending">بانتظار التأكيد</option>
+                        <option value="confirmed">مؤكد</option>
+                        <option value="cancelled">ملغي</option>
+                        <option value="blocked">محجوب</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="editBookingCheckIn">الدخول</label>
+                    <input id="editBookingCheckIn" type="date" required>
+                </div>
+
+                <div class="field">
+                    <label for="editBookingCheckOut">الخروج</label>
+                    <input id="editBookingCheckOut" type="date" required>
+                </div>
+
+                <div class="field">
+                    <label for="editBookingName">اسم العميل</label>
+                    <input id="editBookingName">
+                </div>
+
+                <div class="field">
+                    <label for="editBookingPhone">الهاتف</label>
+                    <input id="editBookingPhone" type="tel">
+                </div>
+
+                <div class="field">
+                    <label for="editBookingEmail">البريد الإلكتروني</label>
+                    <input id="editBookingEmail" type="email">
+                </div>
+
+                <div class="field">
+                    <label for="editBookingReference">رقم الحجز في المنصة</label>
+                    <input id="editBookingReference">
+                </div>
+
+                <div class="field">
+                    <label for="editBookingAdults">البالغون</label>
+                    <input id="editBookingAdults" type="number" min="0">
+                </div>
+
+                <div class="field">
+                    <label for="editBookingChildren">الأطفال</label>
+                    <input id="editBookingChildren" type="number" min="0">
+                </div>
+
+                <div class="field">
+                    <label for="editBookingPrice">السعر الإجمالي</label>
+                    <input id="editBookingPrice" type="number" min="0" step="0.01">
+                </div>
+
+                <div class="field">
+                    <label for="editBookingCurrency">العملة</label>
+                    <select id="editBookingCurrency">
+                        <option value="JOD">JOD</option>
+                        <option value="USD">USD</option>
+                        <option value="SAR">SAR</option>
+                    </select>
+                </div>
+
+                <div class="field span-4">
+                    <label for="editBookingNotes">الملاحظات</label>
+                    <textarea id="editBookingNotes" rows="4"></textarea>
+                </div>
+            </div>
+
+            <div class="edit-booking-actions">
+                <button class="btn btn-light" id="cancelEditBookingBtn" type="button">
+                    إلغاء
+                </button>
+
+                <button class="btn btn-primary" id="saveEditBookingBtn" type="submit">
+                    حفظ التعديلات
+                </button>
+            </div>
+        </form>
+    </dialog>
+
     <script>
         const API_BASE = "https://api.hijazi-apartments.com";
 
@@ -3022,6 +3511,7 @@
         let allBookings = [];
         let apartments = [];
         let adminCalendar = null;
+        let editingBookingId = null;
         const notice = document.getElementById("notice"), loginOverlay = document.getElementById("loginOverlay"), loginError = document.getElementById("loginError");
 
         function basicToken(value) { const bytes = new TextEncoder().encode(value); let binary = ""; bytes.forEach(byte => { binary += String.fromCharCode(byte) }); return btoa(binary); }
@@ -3071,7 +3561,31 @@
                     ? String(nightlyPrice * nights)
                     : "0";
         }
-        function setButtonLoading(button, loading, text = "جاري التنفيذ...") { if (loading) { button.dataset.originalText = button.textContent; button.textContent = text; button.disabled = true } else { button.textContent = button.dataset.originalText || button.textContent; button.disabled = false } }
+        function setButtonLoading(
+            button,
+            loading,
+            text = "جاري التنفيذ..."
+        ) {
+            if (!button) return;
+
+            if (loading) {
+                if (!button.dataset.originalText) {
+                    button.dataset.originalText =
+                        button.textContent.trim();
+                }
+
+                button.textContent = text;
+                button.disabled = true;
+                return;
+            }
+
+            button.textContent =
+                button.dataset.originalText ||
+                button.textContent;
+
+            button.disabled = false;
+            delete button.dataset.originalText;
+        }
 
         function populateApartmentSelects() {
             const options = apartments.filter(a => a.active).map(a => `<option value="${a.apartmentId}">${escapeHtml(a.label)}</option>`).join("");
@@ -3080,20 +3594,440 @@
         }
 
         function updateStats() {
-            const today = todayInAmman(), active = allBookings.filter(b => (b.status || "pending") !== "cancelled");
-            document.getElementById("activeCount").textContent = active.length;
-            document.getElementById("arrivalsCount").textContent = active.filter(b => dateOnly(b.checkIn) === today).length;
-            document.getElementById("occupiedCount").textContent = new Set(active.filter(b => dateOnly(b.checkIn) <= today && dateOnly(b.checkOut) > today).map(b => b.apartmentId)).size;
-            document.getElementById("platformCount").textContent = active.filter(b => ["airbnb", "booking"].includes(b.source)).length;
+            const today = todayInAmman();
+
+            const active = allBookings.filter(
+                booking =>
+                    (booking.status || "pending") !== "cancelled"
+            );
+
+            document.getElementById("activeCount").textContent =
+                active.length;
+
+            document.getElementById("arrivalsCount").textContent =
+                active.filter(
+                    booking =>
+                        dateOnly(booking.checkIn) === today
+                ).length;
+
+            document.getElementById("occupiedCount").textContent =
+                new Set(
+                    active
+                        .filter(
+                            booking =>
+                                dateOnly(booking.checkIn) <= today &&
+                                dateOnly(booking.checkOut) > today
+                        )
+                        .map(booking => booking.apartmentId)
+                ).size;
+
+            document.getElementById("platformCount").textContent =
+                active.filter(
+                    booking =>
+                        ["airbnb", "booking"].includes(
+                            booking.source
+                        )
+                ).length;
+
+            const confirmedRevenueJod = allBookings
+                .filter(
+                    booking =>
+                        booking.status === "confirmed" &&
+                        (booking.currency || "JOD") === "JOD"
+                )
+                .reduce(
+                    (total, booking) =>
+                        total + Number(booking.totalPrice || 0),
+                    0
+                );
+
+            document.getElementById("revenueCount").textContent =
+                `${confirmedRevenueJod.toFixed(2)} JOD`;
+
+            const periodStart =
+                new Date(`${today}T00:00:00Z`);
+
+            const periodEnd =
+                new Date(periodStart.getTime() + 30 * 86400000);
+
+            const occupiedApartmentNights = new Set();
+
+            for (const booking of active) {
+                const bookingStart =
+                    new Date(`${dateOnly(booking.checkIn)}T00:00:00Z`);
+
+                const bookingEnd =
+                    new Date(`${dateOnly(booking.checkOut)}T00:00:00Z`);
+
+                const overlapStart =
+                    bookingStart > periodStart
+                        ? bookingStart
+                        : periodStart;
+
+                const overlapEnd =
+                    bookingEnd < periodEnd
+                        ? bookingEnd
+                        : periodEnd;
+
+                let day = new Date(overlapStart);
+
+                while (day < overlapEnd) {
+                    occupiedApartmentNights.add(
+                        `${booking.apartmentId}:${day.toISOString().slice(0, 10)}`
+                    );
+
+                    day = new Date(
+                        day.getTime() + 86400000
+                    );
+                }
+            }
+
+            const activeApartmentCount =
+                apartments.filter(apartment => apartment.active).length;
+
+            const possibleNights =
+                activeApartmentCount * 30;
+
+            const occupancyRate =
+                possibleNights > 0
+                    ? Math.min(
+                        100,
+                        Math.round(
+                            occupiedApartmentNights.size /
+                            possibleNights *
+                            100
+                        )
+                    )
+                    : 0;
+
+            document.getElementById("occupancyRate").textContent =
+                `${occupancyRate}%`;
         }
 
         function renderBookings() {
-            const query = document.getElementById("searchBox").value.trim().toLowerCase(), apt = document.getElementById("apartmentFilter").value, source = document.getElementById("sourceFilter").value, status = document.getElementById("statusFilter").value;
-            const filtered = allBookings.filter(b => { const s = b.source || "website", st = b.status || "pending", hay = [b.fullName, b.phone, b.email, b.sourceReference].join(" ").toLowerCase(); return (!query || hay.includes(query)) && (!apt || String(b.apartmentId) === apt) && (!source || s === source) && (!status || st === status) });
-            document.getElementById("bookingCountText").textContent = `المعروض ${filtered.length} من أصل ${allBookings.length} حجز`;
-            const body = document.getElementById("bookingsBody");
-            if (!filtered.length) { body.innerHTML = '<tr><td colspan="10" class="empty">لا توجد حجوزات مطابقة.</td></tr>'; return }
-            body.innerHTML = filtered.map(b => { const s = b.source || "website", st = b.status || "pending", price = b.totalPriceText || (b.totalPrice ? `${b.totalPrice} ${b.currency || "JOD"}` : "—"); return `<tr><td>${escapeHtml(b.apartmentLabel || `شقة ${b.apartmentId}`)}</td><td><span class="badge source-${s}">${SOURCE_LABELS[s]}</span></td><td title="${escapeHtml(b.email || "")}">${escapeHtml(b.fullName || "حجز بدون اسم")}</td><td>${escapeHtml(b.phone || "—")}</td><td>${dateOnly(b.checkIn)}</td><td>${dateOnly(b.checkOut)}</td><td>${nightsBetween(b.checkIn, b.checkOut)}</td><td>${escapeHtml(price)}</td><td><select class="status-select status-${st}" data-booking-status="${b._id}">${Object.entries(STATUS_LABELS).map(([v, l]) => `<option value="${v}" ${v === st ? "selected" : ""}>${l}</option>`).join("")}</select></td><td><div class="row-actions"><button class="btn btn-danger btn-small" data-delete-booking="${b._id}" type="button">حذف</button></div></td></tr>` }).join("");
+            const query = document
+                .getElementById("searchBox")
+                .value
+                .trim()
+                .toLowerCase();
+
+            const apartmentFilter =
+                document.getElementById("apartmentFilter").value;
+
+            const sourceFilter =
+                document.getElementById("sourceFilter").value;
+
+            const statusFilter =
+                document.getElementById("statusFilter").value;
+
+            const filtered = allBookings.filter(booking => {
+                const source = booking.source || "website";
+                const status = booking.status || "pending";
+
+                const searchableText = [
+                    booking.fullName,
+                    booking.phone,
+                    booking.email,
+                    booking.sourceReference
+                ]
+                    .join(" ")
+                    .toLowerCase();
+
+                return (
+                    (!query || searchableText.includes(query)) &&
+                    (
+                        !apartmentFilter ||
+                        String(booking.apartmentId) ===
+                        apartmentFilter
+                    ) &&
+                    (
+                        !sourceFilter ||
+                        source === sourceFilter
+                    ) &&
+                    (
+                        !statusFilter ||
+                        status === statusFilter
+                    )
+                );
+            });
+
+            document.getElementById(
+                "bookingCountText"
+            ).textContent =
+                `المعروض ${filtered.length} من أصل ${allBookings.length} حجز`;
+
+            const body =
+                document.getElementById("bookingsBody");
+
+            if (!filtered.length) {
+                body.innerHTML =
+                    '<tr><td colspan="10" class="empty">لا توجد حجوزات مطابقة.</td></tr>';
+                return;
+            }
+
+            body.innerHTML = filtered.map(booking => {
+                const source =
+                    booking.source || "website";
+
+                const status =
+                    booking.status || "pending";
+
+                const isImportedPlatformBooking =
+                    ["airbnb", "booking"].includes(source) &&
+                    Boolean(booking.externalUid);
+
+                const price =
+                    booking.totalPriceText ||
+                    (
+                        Number(booking.totalPrice) > 0
+                            ? `${booking.totalPrice} ${booking.currency || "JOD"}`
+                            : "—"
+                    );
+
+                const statusControl =
+                    isImportedPlatformBooking
+                        ? `
+                            <span
+                                class="badge status-${status}"
+                                title="الحالة تأتي من المنصة"
+                            >
+                                ${STATUS_LABELS[status] || status}
+                            </span>
+                        `
+                        : `
+                            <select
+                                class="status-select status-${status}"
+                                data-booking-status="${booking._id}"
+                            >
+                                ${Object.entries(STATUS_LABELS)
+                            .map(
+                                ([value, label]) =>
+                                    `<option
+                                                value="${value}"
+                                                ${value === status ? "selected" : ""}
+                                            >${label}</option>`
+                            )
+                            .join("")}
+                            </select>
+                        `;
+
+                let safeAction = "";
+
+                if (isImportedPlatformBooking) {
+                    safeAction = `
+                        <button
+                            class="btn btn-warning btn-small"
+                            data-platform-cancel="${booking._id}"
+                            type="button"
+                        >
+                            إلغاء من المنصة
+                        </button>
+                    `;
+                } else if (status === "cancelled") {
+                    safeAction = `
+                        <button
+                            class="btn btn-danger btn-small"
+                            data-delete-booking="${booking._id}"
+                            type="button"
+                        >
+                            حذف نهائي
+                        </button>
+                    `;
+                } else {
+                    safeAction = `
+                        <button
+                            class="btn btn-warning btn-small"
+                            data-cancel-booking="${booking._id}"
+                            type="button"
+                        >
+                            إلغاء
+                        </button>
+                    `;
+                }
+
+                return `
+                    <tr>
+                        <td>
+                            ${escapeHtml(
+                    booking.apartmentLabel ||
+                    `شقة ${booking.apartmentId}`
+                )}
+                        </td>
+
+                        <td>
+                            <span class="badge source-${source}">
+                                ${SOURCE_LABELS[source] || source}
+                            </span>
+                        </td>
+
+                        <td title="${escapeHtml(booking.email || "")}">
+                            ${escapeHtml(
+                    booking.fullName ||
+                    "حجز بدون اسم"
+                )}
+                        </td>
+
+                        <td>${escapeHtml(booking.phone || "—")}</td>
+                        <td>${dateOnly(booking.checkIn)}</td>
+                        <td>${dateOnly(booking.checkOut)}</td>
+                        <td>${nightsBetween(booking.checkIn, booking.checkOut)}</td>
+                        <td>${escapeHtml(price)}</td>
+                        <td>${statusControl}</td>
+
+                        <td>
+                            <div class="row-actions">
+                                <button
+                                    class="btn btn-light btn-small"
+                                    data-edit-booking="${booking._id}"
+                                    type="button"
+                                >
+                                    تعديل
+                                </button>
+
+                                ${safeAction}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join("");
+        }
+
+        /* =========================================================
+           تلوين قائمة الحالة حسب القيمة المختارة
+        ========================================================= */
+        function applyStatusSelectColor(select) {
+            if (!select) return;
+
+            select.classList.remove(
+                "status-pending",
+                "status-confirmed",
+                "status-cancelled",
+                "status-blocked"
+            );
+
+            select.classList.add(
+                `status-${select.value || "pending"}`
+            );
+        }
+
+        /* =========================================================
+           فتح وإغلاق نافذة تعديل الحجز
+        ========================================================= */
+        function closeEditBookingDialog() {
+            const dialog =
+                document.getElementById("editBookingDialog");
+
+            editingBookingId = null;
+
+            if (dialog?.open) {
+                dialog.close();
+            }
+        }
+
+        function openEditBookingDialog(booking) {
+            if (!booking) return;
+
+            editingBookingId = booking._id;
+
+            const source =
+                booking.source || "website";
+
+            const isImportedPlatformBooking =
+                ["airbnb", "booking"].includes(source) &&
+                Boolean(booking.externalUid);
+
+            const apartmentSelect =
+                document.getElementById("editBookingApartment");
+
+            apartmentSelect.innerHTML = apartments
+                .filter(
+                    apartment =>
+                        apartment.active ||
+                        Number(apartment.apartmentId) ===
+                        Number(booking.apartmentId)
+                )
+                .map(
+                    apartment =>
+                        `<option value="${apartment.apartmentId}">
+                            ${escapeHtml(apartment.label)}
+                        </option>`
+                )
+                .join("");
+
+            apartmentSelect.value =
+                String(booking.apartmentId);
+
+            document.getElementById("editBookingStatus").value =
+                booking.status || "pending";
+
+            document.getElementById("editBookingCheckIn").value =
+                dateOnly(booking.checkIn);
+
+            document.getElementById("editBookingCheckOut").value =
+                dateOnly(booking.checkOut);
+
+            document.getElementById("editBookingCheckOut").min =
+                dateOnly(booking.checkIn);
+
+            document.getElementById("editBookingName").value =
+                booking.fullName || "";
+
+            document.getElementById("editBookingPhone").value =
+                booking.phone || "";
+
+            document.getElementById("editBookingEmail").value =
+                booking.email || "";
+
+            document.getElementById("editBookingReference").value =
+                booking.sourceReference || "";
+
+            document.getElementById("editBookingAdults").value =
+                Number(booking.adults || 0);
+
+            document.getElementById("editBookingChildren").value =
+                Number(booking.children || 0);
+
+            document.getElementById("editBookingPrice").value =
+                Number(booking.totalPrice || 0);
+
+            document.getElementById("editBookingCurrency").value =
+                booking.currency || "JOD";
+
+            document.getElementById("editBookingNotes").value =
+                booking.notes || "";
+
+            apartmentSelect.disabled =
+                isImportedPlatformBooking;
+
+            document.getElementById(
+                "editBookingCheckIn"
+            ).disabled = isImportedPlatformBooking;
+
+            document.getElementById(
+                "editBookingCheckOut"
+            ).disabled = isImportedPlatformBooking;
+
+            document.getElementById(
+                "editBookingStatus"
+            ).disabled = isImportedPlatformBooking;
+
+            document.getElementById(
+                "editBookingWarning"
+            ).classList.toggle(
+                "show",
+                isImportedPlatformBooking
+            );
+
+            applyStatusSelectColor(
+                document.getElementById("editBookingStatus")
+            );
+
+            const dialog =
+                document.getElementById("editBookingDialog");
+
+            if (!dialog.open) {
+                dialog.showModal();
+            }
         }
 
         /* =========================================================
@@ -3878,7 +4812,20 @@ ${connections}
         }
 
         document.getElementById("loginForm").addEventListener("submit", async e => { e.preventDefault(); adminUser = document.getElementById("adminUser").value.trim(); adminPass = document.getElementById("adminPass").value; loginError.textContent = "جاري التحقق..."; try { await loadAll(); loginError.textContent = ""; loginOverlay.classList.add("hidden"); document.getElementById("adminPass").value = "" } catch (error) { loginError.textContent = error.message } });
-        document.getElementById("logoutBtn").addEventListener("click", () => { adminUser = ""; adminPass = ""; loginOverlay.classList.remove("hidden") });
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            adminUser = "";
+            adminPass = "";
+            editingBookingId = null;
+
+            document.getElementById("loginForm").reset();
+            loginError.textContent = "";
+            notice.classList.remove("show");
+            loginOverlay.classList.remove("hidden");
+
+            setTimeout(() => {
+                document.getElementById("adminUser").focus();
+            }, 0);
+        });
         document.querySelectorAll(".tab-btn").forEach(button => button.addEventListener("click", () => { document.querySelectorAll(".tab-btn,.tab-panel").forEach(item => item.classList.remove("active")); button.classList.add("active"); document.getElementById(button.dataset.tab).classList.add("active") }));
         ["searchBox", "apartmentFilter", "sourceFilter", "statusFilter"].forEach(id => {
             document.getElementById(id).addEventListener(
@@ -3897,7 +4844,20 @@ ${connections}
             renderBookings();
             renderAdminCalendar();
         });
-        document.getElementById("refreshBtn").addEventListener("click", async e => { setButtonLoading(e.currentTarget, true, "جاري التحديث..."); try { await loadAll(); showNotice("تم تحديث البيانات.") } catch (error) { showNotice(error.message, "error") } finally { setButtonLoading(e.currentTarget, false) } });
+        document.getElementById("refreshBtn").addEventListener("click", async e => {
+            const button = e.currentTarget;
+
+            setButtonLoading(button, true, "جاري التحديث...");
+
+            try {
+                await loadAll();
+                showNotice("تم تحديث البيانات.");
+            } catch (error) {
+                showNotice(error.message, "error");
+            } finally {
+                setButtonLoading(button, false);
+            }
+        });
 
         document.getElementById("manualBookingForm").addEventListener("submit", async e => {
             e.preventDefault();
@@ -3935,6 +4895,9 @@ ${connections}
                 document.getElementById("manualAdults").value = 1;
                 document.getElementById("manualChildren").value = 0;
                 document.getElementById("manualPrice").value = 0;
+                applyStatusSelectColor(
+                    document.getElementById("manualStatus")
+                );
 
                 await loadAll();
                 showNotice("✅ تم إضافة الحجز وإغلاق التواريخ بنجاح.");
@@ -3944,8 +4907,295 @@ ${connections}
                 setButtonLoading(button, false);
             }
         });
-        document.getElementById("bookingsBody").addEventListener("change", async e => { const id = e.target.dataset.bookingStatus; if (!id) return; try { await api(`/admin/bookings/${id}`, { method: "PATCH", body: JSON.stringify({ status: e.target.value }) }); await loadAll(); showNotice("تم تحديث حالة الحجز.") } catch (error) { showNotice(error.message, "error"); await loadAll() } });
-        document.getElementById("bookingsBody").addEventListener("click", async e => { const id = e.target.dataset.deleteBooking; if (!id || !confirm("هل أنت متأكد من حذف هذا الحجز نهائيًا؟")) return; setButtonLoading(e.target, true, "..."); try { await api(`/admin/bookings/${id}`, { method: "DELETE" }); await loadAll(); showNotice("تم حذف الحجز.") } catch (error) { showNotice(error.message, "error"); setButtonLoading(e.target, false) } });
+        document
+            .getElementById("bookingsBody")
+            .addEventListener("change", async event => {
+                const select =
+                    event.target.closest("[data-booking-status]");
+
+                if (!select) return;
+
+                const bookingId =
+                    select.dataset.bookingStatus;
+
+                applyStatusSelectColor(select);
+                select.disabled = true;
+
+                try {
+                    await api(
+                        `/admin/bookings/${bookingId}`,
+                        {
+                            method: "PATCH",
+                            body: JSON.stringify({
+                                status: select.value
+                            })
+                        }
+                    );
+
+                    await loadAll();
+                    showNotice("✅ تم تحديث حالة الحجز.");
+                } catch (error) {
+                    showNotice(error.message, "error");
+                    await loadAll();
+                }
+            });
+
+        document
+            .getElementById("bookingsBody")
+            .addEventListener("click", async event => {
+                const button = event.target.closest("button");
+
+                if (!button) return;
+
+                const editId =
+                    button.dataset.editBooking;
+
+                if (editId) {
+                    const booking = allBookings.find(
+                        item => item._id === editId
+                    );
+
+                    openEditBookingDialog(booking);
+                    return;
+                }
+
+                const platformId =
+                    button.dataset.platformCancel;
+
+                if (platformId) {
+                    const booking = allBookings.find(
+                        item => item._id === platformId
+                    );
+
+                    const platformName =
+                        booking?.source === "airbnb"
+                            ? "Airbnb"
+                            : "Booking.com";
+
+                    showNotice(
+                        `هذا الحجز حقيقي على ${platformName}. افتح ${platformName} وألغِه هناك؛ بعدها ستزيله المزامنة من PMS تلقائيًا.`,
+                        "error"
+                    );
+
+                    return;
+                }
+
+                const cancelId =
+                    button.dataset.cancelBooking;
+
+                if (cancelId) {
+                    if (
+                        !confirm(
+                            "هل تريد إلغاء هذا الحجز؟ ستفتح تواريخه في تقويم HIJAZI بعد مزامنة المنصات."
+                        )
+                    ) {
+                        return;
+                    }
+
+                    setButtonLoading(
+                        button,
+                        true,
+                        "جاري الإلغاء..."
+                    );
+
+                    try {
+                        await api(
+                            `/admin/bookings/${cancelId}`,
+                            {
+                                method: "PATCH",
+                                body: JSON.stringify({
+                                    status: "cancelled"
+                                })
+                            }
+                        );
+
+                        await loadAll();
+                        showNotice("✅ تم إلغاء الحجز.");
+                    } catch (error) {
+                        showNotice(error.message, "error");
+
+                        if (document.body.contains(button)) {
+                            setButtonLoading(button, false);
+                        }
+                    }
+
+                    return;
+                }
+
+                const deleteId =
+                    button.dataset.deleteBooking;
+
+                if (!deleteId) return;
+
+                if (
+                    !confirm(
+                        "الحجز ملغي. هل تريد حذفه نهائيًا من سجل PMS؟"
+                    )
+                ) {
+                    return;
+                }
+
+                setButtonLoading(
+                    button,
+                    true,
+                    "جاري الحذف..."
+                );
+
+                try {
+                    await api(
+                        `/admin/bookings/${deleteId}`,
+                        {
+                            method: "DELETE"
+                        }
+                    );
+
+                    await loadAll();
+                    showNotice("✅ تم حذف الحجز نهائيًا.");
+                } catch (error) {
+                    showNotice(error.message, "error");
+
+                    if (document.body.contains(button)) {
+                        setButtonLoading(button, false);
+                    }
+                }
+            });
+
+        document
+            .getElementById("closeEditBookingBtn")
+            .addEventListener("click", closeEditBookingDialog);
+
+        document
+            .getElementById("cancelEditBookingBtn")
+            .addEventListener("click", closeEditBookingDialog);
+
+        document
+            .getElementById("editBookingDialog")
+            .addEventListener("click", event => {
+                if (event.target === event.currentTarget) {
+                    closeEditBookingDialog();
+                }
+            });
+
+        document
+            .getElementById("editBookingStatus")
+            .addEventListener("change", event => {
+                applyStatusSelectColor(event.currentTarget);
+            });
+
+        document
+            .getElementById("editBookingCheckIn")
+            .addEventListener("change", event => {
+                document.getElementById(
+                    "editBookingCheckOut"
+                ).min = event.currentTarget.value;
+            });
+
+        document
+            .getElementById("editBookingForm")
+            .addEventListener("submit", async event => {
+                event.preventDefault();
+
+                if (!editingBookingId) return;
+
+                const button =
+                    document.getElementById("saveEditBookingBtn");
+
+                setButtonLoading(
+                    button,
+                    true,
+                    "جاري الحفظ..."
+                );
+
+                try {
+                    const payload = {
+                        apartmentId: Number(
+                            document.getElementById(
+                                "editBookingApartment"
+                            ).value
+                        ),
+
+                        status:
+                            document.getElementById(
+                                "editBookingStatus"
+                            ).value,
+
+                        checkIn:
+                            document.getElementById(
+                                "editBookingCheckIn"
+                            ).value,
+
+                        checkOut:
+                            document.getElementById(
+                                "editBookingCheckOut"
+                            ).value,
+
+                        fullName:
+                            document.getElementById(
+                                "editBookingName"
+                            ).value,
+
+                        phone:
+                            document.getElementById(
+                                "editBookingPhone"
+                            ).value,
+
+                        email:
+                            document.getElementById(
+                                "editBookingEmail"
+                            ).value,
+
+                        sourceReference:
+                            document.getElementById(
+                                "editBookingReference"
+                            ).value,
+
+                        adults: Number(
+                            document.getElementById(
+                                "editBookingAdults"
+                            ).value || 0
+                        ),
+
+                        children: Number(
+                            document.getElementById(
+                                "editBookingChildren"
+                            ).value || 0
+                        ),
+
+                        totalPrice: Number(
+                            document.getElementById(
+                                "editBookingPrice"
+                            ).value || 0
+                        ),
+
+                        currency:
+                            document.getElementById(
+                                "editBookingCurrency"
+                            ).value,
+
+                        notes:
+                            document.getElementById(
+                                "editBookingNotes"
+                            ).value
+                    };
+
+                    const data = await api(
+                        `/admin/bookings/${editingBookingId}`,
+                        {
+                            method: "PUT",
+                            body: JSON.stringify(payload)
+                        }
+                    );
+
+                    closeEditBookingDialog();
+                    await loadAll();
+                    showNotice(data.message || "✅ تم حفظ التعديلات.");
+                } catch (error) {
+                    showNotice(error.message, "error");
+                } finally {
+                    setButtonLoading(button, false);
+                }
+            });
+
         document.getElementById("addApartmentForm").addEventListener("submit", async e => {
             e.preventDefault();
 
@@ -4167,7 +5417,56 @@ ${connections}
                 }
             });
 
-        document.getElementById("syncAllBtn").addEventListener("click", async e => { setButtonLoading(e.currentTarget, true, "جاري المزامنة..."); try { const data = await api("/admin/sync", { method: "POST", body: "{}" }); await loadAll(); const successes = data.results?.filter(r => r.status === "success").length || 0, errors = data.results?.filter(r => r.status === "error") || []; showNotice(errors.length ? `نجحت ${successes} مزامنة، وفشلت ${errors.length}: ${errors.map(i => i.message).join(" — ")}` : `تمت المزامنة بنجاح (${successes} تقويم).`, errors.length ? "error" : "success") } catch (error) { showNotice(error.message, "error") } finally { setButtonLoading(e.currentTarget, false) } });
+        document
+            .getElementById("syncAllBtn")
+            .addEventListener("click", async event => {
+                /*
+                  نحفظ الزر قبل await؛ لأن event.currentTarget
+                  تصبح null بعد انتهاء الجزء المتزامن من الحدث.
+                */
+                const button = event.currentTarget;
+
+                setButtonLoading(
+                    button,
+                    true,
+                    "جاري المزامنة..."
+                );
+
+                try {
+                    const data = await api(
+                        "/admin/sync",
+                        {
+                            method: "POST",
+                            body: "{}"
+                        }
+                    );
+
+                    await loadAll();
+
+                    const successes =
+                        data.results?.filter(
+                            result =>
+                                result.status === "success"
+                        ).length || 0;
+
+                    const errors =
+                        data.results?.filter(
+                            result =>
+                                result.status === "error"
+                        ) || [];
+
+                    showNotice(
+                        errors.length
+                            ? `نجحت ${successes} مزامنة، وفشلت ${errors.length}: ${errors.map(item => item.message).join(" — ")}`
+                            : `تمت المزامنة بنجاح (${successes} تقويم).`,
+                        errors.length ? "error" : "success"
+                    );
+                } catch (error) {
+                    showNotice(error.message, "error");
+                } finally {
+                    setButtonLoading(button, false);
+                }
+            });
         /* تشغيل تقويم الأدمن بعد تجهيز الصفحة */
         initializeAdminCalendar();
         const today = todayInAmman();
@@ -4190,6 +5489,16 @@ ${connections}
         ["manualApartment", "manualCheckOut"].forEach(id => {
             document.getElementById(id).addEventListener("change", updateManualPrice);
         });
+
+        document
+            .getElementById("manualStatus")
+            .addEventListener("change", event => {
+                applyStatusSelectColor(event.currentTarget);
+            });
+
+        applyStatusSelectColor(
+            document.getElementById("manualStatus")
+        );
     </script>
 </body>
 

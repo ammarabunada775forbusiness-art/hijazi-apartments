@@ -64,6 +64,9 @@ const bookingSchema = new mongoose.Schema(
             index: true
         },
 
+        // وقت إلغاء الحجز داخل PMS للحجوزات المحلية
+        cancelledAt: { type: Date, default: null },
+
         // رقم الحجز أو UID القادم من المنصة الخارجية
         externalUid: { type: String, default: "", trim: true },
         sourceReference: { type: String, default: "", trim: true },
