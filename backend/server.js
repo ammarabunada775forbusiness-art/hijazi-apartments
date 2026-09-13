@@ -918,17 +918,61 @@ app.delete("/admin/apartments/:id", requireAdmin, async (req, res) => {
 ========================================================= */
 app.post("/admin/sync", requireAdmin, async (req, res) => {
     try {
-        const filter = req.body.apartmentId
-            ? { apartmentId: Number(req.body.apartmentId), active: true }
-            : { active: true };
-        const apartments = await Apartment.find(filter).sort({ apartmentId: 1 });
+        const requestedApartmentId = req.body.apartmentId
+            ? Number(req.body.apartmentId)
+            : null;
+
+        const requestedSource = String(req.body.source || "")
+            .trim()
+            .toLowerCase();
+
+        if (
+            requestedSource &&
+            !["airbnb", "booking"].includes(requestedSource)
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: "مصدر المزامنة غير صحيح."
+            });
+        }
+
+        const filter = requestedApartmentId
+            ? {
+                apartmentId: requestedApartmentId,
+                active: true
+            }
+            : {
+                active: true
+            };
+
+        const apartments = await Apartment.find(filter)
+            .sort({ apartmentId: 1 });
+
+        if (!apartments.length) {
+            return res.status(404).json({
+                success: false,
+                message: "لم يتم العثور على شقة فعالة للمزامنة."
+            });
+        }
+
+        const sources = requestedSource
+            ? [requestedSource]
+            : ["airbnb", "booking"];
+
         const results = [];
 
         for (const apartment of apartments) {
-            for (const source of ["airbnb", "booking"]) {
+            for (const source of sources) {
                 try {
-                    const result = await syncApartmentCalendar(apartment, source);
-                    results.push({ apartmentId: apartment.apartmentId, ...result });
+                    const result = await syncApartmentCalendar(
+                        apartment,
+                        source
+                    );
+
+                    results.push({
+                        apartmentId: apartment.apartmentId,
+                        ...result
+                    });
                 } catch (error) {
                     results.push({
                         apartmentId: apartment.apartmentId,
@@ -942,12 +986,18 @@ app.post("/admin/sync", requireAdmin, async (req, res) => {
         }
 
         res.json({
-            success: !results.some((result) => result.status === "error"),
+            success: !results.some(
+                result => result.status === "error"
+            ),
             results
         });
     } catch (error) {
         console.log("ADMIN SYNC ERROR:", error);
-        res.status(500).json({ success: false, message: "تعذر تشغيل المزامنة." });
+
+        res.status(500).json({
+            success: false,
+            message: "تعذر تشغيل المزامنة."
+        });
     }
 });
 

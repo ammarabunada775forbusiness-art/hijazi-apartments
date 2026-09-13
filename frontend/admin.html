@@ -1482,6 +1482,314 @@
                 animation: none;
             }
         }
+
+        /* =========================================================
+   صحة المزامنة وكشف التعارضات
+========================================================= */
+
+        .sync-health-section {
+            overflow: hidden;
+        }
+
+        .sync-health-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+
+        .health-summary-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 36px;
+            padding: 7px 11px;
+            border: 1px solid rgba(255, 255, 255, 0.74);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.48);
+            box-shadow: 0 6px 15px rgba(25, 21, 12, 0.07);
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .health-summary-item strong {
+            font-size: 15px;
+        }
+
+        .sync-health-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .sync-apartment-card {
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.74);
+            border-radius: 17px;
+            background:
+                linear-gradient(145deg,
+                    rgba(255, 255, 255, 0.55),
+                    rgba(255, 255, 255, 0.27));
+            box-shadow: 0 12px 28px rgba(25, 21, 12, 0.08);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .sync-apartment-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .sync-apartment-head h3 {
+            margin: 0;
+            font-size: 17px;
+        }
+
+        .sync-apartment-head span {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .health-sources {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .health-source {
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.66);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.39);
+        }
+
+        .health-source-airbnb {
+            border-color: rgba(255, 56, 92, 0.30);
+            box-shadow: inset -4px 0 0 #ff385c;
+        }
+
+        .health-source-booking {
+            border-color: rgba(0, 59, 149, 0.30);
+            box-shadow: inset -4px 0 0 #003b95;
+        }
+
+        .health-source-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 7px;
+            margin-bottom: 8px;
+        }
+
+        .health-source-airbnb .health-source-title strong {
+            color: #d71948;
+        }
+
+        .health-source-booking .health-source-title strong {
+            color: #003b95;
+        }
+
+        .health-status {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 72px;
+            padding: 5px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 900;
+        }
+
+        .health-success {
+            color: #067647;
+            background: #dcfae6;
+            border: 1px solid #75e0a7;
+        }
+
+        .health-warning {
+            color: #93370d;
+            background: #fef0c7;
+            border: 1px solid #fec84b;
+        }
+
+        .health-error {
+            color: #b42318;
+            background: #fee4e2;
+            border: 1px solid #fda29b;
+        }
+
+        .health-off {
+            color: #475467;
+            background: #f2f4f7;
+            border: 1px solid #d0d5dd;
+        }
+
+        .health-source-message {
+            min-height: 39px;
+            margin: 0 0 5px;
+            color: #4c4840;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .health-source-time {
+            display: block;
+            min-height: 32px;
+            margin-bottom: 9px;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .health-source .btn {
+            width: 100%;
+            min-height: 37px;
+            padding: 7px 9px;
+            font-size: 12px;
+        }
+
+        /* ===== فحص التعارضات ===== */
+
+        .conflict-zone {
+            margin-top: 18px;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            border-radius: 17px;
+            background: rgba(255, 255, 255, 0.33);
+        }
+
+        .conflict-zone.has-conflicts {
+            border-color: rgba(240, 68, 56, 0.36);
+            background: rgba(254, 228, 226, 0.46);
+        }
+
+        .conflict-zone.no-conflicts {
+            border-color: rgba(18, 183, 106, 0.29);
+            background: rgba(220, 250, 230, 0.42);
+        }
+
+        .conflict-zone-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .conflict-zone-head h3 {
+            margin: 0;
+            font-size: 17px;
+        }
+
+        .conflict-zone-head p {
+            margin: 4px 0 0;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .conflict-count {
+            display: inline-grid;
+            place-items: center;
+            min-width: 38px;
+            height: 38px;
+            padding: 0 8px;
+            border-radius: 50%;
+            color: #fff;
+            background: #111;
+            font-weight: 900;
+        }
+
+        .conflict-clear {
+            margin-top: 13px;
+            padding: 13px;
+            border-radius: 12px;
+            color: #067647;
+            background: rgba(255, 255, 255, 0.48);
+            font-weight: 900;
+        }
+
+        .conflict-list {
+            display: grid;
+            gap: 9px;
+            margin-top: 13px;
+        }
+
+        .conflict-item {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 12px;
+            padding: 12px;
+            border: 1px solid rgba(240, 68, 56, 0.23);
+            border-radius: 13px;
+            background: rgba(255, 255, 255, 0.58);
+        }
+
+        .conflict-apartment {
+            display: grid;
+            place-items: center;
+            min-width: 75px;
+            padding: 8px;
+            border-radius: 11px;
+            color: #fff;
+            background: #b42318;
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .conflict-details {
+            min-width: 0;
+        }
+
+        .conflict-details strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #7a271a;
+        }
+
+        .conflict-sources {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+
+        .conflict-dates {
+            display: block;
+            margin-top: 7px;
+            color: #555048;
+            font-size: 12px;
+        }
+
+        @media (max-width: 1050px) {
+            .sync-health-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .health-sources {
+                grid-template-columns: 1fr;
+            }
+
+            .sync-health-summary {
+                width: 100%;
+            }
+
+            .health-summary-item {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .conflict-item {
+                grid-template-columns: 1fr;
+            }
+
+            .conflict-apartment {
+                width: fit-content;
+            }
+        }
     </style>
 </head>
 
@@ -1534,6 +1842,42 @@
                     <div class="stat-value" id="platformCount">0</div>
                 </div>
             </div>
+
+            <!-- =========================================================
+     صحة المزامنة وتنبيهات التعارض
+========================================================= -->
+            <section class="card section-card sync-health-section">
+                <div class="section-head">
+                    <div>
+                        <h2>صحة المزامنة</h2>
+                        <p>
+                            متابعة حالة ربط Airbnb وBooking لكل شقة،
+                            وتشغيل مزامنة مستقلة لأي منصة.
+                        </p>
+                    </div>
+
+                    <div class="sync-health-summary" id="syncHealthSummary">
+                        جاري فحص المزامنة...
+                    </div>
+                </div>
+
+                <div class="sync-health-grid" id="syncHealthGrid"></div>
+
+                <div class="conflict-zone" id="conflictZone">
+                    <div class="conflict-zone-head">
+                        <div>
+                            <h3>فحص تعارض الحجوزات</h3>
+                            <p>
+                                يفحص وجود حجزين متداخلين على الشقة نفسها.
+                            </p>
+                        </div>
+
+                        <span class="conflict-count" id="conflictCount">0</span>
+                    </div>
+
+                    <div id="conflictAlerts"></div>
+                </div>
+            </section>
 
             <section class="card section-card">
                 <div class="section-head">
@@ -2059,6 +2403,389 @@
             adminCalendar.render();
         }
 
+        /* =========================================================
+   تحديد حالة اتصال تقويم واحد
+========================================================= */
+        const SYNC_STALE_MINUTES = 45;
+
+        function getCalendarHealth(connection) {
+            if (!connection?.url || !connection?.enabled) {
+                return {
+                    level: "off",
+                    label: "غير مربوط",
+                    message: "الاستيراد غير مفعّل لهذه المنصة."
+                };
+            }
+
+            if (connection.lastSyncStatus === "error") {
+                return {
+                    level: "error",
+                    label: "خطأ",
+                    message:
+                        connection.lastSyncMessage ||
+                        "فشلت آخر محاولة مزامنة."
+                };
+            }
+
+            if (!connection.lastSyncedAt) {
+                return {
+                    level: "warning",
+                    label: "بانتظار المزامنة",
+                    message: "الرابط محفوظ، لكن لم تتم مزامنته بعد."
+                };
+            }
+
+            const syncedAt = new Date(connection.lastSyncedAt);
+
+            if (Number.isNaN(syncedAt.getTime())) {
+                return {
+                    level: "warning",
+                    label: "وقت غير معروف",
+                    message: "تعذر قراءة وقت آخر مزامنة."
+                };
+            }
+
+            const ageMinutes = Math.max(
+                0,
+                Math.floor((Date.now() - syncedAt.getTime()) / 60000)
+            );
+
+            if (ageMinutes > SYNC_STALE_MINUTES) {
+                return {
+                    level: "warning",
+                    label: "متأخرة",
+                    message: `آخر مزامنة أقدم من ${SYNC_STALE_MINUTES} دقيقة.`
+                };
+            }
+
+            return {
+                level: "success",
+                label: "سليمة",
+                message:
+                    connection.lastSyncMessage ||
+                    "تمت المزامنة بنجاح."
+            };
+        }
+
+        /* =========================================================
+           تنسيق وقت المزامنة بتوقيت عمّان
+        ========================================================= */
+        function formatSyncDateTime(value) {
+            if (!value) return "لم تتم المزامنة بعد";
+
+            const date = new Date(value);
+
+            if (Number.isNaN(date.getTime())) {
+                return "وقت المزامنة غير معروف";
+            }
+
+            return new Intl.DateTimeFormat("ar-JO", {
+                timeZone: "Asia/Amman",
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            }).format(date);
+        }
+
+        /* =========================================================
+           البحث عن حجوزات متداخلة للشقة نفسها
+        ========================================================= */
+        function findBookingConflicts() {
+            const activeBookings = allBookings
+                .filter(booking => booking.status !== "cancelled")
+                .map(booking => ({
+                    booking,
+                    start: new Date(booking.checkIn),
+                    end: new Date(booking.checkOut)
+                }))
+                .filter(item =>
+                    !Number.isNaN(item.start.getTime()) &&
+                    !Number.isNaN(item.end.getTime()) &&
+                    item.end > item.start
+                );
+
+            const bookingsByApartment = new Map();
+
+            activeBookings.forEach(item => {
+                const apartmentId = Number(item.booking.apartmentId);
+
+                if (!bookingsByApartment.has(apartmentId)) {
+                    bookingsByApartment.set(apartmentId, []);
+                }
+
+                bookingsByApartment.get(apartmentId).push(item);
+            });
+
+            const conflicts = [];
+
+            bookingsByApartment.forEach((items, apartmentId) => {
+                items.sort((first, second) => first.start - second.start);
+
+                for (let firstIndex = 0; firstIndex < items.length; firstIndex++) {
+                    const first = items[firstIndex];
+
+                    for (
+                        let secondIndex = firstIndex + 1;
+                        secondIndex < items.length;
+                        secondIndex++
+                    ) {
+                        const second = items[secondIndex];
+
+                        if (second.start >= first.end) {
+                            break;
+                        }
+
+                        if (
+                            first.start < second.end &&
+                            first.end > second.start
+                        ) {
+                            conflicts.push({
+                                apartmentId,
+                                first: first.booking,
+                                second: second.booking,
+                                overlapStart: new Date(
+                                    Math.max(
+                                        first.start.getTime(),
+                                        second.start.getTime()
+                                    )
+                                ).toISOString().slice(0, 10),
+                                overlapEnd: new Date(
+                                    Math.min(
+                                        first.end.getTime(),
+                                        second.end.getTime()
+                                    )
+                                ).toISOString().slice(0, 10)
+                            });
+                        }
+                    }
+                }
+            });
+
+            return conflicts;
+        }
+
+        /* =========================================================
+           عرض نتيجة فحص تعارض الحجوزات
+        ========================================================= */
+        function renderConflictAlerts() {
+            const conflictZone = document.getElementById("conflictZone");
+            const conflictCount = document.getElementById("conflictCount");
+            const conflictAlerts = document.getElementById("conflictAlerts");
+
+            if (!conflictZone || !conflictCount || !conflictAlerts) return;
+
+            const conflicts = findBookingConflicts();
+
+            conflictCount.textContent = conflicts.length;
+
+            if (!conflicts.length) {
+                conflictZone.classList.remove("has-conflicts");
+                conflictZone.classList.add("no-conflicts");
+
+                conflictAlerts.innerHTML = `
+            <div class="conflict-clear">
+                ✅ لا يوجد حاليًا أي تعارض بين الحجوزات.
+            </div>
+        `;
+
+                return;
+            }
+
+            conflictZone.classList.remove("no-conflicts");
+            conflictZone.classList.add("has-conflicts");
+
+            conflictAlerts.innerHTML = `
+        <div class="conflict-list">
+            ${conflicts.slice(0, 20).map(conflict => {
+                const firstSource =
+                    SOURCE_LABELS[conflict.first.source] ||
+                    conflict.first.source;
+
+                const secondSource =
+                    SOURCE_LABELS[conflict.second.source] ||
+                    conflict.second.source;
+
+                return `
+                    <div class="conflict-item">
+                        <div class="conflict-apartment">
+                            الشقة ${conflict.apartmentId}
+                        </div>
+
+                        <div class="conflict-details">
+                            <strong>
+                                ⚠️ يوجد حجزان متداخلان
+                            </strong>
+
+                            <div class="conflict-sources">
+                                <span class="badge source-${escapeHtml(
+                    conflict.first.source
+                )}">
+                                    ${escapeHtml(firstSource)}
+                                </span>
+
+                                <span>مع</span>
+
+                                <span class="badge source-${escapeHtml(
+                    conflict.second.source
+                )}">
+                                    ${escapeHtml(secondSource)}
+                                </span>
+                            </div>
+
+                            <span class="conflict-dates">
+                                فترة التداخل:
+                                ${escapeHtml(conflict.overlapStart)}
+                                إلى
+                                ${escapeHtml(conflict.overlapEnd)}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join("")}
+        </div>
+    `;
+        }
+
+        /* =========================================================
+           عرض صحة مزامنة جميع الشقق والمنصات
+        ========================================================= */
+        function renderSyncHealth() {
+            const grid = document.getElementById("syncHealthGrid");
+            const summary = document.getElementById("syncHealthSummary");
+
+            if (!grid || !summary) return;
+
+            const counts = {
+                success: 0,
+                warning: 0,
+                error: 0,
+                off: 0
+            };
+
+            if (!apartments.length) {
+                grid.innerHTML = `
+            <div class="sync-apartment-card">
+                لا توجد شقق داخل النظام.
+            </div>
+        `;
+
+                summary.textContent = "لا توجد بيانات";
+                renderConflictAlerts();
+                return;
+            }
+
+            grid.innerHTML = apartments.map(apartment => {
+                const sourcesHtml = ["airbnb", "booking"].map(source => {
+                    const connection =
+                        apartment.calendars?.[source] || {};
+
+                    const health = getCalendarHealth(connection);
+                    counts[health.level]++;
+
+                    const sourceTitle =
+                        source === "airbnb"
+                            ? "Airbnb"
+                            : "Booking.com";
+
+                    const canSync =
+                        Boolean(connection.url) &&
+                        Boolean(connection.enabled);
+
+                    return `
+                <div class="health-source health-source-${source}">
+                    <div class="health-source-title">
+                        <strong>${sourceTitle}</strong>
+
+                        <span class="health-status health-${health.level}">
+                            ${escapeHtml(health.label)}
+                        </span>
+                    </div>
+
+                    <p class="health-source-message">
+                        ${escapeHtml(health.message)}
+                    </p>
+
+                    <span class="health-source-time">
+                        آخر محاولة:
+                        ${escapeHtml(
+                        formatSyncDateTime(connection.lastSyncedAt)
+                    )}
+                    </span>
+
+                    ${canSync
+                            ? `
+                                <button
+                                    class="btn btn-dark"
+                                    type="button"
+                                    data-sync-source="${source}"
+                                    data-sync-apartment="${apartment.apartmentId}"
+                                >
+                                    مزامنة ${sourceTitle}
+                                </button>
+                            `
+                            : `
+                                <button
+                                    class="btn btn-light"
+                                    type="button"
+                                    disabled
+                                >
+                                    الرابط غير مفعّل
+                                </button>
+                            `
+                        }
+                </div>
+            `;
+                }).join("");
+
+                return `
+            <article class="sync-apartment-card">
+                <div class="sync-apartment-head">
+                    <h3>
+                        ${escapeHtml(
+                    apartment.label ||
+                    `شقة رقم ${apartment.apartmentId}`
+                )}
+                    </h3>
+
+                    <span>
+                        رقم ${apartment.apartmentId}
+                    </span>
+                </div>
+
+                <div class="health-sources">
+                    ${sourcesHtml}
+                </div>
+            </article>
+        `;
+            }).join("");
+
+            summary.innerHTML = `
+        <span class="health-summary-item health-success">
+            سليمة
+            <strong>${counts.success}</strong>
+        </span>
+
+        <span class="health-summary-item health-warning">
+            تحتاج انتباه
+            <strong>${counts.warning}</strong>
+        </span>
+
+        <span class="health-summary-item health-error">
+            أخطاء
+            <strong>${counts.error}</strong>
+        </span>
+
+        <span class="health-summary-item health-off">
+            غير مربوطة
+            <strong>${counts.off}</strong>
+        </span>
+    `;
+
+            renderConflictAlerts();
+        }
+
         function syncStatusText(c) { if (!c?.lastSyncedAt) return "لم تتم المزامنة بعد."; const time = new Date(c.lastSyncedAt).toLocaleString("ar-JO", { timeZone: "Asia/Amman" }); return `${c.lastSyncStatus === "success" ? "نجحت" : "فشلت"} آخر مزامنة: ${time}${c.lastSyncMessage ? ` — ${c.lastSyncMessage}` : ""}`; }
         function renderApartments() {
             const grid = document.getElementById("apartmentsGrid");
@@ -2217,6 +2944,7 @@
             updateStats();
             renderBookings();
             renderApartments();
+            renderSyncHealth();
             renderAdminCalendar();
         }
 
@@ -2438,6 +3166,70 @@
                 }
             }
         });
+
+        /* =========================================================
+   مزامنة منصة واحدة لشقة واحدة من لوحة الصحة
+========================================================= */
+        document
+            .getElementById("syncHealthGrid")
+            .addEventListener("click", async event => {
+                const button = event.target.closest("[data-sync-source]");
+
+                if (!button) return;
+
+                const source = button.dataset.syncSource;
+                const apartmentId = Number(
+                    button.dataset.syncApartment
+                );
+
+                const sourceTitle =
+                    source === "airbnb"
+                        ? "Airbnb"
+                        : "Booking.com";
+
+                setButtonLoading(
+                    button,
+                    true,
+                    `مزامنة ${sourceTitle}...`
+                );
+
+                try {
+                    const data = await api("/admin/sync", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            apartmentId,
+                            source
+                        })
+                    });
+
+                    const failedResult = data.results?.find(
+                        result => result.status === "error"
+                    );
+
+                    await loadAll();
+
+                    if (failedResult) {
+                        throw new Error(
+                            failedResult.message ||
+                            `فشلت مزامنة ${sourceTitle}.`
+                        );
+                    }
+
+                    const result = data.results?.[0];
+                    const importedCount = result?.imported || 0;
+
+                    showNotice(
+                        `✅ تمت مزامنة ${sourceTitle} للشقة ${apartmentId}. تمت قراءة ${importedCount} فترة.`
+                    );
+                } catch (error) {
+                    showNotice(error.message, "error");
+
+                    if (document.body.contains(button)) {
+                        setButtonLoading(button, false);
+                    }
+                }
+            });
+
         document.getElementById("syncAllBtn").addEventListener("click", async e => { setButtonLoading(e.currentTarget, true, "جاري المزامنة..."); try { const data = await api("/admin/sync", { method: "POST", body: "{}" }); await loadAll(); const successes = data.results?.filter(r => r.status === "success").length || 0, errors = data.results?.filter(r => r.status === "error") || []; showNotice(errors.length ? `نجحت ${successes} مزامنة، وفشلت ${errors.length}: ${errors.map(i => i.message).join(" — ")}` : `تمت المزامنة بنجاح (${successes} تقويم).`, errors.length ? "error" : "success") } catch (error) { showNotice(error.message, "error") } finally { setButtonLoading(e.currentTarget, false) } });
         /* تشغيل تقويم الأدمن بعد تجهيز الصفحة */
         initializeAdminCalendar();
