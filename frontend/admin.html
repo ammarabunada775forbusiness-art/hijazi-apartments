@@ -1480,8 +1480,7 @@
             }
 
             grid.innerHTML = apartments.map(a => {
-                const protectedApartment =
-                    Number(a.apartmentId) >= 1 && Number(a.apartmentId) <= 6;
+                const isProtected = Number(a.apartmentId) >= 1 && Number(a.apartmentId) <= 6;
 
                 const connections = ["airbnb", "booking"].map(s => {
                     const c = a.calendars?.[s] || {};
@@ -1539,15 +1538,15 @@
             `;
                 }).join("");
 
-                const deleteControl = protectedApartment
+                const deleteControl = isProtected
                     ? `
                 <span style="
                     display:inline-flex;
                     align-items:center;
-                    padding:8px 12px;
+                    padding:9px 12px;
                     border-radius:10px;
-                    background:#f4f5f7;
-                    color:#68707b;
+                    background:#f2f4f7;
+                    color:#667085;
                     font-weight:800;
                     font-size:13px;
                 ">
@@ -1686,6 +1685,7 @@
                 });
 
                 form.reset();
+
                 document.getElementById("manualAdults").value = 1;
                 document.getElementById("manualChildren").value = 0;
                 document.getElementById("manualPrice").value = 0;
@@ -1721,6 +1721,7 @@
 
                 form.reset();
                 await loadAll();
+
                 showNotice("✅ تمت إضافة الشقة إلى النظام.");
             } catch (error) {
                 showNotice(error.message, "error");
@@ -1757,36 +1758,29 @@
 
             if (e.target.hasAttribute("data-delete-apartment")) {
                 if (Number(apartment.apartmentId) <= 6) {
-                    showNotice(
-                        "الشقق الأساسية من 1 إلى 6 محمية ولا يمكن حذفها.",
-                        "error"
-                    );
+                    showNotice("الشقق الأساسية من 1 إلى 6 محمية ولا يمكن حذفها.", "error");
                     return;
                 }
 
-                const approved = confirm(
-                    `هل أنت متأكد من حذف الشقة ${apartment.apartmentId} نهائيًا؟`
+                const confirmed = confirm(
+                    `هل أنت متأكد من حذف الشقة ${apartment.apartmentId}؟`
                 );
 
-                if (!approved) return;
+                if (!confirmed) return;
 
                 const button = e.target;
                 setButtonLoading(button, true, "جاري الحذف...");
 
                 try {
-                    const data = await api(
-                        `/admin/apartments/${apartment._id}`,
-                        { method: "DELETE" }
-                    );
+                    await api(`/admin/apartments/${apartment._id}`, {
+                        method: "DELETE"
+                    });
 
                     await loadAll();
-                    showNotice(data.message || "✅ تم حذف الشقة.");
+                    showNotice(`✅ تم حذف الشقة ${apartment.apartmentId}.`);
                 } catch (error) {
                     showNotice(error.message, "error");
-
-                    if (document.body.contains(button)) {
-                        setButtonLoading(button, false);
-                    }
+                    setButtonLoading(button, false);
                 }
 
                 return;
@@ -1839,8 +1833,9 @@
 
                     await loadAll();
 
-                    const errors =
-                        data.results?.filter(result => result.status === "error") || [];
+                    const errors = data.results?.filter(
+                        result => result.status === "error"
+                    ) || [];
 
                     showNotice(
                         errors.length

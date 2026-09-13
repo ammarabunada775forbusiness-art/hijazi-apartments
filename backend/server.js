@@ -891,15 +891,17 @@ app.delete("/admin/apartments/:id", requireAdmin, async (req, res) => {
         if (bookingsCount > 0) {
             return res.status(409).json({
                 success: false,
-                message: `لا يمكن حذف الشقة ${apartment.apartmentId} لأنها تحتوي على ${bookingsCount} حجز. أوقف تفعيلها بدل حذفها للمحافظة على سجل الحجوزات.`
+                message: "لا يمكن حذف هذه الشقة لأنها تحتوي على حجوزات سابقة أو حالية. ألغِ تفعيلها بدلًا من حذفها، أو احذف حجوزاتها التجريبية أولًا."
             });
         }
 
-        await Apartment.deleteOne({ _id: apartment._id });
+        await Apartment.deleteOne({
+            _id: apartment._id
+        });
 
         res.json({
             success: true,
-            message: `✅ تم حذف الشقة ${apartment.apartmentId} نهائيًا.`
+            message: `✅ تم حذف الشقة ${apartment.apartmentId}.`
         });
     } catch (error) {
         console.log("ADMIN DELETE APARTMENT ERROR:", error);
