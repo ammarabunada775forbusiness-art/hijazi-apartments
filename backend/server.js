@@ -7,10 +7,19 @@ const ActivityLog = require("./models/ActivityLog");
 const basicAuth = require("basic-auth");
 const { Resend } = require("resend");
 const { buildIcalFeed, fetchCalendarEvents, validateCalendarUrl } = require("./services/ical");
+const {
+    createRateLimiter,
+    rejectDangerousBodyKeys,
+    requireJsonContentType,
+    securityHeaders,
+    timingSafeEqualStrings
+} = require("./services/security");
 require("dotenv").config();
 
 const app = express();
 
+/* إخفاء اسم Express من HTTP Headers */
+app.disable("x-powered-by");
 /* Render يعمل خلف Proxy؛ هذا يجعل req.ip يرجّع IP الحقيقي */
 app.set("trust proxy", 1);
 
@@ -24,30 +33,94 @@ const configuredOrigins = String(process.env.ALLOWED_ORIGINS || "")
 
 const defaultOrigins = [
     "https://hijazi-apartments.com",
-    "https://www.hijazi-apartments.com",
-    "http://localhost:5500",
-    "http://127.0.0.1:5500"
+    "https://www.hijazi-apartments.com"
 ];
 
-function isAllowedOrigin(origin) {
-    if (!origin) return true;
-    if ([...defaultOrigins, ...configuredOrigins].includes(origin)) return true;
-
-    try {
-        return new URL(origin).hostname.endsWith(".vercel.app");
-    } catch {
-        return false;
-    }
+/* السماح بالتطوير المحلي فقط عند تفعيله صراحةً */
+if (process.env.ALLOW_LOCAL_ORIGINS === "true") {
+    defaultOrigins.push(
+        "http://localhost:5500",
+        "http://127.0.0.1:5500"
+    );
 }
 
+/* قبول النطاقات المسجلة فقط */
+function isAllowedOrigin(origin) {
+    if (!origin) return true;
+
+    return [
+        ...defaultOrigins,
+        ...configuredOrigins
+    ].includes(origin);
+}
+
+/* حد عام لكل مستخدم: 600 طلب كل 15 دقيقة */
+const globalApiLimiter = createRateLimiter({
+    windowMs: 15 * 60 * 1000,
+    max: 600,
+    message:
+        "طلبات كثيرة خلال وقت قصير. حاول مرة أخرى بعد قليل."
+});
+
+/* حد خاص بلوحة الإدارة */
+const adminApiLimiter = createRateLimiter({
+    windowMs: 15 * 60 * 1000,
+    max: 300,
+    message:
+        "تم تجاوز الحد المؤقت لطلبات لوحة الإدارة. حاول بعد قليل."
+});
+
+/* منع إرسال حجوزات وهمية كثيرة */
+const publicBookingLimiter = createRateLimiter({
+    windowMs: 60 * 60 * 1000,
+    max: 10,
+    message:
+        "تم إرسال طلبات حجز كثيرة من هذا الاتصال. حاول لاحقًا أو تواصل معنا مباشرة."
+});
+
+/* إضافة Security Headers */
+app.use(securityHeaders);
+
+/* إعداد CORS */
 app.use(cors({
     origin(origin, callback) {
-        callback(null, isAllowedOrigin(origin));
+        callback(
+            null,
+            isAllowedOrigin(origin)
+        );
     },
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+
+    methods: [
+        "GET",
+        "POST",
+        "PUT",
+        "PATCH",
+        "DELETE"
+    ],
+
+    allowedHeaders: [
+        "Content-Type",
+        "Authorization"
+    ]
 }));
-app.use(express.json());
+
+/* تطبيق الحد العام للطلبات */
+app.use(globalApiLimiter);
+
+/* قبول JSON فقط في طلبات الكتابة */
+app.use(requireJsonContentType);
+
+/* رفض JSON أكبر من 50KB */
+app.use(express.json({
+    limit: "50kb",
+    strict: true
+}));
+
+/* فحص جسم الطلب من MongoDB Injection */
+app.use(rejectDangerousBodyKeys);
+
+/* حد منفصل لطلبات الأدمن */
+app.use("/admin", adminApiLimiter);
 
 app.use((req, res, next) => {
     console.log(`[REQUEST] ${new Date().toISOString()} ${req.method} ${req.originalUrl}`);
@@ -110,10 +183,14 @@ app.get("/health/db", async (req, res) => {
             time: new Date().toISOString()
         });
     } catch (error) {
+        console.log(
+            "DATABASE HEALTH CHECK ERROR:",
+            error.message
+        );
+
         res.status(500).json({
             success: false,
-            status: "db_error",
-            errorMessage: error.message
+            status: "db_error"
         });
     }
 });
@@ -156,10 +233,26 @@ function requireAdmin(req, res, next) {
 
     const user = basicAuth(req);
 
+    const configuredAdminUser = String(
+        process.env.ADMIN_USER || ""
+    );
+
+    const configuredAdminPass = String(
+        process.env.ADMIN_PASS || ""
+    );
+
     const ok =
         user &&
-        user.name === process.env.ADMIN_USER &&
-        user.pass === process.env.ADMIN_PASS;
+        configuredAdminUser &&
+        configuredAdminPass &&
+        timingSafeEqualStrings(
+            user.name,
+            configuredAdminUser
+        ) &&
+        timingSafeEqualStrings(
+            user.pass,
+            configuredAdminPass
+        );
 
     if (!ok) {
         const attemptExpired =
@@ -206,6 +299,30 @@ function requireAdmin(req, res, next) {
     req.adminUser = user.name;
     next();
 }
+
+/* تنظيف سجلات محاولات الدخول القديمة من الذاكرة */
+const adminAttemptCleanupTimer = setInterval(() => {
+    const now = Date.now();
+
+    for (
+        const [clientKey, attempt]
+        of adminFailedAttempts.entries()
+    ) {
+        const expired =
+            (
+                !attempt.blockedUntil ||
+                attempt.blockedUntil <= now
+            ) &&
+            now - attempt.firstFailedAt >
+            ADMIN_LOGIN_WINDOW_MS;
+
+        if (expired) {
+            adminFailedAttempts.delete(clientKey);
+        }
+    }
+}, ADMIN_LOGIN_WINDOW_MS);
+
+adminAttemptCleanupTimer.unref();
 
 /* يسجل العملية، ولا يعطل الطلب الأساسي إذا تعذر حفظ السجل. */
 async function recordAdminActivity(req, entry) {
@@ -290,6 +407,65 @@ function calculateNights(checkIn, checkOut) {
     const diff = end - start;
     return diff > 0 ? Math.ceil(diff / (1000 * 60 * 60 * 24)) : 0;
 }
+
+/* =========================================================
+   تحويل الرموز الخطرة إلى نص آمن داخل HTML
+========================================================= */
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+/* =========================================================
+   قبول التاريخ بصيغة YYYY-MM-DD فقط
+========================================================= */
+function parseDateOnly(value) {
+    const text = String(value || "");
+
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(text)) {
+        return null;
+    }
+
+    const date = new Date(
+        `${text}T00:00:00.000Z`
+    );
+
+    if (
+        Number.isNaN(date.getTime()) ||
+        formatDate(date) !== text
+    ) {
+        return null;
+    }
+
+    return date;
+}
+
+/* =========================================================
+   تنظيف الحقول النصية ومنع الأسطر ومحارف التحكم
+========================================================= */
+function normalizeSingleLine(value, maxLength) {
+    return String(value || "")
+        .replace(
+            /[\u0000-\u001f\u007f]/g,
+            " "
+        )
+        .replace(/\s+/g, " ")
+        .trim()
+        .slice(0, maxLength);
+}
+
+/* =========================================================
+   أسعار التحويل المعتمدة داخل السيرفر
+========================================================= */
+const PUBLIC_CURRENCY_RATES = Object.freeze({
+    JOD: 1,
+    USD: 0.71,
+    SAR: 2.66
+});
 
 /* =========================================================
    تجهيز الشقق الست الحالية أول مرة بدون تغيير بياناتها لاحقًا
@@ -397,10 +573,47 @@ HIJAZI Apartments - حجز جديد
    قالب HTML للإيميل
 ========================================================= */
 function bookingHtml(booking, forCustomer = false) {
-    const nights = calculateNights(booking.checkIn, booking.checkOut);
+    const nights = calculateNights(
+        booking.checkIn,
+        booking.checkOut
+    );
+
     const isLong = nights >= 30;
 
-    const title = forCustomer ? "تم استلام طلب الحجز ✅" : "حجز جديد ✅";
+    /* تنظيف كل بيانات العميل قبل إدخالها في HTML */
+    const safeApartmentLabel =
+        escapeHtml(booking.apartmentLabel);
+
+    const safeApartmentId =
+        escapeHtml(booking.apartmentId);
+
+    const safeFullName =
+        escapeHtml(booking.fullName);
+
+    const safePhone =
+        escapeHtml(booking.phone);
+
+    const safeEmail =
+        escapeHtml(booking.email);
+
+    const safeAdults =
+        escapeHtml(booking.adults);
+
+    const safeChildren =
+        escapeHtml(booking.children);
+
+    const safeCurrency =
+        escapeHtml(booking.currency);
+
+    const safeTotalPrice = escapeHtml(
+        booking.totalPriceText ||
+        booking.totalPrice
+    );
+
+    const title = forCustomer
+        ? "تم استلام طلب الحجز ✅"
+        : "حجز جديد ✅";
+
     const msg = forCustomer
         ? "شكراً لك! تم استلام طلب الحجز بنجاح، وسنتواصل معك قريباً لتأكيد التفاصيل."
         : "وصل حجز جديد على الموقع.";
@@ -413,41 +626,92 @@ function bookingHtml(booking, forCustomer = false) {
             </div>
         `
         : "";
+
     const notesBox = booking.notes
         ? `
-        <p><b>ملاحظات العميل:</b><br/>
-        <span style="white-space:pre-line">${String(booking.notes).replace(/[<>]/g, "")}</span></p>
-    `
-        : `<p><b>ملاحظات العميل:</b> لا توجد ملاحظات</p>`;
+        <p>
+            <b>ملاحظات العميل:</b><br/>
+            <span style="white-space:pre-line">${escapeHtml(booking.notes)}</span>
+        </p>
+        `
+        : `
+        <p>
+            <b>ملاحظات العميل:</b>
+            لا توجد ملاحظات
+        </p>
+        `;
 
     return `
-  <div style="font-family:Arial,sans-serif;line-height:1.8">
-    <div style="padding:14px 16px;color:#fff;background:linear-gradient(90deg,#c89116,#000);border-radius:10px">
-      <h2 style="margin:0">${title} - HIJAZI Apartments</h2>
+    <div style="font-family:Arial,sans-serif;line-height:1.8">
+        <div style="padding:14px 16px;color:#fff;background:linear-gradient(90deg,#c89116,#000);border-radius:10px">
+            <h2 style="margin:0">
+                ${title} - HIJAZI Apartments
+            </h2>
+        </div>
+
+        <p style="margin-top:12px">
+            ${msg}
+        </p>
+
+        <div style="border:1px solid #eee;border-radius:10px;padding:14px">
+            <p>
+                <b>الشقة:</b>
+                ${safeApartmentLabel}
+                (ID: ${safeApartmentId})
+            </p>
+
+            <p>
+                <b>الاسم:</b>
+                ${safeFullName}
+            </p>
+
+            <p>
+                <b>الهاتف:</b>
+                ${safePhone}
+            </p>
+
+            <p>
+                <b>البريد:</b>
+                ${safeEmail}
+            </p>
+
+            <p>
+                <b>الدخول:</b>
+                ${formatDate(booking.checkIn)}
+            </p>
+
+            <p>
+                <b>الخروج:</b>
+                ${formatDate(booking.checkOut)}
+            </p>
+
+            <p>
+                <b>عدد الليالي:</b>
+                ${nights}
+            </p>
+
+            <p>
+                <b>الضيوف:</b>
+                بالغين ${safeAdults}
+                + أطفال ${safeChildren}
+            </p>
+
+            <p>
+                <b>السعر:</b>
+                ${safeTotalPrice}
+                (${safeCurrency})
+            </p>
+
+            ${notesBox}
+            ${longStayBox}
+        </div>
+
+        <p style="color:#666;font-size:13px;margin-top:10px">
+            الشميساني - عمّان، الأردن<br/>
+            HIJAZI Apartments
+        </p>
     </div>
-
-    <p style="margin-top:12px">${msg}</p>
-
-    <div style="border:1px solid #eee;border-radius:10px;padding:14px">
-      <p><b>الشقة:</b> ${booking.apartmentLabel} (ID: ${booking.apartmentId})</p>
-      <p><b>الاسم:</b> ${booking.fullName}</p>
-      <p><b>الهاتف:</b> ${booking.phone}</p>
-      <p><b>البريد:</b> ${booking.email}</p>
-      <p><b>الدخول:</b> ${formatDate(booking.checkIn)}</p>
-      <p><b>الخروج:</b> ${formatDate(booking.checkOut)}</p>
-      <p><b>عدد الليالي:</b> ${nights}</p>
-      <p><b>الضيوف:</b> بالغين ${booking.adults} + أطفال ${booking.children}</p>
-      <p><b>السعر:</b> ${booking.totalPriceText || booking.totalPrice} (${booking.currency})</p>
-${notesBox}
-${longStayBox}
-    </div>
-
-    <p style="color:#666;font-size:13px;margin-top:10px">
-      الشميساني - عمّان، الأردن<br/>
-      HIJAZI Apartments
-    </p>
-  </div>
-  `;
+    `;
 }
 
 /* =========================================================
@@ -467,7 +731,14 @@ async function sendBookingEmails(booking) {
         const adminResult = await resend.emails.send({
             from,
             to: adminTo,
-            subject: `حجز جديد ✅ - ${booking.apartmentLabel} (${formatDate(booking.checkIn)} → ${formatDate(booking.checkOut)})`,
+            subject: `حجز جديد ✅ - ${normalizeSingleLine(
+                booking.apartmentLabel,
+                100
+            )} (${formatDate(
+                booking.checkIn
+            )} → ${formatDate(
+                booking.checkOut
+            )})`,
             text: bookingText(booking),
             html: bookingHtml(booking, false),
         });
@@ -667,8 +938,8 @@ app.get("/calendar", async (req, res) => {
         console.error("CALENDAR ERROR:", error);
         res.status(500).json({
             success: false,
-            message: "Error fetching calendar",
-            error: error.message,
+            message:
+                "تعذر جلب بيانات التقويم حاليًا."
         });
     }
 });
@@ -703,145 +974,409 @@ app.get("/bookings", async (req, res) => {
 
 /* =========================================================
    API: إنشاء حجز جديد
+   يتحقق من المدخلات ويحسب السعر داخل السيرفر
 ========================================================= */
-app.post("/bookings", async (req, res) => {
-    try {
-        const {
-            apartmentId,
-            apartmentLabel,
-            fullName,
-            email,
-            phone,
-            checkIn,
-            checkOut,
-            adults,
-            children,
-            currency,
-            totalPrice,
-            totalPriceText,
-            notes,
-            stayType,
-        } = req.body;
+app.post(
+    "/bookings",
+    publicBookingLimiter,
+    async (req, res) => {
+        try {
+            const {
+                apartmentId,
+                fullName,
+                email,
+                phone,
+                checkIn,
+                checkOut,
+                adults,
+                children,
+                currency,
+                notes
+            } = req.body;
 
-        console.log("BOOKING REQUEST RECEIVED:", {
-            apartmentId,
-            hasFullName: Boolean(fullName),
-            hasEmail: Boolean(email),
-            hasPhone: Boolean(phone),
-            checkIn,
-            checkOut,
-            adults,
-            children,
-            currency,
-            totalPrice,
-            hasNotes: Boolean(notes)
-        });
+            /* تنظيف القيم النصية */
+            const normalizedFullName =
+                normalizeSingleLine(
+                    fullName,
+                    150
+                );
 
-        if (
-            apartmentId === undefined ||
-            !fullName ||
-            !email ||
-            !phone ||
-            !checkIn ||
-            !checkOut ||
-            adults === undefined ||
-            totalPrice === undefined
-        ) {
-            return res.status(400).json({
+            const normalizedEmail =
+                normalizeSingleLine(
+                    email,
+                    200
+                ).toLowerCase();
+
+            const normalizedPhone =
+                normalizeSingleLine(
+                    phone,
+                    30
+                );
+
+            const adultsNumber =
+                Number(adults);
+
+            const childrenNumber =
+                Number(children || 0);
+
+            const currencyCode =
+                String(currency || "JOD")
+                    .trim()
+                    .toUpperCase();
+
+            /* سجل لا يحتوي بيانات العميل الشخصية */
+            console.log(
+                "BOOKING REQUEST RECEIVED:",
+                {
+                    apartmentId,
+
+                    hasFullName:
+                        Boolean(
+                            normalizedFullName
+                        ),
+
+                    hasEmail:
+                        Boolean(
+                            normalizedEmail
+                        ),
+
+                    hasPhone:
+                        Boolean(
+                            normalizedPhone
+                        ),
+
+                    checkIn,
+                    checkOut,
+                    adults: adultsNumber,
+                    children: childrenNumber,
+                    currency: currencyCode,
+                    hasNotes: Boolean(notes)
+                }
+            );
+
+            /* التأكد من وجود الحقول المطلوبة */
+            if (
+                apartmentId === undefined ||
+                !normalizedFullName ||
+                !normalizedEmail ||
+                !normalizedPhone ||
+                !checkIn ||
+                !checkOut ||
+                adults === undefined
+            ) {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "بيانات ناقصة. تأكد من تعبئة الحقول المطلوبة."
+                });
+            }
+
+            /* التحقق من الاسم */
+            if (
+                normalizedFullName.length < 2
+            ) {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "الاسم المدخل قصير جدًا."
+                });
+            }
+
+            /* التحقق من البريد */
+            if (
+                !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(
+                    normalizedEmail
+                )
+            ) {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "البريد الإلكتروني غير صحيح."
+                });
+            }
+
+            /* التحقق من رقم الهاتف */
+            if (
+                !/^[\p{N}+\-().\s]{6,30}$/u.test(
+                    normalizedPhone
+                )
+            ) {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "رقم الهاتف غير صحيح."
+                });
+            }
+
+            /* التحقق من عدد البالغين */
+            if (
+                !Number.isInteger(
+                    adultsNumber
+                ) ||
+                adultsNumber < 1 ||
+                adultsNumber > 20
+            ) {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "عدد البالغين غير صحيح."
+                });
+            }
+
+            /* التحقق من عدد الأطفال */
+            if (
+                !Number.isInteger(
+                    childrenNumber
+                ) ||
+                childrenNumber < 0 ||
+                childrenNumber > 20
+            ) {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "عدد الأطفال غير صحيح."
+                });
+            }
+
+            /* قبول العملات المعتمدة فقط */
+            if (
+                !Object.hasOwn(
+                    PUBLIC_CURRENCY_RATES,
+                    currencyCode
+                )
+            ) {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "العملة المختارة غير مدعومة."
+                });
+            }
+
+            /* التحقق الصارم من التواريخ */
+            const checkInDate =
+                parseDateOnly(checkIn);
+
+            const checkOutDate =
+                parseDateOnly(checkOut);
+
+            if (
+                !checkInDate ||
+                !checkOutDate
+            ) {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "تواريخ غير صحيحة."
+                });
+            }
+
+            if (
+                checkOutDate <= checkInDate
+            ) {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "تاريخ المغادرة لازم يكون بعد تاريخ الوصول."
+                });
+            }
+
+            const nights = calculateNights(
+                checkInDate,
+                checkOutDate
+            );
+
+            const today = parseDateOnly(
+                new Date()
+                    .toISOString()
+                    .slice(0, 10)
+            );
+
+            /* منع الحجز بتاريخ قديم */
+            if (checkInDate < today) {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "تاريخ الوصول لا يمكن أن يكون في الماضي."
+                });
+            }
+
+            /* منع إدخال مدد غير منطقية */
+            if (nights > 730) {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "مدة الحجز أطول من الحد المسموح."
+                });
+            }
+
+            await ensureDefaultApartments();
+
+            /* أخذ بيانات الشقة والسعر من MongoDB */
+            const apartment =
+                await Apartment.findOne({
+                    apartmentId:
+                        Number(apartmentId),
+
+                    active: true
+                });
+
+            if (!apartment) {
+                return res.status(400).json({
+                    success: false,
+                    message:
+                        "الشقة المختارة غير موجودة أو غير متاحة للحجز."
+                });
+            }
+
+            /* فحص تعارض التواريخ */
+            const conflict =
+                await Booking.findOne({
+                    ...ACTIVE_BOOKING_FILTER,
+
+                    apartmentId:
+                        Number(apartmentId),
+
+                    checkIn: {
+                        $lt: checkOutDate
+                    },
+
+                    checkOut: {
+                        $gt: checkInDate
+                    }
+                });
+
+            if (conflict) {
+                return res.status(409).json({
+                    success: false,
+
+                    message:
+                        `❌ هذه الشقة محجوزة من ${formatDate(
+                            conflict.checkIn
+                        )} إلى ${formatDate(
+                            conflict.checkOut
+                        )}. اختر تاريخًا آخر.`
+                });
+            }
+
+            /*
+             * لا نثق بالسعر القادم من المتصفح.
+             * السيرفر يحسبه من سعر الشقة المخزن.
+             */
+            const calculatedTotal = Number(
+                (
+                    apartment.nightlyPriceJod *
+                    nights *
+                    PUBLIC_CURRENCY_RATES[
+                    currencyCode
+                    ]
+                ).toFixed(2)
+            );
+
+            const booking = new Booking({
+                apartmentId:
+                    Number(apartmentId),
+
+                apartmentLabel:
+                    apartment.label,
+
+                fullName:
+                    normalizedFullName,
+
+                email:
+                    normalizedEmail,
+
+                phone:
+                    normalizedPhone,
+
+                checkIn:
+                    checkInDate,
+
+                checkOut:
+                    checkOutDate,
+
+                adults:
+                    adultsNumber,
+
+                children:
+                    childrenNumber,
+
+                currency:
+                    currencyCode,
+
+                totalPrice:
+                    calculatedTotal,
+
+                totalPriceText:
+                    `${calculatedTotal.toFixed(
+                        2
+                    )} ${currencyCode}`,
+
+                notes: notes
+                    ? String(notes)
+                        .replace(/\u0000/g, "")
+                        .trim()
+                        .slice(0, 1000)
+                    : "",
+
+                stayType:
+                    nights >= 30
+                        ? "long"
+                        : "normal",
+
+                source: "website",
+                status: "pending"
+            });
+
+            await booking.save();
+
+            console.log(
+                "BOOKING SAVED SUCCESSFULLY:",
+                {
+                    id: booking._id,
+
+                    apartmentId:
+                        booking.apartmentId,
+
+                    checkIn:
+                        formatDate(
+                            booking.checkIn
+                        ),
+
+                    checkOut:
+                        formatDate(
+                            booking.checkOut
+                        )
+                }
+            );
+
+            sendBookingEmails(
+                booking
+            ).catch((error) => {
+                console.log(
+                    "SEND EMAILS ERROR:",
+                    error.message
+                );
+            });
+
+            res.json({
+                success: true,
+                message:
+                    "✅ تم حفظ الحجز بنجاح"
+            });
+        } catch (error) {
+            console.log(
+                "SAVE BOOKING ERROR:",
+                error
+            );
+
+            res.status(500).json({
                 success: false,
-                message: "بيانات ناقصة. تأكد من تعبئة الحقول المطلوبة.",
+                message:
+                    "تعذر حفظ الحجز حاليًا. حاول مرة أخرى."
             });
         }
-
-        const checkInDate = new Date(checkIn);
-        const checkOutDate = new Date(checkOut);
-
-        if (isNaN(checkInDate.getTime()) || isNaN(checkOutDate.getTime())) {
-            return res.status(400).json({
-                success: false,
-                message: "تواريخ غير صحيحة.",
-            });
-        }
-
-        if (checkOutDate <= checkInDate) {
-            return res.status(400).json({
-                success: false,
-                message: "تاريخ المغادرة لازم يكون بعد تاريخ الوصول.",
-            });
-        }
-
-        await ensureDefaultApartments();
-        const apartment = await Apartment.findOne({
-            apartmentId: Number(apartmentId),
-            active: true
-        });
-
-        if (!apartment) {
-            return res.status(400).json({
-                success: false,
-                message: "الشقة المختارة غير موجودة أو غير متاحة للحجز.",
-            });
-        }
-
-        const conflict = await Booking.findOne({
-            ...ACTIVE_BOOKING_FILTER,
-            apartmentId: Number(apartmentId),
-            checkIn: { $lt: checkOutDate },
-            checkOut: { $gt: checkInDate },
-        });
-
-        if (conflict) {
-            return res.status(409).json({
-                success: false,
-                message: `❌ هذه الشقة محجوزة من ${formatDate(conflict.checkIn)} إلى ${formatDate(conflict.checkOut)}. اختر تاريخًا آخر.`,
-            });
-        }
-
-        const booking = new Booking({
-            apartmentId: Number(apartmentId),
-            apartmentLabel: apartmentLabel || `شقة رقم ${apartmentId}`,
-            fullName,
-            email,
-            phone,
-            checkIn: checkInDate,
-            checkOut: checkOutDate,
-            adults: Number(adults),
-            children: Number(children || 0),
-            currency: currency || "JOD",
-            totalPrice: Number(totalPrice),
-            totalPriceText: totalPriceText || "",
-            notes: notes ? String(notes).trim().slice(0, 1000) : "",
-            stayType: stayType || "normal",
-            source: "website",
-            status: "pending"
-        });
-
-        await booking.save();
-
-        console.log("BOOKING SAVED SUCCESSFULLY:", {
-            id: booking._id,
-            apartmentId: booking.apartmentId,
-            checkIn: formatDate(booking.checkIn),
-            checkOut: formatDate(booking.checkOut)
-        });
-
-        sendBookingEmails(booking).catch((e) => {
-            console.log("SEND EMAILS ERROR:", e.message);
-        });
-
-        res.json({
-            success: true,
-            message: "✅ تم حفظ الحجز بنجاح",
-        });
-    } catch (error) {
-        console.log("SAVE BOOKING ERROR:", error);
-        res.status(500).json({
-            success: false,
-            message: "Error saving booking",
-            error: error.message,
-        });
     }
-});
+);
 
 /* =========================================================
    مزامنة تقويم خارجي لشقة واحدة ومصدر واحد
@@ -1882,6 +2417,61 @@ const syncTimer = setInterval(
     syncIntervalMinutes * 60 * 1000
 );
 syncTimer.unref();
+
+/* =========================================================
+   رد للمسارات غير الموجودة
+========================================================= */
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message:
+            "المسار المطلوب غير موجود."
+    });
+});
+
+/* =========================================================
+   معالجة الأخطاء بدون كشف تفاصيل السيرفر
+========================================================= */
+app.use((error, req, res, next) => {
+    console.log(
+        "UNHANDLED REQUEST ERROR:",
+        error.message
+    );
+
+    /* JSON أكبر من 50KB */
+    if (
+        error.type === "entity.too.large"
+    ) {
+        return res.status(413).json({
+            success: false,
+            message:
+                "حجم البيانات المرسلة أكبر من الحد المسموح."
+        });
+    }
+
+    /* JSON مكتوب بصيغة خاطئة */
+    if (
+        error instanceof SyntaxError &&
+        error.status === 400 &&
+        "body" in error
+    ) {
+        return res.status(400).json({
+            success: false,
+            message:
+                "صيغة JSON المرسلة غير صحيحة."
+        });
+    }
+
+    if (res.headersSent) {
+        return next(error);
+    }
+
+    return res.status(500).json({
+        success: false,
+        message:
+            "حدث خطأ داخلي. حاول مرة أخرى لاحقًا."
+    });
+});
 
 /* =========================================================
    تشغيل السيرفر

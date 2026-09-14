@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "check": "node --check server.js && node --check models/Booking.js && node --check models/Apartment.js && node --check models/ActivityLog.js && node --check services/ical.js",
+    "check": "node --check server.js && node --check models/Booking.js && node --check models/Apartment.js && node --check models/ActivityLog.js && node --check services/ical.js && node --check services/security.js",
     "test": "node --test"
   },
   "keywords": [],
