@@ -23,7 +23,7 @@
     "express": "^5.2.1",
     "mongodb": "^7.1.0",
     "mongoose": "^9.2.4",
-    "node-ical": "^0.22.1",
+    "node-ical": "^0.27.1",
     "resend": "^6.9.3"
   },
   "devDependencies": {
