@@ -3243,12 +3243,12 @@
                         <label id="aptLabel" for="aptId">الشقة المختارة:</label>
                         <select id="aptId" required>
                             <option value="">-- اختر الشقة --</option>
-                            <option value="1">شقة رقم 1</option>
-                            <option value="2">شقة رقم 2</option>
-                            <option value="3">شقة رقم 3</option>
-                            <option value="4">شقة رقم 4</option>
-                            <option value="5">شقة رقم 5</option>
-                            <option value="6">شقة رقم 6</option>
+                            <option value="1">شقة رقم 104</option>
+                            <option value="2">شقة رقم 106</option>
+                            <option value="3">شقة رقم 204</option>
+                            <option value="4">شقة رقم 105</option>
+                            <option value="5">شقة رقم 207</option>
+                            <option value="6">شقة رقم 305</option>
                         </select>
                         <div class="field-error" id="aptIdError"></div>
 
@@ -3395,7 +3395,7 @@
     <div id="sharedFooter"></div>
     <div id="sharedWhatsApp"></div>
 
-    <script src="js/main.js?v=3"></script>
+    <script src="js/main.js?v=5"></script>
     <script>
         const API_BASE = "https://api.hijazi-apartments.com";
 
@@ -3517,7 +3517,8 @@
 
                 document.querySelector('#aptId option[value=""]').textContent = "-- اختر الشقة --";
                 for (let i = 1; i <= 6; i++) {
-                    document.querySelector(`#aptId option[value="${i}"]`).textContent = `شقة رقم ${i}`;
+                    document.querySelector(`#aptId option[value="${i}"]`).textContent =
+                        getApartmentDisplayName(i, "ar");
                 }
 
                 document.getElementById("fullName").placeholder = "أدخل اسمك الكامل";
@@ -3567,7 +3568,8 @@
 
                 document.querySelector('#aptId option[value=""]').textContent = "-- Select apartment --";
                 for (let i = 1; i <= 6; i++) {
-                    document.querySelector(`#aptId option[value="${i}"]`).textContent = `Apartment ${i}`;
+                    document.querySelector(`#aptId option[value="${i}"]`).textContent =
+                        getApartmentDisplayName(i, "en");
                 }
 
                 document.getElementById("fullName").placeholder = "Enter your full name";
@@ -4367,7 +4369,7 @@
             aptNameEl.textContent = lang === "ar" ? apt.nameAr : apt.nameEn;
             aptDescEl.textContent = lang === "ar" ? apt.descAr : apt.descEn;
             aptLocationEl.textContent = `📍 ${apt.location}`;
-            summaryAptIdEl.textContent = id;
+            summaryAptIdEl.textContent = getApartmentDisplayNumber(id);
             featuresEl.innerHTML = (lang === "ar" ? apt.featuresAr : apt.featuresEn).map(f => `<li>${f}</li>`).join("");
 
             const aptMap = document.getElementById("aptMap");
@@ -4496,7 +4498,11 @@
             calendarBookedRanges = arr
                 .map(b => ({
                     apartmentId: Number(b.apartmentId),
-                    apartmentLabel: b.apartmentLabel || `شقة رقم ${b.apartmentId}`,
+                    apartmentLabel: getApartmentDisplayName(
+                        b.apartmentId,
+                        getCurrentLang(),
+                        b.apartmentLabel
+                    ),
                     start: new Date(b.checkIn),
                     end: new Date(b.checkOut)
                 }))
@@ -4732,10 +4738,10 @@
                         const selectedId = getSelectedAptId();
 
                         const events = calendarBookedRanges.map(r => {
-                            const label = r.apartmentLabel || (
-                                lang === "ar"
-                                    ? `شقة رقم ${r.apartmentId}`
-                                    : `Apartment ${r.apartmentId}`
+                            const label = getApartmentDisplayName(
+                                r.apartmentId,
+                                lang,
+                                r.apartmentLabel
                             );
 
                             return {

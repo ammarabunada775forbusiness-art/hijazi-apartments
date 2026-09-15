@@ -3825,7 +3825,7 @@
                     <div class="field">
                         <label for="newApartmentLabel">اسم الشقة</label>
 
-                        <input id="newApartmentLabel" placeholder="مثال: شقة رقم 7 - الشميساني">
+                        <input id="newApartmentLabel" placeholder="مثال: شقة رقم 401 - الشميساني">
                     </div>
 
                     <div class="field">
@@ -4092,6 +4092,63 @@
             airbnb: "#ff385c",
             booking: "#003b95"
         };
+        const APARTMENT_DISPLAY_NUMBERS = Object.freeze({
+            1: "104",
+            2: "106",
+            3: "204",
+            4: "105",
+            5: "207",
+            6: "305"
+        });
+
+        function apartmentDisplayNumber(apartmentId) {
+            return APARTMENT_DISPLAY_NUMBERS[Number(apartmentId)] || String(apartmentId || "");
+        }
+
+        function apartmentDisplayLabel(apartmentId, fallback = "") {
+            const displayNumber = APARTMENT_DISPLAY_NUMBERS[Number(apartmentId)];
+            return displayNumber
+                ? `شقة رقم ${displayNumber}`
+                : (fallback || `شقة رقم ${apartmentId}`);
+        }
+
+        function replaceLegacyApartmentLabels(value) {
+            let text = String(value || "");
+
+            Object.entries(APARTMENT_DISPLAY_NUMBERS).forEach(([oldNumber, displayNumber]) => {
+                const suffix = "(?![0-9])";
+                text = text
+                    .replace(new RegExp(`شقة رقم ${oldNumber}${suffix}`, "g"), `شقة رقم ${displayNumber}`)
+                    .replace(new RegExp(`الشقة ${oldNumber}${suffix}`, "g"), `الشقة ${displayNumber}`)
+                    .replace(new RegExp(`شقة ${oldNumber}${suffix}`, "g"), `شقة ${displayNumber}`)
+                    .replace(new RegExp(`Apartment ${oldNumber}${suffix}`, "g"), `Apartment ${displayNumber}`);
+            });
+
+            return text;
+        }
+
+        function normalizeAdminData(bookings, apartmentList, activities) {
+            return {
+                bookings: bookings.map(booking => ({
+                    ...booking,
+                    apartmentLabel: apartmentDisplayLabel(
+                        booking.apartmentId,
+                        booking.apartmentLabel
+                    )
+                })),
+                apartments: apartmentList.map(apartment => ({
+                    ...apartment,
+                    label: apartmentDisplayLabel(
+                        apartment.apartmentId,
+                        apartment.label
+                    )
+                })),
+                activities: activities.map(activity => ({
+                    ...activity,
+                    description: replaceLegacyApartmentLabels(activity.description)
+                }))
+            };
+        }
         let adminUser = "";
         let adminPass = "";
         let allBookings = [];
@@ -4180,10 +4237,10 @@
                     <article class="activity-item activity-${category}">
                         <div class="activity-icon" aria-hidden="true">${ACTIVITY_ICONS[category]}</div>
                         <div class="activity-content">
-                            <strong>${escapeHtml(activity.description || "عملية إدارية")}</strong>
+                            <strong>${escapeHtml(replaceLegacyApartmentLabels(activity.description) || "عملية إدارية")}</strong>
                             <div class="activity-meta">
                                 <span>${escapeHtml(formatActivityDate(activity.createdAt))}</span>
-                                ${activity.apartmentId ? `<span>شقة ${activity.apartmentId}</span>` : ""}
+                                ${activity.apartmentId ? `<span>${escapeHtml(apartmentDisplayLabel(activity.apartmentId))}</span>` : ""}
                                 ${source ? `<span>${escapeHtml(source)}</span>` : ""}
                                 <span>بواسطة ${escapeHtml(activity.adminUser || "admin")}</span>
                             </div>
@@ -4221,7 +4278,7 @@
                 `hijazi-bookings-${todayInAmman()}.csv`,
                 ["الشقة", "المصدر", "العميل", "الهاتف", "البريد", "الدخول", "الخروج", "الليالي", "السعر", "العملة", "الحالة", "رقم المنصة", "الملاحظات"],
                 bookings.map(booking => [
-                    booking.apartmentLabel || `شقة ${booking.apartmentId}`,
+                    apartmentDisplayLabel(booking.apartmentId, booking.apartmentLabel),
                     SOURCE_LABELS[booking.source] || booking.source,
                     booking.fullName,
                     booking.phone,
@@ -4249,8 +4306,8 @@
                 activities.map(activity => [
                     formatActivityDate(activity.createdAt),
                     ACTIVITY_CATEGORY_LABELS[activity.category] || activity.category,
-                    activity.description,
-                    activity.apartmentId || "",
+                    replaceLegacyApartmentLabels(activity.description),
+                    activity.apartmentId ? apartmentDisplayNumber(activity.apartmentId) : "",
                     SOURCE_LABELS[activity.source] || activity.source,
                     activity.adminUser,
                     activity.action
@@ -4585,8 +4642,10 @@
                     <tr>
                         <td>
                             ${escapeHtml(
-                    booking.apartmentLabel ||
-                    `شقة ${booking.apartmentId}`
+                    apartmentDisplayLabel(
+                        booking.apartmentId,
+                        booking.apartmentLabel
+                    )
                 )}
                         </td>
 
@@ -5011,7 +5070,7 @@
 
             setCalendarDetail(
                 "calendarDetailApartment",
-                booking.apartmentLabel || `شقة رقم ${booking.apartmentId}`
+                apartmentDisplayLabel(booking.apartmentId, booking.apartmentLabel)
             );
 
             setCalendarDetail(
@@ -5094,8 +5153,10 @@
             const events = visibleBookings.map(booking => {
                 const source = booking.source || "website";
                 const status = booking.status || "pending";
-                const apartmentLabel =
-                    booking.apartmentLabel || `شقة رقم ${booking.apartmentId}`;
+                const apartmentLabel = apartmentDisplayLabel(
+                    booking.apartmentId,
+                    booking.apartmentLabel
+                );
 
                 return {
                     id: booking._id,
@@ -5165,7 +5226,7 @@
                     const source = booking.source || "website";
 
                     info.el.title =
-                        `${booking.apartmentLabel || `شقة رقم ${booking.apartmentId}`}\n` +
+                        `${apartmentDisplayLabel(booking.apartmentId, booking.apartmentLabel)}\n` +
                         `${SOURCE_LABELS[source] || source}\n` +
                         `${dateOnly(booking.checkIn)} → ${dateOnly(booking.checkOut)}`;
                 }
@@ -5381,7 +5442,7 @@
                 return `
                     <div class="conflict-item">
                         <div class="conflict-apartment">
-                            الشقة ${conflict.apartmentId}
+                            ${escapeHtml(apartmentDisplayLabel(conflict.apartmentId))}
                         </div>
 
                         <div class="conflict-details">
@@ -5515,13 +5576,15 @@
                 <div class="sync-apartment-head">
                     <h3>
                         ${escapeHtml(
-                    apartment.label ||
-                    `شقة رقم ${apartment.apartmentId}`
+                    apartmentDisplayLabel(
+                        apartment.apartmentId,
+                        apartment.label
+                    )
                 )}
                     </h3>
 
                     <span>
-                        رقم ${apartment.apartmentId}
+                        رقم ${escapeHtml(apartmentDisplayNumber(apartment.apartmentId))}
                     </span>
                 </div>
 
@@ -5656,7 +5719,7 @@
                 data-apartment-card="${a._id}"
             >
                 <div class="apartment-title">
-                    <h3>الشقة ${a.apartmentId}</h3>
+                    <h3>${escapeHtml(apartmentDisplayLabel(a.apartmentId, a.label))}</h3>
 
                     <label class="inline-check">
                         <input
@@ -5726,9 +5789,15 @@ ${connections}
                 api("/admin/activity?limit=250")
             ]);
 
-            allBookings = bookingsData.bookings || [];
-            apartments = apartmentsData.apartments || [];
-            allActivities = activityData.activities || [];
+            const normalized = normalizeAdminData(
+                bookingsData.bookings || [],
+                apartmentsData.apartments || [],
+                activityData.activities || []
+            );
+
+            allBookings = normalized.bookings;
+            apartments = normalized.apartments;
+            allActivities = normalized.activities;
 
             populateApartmentSelects();
             updateStats();
@@ -5812,7 +5881,11 @@ ${connections}
 
             try {
                 const data = await api("/admin/activity?limit=250");
-                allActivities = data.activities || [];
+                allActivities = normalizeAdminData(
+                    [],
+                    [],
+                    data.activities || []
+                ).activities;
                 renderActivity();
                 showNotice("تم تحديث سجل العمليات.");
             } catch (error) {
@@ -6235,12 +6308,12 @@ ${connections}
 
             if (e.target.hasAttribute("data-delete-apartment")) {
                 if (Number(apartment.apartmentId) <= 6) {
-                    showNotice("الشقق الأساسية من 1 إلى 6 محمية ولا يمكن حذفها.", "error");
+                    showNotice("الشقق الأساسية الحالية محمية ولا يمكن حذفها.", "error");
                     return;
                 }
 
                 const confirmed = confirm(
-                    `هل أنت متأكد من حذف الشقة ${apartment.apartmentId}؟`
+                    `هل أنت متأكد من حذف ${apartmentDisplayLabel(apartment.apartmentId, apartment.label)}؟`
                 );
 
                 if (!confirmed) return;
@@ -6254,7 +6327,7 @@ ${connections}
                     });
 
                     await loadAll();
-                    showNotice(`✅ تم حذف الشقة ${apartment.apartmentId}.`);
+                    showNotice(`✅ تم حذف ${apartmentDisplayLabel(apartment.apartmentId, apartment.label)}.`);
                 } catch (error) {
                     showNotice(error.message, "error");
                     setButtonLoading(button, false);
@@ -6384,7 +6457,7 @@ ${connections}
                     const importedCount = result?.imported || 0;
 
                     showNotice(
-                        `✅ تمت مزامنة ${sourceTitle} للشقة ${apartmentId}. تمت قراءة ${importedCount} فترة.`
+                        `✅ تمت مزامنة ${sourceTitle} لـ${apartmentDisplayLabel(apartmentId)}. تمت قراءة ${importedCount} فترة.`
                     );
                 } catch (error) {
                     showNotice(error.message, "error");

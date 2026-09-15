@@ -150,6 +150,7 @@ if (require.main === module) mongoose
     .then(async () => {
         console.log("MongoDB Connected Successfully");
         await ensureDefaultApartments();
+        await migrateApartmentDisplayLabels();
         runScheduledCalendarSync().catch((error) => {
             console.log("INITIAL CALENDAR SYNC ERROR:", error.message);
         });
@@ -481,13 +482,19 @@ const PUBLIC_CURRENCY_RATES = Object.freeze({
    تجهيز الشقق الست الحالية أول مرة بدون تغيير بياناتها لاحقًا
 ========================================================= */
 const DEFAULT_APARTMENTS = [
-    { apartmentId: 1, label: "شقة رقم 1", nightlyPriceJod: 150 },
-    { apartmentId: 2, label: "شقة رقم 2", nightlyPriceJod: 200 },
-    { apartmentId: 3, label: "شقة رقم 3", nightlyPriceJod: 150 },
-    { apartmentId: 4, label: "شقة رقم 4", nightlyPriceJod: 200 },
-    { apartmentId: 5, label: "شقة رقم 5", nightlyPriceJod: 150 },
-    { apartmentId: 6, label: "شقة رقم 6", nightlyPriceJod: 200 }
+    { apartmentId: 1, label: "شقة رقم 104", nightlyPriceJod: 150 },
+    { apartmentId: 2, label: "شقة رقم 106", nightlyPriceJod: 200 },
+    { apartmentId: 3, label: "شقة رقم 204", nightlyPriceJod: 150 },
+    { apartmentId: 4, label: "شقة رقم 105", nightlyPriceJod: 200 },
+    { apartmentId: 5, label: "شقة رقم 207", nightlyPriceJod: 150 },
+    { apartmentId: 6, label: "شقة رقم 305", nightlyPriceJod: 200 }
 ];
+
+function defaultApartmentLabel(apartmentId, fallback = "") {
+    return DEFAULT_APARTMENTS.find(
+        apartment => apartment.apartmentId === Number(apartmentId)
+    )?.label || fallback || `شقة رقم ${apartmentId}`;
+}
 
 /* =========================================================
    تجهيز الشقق الأساسية وترحيل أسعارها القديمة تلقائيًا
@@ -534,6 +541,33 @@ async function ensureDefaultApartments() {
                 }
             }
         }))
+    );
+}
+
+/* =========================================================
+   ترحيل أسماء الشقق الحالية والحجوزات القديمة عند النشر
+
+   لا نغيّر apartmentId لأنه مفتاح تقني للصور والتقويم والروابط.
+========================================================= */
+async function migrateApartmentDisplayLabels() {
+    await Apartment.bulkWrite(
+        DEFAULT_APARTMENTS.map(apartment => ({
+            updateOne: {
+                filter: { apartmentId: apartment.apartmentId },
+                update: { $set: { label: apartment.label } }
+            }
+        })),
+        { ordered: false }
+    );
+
+    await Booking.bulkWrite(
+        DEFAULT_APARTMENTS.map(apartment => ({
+            updateMany: {
+                filter: { apartmentId: apartment.apartmentId },
+                update: { $set: { apartmentLabel: apartment.label } }
+            }
+        })),
+        { ordered: false }
     );
 }
 
@@ -814,16 +848,17 @@ async function sendSyncFailureEmail({
         source === "airbnb"
             ? "Airbnb"
             : "Booking.com";
+    const apartmentLabel = defaultApartmentLabel(apartmentId);
 
     try {
         await resend.emails.send({
             from,
             to: adminTo,
             subject:
-                `فشل مزامنة ${sourceTitle} - الشقة ${apartmentId}`,
+                `فشل مزامنة ${sourceTitle} - ${apartmentLabel}`,
             text:
                 `تنبيه من HIJAZI PMS\n\n` +
-                `الشقة: ${apartmentId}\n` +
+                `الشقة: ${apartmentLabel}\n` +
                 `المنصة: ${sourceTitle}\n` +
                 `الخطأ: ${message || "خطأ غير معروف"}\n` +
                 `الوقت: ${new Date().toLocaleString(
@@ -901,7 +936,10 @@ app.get("/availability", async (req, res) => {
 
         const bookedRanges = conflicts.map((b) => ({
             apartmentId: Number(b.apartmentId),
-            apartmentLabel: b.apartmentLabel || `شقة رقم ${b.apartmentId}`,
+            apartmentLabel: defaultApartmentLabel(
+                b.apartmentId,
+                b.apartmentLabel
+            ),
             checkIn: formatDate(b.checkIn),
             checkOut: formatDate(b.checkOut),
         }));
@@ -1686,7 +1724,7 @@ app.post("/admin/apartments/:id/rotate-calendar-token", requireAdmin, async (req
         await recordAdminActivity(req, {
             category: "apartment", action: "apartment.calendar_token_rotated", targetType: "apartment",
             targetId: apartment._id, apartmentId: apartment.apartmentId,
-            description: `تم تجديد روابط تصدير التقويم للشقة ${apartment.apartmentId}.`
+            description: `تم تجديد روابط تصدير التقويم لـ${defaultApartmentLabel(apartment.apartmentId, apartment.label)}.`
         });
         return res.json({ success: true, message: "تم تجديد الروابط. حدّث رابط HIJAZI في Airbnb وBooking.com." });
     } catch {
@@ -1802,7 +1840,7 @@ app.delete("/admin/apartments/:id", requireAdmin, async (req, res) => {
         if (apartment.apartmentId >= 1 && apartment.apartmentId <= 6) {
             return res.status(403).json({
                 success: false,
-                message: "الشقق الأساسية من 1 إلى 6 محمية ولا يمكن حذفها."
+                message: "الشقق الأساسية الحالية محمية ولا يمكن حذفها."
             });
         }
 
@@ -1833,7 +1871,7 @@ app.delete("/admin/apartments/:id", requireAdmin, async (req, res) => {
 
         res.json({
             success: true,
-            message: `✅ تم حذف الشقة ${apartment.apartmentId}.`
+            message: `✅ تم حذف ${defaultApartmentLabel(apartment.apartmentId, apartment.label)}.`
         });
     } catch (error) {
         console.log("ADMIN DELETE APARTMENT ERROR:", error);
@@ -1933,7 +1971,7 @@ app.post("/admin/sync", requireAdmin, async (req, res) => {
             apartmentId: requestedApartmentId,
             source: requestedSource,
             description: requestedApartmentId
-                ? `تم تشغيل مزامنة يدوية للشقة ${requestedApartmentId}${requestedSource ? ` مع ${requestedSource === "airbnb" ? "Airbnb" : "Booking.com"}` : ""}.`
+                ? `تم تشغيل مزامنة يدوية لـ${defaultApartmentLabel(requestedApartmentId)}${requestedSource ? ` مع ${requestedSource === "airbnb" ? "Airbnb" : "Booking.com"}` : ""}.`
                 : "تم تشغيل مزامنة يدوية لجميع الشقق.",
             details: { successfulCount, failedCount, calendarsChecked: results.length }
         });
@@ -2019,7 +2057,7 @@ app.post("/admin/bookings", requireAdmin, async (req, res) => {
             targetId: booking._id,
             apartmentId: booking.apartmentId,
             source: booking.source,
-            description: `تمت إضافة حجز جديد لـ${booking.apartmentLabel || `الشقة ${booking.apartmentId}`}.`,
+            description: `تمت إضافة حجز جديد لـ${defaultApartmentLabel(booking.apartmentId, booking.apartmentLabel)}.`,
             details: {
                 checkIn: booking.checkIn,
                 checkOut: booking.checkOut,
@@ -2233,7 +2271,7 @@ app.put("/admin/bookings/:id", requireAdmin, async (req, res) => {
             targetId: booking._id,
             apartmentId: booking.apartmentId,
             source: booking.source,
-            description: `تم تعديل حجز ${booking.apartmentLabel || `الشقة ${booking.apartmentId}`}.`,
+            description: `تم تعديل حجز ${defaultApartmentLabel(booking.apartmentId, booking.apartmentLabel)}.`,
             details: {
                 platformFieldsLocked: isImportedPlatformBooking,
                 before: previousBooking,
@@ -2323,7 +2361,7 @@ app.patch("/admin/bookings/:id", requireAdmin, async (req, res) => {
             targetId: booking._id,
             apartmentId: booking.apartmentId,
             source: booking.source,
-            description: `تم تغيير حالة حجز ${booking.apartmentLabel || `الشقة ${booking.apartmentId}`} من ${previousStatus} إلى ${booking.status}.`,
+            description: `تم تغيير حالة حجز ${defaultApartmentLabel(booking.apartmentId, booking.apartmentLabel)} من ${previousStatus} إلى ${booking.status}.`,
             details: { previousStatus, status: booking.status }
         });
 
@@ -2385,7 +2423,7 @@ app.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
             targetId: booking._id,
             apartmentId: booking.apartmentId,
             source: booking.source,
-            description: `تم حذف حجز ملغي لـ${booking.apartmentLabel || `الشقة ${booking.apartmentId}`} نهائيًا.`,
+            description: `تم حذف حجز ملغي لـ${defaultApartmentLabel(booking.apartmentId, booking.apartmentLabel)} نهائيًا.`,
             details: {
                 checkIn: booking.checkIn,
                 checkOut: booking.checkOut,

@@ -23,6 +23,41 @@ const APARTMENT_PRICES = {
     5: 150,
     6: 200
 };
+
+/* =========================
+   أرقام الشقق الظاهرة للزائر
+
+   تبقى المفاتيح 1-6 معرّفات داخلية للصور والروابط فقط،
+   بينما تظهر الأرقام الفعلية التالية في جميع صفحات الموقع.
+========================= */
+const APARTMENT_DISPLAY_NUMBERS = Object.freeze({
+    1: "104",
+    2: "106",
+    3: "204",
+    4: "105",
+    5: "207",
+    6: "305"
+});
+
+function getApartmentDisplayNumber(apartmentId) {
+    return APARTMENT_DISPLAY_NUMBERS[Number(apartmentId)] || String(apartmentId || "");
+}
+
+function getApartmentDisplayName(apartmentId, lang = "ar", fallback = "") {
+    const displayNumber = APARTMENT_DISPLAY_NUMBERS[Number(apartmentId)];
+
+    if (displayNumber) {
+        return lang === "en"
+            ? `Apartment ${displayNumber}`
+            : `شقة رقم ${displayNumber}`;
+    }
+
+    if (fallback) return String(fallback);
+
+    return lang === "en"
+        ? `Apartment ${apartmentId}`
+        : `شقة رقم ${apartmentId}`;
+}
 /* =========================
    بيانات الشقق المشتركة
 ========================= */
@@ -31,8 +66,8 @@ const HIJAZI_APARTMENTS = {
         id: 1,
         location: "وسط البلد",
         mapEmbed: "https://www.google.com/maps?q=%D9%88%D8%B3%D8%B7%20%D8%A7%D9%84%D8%A8%D9%84%D8%AF%20%D8%B9%D9%85%D8%A7%D9%86&z=15&output=embed",
-        nameAr: "شقة رقم 1",
-        nameEn: "Apartment 1",
+        nameAr: getApartmentDisplayName(1, "ar"),
+        nameEn: getApartmentDisplayName(1, "en"),
         price: APARTMENT_PRICES[1],
         oneBalcony: false,
         descAr: "شقة مفروشة راقية مناسبة للإقامة الطبية والتنفيذية في عمّان.",
@@ -152,8 +187,8 @@ const HIJAZI_APARTMENTS = {
 for (let i = 2; i <= 6; i++) {
     HIJAZI_APARTMENTS[i] = JSON.parse(JSON.stringify(HIJAZI_APARTMENTS[1]));
     HIJAZI_APARTMENTS[i].id = i;
-    HIJAZI_APARTMENTS[i].nameAr = `شقة رقم ${i}`;
-    HIJAZI_APARTMENTS[i].nameEn = `Apartment ${i}`;
+    HIJAZI_APARTMENTS[i].nameAr = getApartmentDisplayName(i, "ar");
+    HIJAZI_APARTMENTS[i].nameEn = getApartmentDisplayName(i, "en");
     HIJAZI_APARTMENTS[i].price = APARTMENT_PRICES[i];
 }
 

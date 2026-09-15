@@ -4,7 +4,7 @@ const { buildIcalFeed, validateCalendarUrl } = require("../services/ical");
 
 test("buildIcalFeed creates an all-day reservation with exclusive checkout", () => {
     const feed = buildIcalFeed(
-        { label: "شقة رقم 1" },
+        { label: "شقة رقم 104" },
         [{
             _id: "booking-1",
             checkIn: new Date("2026-09-15T00:00:00.000Z"),
