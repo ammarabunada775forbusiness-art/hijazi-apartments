@@ -18,15 +18,43 @@ function getClientKey(req) {
    مقارنة بيانات الدخول بطريقة تقلل Timing Attacks
 ========================================================= */
 function timingSafeEqualStrings(left, right) {
-    const leftBuffer = Buffer.from(String(left || ""));
-    const rightBuffer = Buffer.from(String(right || ""));
-
-    if (leftBuffer.length !== rightBuffer.length) return false;
+    // هاش ثابت الطول لتجنب مقارنة كلمة المرور باختلاف طول المصفوفتين.
+    const leftBuffer = crypto.createHash("sha256").update(String(left ?? "")).digest();
+    const rightBuffer = crypto.createHash("sha256").update(String(right ?? "")).digest();
 
     return crypto.timingSafeEqual(
         leftBuffer,
         rightBuffer
     );
+}
+
+/* لا نسجل Query strings أو رمز الوصول الموجود داخل رابط التقويم. */
+function requestPathForLog(req) {
+    const path = String(req.path || "/");
+    return /^\/ical(?:\/|$)/i.test(path)
+        ? "/ical/[redacted]"
+        : path.replace(/[\u0000-\u001f\u007f]/g, "").slice(0, 200);
+}
+
+/* التحقق من الأنواع قبل Number/String لمنع تحويل مصفوفة أو Boolean إلى قيمة مقبولة. */
+function validatePublicBookingShape(req, res, next) {
+    const body = req.body;
+    const bad = () => res.status(400).json({ success: false, message: "أنواع بيانات الحجز غير صحيحة." });
+    if (!body || typeof body !== "object" || Array.isArray(body)) return bad();
+    const limits = { fullName: 150, email: 200, phone: 30, checkIn: 10, checkOut: 10 };
+    for (const [key, max] of Object.entries(limits)) {
+        if (typeof body[key] !== "string" || !body[key].trim() || body[key].length > max) return bad();
+    }
+    for (const [key, max] of Object.entries({ notes: 1000, currency: 3 })) {
+        if (body[key] !== undefined && (typeof body[key] !== "string" || body[key].length > max)) return bad();
+    }
+    for (const key of ["apartmentId", "adults", "children"]) {
+        const value = body[key];
+        if (key === "children" && value === undefined) continue;
+        if ((typeof value !== "number" && !(typeof value === "string" && /^\d+$/.test(value))) ||
+            !Number.isSafeInteger(Number(value)) || Number(value) < (key === "children" ? 0 : 1)) return bad();
+    }
+    return next();
 }
 
 /* =========================================================
@@ -73,8 +101,8 @@ function securityHeaders(req, res, next) {
     }
 
     if (
-        req.originalUrl === "/admin" ||
-        req.originalUrl.startsWith("/admin/")
+        req.path === "/admin" ||
+        req.path.startsWith("/admin/") || req.path.startsWith("/ical/")
     ) {
         res.set(
             "Cache-Control",
@@ -282,6 +310,8 @@ function createRateLimiter({
 }
 
 module.exports = {
+    requestPathForLog,
+    validatePublicBookingShape,
     createRateLimiter,
     findDangerousObjectKey,
     rejectDangerousBodyKeys,

@@ -1,4 +1,5 @@
 const express = require("express");
+const crypto = require("node:crypto");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const Booking = require("./models/Booking");
@@ -12,10 +13,14 @@ const {
     rejectDangerousBodyKeys,
     requireJsonContentType,
     securityHeaders,
-    timingSafeEqualStrings
+    timingSafeEqualStrings,
+    requestPathForLog,
+    validatePublicBookingShape
 } = require("./services/security");
 require("dotenv").config();
 
+const { createTurnstileProtection } = require("./services/turnstile");
+const turnstileProtection = createTurnstileProtection();
 const app = express();
 
 /* إخفاء اسم Express من HTTP Headers */
@@ -81,6 +86,14 @@ const publicBookingLimiter = createRateLimiter({
 /* إضافة Security Headers */
 app.use(securityHeaders);
 
+/* رفض Origin غير المعتمد داخل الخادم أيضًا، قبل أي تعديل للبيانات. */
+app.use((req, res, next) => {
+    if (!isAllowedOrigin(req.get("Origin"))) {
+        return res.status(403).json({ success: false, message: "مصدر الطلب غير مسموح." });
+    }
+    next();
+});
+
 /* إعداد CORS */
 app.use(cors({
     origin(origin, callback) {
@@ -123,13 +136,13 @@ app.use(rejectDangerousBodyKeys);
 app.use("/admin", adminApiLimiter);
 
 app.use((req, res, next) => {
-    console.log(`[REQUEST] ${new Date().toISOString()} ${req.method} ${req.originalUrl}`);
+    console.log(`[REQUEST] ${new Date().toISOString()} ${req.method} ${requestPathForLog(req)}`);
     next();
 });
 /* =========================================================
    الاتصال بقاعدة البيانات
 ========================================================= */
-mongoose
+if (require.main === module) mongoose
     .connect(process.env.MONGO_URI, {
         serverSelectionTimeoutMS: 15000,
         family: 4
@@ -141,7 +154,7 @@ mongoose
             console.log("INITIAL CALENDAR SYNC ERROR:", error.message);
         });
     })
-    .catch((err) => console.log("MongoDB Connection Error:", err));
+    .catch((err) => console.log("MongoDB Connection Error:", err.name || "Error"));
 
 /* =========================================================
    إعداد Resend لإرسال الإيميلات
@@ -154,6 +167,8 @@ const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KE
 app.get("/", (req, res) => {
     res.send("HIJAZI Apartments API Running");
 });
+
+app.get("/security/public-config", turnstileProtection.publicConfig);
 
 app.get("/health", (req, res) => {
     res.status(200).json({
@@ -245,14 +260,9 @@ function requireAdmin(req, res, next) {
         user &&
         configuredAdminUser &&
         configuredAdminPass &&
-        timingSafeEqualStrings(
-            user.name,
-            configuredAdminUser
-        ) &&
-        timingSafeEqualStrings(
-            user.pass,
-            configuredAdminPass
-        );
+        // & ينفذ المقارنتين؛ لا نتوقف مبكرًا بسبب اسم مستخدم غير مطابق.
+        (timingSafeEqualStrings(user.name, configuredAdminUser) &
+            timingSafeEqualStrings(user.pass, configuredAdminPass));
 
     if (!ok) {
         const attemptExpired =
@@ -979,6 +989,8 @@ app.get("/bookings", async (req, res) => {
 app.post(
     "/bookings",
     publicBookingLimiter,
+    validatePublicBookingShape,
+    turnstileProtection.verify,
     async (req, res) => {
         try {
             const {
@@ -1366,7 +1378,7 @@ app.post(
         } catch (error) {
             console.log(
                 "SAVE BOOKING ERROR:",
-                error
+                error.name || "Error"
             );
 
             res.status(500).json({
@@ -1661,6 +1673,27 @@ app.post("/admin/apartments", requireAdmin, async (req, res) => {
 /* =========================================================
    API: تعديل اسم الشقة وحالتها وروابط تقاويمها
 ========================================================= */
+/* إبطال روابط التصدير القديمة بإجراء صريح من الأدمن، ثم نسخ الروابط الجديدة للمنصات. */
+app.post("/admin/apartments/:id/rotate-calendar-token", requireAdmin, async (req, res) => {
+    if (!/^[a-f0-9]{24}$/i.test(req.params.id) || req.body?.confirm !== true) {
+        return res.status(400).json({ success: false, message: "تأكد من الشقة ووافق على استبدال روابط التصدير." });
+    }
+    try {
+        const apartment = await Apartment.findByIdAndUpdate(req.params.id, {
+            $set: { calendarToken: crypto.randomBytes(24).toString("hex") }
+        }, { new: true, runValidators: true });
+        if (!apartment) return res.status(404).json({ success: false, message: "الشقة غير موجودة." });
+        await recordAdminActivity(req, {
+            category: "apartment", action: "apartment.calendar_token_rotated", targetType: "apartment",
+            targetId: apartment._id, apartmentId: apartment.apartmentId,
+            description: `تم تجديد روابط تصدير التقويم للشقة ${apartment.apartmentId}.`
+        });
+        return res.json({ success: true, message: "تم تجديد الروابط. حدّث رابط HIJAZI في Airbnb وBooking.com." });
+    } catch {
+        return res.status(500).json({ success: false, message: "تعذر تجديد روابط التقويم." });
+    }
+});
+
 app.put("/admin/apartments/:id", requireAdmin, async (req, res) => {
     try {
         const apartment = await Apartment.findById(req.params.id);
@@ -2435,8 +2468,10 @@ app.use((req, res) => {
 app.use((error, req, res, next) => {
     console.log(
         "UNHANDLED REQUEST ERROR:",
-        error.message
+        error.name || "Error"
     );
+
+    if (res.headersSent) return next(error);
 
     /* JSON أكبر من 50KB */
     if (
@@ -2477,4 +2512,7 @@ app.use((error, req, res, next) => {
    تشغيل السيرفر
 ========================================================= */
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+if (require.main === module) {
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+module.exports = { app };

@@ -3135,6 +3135,7 @@
             }
         }
     </style>
+    <script src="js/booking-security.js" defer></script>
 </head>
 
 <body>
@@ -3302,6 +3303,10 @@
                         <p><span id="finalPriceLabel">السعر النهائي:</span> <span class="price" id="totalPrice">—</span>
                         </p>
 
+                        <div id="bookingSecurity" hidden style="margin:16px 0;max-width:100%;overflow:hidden">
+                            <div id="bookingTurnstile"></div>
+                        </div>
+                        <p id="bookingSecurityStatus" role="status" aria-live="polite" style="font-size:14px"></p>
                         <button id="submitBtn" type="submit">تأكيد الحجز</button>
                     </form>
                 </div>
@@ -4853,10 +4858,19 @@
                 stayType: isLongStay(checkInEl.value, checkOutEl.value) ? "long" : "normal"
             };
 
+            let securityTokenSubmitted = false;
             try {
                 submitBtn.disabled = true;
                 submitBtn.textContent = lang === "ar" ? "جاري الحفظ..." : "Saving...";
 
+                try {
+                    payload.turnstileToken = await window.HijaziBookingSecurity.getToken();
+                } catch (error) {
+                    showMessage(error.message || "تعذر التحقق الأمني.", "error");
+                    return;
+                }
+
+                securityTokenSubmitted = true;
                 const res = await fetch(`${API_BASE}/bookings`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -4912,6 +4926,7 @@
                     "error"
                 );
             } finally {
+                if (securityTokenSubmitted) window.HijaziBookingSecurity?.reset();
                 submitBtn.disabled = false;
                 submitBtn.textContent = lang === "ar" ? "تأكيد الحجز" : "Confirm booking";
             }

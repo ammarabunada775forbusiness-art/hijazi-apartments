@@ -3570,6 +3570,7 @@
             }
         }
     </style>
+    <script src="js/export-security.js"></script>
 </head>
 
 <body>
@@ -4194,7 +4195,7 @@
         }
 
         function csvCell(value) {
-            return `"${String(value ?? "").replace(/"/g, '""')}"`;
+            return window.HijaziExportSecurity.csvCell(value);
         }
 
         function downloadCsv(fileName, headers, rows) {
@@ -5707,6 +5708,10 @@ ${connections}
                         مزامنة هذه الشقة
                     </button>
 
+                    <button class="btn btn-dark" data-rotate-calendar-token type="button">
+                        تجديد روابط التصدير
+                    </button>
+
                     ${deleteControl}
                 </div>
             </article>
@@ -6210,6 +6215,21 @@ ${connections}
                 }
 
                 showNotice("تم نسخ رابط التقويم.");
+                return;
+            }
+
+            if (e.target.hasAttribute("data-rotate-calendar-token")) {
+                if (!confirm("سيتم إبطال رابطَي HIJAZI القديمين لهذه الشقة. ستحتاج إلى استبدالهما داخل Airbnb وBooking.com. هل تريد المتابعة؟")) return;
+                const button = e.target;
+                setButtonLoading(button, true, "جاري التجديد...");
+                try {
+                    await api(`/admin/apartments/${apartment._id}/rotate-calendar-token`, {
+                        method: "POST", body: JSON.stringify({ confirm: true })
+                    });
+                    await loadAll();
+                    showNotice("تم تجديد روابط التصدير. انسخ الروابط الجديدة إلى المنصات المرتبطة الآن.");
+                } catch (error) { showNotice(error.message, "error"); }
+                finally { if (document.body.contains(button)) setButtonLoading(button, false); }
                 return;
             }
 
