@@ -1575,7 +1575,14 @@ app.get("/apartments/public", async (req, res) => {
 
         res.json({
             success: true,
-            apartments
+            apartments: apartments.map(apartment => ({
+                apartmentId: Number(apartment.apartmentId),
+                label: defaultApartmentLabel(
+                    apartment.apartmentId,
+                    apartment.label
+                ),
+                nightlyPriceJod: Number(apartment.nightlyPriceJod)
+            }))
         });
     } catch (error) {
         console.log("PUBLIC APARTMENTS ERROR:", error);
@@ -1593,7 +1600,9 @@ app.get("/apartments/public", async (req, res) => {
 app.get("/admin/apartments", requireAdmin, async (req, res) => {
     try {
         await ensureDefaultApartments();
-        const apartments = await Apartment.find().sort({ apartmentId: 1 });
+        const apartments = await Apartment.find()
+            .select("+calendarToken")
+            .sort({ apartmentId: 1 });
         const apiBase = String(process.env.PUBLIC_API_URL || `${req.protocol}://${req.get("host")}`).replace(/\/$/, "");
 
         res.json({

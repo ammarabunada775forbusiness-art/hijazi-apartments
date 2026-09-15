@@ -118,6 +118,36 @@ test("admin access needs authentication and repeated failures are blocked", asyn
     assert.equal(blocked.status, 429); assert.ok(blocked.headers.get("retry-after"));
 });
 
+test("public apartment data exposes labels and prices but never calendar tokens", async () => {
+    const originalFind = Apartment.find;
+    Apartment.find = () => ({
+        select: () => ({
+            sort: async () => [{
+                _id: "internal-id",
+                apartmentId: 1,
+                label: "شقة رقم 104",
+                nightlyPriceJod: 120,
+                calendarToken: "must-not-be-public"
+            }]
+        })
+    });
+
+    try {
+        const response = await originalFetch(base + "/apartments/public");
+        assert.equal(response.status, 200);
+        const body = await response.json();
+        assert.deepEqual(body.apartments, [{
+            apartmentId: 1,
+            label: "شقة رقم 104",
+            nightlyPriceJod: 120
+        }]);
+        assert.ok(!JSON.stringify(body).includes("calendarToken"));
+        assert.ok(!JSON.stringify(body).includes("must-not-be-public"));
+    } finally {
+        Apartment.find = originalFind;
+    }
+});
+
 test("calendar token rotation requires admin and explicit confirmation; audit has no token", async () => {
     const path = "/admin/apartments/0123456789abcdef01234567/rotate-calendar-token";
     const headers = { "Content-Type": "application/json", "X-Forwarded-For": "198.51.100.60" };

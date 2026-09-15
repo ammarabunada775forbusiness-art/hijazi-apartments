@@ -59,7 +59,7 @@ const apartmentSchema = new mongoose.Schema(
         calendarToken: {
             type: String,
             default: () => crypto.randomBytes(24).toString("hex"),
-            select: true
+            select: false
         },
 
         calendars: {
