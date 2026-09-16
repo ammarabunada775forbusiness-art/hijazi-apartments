@@ -49,14 +49,14 @@ function getApartmentDisplayName(apartmentId, lang = "ar", fallback = "") {
     if (displayNumber) {
         return lang === "en"
             ? `Apartment ${displayNumber}`
-            : `شقة رقم ${displayNumber}`;
+            : `شقة ${displayNumber}`;
     }
 
     if (fallback) return String(fallback);
 
     return lang === "en"
         ? `Apartment ${apartmentId}`
-        : `شقة رقم ${apartmentId}`;
+        : `شقة ${apartmentId}`;
 }
 /* =========================
    بيانات الشقق المشتركة
