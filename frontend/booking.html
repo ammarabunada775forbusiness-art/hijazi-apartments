@@ -4631,7 +4631,8 @@
                 return false;
             }
 
-            const outExclusive = addDays(outDate, 1);
+            // تاريخ المغادرة غير مشمول بالإقامة، لذلك يُستخدم كما هو كنهاية حصرية.
+            const outExclusive = outDate;
 
             if (selectionConflicts(inDate, outExclusive)) {
                 showFieldError(
