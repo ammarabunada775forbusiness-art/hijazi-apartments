@@ -416,7 +416,7 @@ const APARTMENT_ROOM_COUNTS = {
         "bathroom-2": 4,
         "bathroom-3": 1,
         laundry: 1,
-        others: 7,
+        others: 6,
         balcony: 1
     },
 
@@ -457,7 +457,7 @@ const APARTMENT_ROOM_COUNTS = {
         "bedroom-2": 3,
         "bedroom-3": 2,
         kitchen: 4,
-        "bathroom-1": 7,
+        "bathroom-1": 4,
         "bathroom-2": 2,
         "bathroom-3": 1,
         laundry: 1,
@@ -488,7 +488,7 @@ const APARTMENT_ROOM_COUNTS = {
         "bedroom-3": 3,
         kitchen: 3,
         "bathroom-1": 2,
-        "bathroom-2": 2,
+        "bathroom-2": 1,
         "bathroom-3": 2,
         laundry: 1,
         others: 6,
