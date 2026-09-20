@@ -21,13 +21,15 @@ const APARTMENT_PRICES = {
     3: 150,
     4: 200,
     5: 150,
-    6: 200
+    6: 200,
+    7: 150,
+    8: 200
 };
 
 /* =========================
    أرقام الشقق الظاهرة للزائر
 
-   تبقى المفاتيح 1-6 معرّفات داخلية للصور والروابط فقط،
+   تبقى المفاتيح 1-8 معرّفات داخلية للصور والروابط فقط،
    بينما تظهر الأرقام الفعلية التالية في جميع صفحات الموقع.
 ========================= */
 const APARTMENT_DISPLAY_NUMBERS = Object.freeze({
@@ -36,8 +38,13 @@ const APARTMENT_DISPLAY_NUMBERS = Object.freeze({
     3: "204",
     4: "105",
     5: "207",
-    6: "305"
+    6: "305",
+    7: "107",
+    8: "309"
 });
+
+/* ترتيب بطاقات الشقق وقوائم الاختيار الظاهر للزائر. */
+const APARTMENT_DISPLAY_ORDER = Object.freeze([1, 2, 6, 3, 4, 5, 7, 8]);
 
 function getApartmentDisplayNumber(apartmentId) {
     return APARTMENT_DISPLAY_NUMBERS[Number(apartmentId)] || String(apartmentId || "");
@@ -182,9 +189,9 @@ const HIJAZI_APARTMENTS = {
 };
 
 /* =========================
-   توليد بيانات الشقق 2-6
+   توليد بيانات الشقق 2-8
 ========================= */
-for (let i = 2; i <= 6; i++) {
+for (let i = 2; i <= 8; i++) {
     HIJAZI_APARTMENTS[i] = JSON.parse(JSON.stringify(HIJAZI_APARTMENTS[1]));
     HIJAZI_APARTMENTS[i].id = i;
     HIJAZI_APARTMENTS[i].nameAr = getApartmentDisplayName(i, "ar");
@@ -252,23 +259,10 @@ async function loadApartmentPricesFromPms() {
 const HIJAZI_SHARED_LOCATION_AR = "HIJAZI Apartments - شارع يوسف بن تاشفين، الشميساني، عمّان";
 const HIJAZI_SHARED_MAP_EMBED = "https://www.google.com/maps?q=31.97618730798579,35.89911515004555&z=18&output=embed";
 
-HIJAZI_APARTMENTS[1].location = HIJAZI_SHARED_LOCATION_AR;
-HIJAZI_APARTMENTS[1].mapEmbed = HIJAZI_SHARED_MAP_EMBED;
-
-HIJAZI_APARTMENTS[2].location = HIJAZI_SHARED_LOCATION_AR;
-HIJAZI_APARTMENTS[2].mapEmbed = HIJAZI_SHARED_MAP_EMBED;
-
-HIJAZI_APARTMENTS[3].location = HIJAZI_SHARED_LOCATION_AR;
-HIJAZI_APARTMENTS[3].mapEmbed = HIJAZI_SHARED_MAP_EMBED;
-
-HIJAZI_APARTMENTS[4].location = HIJAZI_SHARED_LOCATION_AR;
-HIJAZI_APARTMENTS[4].mapEmbed = HIJAZI_SHARED_MAP_EMBED;
-
-HIJAZI_APARTMENTS[5].location = HIJAZI_SHARED_LOCATION_AR;
-HIJAZI_APARTMENTS[5].mapEmbed = HIJAZI_SHARED_MAP_EMBED;
-
-HIJAZI_APARTMENTS[6].location = HIJAZI_SHARED_LOCATION_AR;
-HIJAZI_APARTMENTS[6].mapEmbed = HIJAZI_SHARED_MAP_EMBED;
+Object.values(HIJAZI_APARTMENTS).forEach(apartment => {
+    apartment.location = HIJAZI_SHARED_LOCATION_AR;
+    apartment.mapEmbed = HIJAZI_SHARED_MAP_EMBED;
+});
 /* =========================================================
    الشقة 6 تحتوي على شرفة واحدة فقط
 ========================================================= */
