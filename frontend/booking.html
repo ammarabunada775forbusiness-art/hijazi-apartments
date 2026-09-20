@@ -3274,14 +3274,14 @@
                             </div>
 
                             <div class="mobile-form-field">
-                                <label id="checkOutLabel" for="checkOut">تاريخ المغادرة:</label>
+                                <label id="checkOutLabel" for="checkOut">تاريخ المغادرة صباحًا:</label>
                                 <input type="date" id="checkOut" required>
                                 <div class="field-error" id="dateError"></div>
                             </div>
                         </div>
 
                         <div class="hint" id="dateHint">
-                            لا يمكن اختيار فترة متداخلة مع الحجوزات الموجودة.
+                            يوم المغادرة لا يُحسب ليلة، ولا يمكن اختيار فترة متداخلة مع الحجوزات الموجودة.
                         </div>
 
                         <div id="longStayNotice"></div>
@@ -3499,8 +3499,8 @@
                 document.getElementById("emailLabel").textContent = "البريد الإلكتروني:";
                 document.getElementById("phoneLabel").textContent = "رقم الهاتف:";
                 document.getElementById("checkInLabel").textContent = "تاريخ الوصول:";
-                document.getElementById("checkOutLabel").textContent = "تاريخ المغادرة:";
-                document.getElementById("dateHint").textContent = "لا يمكن اختيار فترة متداخلة مع الحجوزات الموجودة.";
+                document.getElementById("checkOutLabel").textContent = "تاريخ المغادرة صباحًا:";
+                document.getElementById("dateHint").textContent = "يوم المغادرة لا يُحسب ليلة، ولا يمكن اختيار فترة متداخلة مع الحجوزات الموجودة.";
                 document.getElementById("adultsLabel").textContent = "عدد البالغين:";
                 document.getElementById("childrenLabel").textContent = "عدد الأطفال:";
                 document.getElementById("notesLabel").textContent = "ملاحظات أو أسئلة إضافية:";
@@ -3550,8 +3550,8 @@
                 document.getElementById("emailLabel").textContent = "Email:";
                 document.getElementById("phoneLabel").textContent = "Phone number:";
                 document.getElementById("checkInLabel").textContent = "Check-in:";
-                document.getElementById("checkOutLabel").textContent = "Check-out:";
-                document.getElementById("dateHint").textContent = "Overlapping dates with existing bookings are not allowed.";
+                document.getElementById("checkOutLabel").textContent = "Check-out morning:";
+                document.getElementById("dateHint").textContent = "The check-out date is not charged as a night, and overlapping bookings are not allowed.";
                 document.getElementById("adultsLabel").textContent = "Adults:";
                 document.getElementById("childrenLabel").textContent = "Children:";
                 document.getElementById("notesLabel").textContent = "Additional notes or questions:";

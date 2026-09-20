@@ -8,8 +8,6 @@
     <title>HIJAZI PMS - نظام إدارة الحجوزات</title>
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.js"></script>
     <style>
         :root {
             --gold: #c89116;
@@ -3569,6 +3567,272 @@
                 justify-self: start;
             }
         }
+
+        /* =========================================================
+           تقويم إشغال مستقل لكل شقة
+        ========================================================= */
+        #adminCalendar {
+            min-height: 0;
+        }
+
+        .apartment-calendar-toolbar {
+            display: grid;
+            grid-template-columns: auto minmax(180px, 1fr) auto;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            padding: 12px;
+            border: 1px solid #eaecf0;
+            border-radius: 16px;
+            background: #f8fafc;
+        }
+
+        .apartment-calendar-toolbar h4 {
+            margin: 0;
+            color: #101828;
+            font-size: 20px;
+            text-align: center;
+        }
+
+        .calendar-nav-group {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .calendar-nav-button {
+            min-width: 42px;
+            min-height: 40px;
+            padding: 7px 11px;
+            border: 1px solid #d0d5dd;
+            border-radius: 10px;
+            color: #344054;
+            background: #fff;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        .calendar-nav-button:hover,
+        .calendar-nav-button:focus-visible {
+            border-color: var(--gold);
+            color: #111;
+            outline: none;
+        }
+
+        .apartment-calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .apartment-mini-calendar {
+            min-width: 0;
+            padding: 15px;
+            border: 1px solid #e4e7ec;
+            border-radius: 18px;
+            background: #fff;
+            box-shadow: 0 8px 24px rgba(16, 24, 40, .06);
+        }
+
+        .apartment-mini-calendar h4 {
+            margin: 0 0 12px;
+            color: #101828;
+            font-size: 17px;
+        }
+
+        .mini-calendar-weekdays,
+        .mini-calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+        }
+
+        .mini-calendar-weekdays {
+            gap: 2px;
+            margin-bottom: 5px;
+        }
+
+        .mini-calendar-weekdays span {
+            color: #667085;
+            font-size: 10px;
+            font-weight: 900;
+            text-align: center;
+        }
+
+        .mini-calendar-days {
+            gap: 3px 2px;
+        }
+
+        .mini-calendar-day {
+            position: relative;
+            display: grid;
+            place-items: center;
+            min-width: 0;
+            min-height: 34px;
+            aspect-ratio: 1.05;
+            padding: 0;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            color: #344054;
+            background: #f9fafb;
+            font: inherit;
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        button.mini-calendar-day {
+            cursor: pointer;
+        }
+
+        button.mini-calendar-day:hover,
+        button.mini-calendar-day:focus-visible {
+            z-index: 2;
+            transform: translateY(-1px);
+            outline: 2px solid #111;
+            outline-offset: 1px;
+        }
+
+        .mini-calendar-day.is-empty {
+            visibility: hidden;
+        }
+
+        .mini-calendar-day.is-past {
+            border-color: transparent !important;
+            color: #98a2b3 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            opacity: .34;
+            pointer-events: none;
+        }
+
+        .mini-calendar-day.is-today {
+            border-color: #8a6110;
+            background: #fff2c2;
+            box-shadow: inset 0 0 0 2px #c89116;
+        }
+
+        .mini-calendar-day.is-booked {
+            border-color: transparent;
+            color: #fff;
+            background: var(--booking-color, #344054);
+            box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .14);
+        }
+
+        .mini-calendar-day.is-booked.is-today {
+            outline: 3px solid #c89116;
+            outline-offset: 1px;
+            box-shadow: inset 0 0 0 2px #fff;
+        }
+
+        .mini-calendar-day.has-overlap::after {
+            content: "!";
+            position: absolute;
+            top: -4px;
+            left: -3px;
+            display: grid;
+            place-items: center;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            color: #fff;
+            background: #b42318;
+            font-size: 9px;
+        }
+
+        .calendar-empty-state {
+            grid-column: 1 / -1;
+            padding: 30px 16px;
+            border: 1px dashed #d0d5dd;
+            border-radius: 16px;
+            color: #667085;
+            background: #f9fafb;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        /* ألوان المصادر المعتمدة في جميع أجزاء لوحة الإدارة. */
+        .source-airbnb {
+            color: #c11574 !important;
+            background: #fdf2fa !important;
+        }
+
+        .source-booking {
+            color: #175cd3 !important;
+            background: #eff8ff !important;
+        }
+
+        .source-manual {
+            color: #6941c6 !important;
+            background: #f4f3ff !important;
+        }
+
+        .source-website {
+            color: #8a6110 !important;
+            background: #fff7dc !important;
+        }
+
+        .legend-airbnb {
+            background: #ff385c !important;
+        }
+
+        .legend-booking {
+            background: #003b95 !important;
+        }
+
+        .legend-manual,
+        .hijazi-select-option[data-tone="source-manual"] .hijazi-option-dot {
+            background: #7f56d9 !important;
+        }
+
+        .legend-website,
+        .hijazi-select-option[data-tone="source-website"] .hijazi-option-dot {
+            background: #c89116 !important;
+        }
+
+        .legend-today {
+            border: 2px solid #c89116;
+            background: #111 !important;
+        }
+
+        .tone-source-manual {
+            color: #6941c6 !important;
+            background: #f4f3ff !important;
+            border-color: #d9d6fe !important;
+        }
+
+        .tone-source-website {
+            color: #8a6110 !important;
+            background: #fff7dc !important;
+            border-color: #e2c36d !important;
+        }
+
+        @media (max-width: 760px) {
+            .apartment-calendar-toolbar {
+                grid-template-columns: 1fr;
+            }
+
+            .calendar-nav-group {
+                justify-content: center;
+            }
+
+            .apartment-calendar-toolbar h4 {
+                grid-row: 1;
+            }
+
+            .apartment-calendar-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .apartment-mini-calendar {
+                padding: 12px;
+            }
+
+            .mini-calendar-day {
+                min-height: 38px;
+                font-size: 13px;
+            }
+        }
     </style>
     <script src="js/export-security.js"></script>
 </head>
@@ -3688,7 +3952,7 @@
                         </select></div>
                     <div class="field"><label for="manualCheckIn">الدخول *</label><input id="manualCheckIn" type="date"
                             required></div>
-                    <div class="field"><label for="manualCheckOut">الخروج *</label><input id="manualCheckOut"
+                    <div class="field"><label for="manualCheckOut">الخروج صباحًا * — لا يُحسب هذا اليوم ليلة</label><input id="manualCheckOut"
                             type="date" required></div>
                     <div class="field"><label for="manualName">اسم العميل</label><input id="manualName"
                             placeholder="مثال: أحمد محمد"></div>
@@ -3776,7 +4040,7 @@
                     <div class="admin-calendar-head">
                         <div>
                             <h3>تقويم إشغال الشقق</h3>
-                            <p>يعرض الحجوزات حسب الشقة والمصدر. اضغط على أي حجز لعرض تفاصيله.</p>
+                            <p>تقويم مستقل لكل شقة. يوم الخروج لا يُحسب ليلة ويمكن أن يبدأ فيه حجز جديد.</p>
                         </div>
 
                         <div class="calendar-legend">
@@ -3798,6 +4062,11 @@
                             <span class="legend-item">
                                 <span class="legend-dot legend-website"></span>
                                 الموقع
+                            </span>
+
+                            <span class="legend-item">
+                                <span class="legend-dot legend-today"></span>
+                                اليوم
                             </span>
                         </div>
                     </div>
@@ -4099,8 +4368,8 @@
         };
         const ACTIVITY_ICONS = { booking: "ح", apartment: "ش", sync: "↻", system: "ن" };
         const SOURCE_COLORS = {
-            website: "#6941c6",
-            manual: "#067647",
+            website: "#c89116",
+            manual: "#7f56d9",
             airbnb: "#ff385c",
             booking: "#003b95"
         };
@@ -5215,54 +5484,165 @@
         }
 
         /* =========================================================
-           تحويل الحجوزات إلى أحداث ملونة داخل التقويم
+           تقويم شهري مستقل لكل شقة
+           يوم الخروج نهاية حصرية: لا يُلوّن ولا يُحسب ليلة.
         ========================================================= */
-        function renderAdminCalendar() {
-            if (!adminCalendar) return;
+        function monthStartFor(value) {
+            const [year, month] = String(value).split("-").map(Number);
+            return new Date(Date.UTC(year, month - 1, 1));
+        }
 
+        function calendarDateKey(year, monthIndex, day) {
+            return `${year}-${String(monthIndex + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+        }
+
+        function visibleCalendarBookings() {
             const selectedStatus = document.getElementById("statusFilter").value;
 
-            const visibleBookings = getFilteredCalendarBookings()
+            return getFilteredCalendarBookings()
                 .filter(booking => {
                     const status = booking.status || "pending";
-
-                    // الحجوزات الملغية لا تظهر افتراضيًا.
-                    // تظهر فقط عند اختيار فلتر "ملغي".
                     return selectedStatus === "cancelled" || status !== "cancelled";
                 })
-                .filter(booking => {
-                    return dateOnly(booking.checkIn) && dateOnly(booking.checkOut);
+                .filter(booking => dateOnly(booking.checkIn) && dateOnly(booking.checkOut));
+        }
+
+        function renderApartmentMonthCard(apartment, monthStart, bookings, today) {
+            const year = monthStart.getUTCFullYear();
+            const monthIndex = monthStart.getUTCMonth();
+            const daysInMonth = new Date(Date.UTC(year, monthIndex + 1, 0)).getUTCDate();
+            const leadingEmptyDays = (monthStart.getUTCDay() - 6 + 7) % 7;
+            const totalCells = Math.ceil((leadingEmptyDays + daysInMonth) / 7) * 7;
+            const apartmentBookings = bookings.filter(
+                booking => Number(booking.apartmentId) === Number(apartment.apartmentId)
+            );
+            const weekdays = [
+                ["س", "السبت"],
+                ["ح", "الأحد"],
+                ["ن", "الاثنين"],
+                ["ث", "الثلاثاء"],
+                ["ر", "الأربعاء"],
+                ["خ", "الخميس"],
+                ["ج", "الجمعة"]
+            ];
+            const cells = [];
+
+            for (let cellIndex = 0; cellIndex < totalCells; cellIndex += 1) {
+                const day = cellIndex - leadingEmptyDays + 1;
+
+                if (day < 1 || day > daysInMonth) {
+                    cells.push('<span class="mini-calendar-day is-empty" aria-hidden="true"></span>');
+                    continue;
+                }
+
+                const dateKey = calendarDateKey(year, monthIndex, day);
+                const isPast = dateKey < today;
+                const isToday = dateKey === today;
+                const dayBookings = apartmentBookings.filter(booking => {
+                    const start = dateOnly(booking.checkIn);
+                    const end = dateOnly(booking.checkOut);
+
+                    // checkOut حصري: الضيف يغادر صباح هذا اليوم.
+                    return start <= dateKey && dateKey < end;
                 });
+                const activeDayBookings = isPast ? [] : dayBookings;
+                const sources = [...new Set(
+                    activeDayBookings.map(booking => booking.source || "website")
+                )];
+                const colors = sources.map(source => SOURCE_COLORS[source] || "#344054");
+                const bookingColor = colors.length > 1
+                    ? `linear-gradient(135deg, ${colors.join(", ")})`
+                    : colors[0] || "";
+                const classes = [
+                    "mini-calendar-day",
+                    isPast ? "is-past" : "",
+                    isToday ? "is-today" : "",
+                    activeDayBookings.length ? "is-booked" : "",
+                    activeDayBookings.length > 1 ? "has-overlap" : ""
+                ].filter(Boolean).join(" ");
 
-            const events = visibleBookings.map(booking => {
-                const source = booking.source || "website";
-                const status = booking.status || "pending";
-                const apartmentLabel = apartmentDisplayLabel(
-                    booking.apartmentId,
-                    booking.apartmentLabel
+                if (!activeDayBookings.length) {
+                    cells.push(`<span class="${classes}" aria-label="${escapeHtml(dateKey)}">${day}</span>`);
+                    continue;
+                }
+
+                const firstBooking = activeDayBookings[0];
+                const bookingDescription = activeDayBookings.map(booking => {
+                    const source = booking.source || "website";
+                    return `${SOURCE_LABELS[source] || source}: ${booking.fullName || "حجز"}`;
+                }).join(" | ");
+
+                cells.push(`
+                    <button
+                        type="button"
+                        class="${classes}"
+                        data-booking-id="${escapeHtml(firstBooking._id)}"
+                        style="--booking-color:${escapeHtml(bookingColor)}"
+                        title="${escapeHtml(bookingDescription)}"
+                        aria-label="${escapeHtml(`${dateKey} — ${bookingDescription}`)}"
+                    >${day}</button>
+                `);
+            }
+
+            return `
+                <article class="apartment-mini-calendar">
+                    <h4>${escapeHtml(apartmentDisplayLabel(apartment.apartmentId, apartment.label))}</h4>
+                    <div class="mini-calendar-weekdays">
+                        ${weekdays.map(([shortLabel, fullLabel]) =>
+                            `<span title="${fullLabel}">${shortLabel}</span>`
+                        ).join("")}
+                    </div>
+                    <div class="mini-calendar-days">
+                        ${cells.join("")}
+                    </div>
+                </article>
+            `;
+        }
+
+        function renderAdminCalendar() {
+            const calendarElement = document.getElementById("adminCalendar");
+
+            if (!calendarElement || !adminCalendar?.monthStart) return;
+
+            const monthStart = adminCalendar.monthStart;
+            const today = todayInAmman();
+            const selectedApartmentId = document.getElementById("apartmentFilter").value;
+            const calendarApartments = apartments
+                .filter(apartment => apartment.active)
+                .filter(apartment =>
+                    !selectedApartmentId ||
+                    String(apartment.apartmentId) === selectedApartmentId
                 );
+            const monthTitle = new Intl.DateTimeFormat("ar-JO", {
+                month: "long",
+                year: "numeric",
+                timeZone: "UTC"
+            }).format(monthStart);
+            const calendarBookings = visibleCalendarBookings();
+            const cards = calendarApartments.map(apartment =>
+                renderApartmentMonthCard(
+                    apartment,
+                    monthStart,
+                    calendarBookings,
+                    today
+                )
+            ).join("");
 
-                return {
-                    id: booking._id,
-                    title: `${apartmentLabel} • ${SOURCE_LABELS[source] || source}`,
-                    start: dateOnly(booking.checkIn),
-                    end: dateOnly(booking.checkOut),
-                    allDay: true,
-                    backgroundColor: SOURCE_COLORS[source] || "#344054",
-                    borderColor: SOURCE_COLORS[source] || "#344054",
-                    textColor: "#ffffff",
-                    classNames:
-                        status === "cancelled"
-                            ? ["cancelled-calendar-event"]
-                            : [],
-                    extendedProps: {
-                        booking
-                    }
-                };
-            });
-
-            adminCalendar.removeAllEvents();
-            adminCalendar.addEventSource(events);
+            calendarElement.innerHTML = `
+                <div class="apartment-calendar-toolbar">
+                    <div class="calendar-nav-group">
+                        <button class="calendar-nav-button" type="button" data-calendar-step="-1" aria-label="الشهر السابق">‹</button>
+                        <button class="calendar-nav-button" type="button" data-calendar-step="1" aria-label="الشهر التالي">›</button>
+                    </div>
+                    <h4>${escapeHtml(monthTitle)}</h4>
+                    <div class="calendar-nav-group">
+                        <button class="calendar-nav-button" type="button" data-calendar-today>اليوم</button>
+                    </div>
+                </div>
+                <div class="apartment-calendar-grid">
+                    ${cards || '<div class="calendar-empty-state">لا توجد شقة مطابقة للفلاتر الحالية.</div>'}
+                </div>
+            `;
         }
 
         /* =========================================================
@@ -5273,50 +5653,42 @@
 
             if (!calendarElement) return;
 
-            adminCalendar = new FullCalendar.Calendar(calendarElement, {
-                initialView: "dayGridMonth",
-                locale: "ar",
-                direction: "rtl",
-                firstDay: 6,
-                height: "auto",
-                displayEventTime: false,
-                dayMaxEvents: window.innerWidth <= 650 ? 2 : 4,
+            adminCalendar = {
+                monthStart: monthStartFor(todayInAmman())
+            };
 
-                headerToolbar: {
-                    start: "dayGridMonth,listMonth",
-                    center: "title",
-                    end: "today prev,next"
-                },
+            calendarElement.addEventListener("click", event => {
+                const monthButton = event.target.closest("[data-calendar-step]");
 
-                buttonText: {
-                    today: "اليوم",
-                    month: "شهر",
-                    list: "قائمة"
-                },
-
-                moreLinkContent: info => `+${info.num} حجوزات`,
-
-                eventClick: info => {
-                    openCalendarBookingDetails(
-                        info.event.extendedProps.booking
-                    );
-                },
-
-                eventDidMount: info => {
-                    const booking = info.event.extendedProps.booking;
-
-                    if (!booking) return;
-
-                    const source = booking.source || "website";
-
-                    info.el.title =
-                        `${apartmentDisplayLabel(booking.apartmentId, booking.apartmentLabel)}\n` +
-                        `${SOURCE_LABELS[source] || source}\n` +
-                        `${dateOnly(booking.checkIn)} → ${dateOnly(booking.checkOut)}`;
+                if (monthButton) {
+                    const current = adminCalendar.monthStart;
+                    adminCalendar.monthStart = new Date(Date.UTC(
+                        current.getUTCFullYear(),
+                        current.getUTCMonth() + Number(monthButton.dataset.calendarStep),
+                        1
+                    ));
+                    renderAdminCalendar();
+                    return;
                 }
+
+                if (event.target.closest("[data-calendar-today]")) {
+                    adminCalendar.monthStart = monthStartFor(todayInAmman());
+                    renderAdminCalendar();
+                    return;
+                }
+
+                const bookingButton = event.target.closest("[data-booking-id]");
+
+                if (!bookingButton) return;
+
+                const booking = allBookings.find(
+                    item => String(item._id) === bookingButton.dataset.bookingId
+                );
+
+                openCalendarBookingDetails(booking);
             });
 
-            adminCalendar.render();
+            renderAdminCalendar();
         }
 
         /* =========================================================
@@ -5409,6 +5781,7 @@
            البحث عن حجوزات متداخلة للشقة نفسها
         ========================================================= */
         function findBookingConflicts() {
+            const todayStart = new Date(`${todayInAmman()}T00:00:00Z`);
             const activeBookings = allBookings
                 .filter(booking => booking.status !== "cancelled")
                 .map(booking => ({
@@ -5419,7 +5792,9 @@
                 .filter(item =>
                     !Number.isNaN(item.start.getTime()) &&
                     !Number.isNaN(item.end.getTime()) &&
-                    item.end > item.start
+                    item.end > item.start &&
+                    // لا نظهر تنبيهًا لحجز انتهى قبل اليوم.
+                    item.end > todayStart
                 );
 
             const bookingsByApartment = new Map();
@@ -5502,7 +5877,7 @@
 
                 conflictAlerts.innerHTML = `
             <div class="conflict-clear">
-                ✅ لا يوجد حاليًا أي تعارض بين الحجوزات.
+                ✅ لا يوجد أي تعارض حالي أو قادم بين الحجوزات.
             </div>
         `;
 
@@ -5551,7 +5926,7 @@
                             </div>
 
                             <span class="conflict-dates">
-                                فترة التداخل:
+                                فترة التداخل الحالية أو القادمة:
                                 ${escapeHtml(conflict.overlapStart)}
                                 إلى
                                 ${escapeHtml(conflict.overlapEnd)}
