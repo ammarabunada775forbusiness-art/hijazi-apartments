@@ -208,6 +208,21 @@
             transition: transform 0.35s ease;
         }
 
+        .card-image-button {
+            width: 100%;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            display: block;
+            overflow: hidden;
+            cursor: zoom-in;
+        }
+
+        .card-image-button:focus-visible {
+            outline: 3px solid #d4a017;
+            outline-offset: -3px;
+        }
+
         .card:hover img {
             transform: scale(1.04);
         }
@@ -2825,7 +2840,10 @@
             const nightLabel = lang === "ar" ? "السعر لليلة" : "Price per night";
             const nightsLabel = lang === "ar" ? "عدد الليالي" : "Nights";
             const totalLabel = lang === "ar" ? "السعر الكلي التقريبي" : "Estimated total";
-            const detailsBtn = lang === "ar" ? "عرض التفاصيل" : "View details";
+            const detailsBtn = lang === "ar" ? "عرض التفاصيل والصور" : "View details & photos";
+            const openPhotosLabel = lang === "ar"
+                ? `فتح ألبوم صور ${aptName}`
+                : `Open ${aptName} photo album`;
             const bookBtn = lang === "ar" ? "احجز الآن" : "Book now";
             const changeDatesBtn = lang === "ar" ? "اختر تاريخًا آخر" : "Choose other dates";
             const jodText = lang === "ar" ? "دينار" : "JOD";
@@ -2843,7 +2861,9 @@
             <div class="card-top-badge">${badgeLabel}</div>
 
             ${apt.images && apt.images[0]
-                    ? `<img src="${apt.images[0]}" alt="${aptName}" loading="lazy" decoding="async" fetchpriority="low">`
+                    ? `<button class="card-image-button" type="button" onclick="openApartmentAlbum(${apt.id})" aria-label="${openPhotosLabel}" title="${openPhotosLabel}">
+                            <img src="${apt.images[0]}" alt="${aptName}" loading="lazy" decoding="async" fetchpriority="low">
+                       </button>`
                     : `<div class="card-image-missing">${lang === "ar" ? "الصورة غير مرفوعة بعد" : "Photo not uploaded yet"}</div>`
                 }
 
@@ -2900,6 +2920,7 @@
         let currentAlbumItems = [];
         let currentAlbumIndex = 0;
         let albumRenderToken = 0;
+        let currentGalleryApartmentId = null;
 
         function getGalleryItemsForApartment(apt) {
             if (typeof getApartmentGalleryImages === "function") {
@@ -2985,6 +3006,11 @@
         }
 
         function getCurrentGalleryApartment() {
+            if (currentGalleryApartmentId) {
+                const currentApartment = HIJAZI_APARTMENTS[currentGalleryApartmentId];
+                if (currentApartment) return currentApartment;
+            }
+
             if (typeof getSelectedApartment === "function") {
                 const selectedApartment = getSelectedApartment();
                 if (selectedApartment) return selectedApartment;
@@ -3398,6 +3424,17 @@
             });
         }
 
+        window.openApartmentAlbum = async function (id, index = 0) {
+            const apartmentId = Number(id);
+            const apt = HIJAZI_APARTMENTS[apartmentId];
+
+            if (!apt) return;
+
+            currentGalleryApartmentId = apartmentId;
+            await loadApartmentGallery(apartmentId);
+            openPhotoAlbum(index);
+        };
+
         function closePhotoAlbum() {
             const modal = document.getElementById("photoAlbumModal");
 
@@ -3496,6 +3533,7 @@
         window.openDetails = async function (id) {
             const lang = getCurrentLang();
             const apt = HIJAZI_APARTMENTS[id];
+            currentGalleryApartmentId = Number(id);
             await loadApartmentGallery(id);
             const checkIn = checkInEl.value;
             const checkOut = checkOutEl.value;
