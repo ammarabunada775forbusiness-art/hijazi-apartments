@@ -54,6 +54,9 @@ test("iCal sync notifies only when an external booking is first inserted", async
 
     Booking.findOneAndUpdate = async (filter, update, options) => {
         assert.equal(options.includeResultMetadata, true);
+        assert.equal(update.$set.fullName, undefined);
+        assert.equal(update.$set.totalPrice, undefined);
+        assert.equal(update.$set.notes, undefined);
         const inserted = syncCount++ === 0;
 
         return {
@@ -89,7 +92,9 @@ test("iCal sync notifies only when an external booking is first inserted", async
         checkIn: new Date("2026-10-01T00:00:00.000Z"),
         checkOut: new Date("2026-10-05T00:00:00.000Z"),
         sourceReference: "airbnb-event-1",
-        summary: "Reserved"
+        summary: "Reserved",
+        description: "Late arrival",
+        location: "Shmeisani"
     }];
 
     try {
@@ -105,6 +110,8 @@ test("iCal sync notifies only when an external booking is first inserted", async
         assert.equal(notifications.length, 1);
         assert.equal(notifications[0].source, "airbnb");
         assert.equal(notifications[0].externalUid, "airbnb-event-1");
+        assert.equal(notifications[0].externalDescription, "Late arrival");
+        assert.equal(notifications[0].notes, "Late arrival");
     } finally {
         Booking.findOneAndUpdate = originalFindOneAndUpdate;
         Booking.updateMany = originalUpdateMany;
