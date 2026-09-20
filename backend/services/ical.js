@@ -133,13 +133,30 @@ async function fetchCalendarEvents(url, source) {
         let parsed;
         try { parsed = ical.sync.parseICS(text); }
         catch { throw new Error("تعذر قراءة صيغة ملف التقويم."); }
+        const calendarText = (value, maxLength) => {
+            if (value === undefined || value === null) return "";
+
+            const rawValue = Array.isArray(value)
+                ? value.join("\n")
+                : typeof value === "object"
+                    ? value.val || value.value || value.params?.CN || ""
+                    : value;
+
+            return String(rawValue)
+                .replace(/\u0000/g, "")
+                .trim()
+                .slice(0, maxLength);
+        };
+
         return Object.values(parsed)
             .filter(entry => entry && entry.type === "VEVENT" && entry.start instanceof Date && entry.end instanceof Date &&
                 Number.isFinite(entry.start.getTime()) && Number.isFinite(entry.end.getTime()))
             .map(entry => ({
                 externalUid: String(entry.uid || `${entry.start.toISOString()}-${entry.end.toISOString()}`),
                 checkIn: new Date(entry.start), checkOut: new Date(entry.end),
-                summary: String(entry.summary || "حجز مستورد").slice(0, 150),
+                summary: calendarText(entry.summary || "حجز مستورد", 500),
+                description: calendarText(entry.description, 2000),
+                location: calendarText(entry.location, 500),
                 sourceReference: String(entry.uid || "").slice(0, 250)
             }))
             .filter(event => event.checkOut > event.checkIn);
