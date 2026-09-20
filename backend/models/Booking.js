@@ -71,6 +71,11 @@ const bookingSchema = new mongoose.Schema(
         externalUid: { type: String, default: "", trim: true },
         sourceReference: { type: String, default: "", trim: true },
 
+        // أي بيانات إضافية يسمح ملف iCal للمنصة بإرسالها
+        externalSummary: { type: String, default: "", trim: true, maxlength: 500 },
+        externalDescription: { type: String, default: "", trim: true, maxlength: 2000 },
+        externalLocation: { type: String, default: "", trim: true, maxlength: 500 },
+
         // وقت آخر تحديث للحجز المستورد من iCal
         lastSyncedAt: { type: Date, default: null }
     },
