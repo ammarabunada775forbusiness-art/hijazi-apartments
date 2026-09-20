@@ -589,6 +589,17 @@ async function getActiveApartments() {
 ========================================================= */
 const ACTIVE_BOOKING_FILTER = { status: { $ne: "cancelled" } };
 
+const BOOKING_SOURCE_LABELS = Object.freeze({
+    website: "الموقع",
+    manual: "حجز يدوي",
+    airbnb: "Airbnb",
+    booking: "Booking.com"
+});
+
+function bookingSourceLabel(source) {
+    return BOOKING_SOURCE_LABELS[source] || String(source || "غير معروف");
+}
+
 /* =========================================================
    رسالة نصية مختصرة للحجز
 ========================================================= */
@@ -597,8 +608,9 @@ function bookingText(booking) {
     const longStayText = nights >= 30 ? "\nملاحظة: هذا الحجز مؤهل لخصم الإقامة الطويلة." : "";
 
     return `
-HIJAZI Apartments - حجز جديد
+حجز جديد - HIJAZI Apartments
 
+المصدر: ${bookingSourceLabel(booking.source)}
 الشقة: ${booking.apartmentLabel} (ID: ${booking.apartmentId})
 الاسم: ${booking.fullName}
 الهاتف: ${booking.phone}
@@ -636,6 +648,9 @@ function bookingHtml(booking, forCustomer = false) {
     const safeApartmentId =
         escapeHtml(booking.apartmentId);
 
+    const safeSourceLabel =
+        escapeHtml(bookingSourceLabel(booking.source));
+
     const safeFullName =
         escapeHtml(booking.fullName);
 
@@ -665,7 +680,7 @@ function bookingHtml(booking, forCustomer = false) {
 
     const msg = forCustomer
         ? "شكراً لك! تم استلام طلب الحجز بنجاح، وسنتواصل معك قريباً لتأكيد التفاصيل."
-        : "وصل حجز جديد على الموقع.";
+        : `وصل حجز جديد من ${safeSourceLabel}.`;
 
     const longStayBox = isLong
         ? `
@@ -703,6 +718,11 @@ function bookingHtml(booking, forCustomer = false) {
         </p>
 
         <div style="border:1px solid #eee;border-radius:10px;padding:14px">
+            <p>
+                <b>المصدر:</b>
+                ${safeSourceLabel}
+            </p>
+
             <p>
                 <b>الشقة:</b>
                 ${safeApartmentLabel}
@@ -780,7 +800,9 @@ async function sendBookingEmails(booking) {
         const adminResult = await resend.emails.send({
             from,
             to: adminTo,
-            subject: `حجز جديد ✅ - ${normalizeSingleLine(
+            subject: `حجز جديد ✅ - ${bookingSourceLabel(
+                booking.source
+            )} - ${normalizeSingleLine(
                 booking.apartmentLabel,
                 100
             )} (${formatDate(
@@ -797,7 +819,11 @@ async function sendBookingEmails(booking) {
         console.log("Admin email exception:", e.message);
     }
 
-    if (enableCustomerEmail) {
+    if (
+        enableCustomerEmail &&
+        booking.source === "website" &&
+        booking.email
+    ) {
         try {
             const customerResult = await resend.emails.send({
                 from,
@@ -1436,7 +1462,14 @@ app.post(
 /* =========================================================
    مزامنة تقويم خارجي لشقة واحدة ومصدر واحد
 ========================================================= */
-async function syncApartmentCalendar(apartment, source) {
+async function syncApartmentCalendar(
+    apartment,
+    source,
+    {
+        fetchEvents = fetchCalendarEvents,
+        notifyBooking = sendBookingEmails
+    } = {}
+) {
     const connection = apartment.calendars[source];
 
     if (!connection || !connection.enabled || !connection.url) {
@@ -1444,14 +1477,14 @@ async function syncApartmentCalendar(apartment, source) {
     }
 
     try {
-        const events = await fetchCalendarEvents(connection.url, source);
+        const events = await fetchEvents(connection.url, source);
         const syncedAt = new Date();
         const externalUids = [];
 
         for (const event of events) {
             externalUids.push(event.externalUid);
 
-            await Booking.findOneAndUpdate(
+            const syncResult = await Booking.findOneAndUpdate(
                 {
                     apartmentId: apartment.apartmentId,
                     source,
@@ -1479,8 +1512,21 @@ async function syncApartmentCalendar(apartment, source) {
                         stayType: calculateNights(event.checkIn, event.checkOut) >= 30 ? "long" : "normal"
                     }
                 },
-                { upsert: true, new: true, setDefaultsOnInsert: true }
+                {
+                    upsert: true,
+                    new: true,
+                    setDefaultsOnInsert: true,
+                    includeResultMetadata: true
+                }
             );
+
+            const wasInserted =
+                syncResult?.lastErrorObject?.updatedExisting === false ||
+                Boolean(syncResult?.lastErrorObject?.upserted);
+
+            if (wasInserted && syncResult?.value) {
+                await notifyBooking(syncResult.value);
+            }
         }
 
         const today = new Date();
@@ -2567,4 +2613,10 @@ const PORT = process.env.PORT || 10000;
 if (require.main === module) {
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 }
-module.exports = { app };
+module.exports = {
+    app,
+    bookingText,
+    bookingHtml,
+    bookingSourceLabel,
+    syncApartmentCalendar
+};
