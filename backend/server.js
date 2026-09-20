@@ -479,16 +479,21 @@ const PUBLIC_CURRENCY_RATES = Object.freeze({
 });
 
 /* =========================================================
-   تجهيز الشقق الست الحالية أول مرة بدون تغيير بياناتها لاحقًا
+   تجهيز الشقق الثماني الحالية أول مرة بدون تغيير بياناتها لاحقًا
 ========================================================= */
 const DEFAULT_APARTMENTS = [
     { apartmentId: 1, label: "شقة رقم 104", nightlyPriceJod: 150 },
     { apartmentId: 2, label: "شقة رقم 106", nightlyPriceJod: 200 },
+    { apartmentId: 6, label: "شقة رقم 305", nightlyPriceJod: 200 },
     { apartmentId: 3, label: "شقة رقم 204", nightlyPriceJod: 150 },
     { apartmentId: 4, label: "شقة رقم 105", nightlyPriceJod: 200 },
     { apartmentId: 5, label: "شقة رقم 207", nightlyPriceJod: 150 },
-    { apartmentId: 6, label: "شقة رقم 305", nightlyPriceJod: 200 }
+    { apartmentId: 7, label: "شقة رقم 107", nightlyPriceJod: 150 },
+    { apartmentId: 8, label: "شقة رقم 309", nightlyPriceJod: 200 }
 ];
+const DEFAULT_APARTMENT_IDS = new Set(
+    DEFAULT_APARTMENTS.map(apartment => apartment.apartmentId)
+);
 
 function defaultApartmentLabel(apartmentId, fallback = "") {
     return DEFAULT_APARTMENTS.find(
@@ -1826,7 +1831,7 @@ app.put("/admin/apartments/:id", requireAdmin, async (req, res) => {
 });
 
 /* =========================================================
-   API: حذف شقة إضافية مع حماية الشقق الأساسية 1 إلى 6
+   API: حذف شقة إضافية مع حماية الشقق الأساسية الثماني
 ========================================================= */
 app.delete("/admin/apartments/:id", requireAdmin, async (req, res) => {
     try {
@@ -1846,7 +1851,7 @@ app.delete("/admin/apartments/:id", requireAdmin, async (req, res) => {
             });
         }
 
-        if (apartment.apartmentId >= 1 && apartment.apartmentId <= 6) {
+        if (DEFAULT_APARTMENT_IDS.has(Number(apartment.apartmentId))) {
             return res.status(403).json({
                 success: false,
                 message: "الشقق الأساسية الحالية محمية ولا يمكن حذفها."
