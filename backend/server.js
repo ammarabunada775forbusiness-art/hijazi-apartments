@@ -1497,6 +1497,9 @@ async function syncApartmentCalendar(
                         checkOut: event.checkOut,
                         status: "confirmed",
                         sourceReference: event.sourceReference,
+                        externalSummary: event.summary,
+                        externalDescription: event.description,
+                        externalLocation: event.location,
                         lastSyncedAt: syncedAt
                     },
                     $setOnInsert: {
@@ -1508,7 +1511,8 @@ async function syncApartmentCalendar(
                         currency: "JOD",
                         totalPrice: 0,
                         totalPriceText: "",
-                        notes: event.summary,
+                        notes: String(event.description || event.summary || "")
+                            .slice(0, 1000),
                         stayType: calculateNights(event.checkIn, event.checkOut) >= 30 ? "long" : "normal"
                     }
                 },
