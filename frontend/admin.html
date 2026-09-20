@@ -3812,7 +3812,7 @@
                 <div class="section-head">
                     <div>
                         <h2>إضافة شقة جديدة</h2>
-                        <p>يمكنك زيادة العدد عن 6 بدون تعديل الكود.</p>
+                        <p>يمكنك زيادة العدد عن 8 بدون تعديل الكود.</p>
                     </div>
                 </div>
                 <form id="addApartmentForm" class="form-grid">
@@ -4098,8 +4098,22 @@
             3: "204",
             4: "105",
             5: "207",
-            6: "305"
+            6: "305",
+            7: "107",
+            8: "309"
         });
+        const APARTMENT_DISPLAY_ORDER = Object.freeze([1, 2, 6, 3, 4, 5, 7, 8]);
+        const CORE_APARTMENT_IDS = new Set(APARTMENT_DISPLAY_ORDER);
+
+        function apartmentDisplayRank(apartmentId) {
+            const id = Number(apartmentId);
+            const index = APARTMENT_DISPLAY_ORDER.indexOf(id);
+            return index >= 0 ? index : APARTMENT_DISPLAY_ORDER.length + id;
+        }
+
+        function isCoreApartment(apartmentId) {
+            return CORE_APARTMENT_IDS.has(Number(apartmentId));
+        }
 
         function apartmentDisplayNumber(apartmentId) {
             return APARTMENT_DISPLAY_NUMBERS[Number(apartmentId)] || String(apartmentId || "");
@@ -4136,13 +4150,18 @@
                         booking.apartmentLabel
                     )
                 })),
-                apartments: apartmentList.map(apartment => ({
-                    ...apartment,
-                    label: apartmentDisplayLabel(
-                        apartment.apartmentId,
-                        apartment.label
-                    )
-                })),
+                apartments: apartmentList
+                    .map(apartment => ({
+                        ...apartment,
+                        label: apartmentDisplayLabel(
+                            apartment.apartmentId,
+                            apartment.label
+                        )
+                    }))
+                    .sort((first, second) =>
+                        apartmentDisplayRank(first.apartmentId) -
+                        apartmentDisplayRank(second.apartmentId)
+                    ),
                 activities: activities.map(activity => ({
                     ...activity,
                     description: replaceLegacyApartmentLabels(activity.description)
@@ -5630,7 +5649,7 @@
             }
 
             grid.innerHTML = apartments.map(a => {
-                const isProtected = Number(a.apartmentId) >= 1 && Number(a.apartmentId) <= 6;
+                const isProtected = isCoreApartment(a.apartmentId);
 
                 const connections = ["airbnb", "booking"].map(s => {
                     const c = a.calendars?.[s] || {};
@@ -6307,7 +6326,7 @@ ${connections}
             }
 
             if (e.target.hasAttribute("data-delete-apartment")) {
-                if (Number(apartment.apartmentId) <= 6) {
+                if (isCoreApartment(apartment.apartmentId)) {
                     showNotice("الشقق الأساسية الحالية محمية ولا يمكن حذفها.", "error");
                     return;
                 }
