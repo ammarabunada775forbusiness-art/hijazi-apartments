@@ -3966,6 +3966,11 @@
                     <span>الملاحظات</span>
                     <strong id="calendarDetailNotes">—</strong>
                 </div>
+
+                <div class="booking-detail-item full" id="calendarDetailExternalDataItem" hidden>
+                    <span>البيانات الواردة من iCal</span>
+                    <strong id="calendarDetailExternalData">—</strong>
+                </div>
             </div>
         </div>
     </dialog>
@@ -3982,8 +3987,9 @@
 
         <form class="booking-dialog-body" id="editBookingForm">
             <div class="edit-booking-warning" id="editBookingWarning">
-                هذا الحجز مستورد من منصة خارجية. تستطيع إضافة بيانات العميل والسعر والملاحظات،
-                لكن الشقة والتواريخ والحالة تُدار من المنصة نفسها.
+                هذا الحجز مستورد عبر iCal. هذا النوع يرسل التواريخ أساسًا ولا يضمن إرسال اسم العميل
+                أو السعر أو بيانات التواصل. تستطيع إكمال هذه الحقول يدويًا، ولن تمسحها المزامنة،
+                بينما تبقى الشقة والتواريخ والحالة تحت إدارة المنصة نفسها.
             </div>
 
             <div class="form-grid">
@@ -4059,6 +4065,12 @@
                 <div class="field span-4">
                     <label for="editBookingNotes">الملاحظات</label>
                     <textarea id="editBookingNotes" rows="4"></textarea>
+                </div>
+
+                <div class="field span-4" id="editBookingExternalDataField" hidden>
+                    <label for="editBookingExternalData">البيانات الخام الواردة من iCal</label>
+                    <textarea id="editBookingExternalData" rows="5" readonly></textarea>
+                    <small>للقراءة فقط؛ قد لا ترسل المنصة أي بيانات إضافية غير التواريخ.</small>
                 </div>
             </div>
 
@@ -4295,7 +4307,7 @@
 
             downloadCsv(
                 `hijazi-bookings-${todayInAmman()}.csv`,
-                ["الشقة", "المصدر", "العميل", "الهاتف", "البريد", "الدخول", "الخروج", "الليالي", "السعر", "العملة", "الحالة", "رقم المنصة", "الملاحظات"],
+                ["الشقة", "المصدر", "العميل", "الهاتف", "البريد", "الدخول", "الخروج", "الليالي", "السعر", "العملة", "الحالة", "رقم المنصة", "الملاحظات", "عنوان iCal", "وصف iCal", "موقع iCal"],
                 bookings.map(booking => [
                     apartmentDisplayLabel(booking.apartmentId, booking.apartmentLabel),
                     SOURCE_LABELS[booking.source] || booking.source,
@@ -4309,7 +4321,10 @@
                     booking.currency || "JOD",
                     STATUS_LABELS[booking.status] || booking.status,
                     booking.sourceReference,
-                    booking.notes
+                    booking.notes,
+                    booking.externalSummary,
+                    booking.externalDescription,
+                    booking.externalLocation
                 ])
             );
             showNotice(`تم تصدير ${bookings.length} حجز.`);
@@ -4991,6 +5006,15 @@
             document.getElementById("editBookingNotes").value =
                 booking.notes || "";
 
+            const externalDataField =
+                document.getElementById("editBookingExternalDataField");
+
+            externalDataField.hidden = !isImportedPlatformBooking;
+            document.getElementById("editBookingExternalData").value =
+                isImportedPlatformBooking
+                    ? externalCalendarDetails(booking)
+                    : "";
+
             apartmentSelect.disabled =
                 isImportedPlatformBooking;
 
@@ -5047,6 +5071,9 @@
                     booking.phone,
                     booking.email,
                     booking.sourceReference,
+                    booking.externalSummary,
+                    booking.externalDescription,
+                    booking.externalLocation,
                     booking.apartmentLabel,
                     booking.apartmentId
                 ].join(" ").toLowerCase();
@@ -5069,6 +5096,27 @@
             if (element) {
                 element.textContent = value || fallback;
             }
+        }
+
+        function externalCalendarDetails(booking) {
+            const details = [
+                booking.externalSummary
+                    ? `عنوان التقويم: ${booking.externalSummary}`
+                    : "",
+                booking.externalDescription
+                    ? `الوصف: ${booking.externalDescription}`
+                    : "",
+                booking.externalLocation
+                    ? `الموقع: ${booking.externalLocation}`
+                    : "",
+                booking.externalUid
+                    ? `معرّف iCal: ${booking.externalUid}`
+                    : ""
+            ].filter(Boolean);
+
+            return details.length
+                ? details.join("\n")
+                : "لم ترسل المنصة بيانات إضافية عبر iCal.";
         }
 
         /* =========================================================
@@ -5141,6 +5189,23 @@
                 "calendarDetailNotes",
                 booking.notes || "لا توجد ملاحظات"
             );
+
+            const isImportedPlatformBooking =
+                ["airbnb", "booking"].includes(source) &&
+                Boolean(booking.externalUid);
+
+            const externalDataItem = document.getElementById(
+                "calendarDetailExternalDataItem"
+            );
+
+            externalDataItem.hidden = !isImportedPlatformBooking;
+
+            if (isImportedPlatformBooking) {
+                setCalendarDetail(
+                    "calendarDetailExternalData",
+                    externalCalendarDetails(booking)
+                );
+            }
 
             const dialog = document.getElementById("bookingDetailsDialog");
 
