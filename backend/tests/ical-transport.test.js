@@ -26,10 +26,13 @@ test("iCal transport pins the checked DNS answer and retains HTTPS hostname vali
         options.lookup(url.hostname, { all: true }, (error, addresses) => {
             assert.deepEqual(addresses, [{ address: "1.1.1.1", family: 4 }]);
         });
-        return fakeRequest(callback, { body: "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nBEGIN:VEVENT\r\nUID:test\r\nDTSTART;VALUE=DATE:20260915\r\nDTEND;VALUE=DATE:20260918\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n" });
+        return fakeRequest(callback, { body: "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nBEGIN:VEVENT\r\nUID:test\r\nDTSTART;VALUE=DATE:20260915\r\nDTEND;VALUE=DATE:20260918\r\nSUMMARY:Reserved\r\nDESCRIPTION:Late arrival\\nNeeds a cot\r\nLOCATION:Shmeisani\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n" });
     });
     const events = await fetchCalendarEvents("https://www.airbnb.com/calendar/sample", "airbnb");
     assert.equal(events.length, 1); assert.equal(lookups, 1);
+    assert.equal(events[0].summary, "Reserved");
+    assert.equal(events[0].description, "Late arrival\nNeeds a cot");
+    assert.equal(events[0].location, "Shmeisani");
 });
 test("iCal transport validates redirect targets before connecting to them", async t => {
     let connections = 0;
