@@ -2629,7 +2629,7 @@
     <div id="sharedFooter"></div>
     <div id="sharedWhatsApp"></div>
 
-    <script src="js/main.js?v=5"></script>
+    <script src="js/main.js?v=6"></script>
     <script>
         const API_BASE = "https://api.hijazi-apartments.com";
 
@@ -3646,7 +3646,9 @@
             renderLongStayNotice("longStayNotice", checkIn, checkOut);
 
             const err = validateDates(true);
-            const allApartmentIds = Object.keys(HIJAZI_APARTMENTS).map(Number);
+            const allApartmentIds = APARTMENT_DISPLAY_ORDER.filter(
+                id => HIJAZI_APARTMENTS[id]
+            );
 
             if (!checkIn || !checkOut) {
                 statusEl.textContent = lang === "ar"
