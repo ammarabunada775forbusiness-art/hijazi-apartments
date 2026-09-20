@@ -3245,10 +3245,12 @@
                             <option value="">-- اختر الشقة --</option>
                             <option value="1">شقة رقم 104</option>
                             <option value="2">شقة رقم 106</option>
+                            <option value="6">شقة رقم 305</option>
                             <option value="3">شقة رقم 204</option>
                             <option value="4">شقة رقم 105</option>
                             <option value="5">شقة رقم 207</option>
-                            <option value="6">شقة رقم 305</option>
+                            <option value="7">شقة رقم 107</option>
+                            <option value="8">شقة رقم 309</option>
                         </select>
                         <div class="field-error" id="aptIdError"></div>
 
@@ -3395,7 +3397,7 @@
     <div id="sharedFooter"></div>
     <div id="sharedWhatsApp"></div>
 
-    <script src="js/main.js?v=5"></script>
+    <script src="js/main.js?v=6"></script>
     <script>
         const API_BASE = "https://api.hijazi-apartments.com";
 
@@ -3516,10 +3518,10 @@
                 if (mapTitleEl) mapTitleEl.textContent = "موقع الشقة على الخريطة";
 
                 document.querySelector('#aptId option[value=""]').textContent = "-- اختر الشقة --";
-                for (let i = 1; i <= 6; i++) {
-                    document.querySelector(`#aptId option[value="${i}"]`).textContent =
-                        getApartmentDisplayName(i, "ar");
-                }
+                APARTMENT_DISPLAY_ORDER.forEach(apartmentId => {
+                    document.querySelector(`#aptId option[value="${apartmentId}"]`).textContent =
+                        getApartmentDisplayName(apartmentId, "ar");
+                });
 
                 document.getElementById("fullName").placeholder = "أدخل اسمك الكامل";
                 document.getElementById("phone").placeholder = "059xxxxxxx";
@@ -3567,10 +3569,10 @@
                 if (mapTitleEl) mapTitleEl.textContent = "Apartment location on map";
 
                 document.querySelector('#aptId option[value=""]').textContent = "-- Select apartment --";
-                for (let i = 1; i <= 6; i++) {
-                    document.querySelector(`#aptId option[value="${i}"]`).textContent =
-                        getApartmentDisplayName(i, "en");
-                }
+                APARTMENT_DISPLAY_ORDER.forEach(apartmentId => {
+                    document.querySelector(`#aptId option[value="${apartmentId}"]`).textContent =
+                        getApartmentDisplayName(apartmentId, "en");
+                });
 
                 document.getElementById("fullName").placeholder = "Enter your full name";
                 document.getElementById("phone").placeholder = "Phone number";
