@@ -3580,11 +3580,12 @@
             grid-template-columns: auto minmax(180px, 1fr) auto;
             align-items: center;
             gap: 12px;
-            margin-bottom: 18px;
-            padding: 12px;
-            border: 1px solid #eaecf0;
-            border-radius: 16px;
-            background: #f8fafc;
+            margin-bottom: 20px;
+            padding: 13px 14px;
+            border: 1px solid #cfd5de;
+            border-radius: 14px;
+            background: #fff;
+            box-shadow: 0 6px 18px rgba(16, 24, 40, .06);
         }
 
         .apartment-calendar-toolbar h4 {
@@ -3624,44 +3625,66 @@
         .apartment-calendar-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 16px;
+            gap: 20px;
         }
 
         .apartment-mini-calendar {
             min-width: 0;
-            padding: 15px;
-            border: 1px solid #e4e7ec;
-            border-radius: 18px;
+            overflow: hidden;
+            padding: 0;
+            border: 1px solid #c7ced8;
+            border-radius: 16px;
             background: #fff;
-            box-shadow: 0 8px 24px rgba(16, 24, 40, .06);
+            box-shadow: 0 10px 28px rgba(16, 24, 40, .08);
         }
 
         .apartment-mini-calendar h4 {
-            margin: 0 0 12px;
-            color: #101828;
+            margin: 0;
+            padding: 14px 16px;
+            border-bottom: 3px solid #c89116;
+            color: #fff;
+            background: #111827;
             font-size: 17px;
+            text-align: right;
+        }
+
+        .mini-calendar-surface {
+            overflow: hidden;
+            margin: 14px;
+            border: 1px solid #cbd2dc;
+            border-radius: 12px;
+            background: #fff;
         }
 
         .mini-calendar-weekdays,
         .mini-calendar-days {
             display: grid;
             grid-template-columns: repeat(7, minmax(0, 1fr));
+            direction: ltr;
         }
 
         .mini-calendar-weekdays {
-            gap: 2px;
-            margin-bottom: 5px;
+            gap: 0;
+            margin: 0;
+            border-bottom: 1px solid #cbd2dc;
+            background: #eef2f6;
         }
 
         .mini-calendar-weekdays span {
-            color: #667085;
+            min-width: 0;
+            padding: 9px 2px;
+            color: #344054;
             font-size: 10px;
             font-weight: 900;
             text-align: center;
         }
 
+        .mini-calendar-weekdays span:not(:last-child) {
+            border-right: 1px solid #cbd2dc;
+        }
+
         .mini-calendar-days {
-            gap: 3px 2px;
+            gap: 0;
         }
 
         .mini-calendar-day {
@@ -3669,16 +3692,26 @@
             display: grid;
             place-items: center;
             min-width: 0;
-            min-height: 34px;
-            aspect-ratio: 1.05;
+            min-height: 44px;
+            aspect-ratio: auto;
             padding: 0;
-            border: 1px solid transparent;
-            border-radius: 8px;
+            border: 0;
+            border-right: 1px solid #dce1e8;
+            border-bottom: 1px solid #dce1e8;
+            border-radius: 0;
             color: #344054;
-            background: #f9fafb;
+            background: #fff;
             font: inherit;
             font-size: 12px;
             font-weight: 900;
+        }
+
+        .mini-calendar-day:nth-child(7n) {
+            border-right: 0;
+        }
+
+        .mini-calendar-day:nth-last-child(-n + 7) {
+            border-bottom: 0;
         }
 
         button.mini-calendar-day {
@@ -3688,35 +3721,35 @@
         button.mini-calendar-day:hover,
         button.mini-calendar-day:focus-visible {
             z-index: 2;
-            transform: translateY(-1px);
-            outline: 2px solid #111;
-            outline-offset: 1px;
+            outline: 3px solid #111827;
+            outline-offset: -3px;
         }
 
         .mini-calendar-day.is-empty {
-            visibility: hidden;
+            visibility: visible;
+            color: transparent;
+            background: #f8fafc;
         }
 
         .mini-calendar-day.is-past {
-            border-color: transparent !important;
-            color: #98a2b3 !important;
-            background: transparent !important;
+            color: #c2c8d0 !important;
+            background: #f8fafc !important;
             box-shadow: none !important;
-            opacity: .34;
+            opacity: 1;
             pointer-events: none;
         }
 
         .mini-calendar-day.is-today {
-            border-color: #8a6110;
             background: #fff2c2;
-            box-shadow: inset 0 0 0 2px #c89116;
+            box-shadow: inset 0 0 0 3px #c89116;
         }
 
         .mini-calendar-day.is-booked {
-            border-color: transparent;
             color: #fff;
             background: var(--booking-color, #344054);
-            box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .14);
+            border-right-color: rgba(255, 255, 255, .52);
+            border-bottom-color: rgba(255, 255, 255, .52);
+            box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .16);
         }
 
         .mini-calendar-day.is-booked.is-today {
@@ -3790,11 +3823,6 @@
             background: #c89116 !important;
         }
 
-        .legend-today {
-            border: 2px solid #c89116;
-            background: #111 !important;
-        }
-
         .tone-source-manual {
             color: #6941c6 !important;
             background: #f4f3ff !important;
@@ -3825,12 +3853,16 @@
             }
 
             .apartment-mini-calendar {
-                padding: 12px;
+                border-radius: 14px;
+            }
+
+            .mini-calendar-surface {
+                margin: 10px;
             }
 
             .mini-calendar-day {
-                min-height: 38px;
-                font-size: 13px;
+                min-height: 42px;
+                font-size: 12px;
             }
         }
     </style>
@@ -4043,32 +4075,6 @@
                             <p>تقويم مستقل لكل شقة. يوم الخروج لا يُحسب ليلة ويمكن أن يبدأ فيه حجز جديد.</p>
                         </div>
 
-                        <div class="calendar-legend">
-                            <span class="legend-item">
-                                <span class="legend-dot legend-airbnb"></span>
-                                Airbnb
-                            </span>
-
-                            <span class="legend-item">
-                                <span class="legend-dot legend-booking"></span>
-                                Booking.com
-                            </span>
-
-                            <span class="legend-item">
-                                <span class="legend-dot legend-manual"></span>
-                                حجز يدوي
-                            </span>
-
-                            <span class="legend-item">
-                                <span class="legend-dot legend-website"></span>
-                                الموقع
-                            </span>
-
-                            <span class="legend-item">
-                                <span class="legend-dot legend-today"></span>
-                                اليوم
-                            </span>
-                        </div>
                     </div>
 
                     <div id="adminCalendar"></div>
@@ -5517,13 +5523,13 @@
                 booking => Number(booking.apartmentId) === Number(apartment.apartmentId)
             );
             const weekdays = [
-                ["س", "السبت"],
-                ["ح", "الأحد"],
-                ["ن", "الاثنين"],
-                ["ث", "الثلاثاء"],
-                ["ر", "الأربعاء"],
-                ["خ", "الخميس"],
-                ["ج", "الجمعة"]
+                ["سبت", "السبت"],
+                ["أحد", "الأحد"],
+                ["إثن", "الاثنين"],
+                ["ثلا", "الثلاثاء"],
+                ["أرب", "الأربعاء"],
+                ["خمي", "الخميس"],
+                ["جمع", "الجمعة"]
             ];
             const cells = [];
 
@@ -5587,13 +5593,15 @@
             return `
                 <article class="apartment-mini-calendar">
                     <h4>${escapeHtml(apartmentDisplayLabel(apartment.apartmentId, apartment.label))}</h4>
-                    <div class="mini-calendar-weekdays">
-                        ${weekdays.map(([shortLabel, fullLabel]) =>
-                            `<span title="${fullLabel}">${shortLabel}</span>`
-                        ).join("")}
-                    </div>
-                    <div class="mini-calendar-days">
-                        ${cells.join("")}
+                    <div class="mini-calendar-surface" dir="ltr">
+                        <div class="mini-calendar-weekdays">
+                            ${weekdays.map(([shortLabel, fullLabel]) =>
+                                `<span title="${fullLabel}">${shortLabel}</span>`
+                            ).join("")}
+                        </div>
+                        <div class="mini-calendar-days">
+                            ${cells.join("")}
+                        </div>
                     </div>
                 </article>
             `;
@@ -5636,7 +5644,7 @@
                     </div>
                     <h4>${escapeHtml(monthTitle)}</h4>
                     <div class="calendar-nav-group">
-                        <button class="calendar-nav-button" type="button" data-calendar-today>اليوم</button>
+                        <button class="calendar-nav-button" type="button" data-calendar-today>الشهر الحالي</button>
                     </div>
                 </div>
                 <div class="apartment-calendar-grid">

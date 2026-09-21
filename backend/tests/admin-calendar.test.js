@@ -17,6 +17,10 @@ test("admin uses per-apartment calendars with the approved source colors", () =>
     assert.match(html, /manual:\s*"#7f56d9"/);
     assert.match(html, /airbnb:\s*"#ff385c"/);
     assert.match(html, /booking:\s*"#003b95"/);
+    assert.match(html, /class="mini-calendar-surface" dir="ltr"/);
+    assert.match(html, /\.mini-calendar-days \{[\s\S]*?gap: 0;/);
+    assert.doesNotMatch(html, /<div class="calendar-legend">/);
+    assert.doesNotMatch(html, /data-calendar-today>اليوم</);
     assert.doesNotMatch(html, /new FullCalendar\.Calendar/);
 });
 
