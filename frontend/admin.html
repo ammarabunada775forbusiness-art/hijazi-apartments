@@ -3643,7 +3643,7 @@
             padding: 14px 16px;
             border-bottom: 3px solid #c89116;
             color: #fff;
-            background: #111827;
+            background: #000;
             font-size: 17px;
             text-align: right;
         }
@@ -3672,10 +3672,12 @@
 
         .mini-calendar-weekdays span {
             min-width: 0;
-            padding: 9px 2px;
+            padding: 9px 1px;
             color: #344054;
-            font-size: 10px;
+            font-size: clamp(9px, 1vw, 11px);
             font-weight: 900;
+            line-height: 1.35;
+            white-space: nowrap;
             text-align: center;
         }
 
@@ -3732,8 +3734,8 @@
         }
 
         .mini-calendar-day.is-past {
-            color: #c2c8d0 !important;
-            background: #f8fafc !important;
+            color: rgba(52, 64, 84, .14) !important;
+            background: rgba(248, 250, 252, .38) !important;
             box-shadow: none !important;
             opacity: 1;
             pointer-events: none;
@@ -3863,6 +3865,572 @@
             .mini-calendar-day {
                 min-height: 42px;
                 font-size: 12px;
+            }
+        }
+
+        /* =========================================================
+           المرحلة السادسة: لوحة إدارة Mobile First
+           هذه القواعد في نهاية الملف لتكون المرجع النهائي للهاتف.
+        ========================================================= */
+        html {
+            min-width: 320px;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            touch-action: manipulation;
+        }
+
+        .section-head>*,
+        .field,
+        .connection-box,
+        .health-source,
+        .activity-content,
+        .apartment-title>* {
+            min-width: 0;
+        }
+
+        @media (max-width: 760px) {
+            body {
+                min-width: 320px;
+                overflow-x: hidden;
+            }
+
+            .app-header {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 14px;
+                padding: 16px 12px !important;
+            }
+
+            .brand h1 {
+                font-size: 25px;
+            }
+
+            .brand p {
+                margin-top: 5px;
+                font-size: 13px;
+                line-height: 1.55;
+            }
+
+            .header-actions {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 8px;
+                width: 100%;
+            }
+
+            .header-actions .btn {
+                width: 100%;
+                min-width: 0;
+                min-height: 46px;
+                padding-inline: 8px;
+            }
+
+            .shell {
+                width: 100%;
+                max-width: 100%;
+                padding: 14px 10px 38px !important;
+            }
+
+            .notice {
+                margin-bottom: 12px;
+                padding: 12px;
+                font-size: 13px;
+            }
+
+            .tabs {
+                position: sticky;
+                top: 8px;
+                z-index: 80;
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 4px;
+                width: 100%;
+                margin-bottom: 12px;
+                padding: 4px;
+                border-radius: 13px !important;
+            }
+
+            .tabs .btn {
+                width: 100%;
+                min-width: 0;
+                min-height: 44px;
+                padding: 7px 4px;
+                border-radius: 9px;
+                font-size: 11px;
+                line-height: 1.35;
+                white-space: normal;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 9px;
+                margin-bottom: 12px;
+            }
+
+            .stat-card {
+                min-width: 0;
+                padding: 13px 12px;
+                border-radius: 14px !important;
+            }
+
+            .stat-label {
+                font-size: 12px;
+                line-height: 1.45;
+            }
+
+            .stat-value {
+                margin-top: 5px;
+                font-size: clamp(20px, 6vw, 25px);
+                overflow-wrap: anywhere;
+            }
+
+            .section-card,
+            .apartment-card {
+                margin-bottom: 12px;
+                padding: 14px 12px;
+                border-radius: 16px !important;
+            }
+
+            .section-head {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 11px;
+                margin-bottom: 13px;
+            }
+
+            .section-head h2,
+            .admin-calendar-head h3 {
+                font-size: 18px;
+            }
+
+            .section-head p,
+            .admin-calendar-head p {
+                font-size: 12px;
+                line-height: 1.65;
+            }
+
+            .section-actions {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                width: 100%;
+                gap: 8px;
+            }
+
+            .section-actions .btn {
+                width: 100%;
+                min-height: 44px;
+            }
+
+            .form-grid,
+            .filter-grid,
+            .activity-filters {
+                grid-template-columns: 1fr !important;
+                gap: 11px;
+            }
+
+            .field.span-2,
+            .field.span-4 {
+                grid-column: auto;
+            }
+
+            input,
+            select,
+            textarea,
+            .hijazi-select-trigger {
+                max-width: 100%;
+                min-height: 48px;
+                font-size: 16px;
+            }
+
+            textarea {
+                min-height: 104px;
+            }
+
+            .form-actions,
+            .form-actions .btn,
+            .activity-filters .btn {
+                width: 100%;
+            }
+
+            .form-actions .btn,
+            .activity-filters .btn {
+                min-height: 48px;
+            }
+
+            /* جدول الحجوزات يتحول إلى بطاقات مقروءة بلا سحب أفقي. */
+            .table-wrap {
+                overflow: visible !important;
+                border: 0 !important;
+                border-radius: 0 !important;
+                background: transparent !important;
+                box-shadow: none !important;
+            }
+
+            .table-wrap table,
+            .table-wrap tbody,
+            .table-wrap tr,
+            .table-wrap td {
+                display: block;
+                width: 100%;
+                min-width: 0;
+            }
+
+            .table-wrap table {
+                min-width: 0;
+                background: transparent !important;
+            }
+
+            .table-wrap thead {
+                display: none;
+            }
+
+            .table-wrap tbody {
+                display: grid;
+                gap: 12px;
+            }
+
+            .table-wrap tbody tr {
+                overflow: hidden;
+                border: 1px solid #d0d5dd;
+                border-radius: 14px;
+                background: #fff;
+                box-shadow: 0 6px 18px rgba(16, 24, 40, .06);
+            }
+
+            .table-wrap tbody td {
+                display: grid;
+                grid-template-columns: minmax(88px, .72fr) minmax(0, 1.28fr);
+                align-items: center;
+                gap: 10px;
+                min-height: 45px;
+                padding: 9px 11px;
+                border-bottom: 1px solid #eaecf0 !important;
+                text-align: right;
+                overflow-wrap: anywhere;
+            }
+
+            .table-wrap tbody td:not(.empty)::before {
+                content: attr(data-label);
+                color: #667085;
+                font-size: 11px;
+                font-weight: 900;
+            }
+
+            .table-wrap tbody td:last-child {
+                display: block;
+                border-bottom: 0 !important;
+            }
+
+            .table-wrap tbody td:last-child::before {
+                display: block;
+                margin-bottom: 8px;
+            }
+
+            .table-wrap .empty {
+                display: block;
+                padding: 24px 12px;
+                text-align: center;
+            }
+
+            .row-actions {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 8px;
+            }
+
+            .row-actions .btn {
+                width: 100%;
+                min-width: 0;
+                min-height: 43px;
+            }
+
+            .status-select,
+            .hijazi-select.is-compact .hijazi-select-trigger {
+                width: 100%;
+                min-width: 0;
+                min-height: 43px;
+            }
+
+            /* صحة المزامنة والتعارضات. */
+            .sync-health-summary {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 7px;
+                width: 100%;
+            }
+
+            .health-summary-item {
+                width: 100%;
+                min-width: 0;
+                justify-content: space-between;
+                padding: 7px 9px;
+            }
+
+            .sync-health-grid,
+            .health-sources {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .sync-apartment-card,
+            .health-source,
+            .conflict-zone {
+                padding: 12px;
+                border-radius: 14px !important;
+            }
+
+            .sync-apartment-head,
+            .health-source-title,
+            .conflict-zone-head {
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .conflict-count {
+                flex: 0 0 auto;
+            }
+
+            .conflict-item {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+
+            .conflict-apartment {
+                width: 100%;
+            }
+
+            /* إدارة الشقق وروابط iCal. */
+            .apartment-title,
+            .connection-title {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .connection-box {
+                padding: 12px 10px;
+                margin-top: 10px;
+            }
+
+            .url-row {
+                grid-template-columns: 1fr;
+            }
+
+            .url-row .btn {
+                width: 100%;
+                min-height: 44px;
+            }
+
+            .connection-status,
+            .url-row input {
+                overflow-wrap: anywhere;
+            }
+
+            .apartment-actions {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .apartment-actions .btn,
+            .apartment-actions>span {
+                width: 100%;
+                min-height: 46px;
+                justify-content: center;
+                text-align: center;
+            }
+
+            /* تقاويم الشقق وعلامات مصادر الحجز. */
+            .admin-calendar-shell {
+                margin-top: 16px;
+                padding: 10px !important;
+                border-radius: 16px !important;
+            }
+
+            .admin-calendar-head {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 10px;
+                margin-bottom: 12px;
+            }
+
+            .calendar-legend {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 7px;
+                width: 100%;
+                padding: 0;
+                background: transparent !important;
+                border: 0 !important;
+                box-shadow: none !important;
+            }
+
+            .legend-item {
+                min-width: 0;
+                justify-content: center;
+                padding: 7px 5px;
+                font-size: 11px;
+            }
+
+            .apartment-calendar-toolbar {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 9px;
+                margin-bottom: 12px;
+                padding: 10px;
+            }
+
+            .apartment-calendar-toolbar h4 {
+                grid-row: 1;
+                grid-column: 1 / -1;
+                font-size: 18px;
+            }
+
+            .calendar-nav-group {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .calendar-nav-button {
+                min-height: 44px;
+                flex: 1;
+            }
+
+            .apartment-calendar-grid {
+                grid-template-columns: 1fr;
+                gap: 13px;
+            }
+
+            .apartment-mini-calendar h4 {
+                padding: 12px 13px;
+                font-size: 16px;
+                background: #000;
+            }
+
+            .mini-calendar-surface {
+                margin: 8px;
+            }
+
+            .mini-calendar-weekdays span {
+                padding: 8px 0;
+                font-size: clamp(7.5px, 2.45vw, 10px);
+                letter-spacing: -.2px;
+            }
+
+            .mini-calendar-day {
+                min-height: 40px;
+            }
+
+            /* سجل العمليات والنوافذ. */
+            .activity-stats {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 8px;
+            }
+
+            .activity-stat {
+                padding: 12px 10px;
+            }
+
+            .activity-item {
+                grid-template-columns: 40px minmax(0, 1fr);
+                gap: 10px;
+                padding: 11px;
+            }
+
+            .activity-icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .activity-category {
+                grid-column: 1 / -1;
+                justify-self: stretch;
+            }
+
+            .booking-details-dialog,
+            .booking-edit-dialog {
+                width: calc(100% - 16px);
+                max-width: none;
+                max-height: calc(100svh - 16px);
+                margin: 8px;
+                overflow: auto;
+                border-radius: 15px !important;
+            }
+
+            .booking-dialog-head {
+                position: sticky;
+                top: 0;
+                z-index: 2;
+                padding: 13px 14px;
+            }
+
+            .booking-dialog-head h3 {
+                font-size: 17px;
+            }
+
+            .booking-dialog-body {
+                padding: 13px;
+            }
+
+            .booking-details-grid {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .booking-detail-item.full {
+                grid-column: auto;
+            }
+
+            .edit-booking-actions {
+                display: grid;
+                grid-template-columns: 1fr;
+                width: 100%;
+            }
+
+            .edit-booking-actions .btn {
+                width: 100%;
+                min-height: 48px;
+            }
+
+            .login-overlay {
+                padding: 8px;
+            }
+
+            .login-card {
+                width: 100%;
+                max-height: calc(100svh - 16px);
+                padding: 19px 14px;
+                overflow: auto;
+                border-radius: 16px !important;
+            }
+        }
+
+        @media (max-width: 359px) {
+            .shell {
+                padding-inline: 7px !important;
+            }
+
+            .header-actions,
+            .section-actions,
+            .row-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs .btn {
+                padding-inline: 2px;
+                font-size: 10px;
+            }
+
+            .mini-calendar-weekdays span {
+                font-size: 7.5px;
+            }
+
+            .mini-calendar-day {
+                min-height: 36px;
+                font-size: 11px;
             }
         }
     </style>
@@ -4075,6 +4643,27 @@
                             <p>تقويم مستقل لكل شقة. يوم الخروج لا يُحسب ليلة ويمكن أن يبدأ فيه حجز جديد.</p>
                         </div>
 
+                        <div class="calendar-legend" aria-label="دليل ألوان مصادر الحجوزات">
+                            <span class="legend-item">
+                                <span class="legend-dot legend-airbnb"></span>
+                                Airbnb
+                            </span>
+
+                            <span class="legend-item">
+                                <span class="legend-dot legend-booking"></span>
+                                Booking.com
+                            </span>
+
+                            <span class="legend-item">
+                                <span class="legend-dot legend-manual"></span>
+                                حجز يدوي
+                            </span>
+
+                            <span class="legend-item">
+                                <span class="legend-dot legend-website"></span>
+                                الموقع
+                            </span>
+                        </div>
                     </div>
 
                     <div id="adminCalendar"></div>
@@ -4949,7 +5538,7 @@
 
                 return `
                     <tr>
-                        <td>
+                        <td data-label="الشقة">
                             ${escapeHtml(
                     apartmentDisplayLabel(
                         booking.apartmentId,
@@ -4958,27 +5547,27 @@
                 )}
                         </td>
 
-                        <td>
+                        <td data-label="المصدر">
                             <span class="badge source-${source}">
                                 ${SOURCE_LABELS[source] || source}
                             </span>
                         </td>
 
-                        <td title="${escapeHtml(booking.email || "")}">
+                        <td data-label="العميل" title="${escapeHtml(booking.email || "")}">
                             ${escapeHtml(
                     booking.fullName ||
                     "حجز بدون اسم"
                 )}
                         </td>
 
-                        <td>${escapeHtml(booking.phone || "—")}</td>
-                        <td>${dateOnly(booking.checkIn)}</td>
-                        <td>${dateOnly(booking.checkOut)}</td>
-                        <td>${nightsBetween(booking.checkIn, booking.checkOut)}</td>
-                        <td>${escapeHtml(price)}</td>
-                        <td>${statusControl}</td>
+                        <td data-label="الهاتف">${escapeHtml(booking.phone || "—")}</td>
+                        <td data-label="الدخول">${dateOnly(booking.checkIn)}</td>
+                        <td data-label="الخروج">${dateOnly(booking.checkOut)}</td>
+                        <td data-label="الليالي">${nightsBetween(booking.checkIn, booking.checkOut)}</td>
+                        <td data-label="السعر">${escapeHtml(price)}</td>
+                        <td data-label="الحالة">${statusControl}</td>
 
-                        <td>
+                        <td data-label="الإجراءات">
                             <div class="row-actions">
                                 <button
                                     class="btn btn-light btn-small"
@@ -5523,13 +6112,13 @@
                 booking => Number(booking.apartmentId) === Number(apartment.apartmentId)
             );
             const weekdays = [
-                ["سبت", "السبت"],
-                ["أحد", "الأحد"],
-                ["إثن", "الاثنين"],
-                ["ثلا", "الثلاثاء"],
-                ["أرب", "الأربعاء"],
-                ["خمي", "الخميس"],
-                ["جمع", "الجمعة"]
+                ["السبت", "السبت"],
+                ["الأحد", "الأحد"],
+                ["الاثنين", "الاثنين"],
+                ["الثلاثاء", "الثلاثاء"],
+                ["الأربعاء", "الأربعاء"],
+                ["الخميس", "الخميس"],
+                ["الجمعة", "الجمعة"]
             ];
             const cells = [];
 

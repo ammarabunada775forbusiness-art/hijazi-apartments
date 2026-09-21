@@ -19,9 +19,24 @@ test("admin uses per-apartment calendars with the approved source colors", () =>
     assert.match(html, /booking:\s*"#003b95"/);
     assert.match(html, /class="mini-calendar-surface" dir="ltr"/);
     assert.match(html, /\.mini-calendar-days \{[\s\S]*?gap: 0;/);
-    assert.doesNotMatch(html, /<div class="calendar-legend">/);
+    assert.match(html, /class="calendar-legend" aria-label="دليل ألوان مصادر الحجوزات"/);
+    assert.match(html, /\["السبت", "السبت"\]/);
+    assert.match(html, /\["الجمعة", "الجمعة"\]/);
+    assert.doesNotMatch(html, /legend-today/);
     assert.doesNotMatch(html, /data-calendar-today>اليوم</);
     assert.doesNotMatch(html, /new FullCalendar\.Calendar/);
+});
+
+test("admin has a card-based mobile booking table and phone-safe controls", () => {
+    const html = readFrontendFile("admin.html");
+
+    assert.match(html, /المرحلة السادسة: لوحة إدارة Mobile First/);
+    assert.match(html, /\.table-wrap tbody td:not\(\.empty\)::before/);
+    assert.match(html, /content: attr\(data-label\)/);
+    assert.match(html, /<td data-label="الشقة">/);
+    assert.match(html, /<td data-label="الإجراءات">/);
+    assert.match(html, /font-size: 16px;/);
+    assert.match(html, /max-height: calc\(100svh - 16px\)/);
 });
 
 test("admin calendar treats checkout as exclusive and hides finished conflicts", () => {
