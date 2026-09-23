@@ -102,6 +102,49 @@ test("the real booking route ignores forged price, labels, source and status", a
     assert.equal(booking.totalPrice, 110); assert.equal(booking.apartmentLabel, "Trusted apartment");
     assert.equal(booking.source, "website"); assert.equal(booking.status, "pending"); assert.equal(booking.stayType, "normal");
 });
+test("admin can backfill a manual booking whose stay is already in the past", async () => {
+    const originalActivityCreate = ActivityLog.create;
+    const originalBookingCreate = Booking.create;
+    ActivityLog.create = async () => ({});
+    Booking.create = async data => {
+        const booking = new Booking(data);
+        saved.push(booking.toObject());
+        return booking;
+    };
+
+    try {
+        const response = await originalFetch(base + "/admin/bookings", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: auth,
+                "X-Forwarded-For": "198.51.100.70"
+            },
+            body: JSON.stringify({
+                apartmentId: 1,
+                source: "manual",
+                checkIn: "2020-01-10",
+                checkOut: "2020-01-12",
+                fullName: "Past Guest",
+                adults: 1,
+                children: 0,
+                totalPrice: 100,
+                currency: "JOD",
+                status: "confirmed"
+            })
+        });
+
+        assert.equal(response.status, 201);
+        const body = await response.json();
+        assert.equal(body.success, true);
+        assert.equal(body.booking.source, "manual");
+        assert.equal(String(body.booking.checkIn).slice(0, 10), "2020-01-10");
+        assert.equal(String(body.booking.checkOut).slice(0, 10), "2020-01-12");
+    } finally {
+        ActivityLog.create = originalActivityCreate;
+        Booking.create = originalBookingCreate;
+    }
+});
 test("the eleventh request to the booking route is rate limited", async () => {
     const headers = { "X-Forwarded-For": "198.51.100.50" };
     const body = valid(); delete body.turnstileToken;

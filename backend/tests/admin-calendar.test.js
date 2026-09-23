@@ -48,6 +48,35 @@ test("admin calendar treats checkout as exclusive and hides finished conflicts",
     assert.match(html, /يوم الخروج لا يُحسب ليلة/);
 });
 
+test("admin manual bookings allow historical dates without reviving old conflict alerts", () => {
+    const html = readFrontendFile("admin.html");
+
+    assert.match(html, /حتى لو كان تاريخ الإقامة قد مضى/);
+    assert.match(html, /function nextDateKey\(value\)/);
+    assert.match(html, /manualCheckOut\.min = earliestCheckOut/);
+    assert.doesNotMatch(html, /manualCheckIn\.min = today/);
+    assert.doesNotMatch(html, /manualCheckOut\.min = today/);
+    assert.match(html, /item\.end > todayStart/);
+});
+
+test("admin manual dates use the HIJAZI picker and the month menu uses site colors", () => {
+    const html = readFrontendFile("admin.html");
+    const picker = readFrontendFile("js/hijazi-datepicker.js");
+    const styles = readFrontendFile("css/style.css");
+
+    assert.match(html, /flatpickr\.min\.css/);
+    assert.match(html, /js\/hijazi-datepicker\.js\?v=1/);
+    assert.match(html, /HijaziDatePicker\?\.create\(manualCheckIn/);
+    assert.match(html, /HijaziDatePicker\?\.create\(manualCheckOut/);
+    assert.match(html, /minDate:\s*null/);
+    assert.match(picker, /monthSelectorType:\s*"static"/);
+    assert.match(picker, /className = "hijazi-month-trigger"/);
+    assert.match(picker, /className = "hijazi-month-menu"/);
+    assert.match(styles, /\.hijazi-month-option\.is-selected/);
+    assert.match(styles, /linear-gradient\(135deg, #ffd36a, #c89116\)/);
+    assert.doesNotThrow(() => new Function(picker));
+});
+
 test("public booking screens explain that checkout is the departure morning", () => {
     const index = readFrontendFile("index.html");
     const apartments = readFrontendFile("apartments.html");
