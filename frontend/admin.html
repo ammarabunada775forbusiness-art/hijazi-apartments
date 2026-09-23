@@ -7,7 +7,11 @@
     <meta name="robots" content="noindex, nofollow">
     <title>HIJAZI PMS - نظام إدارة الحجوزات</title>
     <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=7">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ar.js"></script>
+    <script src="js/hijazi-datepicker.js?v=1"></script>
     <style>
         :root {
             --gold: #c89116;
@@ -4539,7 +4543,7 @@
                 <div class="section-head">
                     <div>
                         <h2>إضافة حجز</h2>
-                        <p>للحجز الهاتفي أو الشخصي، ويمكن أيضًا تسجيل حجز Airbnb أو Booking يدويًا.</p>
+                        <p>للحجز الهاتفي أو الشخصي، ويمكن أيضًا تسجيل حجز Airbnb أو Booking يدويًا، حتى لو كان تاريخ الإقامة قد مضى.</p>
                     </div>
                 </div>
                 <form id="manualBookingForm" class="form-grid">
@@ -4551,9 +4555,9 @@
                             <option value="booking">Booking.com</option>
                         </select></div>
                     <div class="field"><label for="manualCheckIn">الدخول *</label><input id="manualCheckIn" type="date"
-                            required></div>
+                            placeholder="اختر تاريخ الدخول" required></div>
                     <div class="field"><label for="manualCheckOut">الخروج صباحًا * — لا يُحسب هذا اليوم ليلة</label><input id="manualCheckOut"
-                            type="date" required></div>
+                            type="date" placeholder="اختر تاريخ الخروج" required></div>
                     <div class="field"><label for="manualName">اسم العميل</label><input id="manualName"
                             placeholder="مثال: أحمد محمد"></div>
                     <div class="field"><label for="manualPhone">الهاتف</label><input id="manualPhone" type="tel"
@@ -5061,6 +5065,16 @@
         function dateOnly(value) { return value ? String(value).slice(0, 10) : ""; }
         function todayInAmman() { const parts = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Amman", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date()); const map = Object.fromEntries(parts.map(part => [part.type, part.value])); return `${map.year}-${map.month}-${map.day}`; }
         function nightsBetween(checkIn, checkOut) { const start = new Date(`${dateOnly(checkIn)}T00:00:00Z`), end = new Date(`${dateOnly(checkOut)}T00:00:00Z`); return Math.max(0, Math.round((end - start) / 86400000)); }
+        function nextDateKey(value) {
+            const dateKey = dateOnly(value);
+            if (!dateKey) return "";
+
+            const date = new Date(`${dateKey}T00:00:00Z`);
+            if (Number.isNaN(date.getTime())) return "";
+
+            date.setUTCDate(date.getUTCDate() + 1);
+            return date.toISOString().slice(0, 10);
+        }
 
         /* يرجع التاريخ حسب توقيت عمّان حتى تكون إحصائية اليوم دقيقة. */
         function dateInAmman(value) {
@@ -5834,14 +5848,29 @@
             document.getElementById("editBookingStatus").value =
                 booking.status || "pending";
 
-            document.getElementById("editBookingCheckIn").value =
+            const editCheckInInput =
+                document.getElementById("editBookingCheckIn");
+            const editCheckOutInput =
+                document.getElementById("editBookingCheckOut");
+
+            editCheckInInput.value =
                 dateOnly(booking.checkIn);
 
-            document.getElementById("editBookingCheckOut").value =
+            editCheckOutInput.value =
                 dateOnly(booking.checkOut);
 
-            document.getElementById("editBookingCheckOut").min =
-                dateOnly(booking.checkIn);
+            editCheckInInput._flatpickr?.setDate(
+                dateOnly(booking.checkIn),
+                false
+            );
+            editCheckOutInput._flatpickr?.setDate(
+                dateOnly(booking.checkOut),
+                false
+            );
+            editCheckOutInput._flatpickr?.set(
+                "minDate",
+                nextDateKey(booking.checkIn)
+            );
 
             document.getElementById("editBookingName").value =
                 booking.fullName || "";
@@ -6984,6 +7013,19 @@ ${connections}
 
                 form.reset();
 
+                const manualCheckInInput =
+                    document.getElementById("manualCheckIn");
+                const manualCheckOutInput =
+                    document.getElementById("manualCheckOut");
+
+                manualCheckInInput._flatpickr?.clear();
+                manualCheckOutInput._flatpickr?.clear();
+                manualCheckOutInput._flatpickr?.set(
+                    "minDate",
+                    null
+                );
+                manualCheckOutInput.removeAttribute("min");
+
                 document.getElementById("manualAdults").value = 1;
                 document.getElementById("manualChildren").value = 0;
                 document.getElementById("manualPrice").value = 0;
@@ -7177,9 +7219,28 @@ ${connections}
         document
             .getElementById("editBookingCheckIn")
             .addEventListener("change", event => {
-                document.getElementById(
+                const editCheckOut = document.getElementById(
                     "editBookingCheckOut"
-                ).min = event.currentTarget.value;
+                );
+                const earliestCheckOut =
+                    nextDateKey(event.currentTarget.value);
+
+                if (editCheckOut._flatpickr) {
+                    editCheckOut._flatpickr.set(
+                        "minDate",
+                        earliestCheckOut || null
+                    );
+                }
+
+                if (
+                    editCheckOut.value &&
+                    earliestCheckOut &&
+                    editCheckOut.value < earliestCheckOut
+                ) {
+                    editCheckOut._flatpickr
+                        ? editCheckOut._flatpickr.clear()
+                        : (editCheckOut.value = "");
+                }
             });
 
         document
@@ -7576,18 +7637,56 @@ ${connections}
             });
         /* تشغيل تقويم الأدمن بعد تجهيز الصفحة */
         initializeAdminCalendar();
-        const today = todayInAmman();
         const manualCheckIn = document.getElementById("manualCheckIn");
         const manualCheckOut = document.getElementById("manualCheckOut");
+        const adminDateLocale =
+            window.flatpickr?.l10ns?.ar || "default";
 
-        manualCheckIn.min = today;
-        manualCheckOut.min = today;
+        window.HijaziDatePicker?.create(manualCheckIn, {
+            locale: adminDateLocale,
+            minDate: null
+        });
+        window.HijaziDatePicker?.create(manualCheckOut, {
+            locale: adminDateLocale,
+            minDate: null
+        });
+        window.HijaziDatePicker?.create(
+            document.getElementById("editBookingCheckIn"),
+            {
+                locale: adminDateLocale,
+                minDate: null
+            }
+        );
+        window.HijaziDatePicker?.create(
+            document.getElementById("editBookingCheckOut"),
+            {
+                locale: adminDateLocale,
+                minDate: null
+            }
+        );
 
         manualCheckIn.addEventListener("change", event => {
-            manualCheckOut.min = event.target.value || today;
+            const earliestCheckOut = nextDateKey(event.target.value);
 
-            if (manualCheckOut.value && manualCheckOut.value <= event.target.value) {
-                manualCheckOut.value = "";
+            if (manualCheckOut._flatpickr) {
+                manualCheckOut._flatpickr.set(
+                    "minDate",
+                    earliestCheckOut || null
+                );
+            } else if (earliestCheckOut) {
+                manualCheckOut.min = earliestCheckOut;
+            } else {
+                manualCheckOut.removeAttribute("min");
+            }
+
+            if (
+                manualCheckOut.value &&
+                earliestCheckOut &&
+                manualCheckOut.value < earliestCheckOut
+            ) {
+                manualCheckOut._flatpickr
+                    ? manualCheckOut._flatpickr.clear()
+                    : (manualCheckOut.value = "");
             }
 
             updateManualPrice();
