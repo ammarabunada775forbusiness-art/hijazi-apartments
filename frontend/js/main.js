@@ -1022,7 +1022,7 @@ document.addEventListener("DOMContentLoaded", () => {
 ========================================================= */
 
 function initHijaziGlassDatePickers() {
-    if (typeof flatpickr === "undefined") return;
+    if (!window.HijaziDatePicker) return;
 
     const lang = getCurrentLang ? getCurrentLang() : "ar";
 
@@ -1031,45 +1031,37 @@ function initHijaziGlassDatePickers() {
     dateInputs.forEach(input => {
         if (input._flatpickr) return;
 
-        input.type = "text";
-        input.classList.add("glass-date-input");
-        input.setAttribute("autocomplete", "off");
-        input.setAttribute("readonly", "readonly");
-
-        flatpickr(input, {
-            dateFormat: "Y-m-d",
+        window.HijaziDatePicker.create(input, {
             minDate: input.min || "today",
             locale: lang === "ar" ? flatpickr.l10ns.ar : "default",
-            disableMobile: true,
-            allowInput: false,
-
-            onReady: function (_, __, instance) {
-                instance.calendarContainer.classList.add("hijazi-glass-calendar");
-            },
-
-            onOpen: function (_, __, instance) {
-                instance.calendarContainer.classList.add("hijazi-glass-calendar");
-            },
-
-            onChange: function () {
-                input.dispatchEvent(new Event("change", { bubbles: true }));
-            }
         });
     });
 
-    const checkIn = document.getElementById("checkIn");
-    const checkOut = document.getElementById("checkOut");
+    function linkDatePair(checkIn, checkOut) {
+        if (!checkIn?._flatpickr || !checkOut?._flatpickr) return;
 
-    if (checkIn && checkOut && checkIn._flatpickr && checkOut._flatpickr) {
         checkIn.addEventListener("change", function () {
-            checkOut._flatpickr.set("minDate", checkIn.value || "today");
+            const earliestCheckOut = checkIn.value
+                ? window.HijaziDatePicker.nextDateKey(checkIn.value)
+                : "today";
+
+            checkOut._flatpickr.set("minDate", earliestCheckOut);
 
             if (checkOut.value && checkIn.value && checkOut.value <= checkIn.value) {
-                checkOut.value = "";
                 checkOut._flatpickr.clear();
             }
         });
     }
+
+    linkDatePair(
+        document.getElementById("checkIn"),
+        document.getElementById("checkOut")
+    );
+
+    linkDatePair(
+        document.getElementById("mobileCheckIn"),
+        document.getElementById("mobileCheckOut")
+    );
 }
 
 document.addEventListener("DOMContentLoaded", initHijaziGlassDatePickers);
