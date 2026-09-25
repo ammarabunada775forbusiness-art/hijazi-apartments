@@ -1280,6 +1280,338 @@ body.ltr-mode .seo-card {
     }
 }
 
+/* =========================================================
+   HIJAZI DATE PICKER - FINAL RESPONSIVE FIX
+   إصلاح الشهر + السنة + شبكة الأيام + قائمة الأشهر
+   للأدمن وصفحة حجز المستخدم - Desktop & Mobile
+========================================================= */
+
+/* حجم التقويم ثابت ومرن بدون خروج عن الشاشة */
+.flatpickr-calendar.hijazi-glass-calendar {
+    width: 340px !important;
+    max-width: calc(100vw - 20px) !important;
+    overflow: hidden !important;
+}
+
+/* =========================
+   رأس التقويم
+   الشهر + السنة
+========================= */
+
+.hijazi-glass-calendar .flatpickr-months {
+    position: relative !important;
+    min-height: 52px !important;
+    padding: 7px 0 !important;
+}
+
+.hijazi-glass-calendar .flatpickr-month {
+    height: 40px !important;
+}
+
+.hijazi-glass-calendar .flatpickr-current-month {
+    left: 44px !important;
+    width: calc(100% - 88px) !important;
+    height: 40px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    gap: 8px !important;
+    padding: 0 !important;
+
+    /* الشهر على اليسار والسنة على اليمين بشكل ثابت */
+    direction: ltr !important;
+}
+
+/* زر الشهر */
+.hijazi-glass-calendar .hijazi-month-trigger {
+    flex: 1 1 auto !important;
+
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: 132px !important;
+
+    height: 34px !important;
+    min-height: 34px !important;
+
+    margin: 0 !important;
+    padding: 5px 25px 5px 10px !important;
+
+    direction: rtl !important;
+
+    background: rgba(255, 255, 255, 0.07) !important;
+    border: 1px solid rgba(212, 160, 23, 0.48) !important;
+    border-radius: 10px !important;
+
+    color: #fff !important;
+    box-shadow: none !important;
+}
+
+/* الغلاف الخاص بالسنة */
+.hijazi-glass-calendar .flatpickr-current-month .numInputWrapper {
+    flex: 0 0 76px !important;
+
+    width: 76px !important;
+    min-width: 76px !important;
+    max-width: 76px !important;
+
+    height: 34px !important;
+}
+
+/*
+   مهم جدًا:
+   يمنع CSS الأدمن العام من تحويل السنة
+   إلى مستطيل أبيض كبير
+*/
+.hijazi-glass-calendar .flatpickr-current-month input.cur-year {
+    display: block !important;
+
+    width: 100% !important;
+    min-width: 0 !important;
+
+    height: 34px !important;
+    min-height: 34px !important;
+
+    margin: 0 !important;
+    padding: 0 18px 0 6px !important;
+
+    color: #fff !important;
+    background: rgba(255, 255, 255, 0.07) !important;
+
+    border: 1px solid rgba(212, 160, 23, 0.48) !important;
+    border-radius: 10px !important;
+
+    box-shadow: none !important;
+    outline: none !important;
+
+    text-align: center !important;
+    font-size: 16px !important;
+    font-weight: 900 !important;
+    line-height: 34px !important;
+
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* أسهم تغيير السنة الصغيرة */
+.hijazi-glass-calendar .flatpickr-current-month .numInputWrapper span.arrowUp,
+
+.hijazi-glass-calendar .flatpickr-current-month .numInputWrapper span.arrowDown {
+    right: 3px !important;
+    width: 14px !important;
+    opacity: 0.65 !important;
+}
+
+/* =========================
+   قائمة الأشهر
+========================= */
+
+/*
+   لا يوجد داعي للـ scrollbar أصلًا:
+   12 شهر فقط، نخلي القائمة تتمدد طبيعيًا.
+*/
+.hijazi-glass-calendar .hijazi-month-menu {
+    top: 51px !important;
+
+    width: min(260px, calc(100% - 20px)) !important;
+
+    max-height: none !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+
+    padding: 8px !important;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 5px !important;
+
+    border-radius: 14px !important;
+}
+
+/* تصغير بسيط حتى تظهر الأشهر كلها بدون Scroll */
+.hijazi-glass-calendar .hijazi-month-option {
+    min-height: 31px !important;
+    padding: 6px 8px !important;
+
+    font-size: 12px !important;
+    line-height: 1.15 !important;
+}
+
+/* اللون عند اختيار الشهر */
+.hijazi-glass-calendar .hijazi-month-option.is-selected {
+    color: #111 !important;
+
+    background: linear-gradient(135deg,
+            #ffd36a,
+            #c89116) !important;
+
+    border-color: #ffd36a !important;
+
+    box-shadow:
+        0 5px 14px rgba(212, 160, 23, 0.28) !important;
+}
+
+/* =========================
+   إصلاح عرض جدول الأيام
+========================= */
+
+.hijazi-glass-calendar .flatpickr-innerContainer,
+.hijazi-glass-calendar .flatpickr-rContainer,
+.hijazi-glass-calendar .flatpickr-days,
+.hijazi-glass-calendar .dayContainer,
+.hijazi-glass-calendar .flatpickr-weekdays,
+.hijazi-glass-calendar .flatpickr-weekdaycontainer {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+}
+
+/* أيام الأسبوع السبعة بنفس العرض */
+.hijazi-glass-calendar .flatpickr-weekdaycontainer {
+    display: grid !important;
+    grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+}
+
+.hijazi-glass-calendar span.flatpickr-weekday {
+    width: auto !important;
+    min-width: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    padding: 8px 1px !important;
+
+    white-space: nowrap !important;
+    overflow: hidden !important;
+
+    font-size: 12px !important;
+    line-height: 1.2 !important;
+
+    color: #ffd36a !important;
+}
+
+/* كل يوم يأخذ 1/7 من عرض الجدول */
+.hijazi-glass-calendar .flatpickr-day {
+    flex: 0 0 14.285714% !important;
+
+    width: 14.285714% !important;
+    max-width: 14.285714% !important;
+
+    height: 40px !important;
+    line-height: 40px !important;
+
+    margin: 0 !important;
+}
+
+/* =========================
+   الهاتف
+========================= */
+
+@media (max-width: 768px) {
+
+    .flatpickr-calendar.hijazi-glass-calendar {
+        width: calc(100vw - 20px) !important;
+        max-width: 360px !important;
+
+        left: 50% !important;
+        right: auto !important;
+
+        transform: translateX(-50%) !important;
+
+        border-radius: 18px !important;
+    }
+
+    .hijazi-glass-calendar .flatpickr-current-month {
+        left: 38px !important;
+        width: calc(100% - 76px) !important;
+
+        gap: 6px !important;
+    }
+
+    .hijazi-glass-calendar .hijazi-month-trigger {
+        max-width: 124px !important;
+
+        height: 33px !important;
+        min-height: 33px !important;
+
+        font-size: 14px !important;
+    }
+
+    .hijazi-glass-calendar .flatpickr-current-month .numInputWrapper {
+        flex-basis: 70px !important;
+        width: 70px !important;
+        min-width: 70px !important;
+        max-width: 70px !important;
+    }
+
+    .hijazi-glass-calendar .flatpickr-current-month input.cur-year {
+        height: 33px !important;
+        min-height: 33px !important;
+
+        font-size: 15px !important;
+        line-height: 33px !important;
+    }
+
+    .hijazi-glass-calendar span.flatpickr-weekday {
+        font-size: clamp(10.5px,
+                3.1vw,
+                12px) !important;
+
+        padding-inline: 0 !important;
+    }
+
+    .hijazi-glass-calendar .flatpickr-day {
+        height: 38px !important;
+        line-height: 38px !important;
+
+        font-size: 13px !important;
+    }
+}
+
+/* =========================
+   الشاشات القصيرة جدًا
+   مثل Landscape
+========================= */
+
+/*
+   فقط هنا نسمح بالـ scroll.
+   ويصبح ذهبيًا ونظيفًا بدل Scrollbar ويندوز الأبيض.
+*/
+@media (max-height: 520px) {
+
+    .hijazi-glass-calendar .hijazi-month-menu {
+        max-height: 180px !important;
+        overflow-y: auto !important;
+
+        scrollbar-width: thin;
+        scrollbar-color: #c89116 rgba(255, 255, 255, 0.06);
+    }
+
+    .hijazi-glass-calendar .hijazi-month-menu::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .hijazi-glass-calendar .hijazi-month-menu::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 20px;
+    }
+
+    .hijazi-glass-calendar .hijazi-month-menu::-webkit-scrollbar-thumb {
+        background: linear-gradient(#ffd36a,
+                #c89116,
+                #8a6508);
+
+        border-radius: 20px;
+    }
+
+    .hijazi-glass-calendar .hijazi-month-menu::-webkit-scrollbar-button {
+        display: none;
+        width: 0;
+        height: 0;
+    }
+}
+
 /* =========================
    PREMIUM BUTTONS
 ========================= */

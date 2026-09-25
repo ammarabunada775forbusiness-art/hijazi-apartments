@@ -7,7 +7,7 @@
     <meta name="robots" content="noindex, nofollow">
     <title>HIJAZI PMS - نظام إدارة الحجوزات</title>
     <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" href="css/style.css?v=7">
+    <link rel="stylesheet" href="css/style.css?v=8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ar.js"></script>
@@ -4543,7 +4543,8 @@
                 <div class="section-head">
                     <div>
                         <h2>إضافة حجز</h2>
-                        <p>للحجز الهاتفي أو الشخصي، ويمكن أيضًا تسجيل حجز Airbnb أو Booking يدويًا، حتى لو كان تاريخ الإقامة قد مضى.</p>
+                        <p>للحجز الهاتفي أو الشخصي، ويمكن أيضًا تسجيل حجز Airbnb أو Booking يدويًا، حتى لو كان تاريخ
+                            الإقامة قد مضى.</p>
                     </div>
                 </div>
                 <form id="manualBookingForm" class="form-grid">
@@ -4556,8 +4557,9 @@
                         </select></div>
                     <div class="field"><label for="manualCheckIn">الدخول *</label><input id="manualCheckIn" type="date"
                             placeholder="اختر تاريخ الدخول" required></div>
-                    <div class="field"><label for="manualCheckOut">الخروج صباحًا * — لا يُحسب هذا اليوم ليلة</label><input id="manualCheckOut"
-                            type="date" placeholder="اختر تاريخ الخروج" required></div>
+                    <div class="field"><label for="manualCheckOut">الخروج صباحًا * — لا يُحسب هذا اليوم
+                            ليلة</label><input id="manualCheckOut" type="date" placeholder="اختر تاريخ الخروج" required>
+                    </div>
                     <div class="field"><label for="manualName">اسم العميل</label><input id="manualName"
                             placeholder="مثال: أحمد محمد"></div>
                     <div class="field"><label for="manualPhone">الهاتف</label><input id="manualPhone" type="tel"
@@ -6214,8 +6216,8 @@
                     <div class="mini-calendar-surface" dir="ltr">
                         <div class="mini-calendar-weekdays">
                             ${weekdays.map(([shortLabel, fullLabel]) =>
-                                `<span title="${fullLabel}">${shortLabel}</span>`
-                            ).join("")}
+                `<span title="${fullLabel}">${shortLabel}</span>`
+            ).join("")}
                         </div>
                         <div class="mini-calendar-days">
                             ${cells.join("")}
