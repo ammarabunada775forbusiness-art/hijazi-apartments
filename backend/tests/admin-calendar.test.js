@@ -51,7 +51,7 @@ test("admin calendar treats checkout as exclusive and hides finished conflicts",
 test("admin manual bookings allow historical dates without reviving old conflict alerts", () => {
     const html = readFrontendFile("admin.html");
 
-    assert.match(html, /حتى لو كان تاريخ الإقامة قد مضى/);
+    assert.match(html, /حتى لو كان تاريخ\s+الإقامة قد مضى/);
     assert.match(html, /function nextDateKey\(value\)/);
     assert.match(html, /manualCheckOut\.min = earliestCheckOut/);
     assert.doesNotMatch(html, /manualCheckIn\.min = today/);

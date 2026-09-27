@@ -4437,8 +4437,117 @@
                 font-size: 11px;
             }
         }
+        /* أقسام الحجوزات مرتبة حسب الحالة الفعلية للإقامة. */
+        .table-wrap tbody tr[hidden] {
+            display: none !important;
+        }
+
+        .booking-group-header th {
+            padding: 0 !important;
+            color: #101828 !important;
+            background: #f9fafb !important;
+            text-align: right;
+        }
+
+        .booking-group-header[data-group="confirmed"] th {
+            background: #ecfdf3 !important;
+        }
+
+        .booking-group-header[data-group="pending"] th {
+            background: #fffaeb !important;
+        }
+
+        .booking-group-header[data-group="completed"] th {
+            background: #eff8ff !important;
+        }
+
+        .booking-group-header[data-group="cancelled"] th {
+            background: #fef3f2 !important;
+        }
+
+        .booking-group-heading,
+        .booking-group-toggle {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            width: 100%;
+            min-height: 52px;
+            padding: 11px 16px;
+            color: inherit;
+            text-align: right;
+            font: inherit;
+        }
+
+        .booking-group-toggle {
+            border: 0;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .booking-group-toggle:hover,
+        .booking-group-toggle:focus-visible {
+            background: rgba(16, 24, 40, .07);
+        }
+
+        .booking-group-toggle:focus-visible {
+            outline: 2px solid #8a6508;
+            outline-offset: -3px;
+        }
+
+        .booking-group-name {
+            font-size: 14px;
+            font-weight: 900;
+        }
+
+        .booking-group-count {
+            padding: 3px 9px;
+            border-radius: 99px;
+            color: #344054;
+            background: #fff;
+            font-weight: 800;
+        }
+
+        .booking-group-note {
+            color: #475467;
+            font-weight: 500;
+        }
+
+        .booking-group-chevron {
+            margin-right: auto;
+            font-size: 21px;
+            line-height: 1;
+            transition: transform .2s ease;
+        }
+
+        .booking-group-toggle[aria-expanded="true"] .booking-group-chevron {
+            transform: rotate(180deg);
+        }
+
+        .booking-finished-note {
+            display: block;
+            margin-top: 5px;
+            color: #175cd3;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        @media (max-width: 760px) {
+            .table-wrap tbody tr.booking-group-header {
+                border: 0;
+                border-radius: 12px;
+                box-shadow: none;
+            }
+
+            .table-wrap tbody tr.booking-group-header th {
+                display: block;
+                width: 100%;
+                border-radius: 12px;
+            }
+        }
     </style>
     <script src="js/export-security.js"></script>
+    <script src="js/admin-booking-groups.js?v=1"></script>
 </head>
 
 <body>
@@ -4961,6 +5070,14 @@
 
         const SOURCE_LABELS = { website: "الموقع", manual: "يدوي", airbnb: "Airbnb", booking: "Booking.com" };
         const STATUS_LABELS = { pending: "بانتظار التأكيد", confirmed: "مؤكد", cancelled: "ملغي", blocked: "محجوب" };
+        const BOOKING_GROUP_DEFINITIONS = [
+            { key: "confirmed", name: "الحجوزات المؤكدة", note: "الحالية والقادمة" },
+            { key: "pending", name: "بانتظار التأكيد", note: "تحتاج إلى متابعة" },
+            { key: "completed", name: "الحجوزات التي تمت", note: "مؤكدة وانتهت إقامتها", collapsible: true },
+            { key: "cancelled", name: "أرشيف الحجوزات الملغية", note: "الحجوزات المحفوظة بعد الإلغاء", collapsible: true },
+            { key: "blocked", name: "التواريخ المحجوبة", note: "تظهر فقط عند وجود حجز محجوب" }
+        ];
+        const expandedBookingGroups = new Set();
         const ACTIVITY_CATEGORY_LABELS = {
             booking: "الحجوزات",
             apartment: "الشقق",
@@ -5305,7 +5422,9 @@
 
             const active = allBookings.filter(
                 booking =>
-                    (booking.status || "pending") !== "cancelled"
+                    !["cancelled", "completed"].includes(
+                        window.HijaziBookingGroups.groupFor(booking, today)
+                    )
             );
 
             document.getElementById("activeCount").textContent =
@@ -5461,7 +5580,7 @@
             document.getElementById(
                 "bookingCountText"
             ).textContent =
-                `المعروض ${filtered.length} من أصل ${allBookings.length} حجز`;
+                `${filtered.length} حجز مطابق من أصل ${allBookings.length}`;
 
             const body =
                 document.getElementById("bookingsBody");
@@ -5472,7 +5591,33 @@
                 return;
             }
 
-            body.innerHTML = filtered.map(booking => {
+            const grouped = window.HijaziBookingGroups.group(
+                filtered,
+                todayInAmman()
+            );
+
+            body.innerHTML = BOOKING_GROUP_DEFINITIONS
+                .filter(({ key }) => key !== "blocked" || grouped.blocked.length)
+                .map(({ key, name, note, collapsible }) => {
+                    const bookings = grouped[key];
+                    const collapsed = collapsible && !expandedBookingGroups.has(key);
+                    const heading = `
+                        <tr class="booking-group-header" data-group="${key}">
+                            <th colspan="10">
+                                <${collapsible ? "button" : "div"}
+                                    class="${collapsible ? "booking-group-toggle" : "booking-group-heading"}"
+                                    ${collapsible ? `type="button" data-toggle-booking-group="${key}" aria-expanded="${!collapsed}"` : ""}
+                                >
+                                    <span class="booking-group-name">${name}</span>
+                                    <span class="booking-group-count">${bookings.length}</span>
+                                    <span class="booking-group-note">${note}</span>
+                                    ${collapsible ? '<span class="booking-group-chevron" aria-hidden="true">⌄</span>' : ""}
+                                </${collapsible ? "button" : "div"}>
+                            </th>
+                        </tr>
+                    `;
+
+                    const rows = bookings.map(booking => {
                 const source =
                     booking.source || "website";
 
@@ -5553,7 +5698,7 @@
                 }
 
                 return `
-                    <tr>
+                    <tr data-booking-group="${key}" ${collapsed ? "hidden" : ""}>
                         <td data-label="الشقة">
                             ${escapeHtml(
                     apartmentDisplayLabel(
@@ -5581,7 +5726,7 @@
                         <td data-label="الخروج">${dateOnly(booking.checkOut)}</td>
                         <td data-label="الليالي">${nightsBetween(booking.checkIn, booking.checkOut)}</td>
                         <td data-label="السعر">${escapeHtml(price)}</td>
-                        <td data-label="الحالة">${statusControl}</td>
+                        <td data-label="الحالة">${statusControl}${key === "completed" ? '<span class="booking-finished-note">تمت الإقامة</span>' : ""}</td>
 
                         <td data-label="الإجراءات">
                             <div class="row-actions">
@@ -5598,7 +5743,10 @@
                         </td>
                     </tr>
                 `;
-            }).join("");
+                    }).join("");
+
+                    return heading + rows;
+                }).join("");
 
             refreshHijaziSelects(body);
         }
@@ -7082,6 +7230,21 @@ ${connections}
                 const button = event.target.closest("button");
 
                 if (!button) return;
+
+                const groupKey = button.dataset.toggleBookingGroup;
+
+                if (groupKey && ["completed", "cancelled"].includes(groupKey)) {
+                    const expanded = !expandedBookingGroups.has(groupKey);
+
+                    if (expanded) expandedBookingGroups.add(groupKey);
+                    else expandedBookingGroups.delete(groupKey);
+
+                    button.setAttribute("aria-expanded", String(expanded));
+                    document.querySelectorAll(
+                        `#bookingsBody tr[data-booking-group="${groupKey}"]`
+                    ).forEach(row => { row.hidden = !expanded; });
+                    return;
+                }
 
                 const editId =
                     button.dataset.editBooking;
