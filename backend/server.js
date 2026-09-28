@@ -186,6 +186,7 @@ app.get("/health", (req, res) => {
         success: true,
         status: "ok",
         service: "HIJAZI Apartments API",
+        release: "booking-reminders-v1",
         time: new Date().toISOString()
     });
 });
