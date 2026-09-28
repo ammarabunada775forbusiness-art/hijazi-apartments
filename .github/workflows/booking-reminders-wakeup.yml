@@ -2,8 +2,8 @@ name: Wake booking reminders
 
 on:
   schedule:
-    # 09:17 and 11:17 in Amman (UTC+3); the backend sends after 09:00.
-    - cron: "17 6,8 * * *"
+    # Check throughout the day in Amman (UTC+3); the backend sends after 09:00.
+    - cron: "17 6,9,12,15,18 * * *"
   workflow_dispatch:
 
 permissions: {}

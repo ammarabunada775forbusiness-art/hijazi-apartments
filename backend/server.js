@@ -186,7 +186,7 @@ app.get("/health", (req, res) => {
         success: true,
         status: "ok",
         service: "HIJAZI Apartments API",
-        release: "booking-reminders-v1",
+        release: "booking-reminders-v2",
         time: new Date().toISOString()
     });
 });
@@ -2100,6 +2100,8 @@ app.post("/admin/sync", requireAdmin, async (req, res) => {
             details: { successfulCount, failedCount, calendarsChecked: results.length }
         });
 
+        queueBookingReminderCheck();
+
         res.json({
             success: !results.some(
                 result => result.status === "error"
@@ -2190,6 +2192,8 @@ app.post("/admin/bookings", requireAdmin, async (req, res) => {
                 currency: booking.currency
             }
         });
+
+        if (booking.status === "confirmed") queueBookingReminderCheck();
 
         res.status(201).json({ success: true, booking, message: "✅ تم إضافة الحجز." });
     } catch (error) {
@@ -2411,6 +2415,8 @@ app.put("/admin/bookings/:id", requireAdmin, async (req, res) => {
             }
         });
 
+        if (booking.status === "confirmed") queueBookingReminderCheck();
+
         res.json({
             success: true,
             booking,
@@ -2489,6 +2495,8 @@ app.patch("/admin/bookings/:id", requireAdmin, async (req, res) => {
             description: `تم تغيير حالة حجز ${defaultApartmentLabel(booking.apartmentId, booking.apartmentLabel)} من ${previousStatus} إلى ${booking.status}.`,
             details: { previousStatus, status: booking.status }
         });
+
+        if (booking.status === "confirmed") queueBookingReminderCheck();
 
         res.json({
             success: true,
@@ -2573,9 +2581,19 @@ app.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
 
 /* إرسال تذكيرات الدخول والخروج مرة واحدة لكل حجز وموعد، بعد 9 صباحًا بتوقيت عمّان. */
 let reminderRunActive = false;
+let reminderRerunRequested = false;
+
+function queueBookingReminderCheck() {
+    setImmediate(() => runScheduledBookingReminders().catch(error =>
+        console.log("BOOKING REMINDER CHECK ERROR:", error.message)));
+}
 
 async function runScheduledBookingReminders(now = new Date()) {
-    if (reminderRunActive || mongoose.connection.readyState !== 1) return;
+    if (reminderRunActive) {
+        reminderRerunRequested = true;
+        return;
+    }
+    if (mongoose.connection.readyState !== 1) return;
     if (!resend || !process.env.RESEND_FROM || !process.env.ADMIN_EMAIL) return;
     if (!isReminderSendTime(now)) return;
 
@@ -2620,6 +2638,10 @@ async function runScheduledBookingReminders(now = new Date()) {
         }
     } finally {
         reminderRunActive = false;
+        if (reminderRerunRequested) {
+            reminderRerunRequested = false;
+            queueBookingReminderCheck();
+        }
     }
 }
 
@@ -2665,6 +2687,7 @@ async function runScheduledCalendarSync() {
                 }
             }
         }
+        queueBookingReminderCheck();
     } finally {
         calendarSyncRunning = false;
     }
