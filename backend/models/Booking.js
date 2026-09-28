@@ -67,6 +67,9 @@ const bookingSchema = new mongoose.Schema(
         // وقت إلغاء الحجز داخل PMS للحجوزات المحلية
         cancelledAt: { type: Date, default: null },
 
+        // مفاتيح تذكيرات الإدارة المرسلة؛ تبقى محفوظة بعد إعادة تشغيل Render
+        reminderSentKeys: { type: [String], default: [] },
+
         // رقم الحجز أو UID القادم من المنصة الخارجية
         externalUid: { type: String, default: "", trim: true },
         sourceReference: { type: String, default: "", trim: true },

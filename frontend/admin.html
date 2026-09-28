@@ -4545,6 +4545,70 @@
                 border-radius: 12px;
             }
         }
+
+        .reminders-count {
+            display: inline-grid;
+            place-items: center;
+            min-width: 38px;
+            min-height: 38px;
+            padding: 4px 9px;
+            border-radius: 50px;
+            color: #713f12;
+            background: #fef0c7;
+            font-weight: 900;
+        }
+
+        .reminders-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .reminder-card {
+            padding: 14px 16px;
+            border: 1px solid #f8dfab;
+            border-right: 4px solid #c89116;
+            border-radius: 14px;
+            background: #fffbeb;
+        }
+
+        .reminder-card[data-kind="checkout"] {
+            border-color: #bfdbfe;
+            border-right-color: #175cd3;
+            background: #eff8ff;
+        }
+
+        .reminder-card[data-days="0"] {
+            box-shadow: 0 0 0 1px rgba(180, 35, 24, .18);
+        }
+
+        .reminder-card strong,
+        .reminder-card span {
+            display: block;
+            overflow-wrap: anywhere;
+        }
+
+        .reminder-card strong {
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+
+        .reminder-card span {
+            color: #475467;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .reminders-empty {
+            padding: 14px 16px;
+            border: 1px solid #eaecf0;
+            border-radius: 14px;
+            color: #475467;
+            background: #f9fafb;
+        }
+
+        .calendar-section .admin-calendar-shell {
+            margin-top: 0;
+        }
     </style>
     <script src="js/export-security.js"></script>
     <script src="js/admin-booking-groups.js?v=1"></script>
@@ -4612,87 +4676,53 @@
                 </div>
             </div>
 
-            <!-- =========================================================
-     صحة المزامنة وتنبيهات التعارض
-========================================================= -->
-            <section class="card section-card sync-health-section">
+            <section class="card section-card reminders-section" aria-labelledby="bookingRemindersTitle">
                 <div class="section-head">
                     <div>
-                        <h2>صحة المزامنة</h2>
-                        <p>
-                            متابعة حالة ربط Airbnb وBooking لكل شقة،
-                            وتشغيل مزامنة مستقلة لأي منصة.
-                        </p>
+                        <h2 id="bookingRemindersTitle">تنبيهات الدخول والخروج</h2>
+                        <p>تذكيرات الحجوزات المؤكدة: الدخول قبل 3 أيام، وقبل يوم، ويوم الدخول؛ والخروج قبل يوم ويوم الخروج.</p>
                     </div>
-
-                    <div class="sync-health-summary" id="syncHealthSummary">
-                        جاري فحص المزامنة...
-                    </div>
+                    <span class="reminders-count" id="bookingRemindersCount">0</span>
                 </div>
-
-                <div class="sync-health-grid" id="syncHealthGrid"></div>
-
-                <div class="conflict-zone" id="conflictZone">
-                    <div class="conflict-zone-head">
-                        <div>
-                            <h3>فحص تعارض الحجوزات</h3>
-                            <p>
-                                يفحص وجود حجزين متداخلين على الشقة نفسها.
-                            </p>
-                        </div>
-
-                        <span class="conflict-count" id="conflictCount">0</span>
-                    </div>
-
-                    <div id="conflictAlerts"></div>
-                </div>
+                <div class="reminders-list" id="bookingRemindersList" aria-live="polite"></div>
             </section>
 
-            <section class="card section-card">
-                <div class="section-head">
-                    <div>
-                        <h2>إضافة حجز</h2>
-                        <p>للحجز الهاتفي أو الشخصي، ويمكن أيضًا تسجيل حجز Airbnb أو Booking يدويًا، حتى لو كان تاريخ
-                            الإقامة قد مضى.</p>
+            <section class="card section-card calendar-section">
+                <!-- =========================================================
+                     تقويم إشغال الشقق الخاص بالأدمن
+                ========================================================== -->
+                <div class="admin-calendar-shell">
+                    <div class="admin-calendar-head">
+                        <div>
+                            <h3>تقويم إشغال الشقق</h3>
+                            <p>تقويم مستقل لكل شقة. يوم الخروج لا يُحسب ليلة ويمكن أن يبدأ فيه حجز جديد.</p>
+                        </div>
+
+                        <div class="calendar-legend" aria-label="دليل ألوان مصادر الحجوزات">
+                            <span class="legend-item">
+                                <span class="legend-dot legend-airbnb"></span>
+                                Airbnb
+                            </span>
+
+                            <span class="legend-item">
+                                <span class="legend-dot legend-booking"></span>
+                                Booking.com
+                            </span>
+
+                            <span class="legend-item">
+                                <span class="legend-dot legend-manual"></span>
+                                حجز يدوي
+                            </span>
+
+                            <span class="legend-item">
+                                <span class="legend-dot legend-website"></span>
+                                الموقع
+                            </span>
+                        </div>
                     </div>
+
+                    <div id="adminCalendar"></div>
                 </div>
-                <form id="manualBookingForm" class="form-grid">
-                    <div class="field"><label for="manualApartment">الشقة *</label><select id="manualApartment"
-                            required></select></div>
-                    <div class="field"><label for="manualSource">المصدر *</label><select id="manualSource">
-                            <option value="manual">حجز يدوي / هاتفي</option>
-                            <option value="airbnb">Airbnb</option>
-                            <option value="booking">Booking.com</option>
-                        </select></div>
-                    <div class="field"><label for="manualCheckIn">الدخول *</label><input id="manualCheckIn" type="date"
-                            placeholder="اختر تاريخ الدخول" required></div>
-                    <div class="field"><label for="manualCheckOut">الخروج صباحًا * — لا يُحسب هذا اليوم
-                            ليلة</label><input id="manualCheckOut" type="date" placeholder="اختر تاريخ الخروج" required>
-                    </div>
-                    <div class="field"><label for="manualName">اسم العميل</label><input id="manualName"
-                            placeholder="مثال: أحمد محمد"></div>
-                    <div class="field"><label for="manualPhone">الهاتف</label><input id="manualPhone" type="tel"
-                            placeholder="07xxxxxxxx"></div>
-                    <div class="field"><label for="manualEmail">البريد</label><input id="manualEmail" type="email"
-                            placeholder="name@example.com"></div>
-                    <div class="field"><label for="manualReference">رقم الحجز في المنصة</label><input
-                            id="manualReference" placeholder="اختياري"></div>
-                    <div class="field"><label for="manualAdults">البالغون</label><input id="manualAdults" type="number"
-                            min="0" value="1"></div>
-                    <div class="field"><label for="manualChildren">الأطفال</label><input id="manualChildren"
-                            type="number" min="0" value="0"></div>
-                    <div class="field"><label for="manualPrice">السعر الإجمالي (JOD) — يُحسب تلقائيًا ويمكن
-                            تعديله</label><input id="manualPrice" type="number" min="0" step="0.01" value="0"></div>
-                    <div class="field"><label for="manualStatus">الحالة</label><select
-                            class="status-select status-confirmed" id="manualStatus">
-                            <option value="confirmed">مؤكد</option>
-                            <option value="pending">بانتظار التأكيد</option>
-                        </select></div>
-                    <div class="field span-4"><label for="manualNotes">ملاحظات</label><textarea id="manualNotes"
-                            placeholder="أي تفاصيل مهمة عن الحجز..."></textarea></div>
-                    <div class="form-actions field span-4"><button class="btn btn-primary" id="addBookingBtn"
-                            type="submit">إضافة الحجز وإغلاق التواريخ</button></div>
-                </form>
             </section>
 
             <section class="card section-card">
@@ -4747,46 +4777,94 @@
                         <tbody id="bookingsBody"></tbody>
                     </table>
                 </div>
+            </section>
 
-                <!-- =========================================================
-                     تقويم إشغال الشقق الخاص بالأدمن
-                ========================================================== -->
-                <div class="admin-calendar-shell">
-                    <div class="admin-calendar-head">
+            <section class="card section-card">
+                <div class="section-head">
+                    <div>
+                        <h2>إضافة حجز</h2>
+                        <p>للحجز الهاتفي أو الشخصي، ويمكن أيضًا تسجيل حجز Airbnb أو Booking يدويًا، حتى لو كان تاريخ
+                            الإقامة قد مضى.</p>
+                    </div>
+                </div>
+                <form id="manualBookingForm" class="form-grid">
+                    <div class="field"><label for="manualApartment">الشقة *</label><select id="manualApartment"
+                            required></select></div>
+                    <div class="field"><label for="manualSource">المصدر *</label><select id="manualSource">
+                            <option value="manual">حجز يدوي / هاتفي</option>
+                            <option value="airbnb">Airbnb</option>
+                            <option value="booking">Booking.com</option>
+                        </select></div>
+                    <div class="field"><label for="manualCheckIn">الدخول *</label><input id="manualCheckIn" type="date"
+                            placeholder="اختر تاريخ الدخول" required></div>
+                    <div class="field"><label for="manualCheckOut">الخروج صباحًا * — لا يُحسب هذا اليوم
+                            ليلة</label><input id="manualCheckOut" type="date" placeholder="اختر تاريخ الخروج" required>
+                    </div>
+                    <div class="field"><label for="manualName">اسم العميل</label><input id="manualName"
+                            placeholder="مثال: أحمد محمد"></div>
+                    <div class="field"><label for="manualPhone">الهاتف</label><input id="manualPhone" type="tel"
+                            placeholder="07xxxxxxxx"></div>
+                    <div class="field"><label for="manualEmail">البريد</label><input id="manualEmail" type="email"
+                            placeholder="name@example.com"></div>
+                    <div class="field"><label for="manualReference">رقم الحجز في المنصة</label><input
+                            id="manualReference" placeholder="اختياري"></div>
+                    <div class="field"><label for="manualAdults">البالغون</label><input id="manualAdults" type="number"
+                            min="0" value="1"></div>
+                    <div class="field"><label for="manualChildren">الأطفال</label><input id="manualChildren"
+                            type="number" min="0" value="0"></div>
+                    <div class="field"><label for="manualPrice">السعر الإجمالي (JOD) — يُحسب تلقائيًا ويمكن
+                            تعديله</label><input id="manualPrice" type="number" min="0" step="0.01" value="0"></div>
+                    <div class="field"><label for="manualStatus">الحالة</label><select
+                            class="status-select status-confirmed" id="manualStatus">
+                            <option value="confirmed">مؤكد</option>
+                            <option value="pending">بانتظار التأكيد</option>
+                        </select></div>
+                    <div class="field span-4"><label for="manualNotes">ملاحظات</label><textarea id="manualNotes"
+                            placeholder="أي تفاصيل مهمة عن الحجز..."></textarea></div>
+                    <div class="form-actions field span-4"><button class="btn btn-primary" id="addBookingBtn"
+                            type="submit">إضافة الحجز وإغلاق التواريخ</button></div>
+                </form>
+            </section>
+
+            <section class="card section-card conflict-section">
+                <div class="conflict-zone" id="conflictZone">
+                    <div class="conflict-zone-head">
                         <div>
-                            <h3>تقويم إشغال الشقق</h3>
-                            <p>تقويم مستقل لكل شقة. يوم الخروج لا يُحسب ليلة ويمكن أن يبدأ فيه حجز جديد.</p>
+                            <h3>فحص تعارض الحجوزات</h3>
+                            <p>
+                                يفحص وجود حجزين متداخلين على الشقة نفسها.
+                            </p>
                         </div>
 
-                        <div class="calendar-legend" aria-label="دليل ألوان مصادر الحجوزات">
-                            <span class="legend-item">
-                                <span class="legend-dot legend-airbnb"></span>
-                                Airbnb
-                            </span>
-
-                            <span class="legend-item">
-                                <span class="legend-dot legend-booking"></span>
-                                Booking.com
-                            </span>
-
-                            <span class="legend-item">
-                                <span class="legend-dot legend-manual"></span>
-                                حجز يدوي
-                            </span>
-
-                            <span class="legend-item">
-                                <span class="legend-dot legend-website"></span>
-                                الموقع
-                            </span>
-                        </div>
+                        <span class="conflict-count" id="conflictCount">0</span>
                     </div>
 
-                    <div id="adminCalendar"></div>
+                    <div id="conflictAlerts"></div>
                 </div>
             </section>
         </section>
 
         <section class="tab-panel" id="apartmentsPanel">
+            <!-- صحة مزامنة Airbnb وBooking -->
+            <section class="card section-card sync-health-section">
+                <div class="section-head">
+                    <div>
+                        <h2>صحة المزامنة</h2>
+                        <p>
+                            متابعة حالة ربط Airbnb وBooking لكل شقة،
+                            وتشغيل مزامنة مستقلة لأي منصة.
+                        </p>
+                    </div>
+
+                    <div class="sync-health-summary" id="syncHealthSummary">
+                        جاري فحص المزامنة...
+                    </div>
+                </div>
+
+                <div class="sync-health-grid" id="syncHealthGrid"></div>
+
+            </section>
+
             <section class="card section-card">
                 <div class="section-head">
                     <div>
@@ -5170,6 +5248,7 @@
         let adminUser = "";
         let adminPass = "";
         let allBookings = [];
+        let allReminders = [];
         let apartments = [];
         let allActivities = [];
         let adminCalendar = null;
@@ -5528,6 +5607,33 @@
 
             document.getElementById("occupancyRate").textContent =
                 `${occupancyRate}%`;
+        }
+
+        function renderBookingReminders() {
+            const count = document.getElementById("bookingRemindersCount");
+            const list = document.getElementById("bookingRemindersList");
+            count.textContent = allReminders.length;
+
+            if (!allReminders.length) {
+                list.innerHTML = '<div class="reminders-empty">لا يوجد دخول أو خروج يحتاج تذكيرًا اليوم.</div>';
+                return;
+            }
+
+            list.innerHTML = allReminders.map(reminder => {
+                const apartment = apartmentDisplayLabel(
+                    reminder.apartmentId,
+                    reminder.apartmentLabel
+                );
+                const action = reminder.kind === "checkout" ? "خروج" : "دخول";
+                const source = SOURCE_LABELS[reminder.source] || reminder.source || "غير محدد";
+                const guest = reminder.fullName || "حجز بدون اسم";
+                const phone = reminder.phone || "غير متوفر";
+
+                return `<article class="reminder-card" data-kind="${reminder.kind === "checkout" ? "checkout" : "checkin"}" data-days="${reminder.daysUntil === 0 ? "0" : "later"}">
+                    <strong>${escapeHtml(apartment)}: ${action} ${escapeHtml(reminder.label)} (${escapeHtml(reminder.targetDate)})</strong>
+                    <span>العميل: ${escapeHtml(guest)} · الهاتف: ${escapeHtml(phone)} · المصدر: ${escapeHtml(source)}</span>
+                </article>`;
+            }).join("");
         }
 
         function renderBookings() {
@@ -6739,7 +6845,6 @@
         `;
 
                 summary.textContent = "لا توجد بيانات";
-                renderConflictAlerts();
                 return;
             }
 
@@ -6852,7 +6957,6 @@
         </span>
     `;
 
-            renderConflictAlerts();
         }
 
         function syncStatusText(c) { if (!c?.lastSyncedAt) return "لم تتم المزامنة بعد."; const time = new Date(c.lastSyncedAt).toLocaleString("ar-JO", { timeZone: "Asia/Amman" }); return `${c.lastSyncStatus === "success" ? "نجحت" : "فشلت"} آخر مزامنة: ${time}${c.lastSyncMessage ? ` — ${c.lastSyncMessage}` : ""}`; }
@@ -7031,15 +7135,18 @@ ${connections}
             );
 
             allBookings = normalized.bookings;
+            allReminders = bookingsData.reminders || [];
             apartments = normalized.apartments;
             allActivities = normalized.activities;
 
             populateApartmentSelects();
             updateStats();
+            renderBookingReminders();
             renderBookings();
             renderApartments();
             renderSyncHealth();
             renderAdminCalendar();
+            renderConflictAlerts();
             renderActivity();
             refreshHijaziSelects();
         }

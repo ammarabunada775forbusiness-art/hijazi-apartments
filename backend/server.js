@@ -9,6 +9,13 @@ const basicAuth = require("basic-auth");
 const { Resend } = require("resend");
 const { buildIcalFeed, fetchCalendarEvents, validateCalendarUrl } = require("./services/ical");
 const {
+    ammanDateKey,
+    isReminderSendTime,
+    dueReminders,
+    serializeReminder,
+    deliverReminders
+} = require("./services/booking-reminders");
+const {
     createRateLimiter,
     rejectDangerousBodyKeys,
     requireJsonContentType,
@@ -153,6 +160,9 @@ if (require.main === module) mongoose
         await migrateApartmentDisplayLabels();
         runScheduledCalendarSync().catch((error) => {
             console.log("INITIAL CALENDAR SYNC ERROR:", error.message);
+        });
+        runScheduledBookingReminders().catch((error) => {
+            console.log("INITIAL BOOKING REMINDER ERROR:", error.message);
         });
     })
     .catch((err) => console.log("MongoDB Connection Error:", err.name || "Error"));
@@ -837,6 +847,55 @@ async function sendBookingEmails(booking) {
         } catch (e) {
             console.log("Customer email exception:", e.message);
         }
+    }
+}
+
+/* تذكير لصاحب لوحة الإدارة فقط؛ لا تُرسل هذه الرسائل للضيوف. */
+async function sendBookingReminderEmail(booking, reminder) {
+    const from = process.env.RESEND_FROM;
+    const adminTo = process.env.ADMIN_EMAIL;
+    const apartmentLabel = defaultApartmentLabel(
+        booking.apartmentId,
+        booking.apartmentLabel
+    );
+    const action = reminder.kind === "checkin" ? "دخول" : "خروج";
+    const fullName = normalizeSingleLine(booking.fullName || "حجز بدون اسم", 150);
+    const phone = normalizeSingleLine(booking.phone || "غير متوفر", 50);
+    const source = bookingSourceLabel(booking.source);
+    const text = [
+        `تذكير ${action} - HIJAZI Apartments`,
+        `الموعد: ${reminder.label} (${reminder.targetDate})`,
+        `الشقة: ${apartmentLabel}`,
+        `العميل: ${fullName}`,
+        `الهاتف: ${phone}`,
+        `المصدر: ${source}`,
+        `الدخول: ${formatDate(booking.checkIn)}`,
+        `الخروج: ${formatDate(booking.checkOut)}`,
+        "افتح لوحة الإدارة: https://www.hijazi-apartments.com/admin.html"
+    ].join("\n");
+
+    const { data, error } = await resend.emails.send({
+        from,
+        to: adminTo,
+        subject: `تذكير ${action}: ${normalizeSingleLine(apartmentLabel, 100)} - ${reminder.label}`,
+        text,
+        html: `<div dir="rtl" style="font-family:Arial,sans-serif;line-height:1.9;color:#111">
+            <h2>تذكير ${action} — HIJAZI Apartments</h2>
+            <p><strong>${escapeHtml(reminder.label)}</strong> (${escapeHtml(reminder.targetDate)})</p>
+            <p>الشقة: <strong>${escapeHtml(apartmentLabel)}</strong><br>
+            العميل: ${escapeHtml(fullName)}<br>
+            الهاتف: ${escapeHtml(phone)}<br>
+            المصدر: ${escapeHtml(source)}<br>
+            الدخول: ${escapeHtml(formatDate(booking.checkIn))}<br>
+            الخروج: ${escapeHtml(formatDate(booking.checkOut))}</p>
+            <a href="https://www.hijazi-apartments.com/admin.html">افتح لوحة الإدارة</a>
+        </div>`
+    }, {
+        idempotencyKey: `hijazi-reminder:${booking._id}:${reminder.key}`
+    });
+
+    if (error || !data?.id) {
+        throw new Error(error?.message || "Resend did not confirm the reminder email.");
     }
 }
 
@@ -2144,7 +2203,8 @@ app.post("/admin/bookings", requireAdmin, async (req, res) => {
 app.get("/admin/bookings", requireAdmin, async (req, res) => {
     try {
         const bookings = await Booking.find().sort({ createdAt: -1 });
-        res.json({ success: true, bookings });
+        const reminders = dueReminders(bookings).map(serializeReminder);
+        res.json({ success: true, bookings, reminders });
     } catch (error) {
         console.log("ADMIN GET BOOKINGS ERROR:", error);
         res.status(500).json({
@@ -2509,6 +2569,69 @@ app.delete("/admin/bookings/:id", requireAdmin, async (req, res) => {
         });
     }
 });
+
+/* إرسال تذكيرات الدخول والخروج مرة واحدة لكل حجز وموعد، بعد 9 صباحًا بتوقيت عمّان. */
+let reminderRunActive = false;
+
+async function runScheduledBookingReminders(now = new Date()) {
+    if (reminderRunActive || mongoose.connection.readyState !== 1) return;
+    if (!resend || !process.env.RESEND_FROM || !process.env.ADMIN_EMAIL) return;
+    if (!isReminderSendTime(now)) return;
+
+    reminderRunActive = true;
+
+    try {
+        const todayStart = new Date(`${ammanDateKey(now)}T00:00:00.000Z`);
+        const dayMs = 24 * 60 * 60 * 1000;
+        const bookings = await Booking.find({
+            status: "confirmed",
+            $or: [
+                { checkIn: { $gte: todayStart, $lt: new Date(todayStart.getTime() + 4 * dayMs) } },
+                { checkOut: { $gte: todayStart, $lt: new Date(todayStart.getTime() + 2 * dayMs) } }
+            ]
+        });
+
+        const result = await deliverReminders(dueReminders(bookings, now), {
+            async claim(reminder) {
+                const dateField = reminder.kind === "checkin" ? "checkIn" : "checkOut";
+                const update = await Booking.updateOne({
+                    _id: reminder.booking._id,
+                    status: "confirmed",
+                    [dateField]: reminder.booking[dateField],
+                    reminderSentKeys: { $ne: reminder.key }
+                }, {
+                    $addToSet: { reminderSentKeys: reminder.key }
+                });
+                return update.modifiedCount === 1;
+            },
+            send: reminder => sendBookingReminderEmail(reminder.booking, reminder),
+            release: reminder => Booking.updateOne(
+                { _id: reminder.booking._id, reminderSentKeys: reminder.key },
+                { $pull: { reminderSentKeys: reminder.key } }
+            )
+        });
+
+        if (result.sent || result.errors.length) {
+            console.log(`BOOKING REMINDERS sent=${result.sent} errors=${result.errors.length}`);
+        }
+        for (const error of result.errors) {
+            console.log("BOOKING REMINDER ERROR:", error.message);
+        }
+    } finally {
+        reminderRunActive = false;
+    }
+}
+
+const reminderIntervalSetting = Number(process.env.BOOKING_REMINDER_INTERVAL_MINUTES || 15);
+const reminderIntervalMinutes = Number.isFinite(reminderIntervalSetting)
+    ? Math.max(5, reminderIntervalSetting)
+    : 15;
+const reminderTimer = setInterval(
+    () => runScheduledBookingReminders().catch(error =>
+        console.log("BOOKING REMINDER TIMER ERROR:", error.message)),
+    reminderIntervalMinutes * 60 * 1000
+);
+reminderTimer.unref();
 
 /* =========================================================
    مزامنة دورية للتقاويم المفعّلة أثناء عمل خدمة Render

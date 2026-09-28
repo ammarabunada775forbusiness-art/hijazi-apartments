@@ -1,0 +1,20 @@
+name: Wake booking reminders
+
+on:
+  schedule:
+    # 09:17 and 11:17 in Amman (UTC+3); the backend sends after 09:00.
+    - cron: "17 6,8 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  wake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - name: Wake API and wait for its database
+        run: |
+          curl --fail --silent --show-error --retry 5 --retry-all-errors \
+            --retry-delay 20 --connect-timeout 20 --max-time 35 \
+            https://api.hijazi-apartments.com/health/db > /dev/null
