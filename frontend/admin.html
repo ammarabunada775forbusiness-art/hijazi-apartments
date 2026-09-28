@@ -5624,13 +5624,12 @@
                     reminder.apartmentId,
                     reminder.apartmentLabel
                 );
-                const action = reminder.kind === "checkout" ? "خروج" : "دخول";
                 const source = SOURCE_LABELS[reminder.source] || reminder.source || "غير محدد";
                 const guest = reminder.fullName || "حجز بدون اسم";
                 const phone = reminder.phone || "غير متوفر";
 
                 return `<article class="reminder-card" data-kind="${reminder.kind === "checkout" ? "checkout" : "checkin"}" data-days="${reminder.daysUntil === 0 ? "0" : "later"}">
-                    <strong>${escapeHtml(apartment)}: ${action} ${escapeHtml(reminder.label)} (${escapeHtml(reminder.targetDate)})</strong>
+                    <strong>${escapeHtml(apartment)}: ${escapeHtml(reminder.label)} (${escapeHtml(reminder.targetDate)})</strong>
                     <span>العميل: ${escapeHtml(guest)} · الهاتف: ${escapeHtml(phone)} · المصدر: ${escapeHtml(source)}</span>
                 </article>`;
             }).join("");
