@@ -65,7 +65,7 @@ test("admin manual dates use the HIJAZI picker and the month menu uses site colo
     const styles = readFrontendFile("css/style.css");
 
     assert.match(html, /flatpickr\.min\.css/);
-    assert.match(html, /js\/hijazi-datepicker\.js\?v=1/);
+    assert.match(html, /js\/hijazi-datepicker\.js\?v=2/);
     assert.match(html, /HijaziDatePicker\?\.create\(manualCheckIn/);
     assert.match(html, /HijaziDatePicker\?\.create\(manualCheckOut/);
     assert.match(html, /minDate:\s*null/);

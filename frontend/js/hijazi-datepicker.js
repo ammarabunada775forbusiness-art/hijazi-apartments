@@ -132,6 +132,9 @@
 
         if (input._flatpickr) return input._flatpickr;
 
+        // Modal dialogs make everything outside their subtree inert, including
+        // calendars appended to body. Keep the popup inside the owning dialog.
+        const dialog = input.closest("dialog");
         const locale = options.locale || "default";
         const config = {
             dateFormat: "Y-m-d",
@@ -146,6 +149,22 @@
                     "hijazi-glass-calendar"
                 );
                 installMonthPicker(instance);
+
+                if (dialog) {
+                    instance.calendarContainer.classList.add("hijazi-dialog-calendar");
+                    const close = () => instance.close();
+                    const onScroll = event => {
+                        if (instance.isOpen && !instance.calendarContainer.contains(event.target)) {
+                            instance.config.position(instance);
+                        }
+                    };
+                    dialog.addEventListener("close", close);
+                    dialog.addEventListener("scroll", onScroll, true);
+                    instance.config.onDestroy.push(() => {
+                        dialog.removeEventListener("close", close);
+                        dialog.removeEventListener("scroll", onScroll, true);
+                    });
+                }
             },
 
             onOpen(_, __, instance) {
@@ -160,6 +179,32 @@
                 );
             }
         };
+
+        if (dialog) {
+            config.appendTo = dialog;
+            config.position = instance => {
+                const calendar = instance.calendarContainer;
+                const field = input.getBoundingClientRect();
+                const bounds = dialog.getBoundingClientRect();
+                const header = dialog.querySelector(".booking-dialog-head")?.getBoundingClientRect();
+                const edge = 8;
+                const left = Math.max(0, bounds.left) + edge;
+                const right = Math.min(window.innerWidth, bounds.right) - edge;
+                const top = Math.max(0, bounds.top, header?.bottom || 0) + edge;
+                const bottom = Math.min(window.innerHeight, bounds.bottom) - edge;
+
+                calendar.style.setProperty("max-width", `${Math.max(0, right - left)}px`, "important");
+                calendar.style.maxHeight = `${Math.max(0, bottom - top)}px`;
+                const height = calendar.offsetHeight;
+                const preferredTop = field.bottom + edge + height <= bottom
+                    ? field.bottom + edge
+                    : field.top - height - edge;
+
+                calendar.style.left = `${Math.max(left, Math.min(field.left, right - calendar.offsetWidth))}px`;
+                calendar.style.top = `${Math.max(top, Math.min(preferredTop, bottom - height))}px`;
+                calendar.style.right = "auto";
+            };
+        }
 
         if (Object.prototype.hasOwnProperty.call(options, "minDate")) {
             config.minDate = options.minDate || null;

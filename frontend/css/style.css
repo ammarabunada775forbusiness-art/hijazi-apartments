@@ -1298,6 +1298,14 @@ body.ltr-mode .seo-card {
    الشهر + السنة
 ========================= */
 
+.flatpickr-calendar.hijazi-dialog-calendar {
+    position: fixed !important;
+    z-index: 10060;
+    background: #171512 !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+}
+
 .hijazi-glass-calendar .flatpickr-months {
     position: relative !important;
     min-height: 52px !important;

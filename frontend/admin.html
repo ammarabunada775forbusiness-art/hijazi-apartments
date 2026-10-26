@@ -7,11 +7,11 @@
     <meta name="robots" content="noindex, nofollow">
     <title>HIJAZI PMS - نظام إدارة الحجوزات</title>
     <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" href="css/style.css?v=8">
+    <link rel="stylesheet" href="css/style.css?v=9">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ar.js"></script>
-    <script src="js/hijazi-datepicker.js?v=1"></script>
+    <script src="js/hijazi-datepicker.js?v=2"></script>
     <style>
         :root {
             --gold: #c89116;
@@ -3007,6 +3007,18 @@
             display: block;
         }
 
+        .edit-booking-error:not([hidden]) {
+            padding: 12px;
+            border: 1px solid #fecdca;
+            border-radius: 10px;
+            color: #b42318;
+            background: #fef3f2;
+        }
+
+        .booking-dialog-body .field[hidden] {
+            display: none;
+        }
+
         .edit-booking-actions {
             display: flex;
             justify-content: flex-end;
@@ -4687,6 +4699,53 @@
                 <div class="reminders-list" id="bookingRemindersList" aria-live="polite"></div>
             </section>
 
+            <section class="card section-card">
+                <div class="section-head">
+                    <div>
+                        <h2>إضافة حجز</h2>
+                        <p>للحجز الهاتفي أو الشخصي، ويمكن أيضًا تسجيل حجز Airbnb أو Booking يدويًا، حتى لو كان تاريخ
+                            الإقامة قد مضى.</p>
+                    </div>
+                </div>
+                <form id="manualBookingForm" class="form-grid">
+                    <div class="field"><label for="manualApartment">الشقة *</label><select id="manualApartment"
+                            required></select></div>
+                    <div class="field"><label for="manualSource">المصدر *</label><select id="manualSource">
+                            <option value="manual">حجز يدوي / هاتفي</option>
+                            <option value="airbnb">Airbnb</option>
+                            <option value="booking">Booking.com</option>
+                        </select></div>
+                    <div class="field"><label for="manualCheckIn">الدخول *</label><input id="manualCheckIn" type="date"
+                            placeholder="اختر تاريخ الدخول" required></div>
+                    <div class="field"><label for="manualCheckOut">الخروج صباحًا * — لا يُحسب هذا اليوم
+                            ليلة</label><input id="manualCheckOut" type="date" placeholder="اختر تاريخ الخروج" required>
+                    </div>
+                    <div class="field"><label for="manualName">اسم العميل</label><input id="manualName"
+                            placeholder="مثال: أحمد محمد"></div>
+                    <div class="field"><label for="manualPhone">الهاتف</label><input id="manualPhone" type="tel"
+                            placeholder="07xxxxxxxx"></div>
+                    <div class="field"><label for="manualEmail">البريد</label><input id="manualEmail" type="email"
+                            placeholder="name@example.com"></div>
+                    <div class="field"><label for="manualReference">رقم الحجز في المنصة</label><input
+                            id="manualReference" placeholder="اختياري"></div>
+                    <div class="field"><label for="manualAdults">البالغون</label><input id="manualAdults" type="number"
+                            min="0" value="1"></div>
+                    <div class="field"><label for="manualChildren">الأطفال</label><input id="manualChildren"
+                            type="number" min="0" value="0"></div>
+                    <div class="field"><label for="manualPrice">السعر الإجمالي (JOD) — يُحسب تلقائيًا ويمكن
+                            تعديله</label><input id="manualPrice" type="number" min="0" step="0.01" value="0"></div>
+                    <div class="field"><label for="manualStatus">الحالة</label><select
+                            class="status-select status-confirmed" id="manualStatus">
+                            <option value="confirmed">مؤكد</option>
+                            <option value="pending">بانتظار التأكيد</option>
+                        </select></div>
+                    <div class="field span-4"><label for="manualNotes">ملاحظات</label><textarea id="manualNotes"
+                            placeholder="أي تفاصيل مهمة عن الحجز..."></textarea></div>
+                    <div class="form-actions field span-4"><button class="btn btn-primary" id="addBookingBtn"
+                            type="submit">إضافة الحجز وإغلاق التواريخ</button></div>
+                </form>
+            </section>
+
             <section class="card section-card calendar-section">
                 <!-- =========================================================
                      تقويم إشغال الشقق الخاص بالأدمن
@@ -4777,53 +4836,6 @@
                         <tbody id="bookingsBody"></tbody>
                     </table>
                 </div>
-            </section>
-
-            <section class="card section-card">
-                <div class="section-head">
-                    <div>
-                        <h2>إضافة حجز</h2>
-                        <p>للحجز الهاتفي أو الشخصي، ويمكن أيضًا تسجيل حجز Airbnb أو Booking يدويًا، حتى لو كان تاريخ
-                            الإقامة قد مضى.</p>
-                    </div>
-                </div>
-                <form id="manualBookingForm" class="form-grid">
-                    <div class="field"><label for="manualApartment">الشقة *</label><select id="manualApartment"
-                            required></select></div>
-                    <div class="field"><label for="manualSource">المصدر *</label><select id="manualSource">
-                            <option value="manual">حجز يدوي / هاتفي</option>
-                            <option value="airbnb">Airbnb</option>
-                            <option value="booking">Booking.com</option>
-                        </select></div>
-                    <div class="field"><label for="manualCheckIn">الدخول *</label><input id="manualCheckIn" type="date"
-                            placeholder="اختر تاريخ الدخول" required></div>
-                    <div class="field"><label for="manualCheckOut">الخروج صباحًا * — لا يُحسب هذا اليوم
-                            ليلة</label><input id="manualCheckOut" type="date" placeholder="اختر تاريخ الخروج" required>
-                    </div>
-                    <div class="field"><label for="manualName">اسم العميل</label><input id="manualName"
-                            placeholder="مثال: أحمد محمد"></div>
-                    <div class="field"><label for="manualPhone">الهاتف</label><input id="manualPhone" type="tel"
-                            placeholder="07xxxxxxxx"></div>
-                    <div class="field"><label for="manualEmail">البريد</label><input id="manualEmail" type="email"
-                            placeholder="name@example.com"></div>
-                    <div class="field"><label for="manualReference">رقم الحجز في المنصة</label><input
-                            id="manualReference" placeholder="اختياري"></div>
-                    <div class="field"><label for="manualAdults">البالغون</label><input id="manualAdults" type="number"
-                            min="0" value="1"></div>
-                    <div class="field"><label for="manualChildren">الأطفال</label><input id="manualChildren"
-                            type="number" min="0" value="0"></div>
-                    <div class="field"><label for="manualPrice">السعر الإجمالي (JOD) — يُحسب تلقائيًا ويمكن
-                            تعديله</label><input id="manualPrice" type="number" min="0" step="0.01" value="0"></div>
-                    <div class="field"><label for="manualStatus">الحالة</label><select
-                            class="status-select status-confirmed" id="manualStatus">
-                            <option value="confirmed">مؤكد</option>
-                            <option value="pending">بانتظار التأكيد</option>
-                        </select></div>
-                    <div class="field span-4"><label for="manualNotes">ملاحظات</label><textarea id="manualNotes"
-                            placeholder="أي تفاصيل مهمة عن الحجز..."></textarea></div>
-                    <div class="form-actions field span-4"><button class="btn btn-primary" id="addBookingBtn"
-                            type="submit">إضافة الحجز وإغلاق التواريخ</button></div>
-                </form>
             </section>
 
             <section class="card section-card conflict-section">
@@ -5131,6 +5143,7 @@
                 </div>
             </div>
 
+            <p class="edit-booking-error" id="editBookingError" role="alert" hidden></p>
             <div class="edit-booking-actions">
                 <button class="btn btn-light" id="cancelEditBookingBtn" type="button">
                     إلغاء
@@ -5921,20 +5934,25 @@
 
         function positionHijaziMenu(trigger, menu) {
             const rect = trigger.getBoundingClientRect();
+            const dialog = trigger.closest("dialog");
+            const bounds = dialog?.getBoundingClientRect();
+            const header = dialog?.querySelector(".booking-dialog-head")?.getBoundingClientRect();
             const gap = 7;
             const edge = 10;
+            const left = Math.max(0, bounds?.left || 0) + edge;
+            const right = Math.min(window.innerWidth, bounds?.right ?? window.innerWidth) - edge;
+            const top = Math.max(0, bounds?.top || 0, header?.bottom || 0) + edge;
+            const bottom = Math.min(window.innerHeight, bounds?.bottom ?? window.innerHeight) - edge;
             const width = Math.max(190, rect.width);
-            const safeWidth = Math.min(width, window.innerWidth - edge * 2);
+            const safeWidth = Math.max(0, Math.min(width, right - left));
 
             menu.style.width = `${safeWidth}px`;
-            menu.style.left = `${Math.max(edge, Math.min(rect.left, window.innerWidth - safeWidth - edge))}px`;
-            menu.style.top = `${rect.bottom + gap}px`;
-
-            const menuRect = menu.getBoundingClientRect();
-
-            if (menuRect.bottom > window.innerHeight - edge && rect.top > menuRect.height + gap + edge) {
-                menu.style.top = `${rect.top - menuRect.height - gap}px`;
-            }
+            menu.style.maxHeight = `${Math.max(0, Math.min(320, bottom - top))}px`;
+            menu.style.left = `${Math.max(left, Math.min(rect.left, right - safeWidth))}px`;
+            const height = menu.getBoundingClientRect().height;
+            const preferredTop = rect.bottom + gap + height <= bottom
+                ? rect.bottom + gap : rect.top - height - gap;
+            menu.style.top = `${Math.max(top, Math.min(preferredTop, bottom - height))}px`;
         }
 
         function updateHijaziTrigger(select) {
@@ -5970,6 +5988,7 @@
             closeHijaziSelect();
 
             const menu = getHijaziMenu();
+            (select.closest("dialog") || document.body).appendChild(menu);
             menu.innerHTML = "";
 
             Array.from(select.options).forEach(option => {
@@ -6071,6 +6090,7 @@
             if (!booking) return;
 
             editingBookingId = booking._id;
+            document.getElementById("editBookingError").hidden = true;
 
             const source =
                 booking.source || "website";
@@ -6118,13 +6138,13 @@
                 dateOnly(booking.checkIn),
                 false
             );
+            // Replace the previous booking's limit before loading this date.
+            const earliestCheckOut = nextDateKey(booking.checkIn);
+            editCheckOutInput.min = earliestCheckOut;
+            editCheckOutInput._flatpickr?.set("minDate", earliestCheckOut || null);
             editCheckOutInput._flatpickr?.setDate(
                 dateOnly(booking.checkOut),
                 false
-            );
-            editCheckOutInput._flatpickr?.set(
-                "minDate",
-                nextDateKey(booking.checkIn)
             );
 
             document.getElementById("editBookingName").value =
@@ -7475,8 +7495,18 @@ ${connections}
 
         document
             .getElementById("editBookingDialog")
+            .addEventListener("close", () => {
+                editingBookingId = null;
+                closeHijaziSelect();
+            });
+
+        document
+            .getElementById("editBookingDialog")
             .addEventListener("click", event => {
-                if (event.target === event.currentTarget) {
+                const bounds = event.currentTarget.getBoundingClientRect();
+                const outside = event.clientX < bounds.left || event.clientX > bounds.right ||
+                    event.clientY < bounds.top || event.clientY > bounds.bottom;
+                if (event.target === event.currentTarget && outside) {
                     closeEditBookingDialog();
                 }
             });
@@ -7496,6 +7526,7 @@ ${connections}
                 const earliestCheckOut =
                     nextDateKey(event.currentTarget.value);
 
+                editCheckOut.min = earliestCheckOut;
                 if (editCheckOut._flatpickr) {
                     editCheckOut._flatpickr.set(
                         "minDate",
@@ -7523,6 +7554,8 @@ ${connections}
 
                 const button =
                     document.getElementById("saveEditBookingBtn");
+                const errorMessage = document.getElementById("editBookingError");
+                errorMessage.hidden = true;
 
                 setButtonLoading(
                     button,
@@ -7614,7 +7647,13 @@ ${connections}
                     await loadAll();
                     showNotice(data.message || "✅ تم حفظ التعديلات.");
                 } catch (error) {
-                    showNotice(error.message, "error");
+                    if (document.getElementById("editBookingDialog").open) {
+                        errorMessage.textContent = error.message;
+                        errorMessage.hidden = false;
+                        errorMessage.scrollIntoView({ block: "nearest" });
+                    } else {
+                        showNotice(error.message, "error");
+                    }
                 } finally {
                     setButtonLoading(button, false);
                 }
@@ -7990,7 +8029,12 @@ ${connections}
         });
 
         window.addEventListener("resize", closeHijaziSelect);
-        window.addEventListener("scroll", closeHijaziSelect, true);
+        window.addEventListener("scroll", event => {
+            const menu = document.getElementById("hijaziSelectMenu");
+            if (activeHijaziTrigger && menu && !menu.contains(event.target)) {
+                positionHijaziMenu(activeHijaziTrigger, menu);
+            }
+        }, true);
 
         refreshHijaziSelects();
     </script>
