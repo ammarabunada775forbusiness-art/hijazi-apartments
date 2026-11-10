@@ -726,7 +726,7 @@ function renderSharedHeader(activePage, showAdminTrigger = false) {
     headerHost.innerHTML = `
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top custom-navbar">
             <div class="container">
-                <a class="navbar-brand gold ${brandClass}" href="${showAdminTrigger ? "javascript:void(0)" : "index.html"}">
+                <a class="navbar-brand gold ${brandClass}" href="${showAdminTrigger ? "javascript:void(0)" : "/"}">
                     HIJAZI Apartments
                 </a>
 
@@ -737,7 +737,7 @@ function renderSharedHeader(activePage, showAdminTrigger = false) {
                 <div class="collapse navbar-collapse" id="${navId}">
                     <ul class="navbar-nav mx-auto align-items-lg-center">
                         <li class="nav-item">
-                            <a class="nav-link ${activePage === "index" ? "active" : ""}" href="index.html">${t.home}</a>
+                            <a class="nav-link ${activePage === "index" ? "active" : ""}" href="/">${t.home}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link ${activePage === "apartments" ? "active" : ""}" href="apartments.html">${t.apartments}</a>
