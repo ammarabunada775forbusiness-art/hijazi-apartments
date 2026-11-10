@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.hijazi-apartments.com/</loc>
     <lastmod>2026-11-10</lastmod>
@@ -12,31 +12,6 @@
   </url>
   <url>
     <loc>https://www.hijazi-apartments.com/booking.html</loc>
-    <lastmod>2026-11-10</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.hijazi-apartments.com/apartments-amman.html</loc>
-    <lastmod>2026-11-10</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.hijazi-apartments.com/apartments-jordan-hospital.html</loc>
-    <lastmod>2026-11-10</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.hijazi-apartments.com/apartments-islamic-hospital.html</loc>
-    <lastmod>2026-11-10</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.hijazi-apartments.com/apartments-medical-amman.html</loc>
-    <lastmod>2026-11-10</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.hijazi-apartments.com/apartments-monthly-amman.html</loc>
     <lastmod>2026-11-10</lastmod>
     <priority>0.8</priority>
   </url>
@@ -54,5 +29,117 @@
     <loc>https://www.hijazi-apartments.com/about.html</loc>
     <lastmod>2026-11-10</lastmod>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.hijazi-apartments.com/apartments-amman.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.hijazi-apartments.com/apartments-amman.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.hijazi-apartments.com/apartments-amman-en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.hijazi-apartments.com/apartments-amman.html"/>
+  </url>
+  <url>
+    <loc>https://www.hijazi-apartments.com/apartments-amman-en.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.hijazi-apartments.com/apartments-amman.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.hijazi-apartments.com/apartments-amman-en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.hijazi-apartments.com/apartments-amman.html"/>
+  </url>
+  <url>
+    <loc>https://www.hijazi-apartments.com/apartments-abdali.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.hijazi-apartments.com/apartments-abdali.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.hijazi-apartments.com/apartments-abdali-en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.hijazi-apartments.com/apartments-abdali.html"/>
+  </url>
+  <url>
+    <loc>https://www.hijazi-apartments.com/apartments-abdali-en.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.hijazi-apartments.com/apartments-abdali.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.hijazi-apartments.com/apartments-abdali-en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.hijazi-apartments.com/apartments-abdali.html"/>
+  </url>
+  <url>
+    <loc>https://www.hijazi-apartments.com/apartments-jordan-hospital.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.hijazi-apartments.com/apartments-jordan-hospital.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.hijazi-apartments.com/apartments-jordan-hospital-en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.hijazi-apartments.com/apartments-jordan-hospital.html"/>
+  </url>
+  <url>
+    <loc>https://www.hijazi-apartments.com/apartments-jordan-hospital-en.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.hijazi-apartments.com/apartments-jordan-hospital.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.hijazi-apartments.com/apartments-jordan-hospital-en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.hijazi-apartments.com/apartments-jordan-hospital.html"/>
+  </url>
+  <url>
+    <loc>https://www.hijazi-apartments.com/apartments-specialty-hospital.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.hijazi-apartments.com/apartments-specialty-hospital.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.hijazi-apartments.com/apartments-specialty-hospital-en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.hijazi-apartments.com/apartments-specialty-hospital.html"/>
+  </url>
+  <url>
+    <loc>https://www.hijazi-apartments.com/apartments-specialty-hospital-en.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.hijazi-apartments.com/apartments-specialty-hospital.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.hijazi-apartments.com/apartments-specialty-hospital-en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.hijazi-apartments.com/apartments-specialty-hospital.html"/>
+  </url>
+  <url>
+    <loc>https://www.hijazi-apartments.com/apartments-islamic-hospital.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.hijazi-apartments.com/apartments-islamic-hospital.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.hijazi-apartments.com/apartments-islamic-hospital-en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.hijazi-apartments.com/apartments-islamic-hospital.html"/>
+  </url>
+  <url>
+    <loc>https://www.hijazi-apartments.com/apartments-islamic-hospital-en.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.hijazi-apartments.com/apartments-islamic-hospital.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.hijazi-apartments.com/apartments-islamic-hospital-en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.hijazi-apartments.com/apartments-islamic-hospital.html"/>
+  </url>
+  <url>
+    <loc>https://www.hijazi-apartments.com/apartments-medical-amman.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.hijazi-apartments.com/apartments-medical-amman.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.hijazi-apartments.com/apartments-medical-amman-en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.hijazi-apartments.com/apartments-medical-amman.html"/>
+  </url>
+  <url>
+    <loc>https://www.hijazi-apartments.com/apartments-medical-amman-en.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.hijazi-apartments.com/apartments-medical-amman.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.hijazi-apartments.com/apartments-medical-amman-en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.hijazi-apartments.com/apartments-medical-amman.html"/>
+  </url>
+  <url>
+    <loc>https://www.hijazi-apartments.com/apartments-monthly-amman.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.hijazi-apartments.com/apartments-monthly-amman.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.hijazi-apartments.com/apartments-monthly-amman-en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.hijazi-apartments.com/apartments-monthly-amman.html"/>
+  </url>
+  <url>
+    <loc>https://www.hijazi-apartments.com/apartments-monthly-amman-en.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.hijazi-apartments.com/apartments-monthly-amman.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.hijazi-apartments.com/apartments-monthly-amman-en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.hijazi-apartments.com/apartments-monthly-amman.html"/>
   </url>
 </urlset>

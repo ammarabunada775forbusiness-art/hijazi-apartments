@@ -690,11 +690,19 @@ const SITE_TRANSLATIONS = {
    اللغة الحالية
 ========================= */
 function getCurrentLang() {
-    return localStorage.getItem("siteLang") || "ar";
+    // Pages that exist in one language only (e.g. landing pages with -en twins) set HIJAZI_PAGE_LANG.
+    if (window.HIJAZI_PAGE_LANG === "ar" || window.HIJAZI_PAGE_LANG === "en") return window.HIJAZI_PAGE_LANG;
+    try {
+        return localStorage.getItem("siteLang") || "ar";
+    } catch (e) {
+        return "ar";
+    }
 }
 
 function setCurrentLang(lang) {
-    localStorage.setItem("siteLang", lang);
+    try {
+        localStorage.setItem("siteLang", lang);
+    } catch (e) { }
 }
 
 /* =========================
@@ -888,6 +896,11 @@ function renderWhatsAppWidget() {
 ========================= */
 function switchLanguage(lang) {
     setCurrentLang(lang);
+    const altPages = window.HIJAZI_ALT_PAGES;
+    if (altPages && altPages[lang]) {
+        location.href = altPages[lang];
+        return;
+    }
     location.reload();
 }
 
