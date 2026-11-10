@@ -136,7 +136,7 @@
 
     <section class="page-hero">
         <h1 id="reviewsTitle">ماذا يقول ضيوفنا</h1>
-        <p id="reviewsSubtitle">يمكنك لاحقًا استبدال الصور بلقطات شاشة حقيقية من محادثات العملاء</p>
+        <p id="reviewsSubtitle">تجارب ضيوف أقاموا في شققنا المفروشة في الشميساني - عمّان</p>
     </section>
 
     <section class="page-content fade-in-section">
@@ -144,7 +144,7 @@
 
             <div class="review-card">
                 <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=900&q=80"
-                    alt="Review 1">
+                    alt="" loading="lazy">
                 <div class="review-body">
                     <div class="review-badge" id="badge1">إقامة طويلة</div>
                     <h3 id="review1Title">تقييم أبو خليل من السعودية</h3>
@@ -154,7 +154,7 @@
 
             <div class="review-card">
                 <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80"
-                    alt="Review 2">
+                    alt="" loading="lazy">
                 <div class="review-body">
                     <div class="review-badge" id="badge2">إقامة عائلية</div>
                     <h3 id="review2Title">تقييم أم محمد من الأردن</h3>
@@ -164,7 +164,7 @@
 
             <div class="review-card">
                 <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=900&q=80"
-                    alt="Review 3">
+                    alt="" loading="lazy">
                 <div class="review-body">
                     <div class="review-badge" id="badge3">إقامة طبية</div>
                     <h3 id="review3Title">تقييم ناصر من الكويت</h3>
@@ -176,10 +176,10 @@
         </div>
     </section>
 
-    <div id="sharedFooter"></div>
+    <div id="sharedFooter"><nav class="static-site-links" aria-label="روابط الموقع" style="display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;padding:24px 16px;font-size:14px"><a href="/">الرئيسية</a><a href="apartments.html">الشقق</a><a href="booking.html">الحجز</a><a href="apartments-amman.html">شقق مفروشة في الشميساني</a><a href="apartments-jordan-hospital.html">شقق قرب مستشفى الأردن</a><a href="apartments-islamic-hospital.html">شقق قرب المستشفى الإسلامي</a><a href="apartments-medical-amman.html">شقق للإقامة الطبية</a><a href="apartments-monthly-amman.html">شقق مفروشة شهري</a><a href="faq.html">الأسئلة الشائعة</a><a href="reviews.html">آراء الضيوف</a><a href="about.html">من نحن</a></nav></div>
     <div id="sharedWhatsApp"></div>
 
-    <script src="js/main.js?v=5"></script>
+    <script src="js/main.js?v=8"></script>
     <script>
         renderSharedHeader("reviews", false);
         renderSharedFooter();
@@ -189,7 +189,7 @@
 
         if (lang === "en") {
             document.getElementById("reviewsTitle").textContent = "What Our Guests Say";
-            document.getElementById("reviewsSubtitle").textContent = "You can later replace these images with real screenshots from guest conversations.";
+            document.getElementById("reviewsSubtitle").textContent = "Experiences from guests who stayed in our furnished apartments in Shmeisani, Amman";
 
             document.getElementById("review1Title").textContent = "Review by Abu Khalil from Saudi Arabia";
             document.getElementById("review1Text").textContent = "Two-month stay - very comfortable apartment and excellent location near the hospital and services.";

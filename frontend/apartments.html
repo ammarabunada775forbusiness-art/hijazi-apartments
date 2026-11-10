@@ -2478,6 +2478,39 @@
                 font-size: 15px !important;
             }
         }
+        .seo-intro {
+            background: #fff;
+            color: #111;
+            border-radius: 18px;
+            padding: 24px;
+            border: 1px solid #eee;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, .08);
+            margin: 28px 0 10px;
+            line-height: 1.9;
+        }
+
+        .seo-intro h2 {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .seo-intro ul {
+            margin: 10px 0 14px;
+            padding-inline-start: 20px;
+        }
+
+        .seo-intro .seo-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+        }
+
+        .seo-intro .seo-links a {
+            color: #9a6c0a;
+            font-weight: 700;
+        }
+
     </style>
 </head>
 
@@ -2494,7 +2527,7 @@
     <div id="sharedHeader"></div>
 
     <section class="page-header">
-        <h1 id="pageTitle">HIJAZI Apartments</h1>
+        <h1 id="pageTitle">شقق مفروشة للإيجار في الشميساني - عمّان</h1>
         <p id="pageSubtitle">اختر الشقة المناسبة حسب تاريخ الدخول والخروج</p>
     </section>
 
@@ -2524,6 +2557,25 @@
         </div>
 
         <div class="grid" id="grid"></div>
+
+        <section class="seo-intro" id="seoIntro" aria-labelledby="seoIntroTitle">
+            <h2 id="seoIntroTitle">شقق HIJAZI Apartments المفروشة في الشميساني</h2>
+            <p id="seoIntroText">شقق مفروشة بالكامل في منطقة الشميساني في عمّان، قريبة من مستشفى الأردن والمستشفى الإسلامي والعبدلي، ومناسبة للإقامة الطبية والعائلية والتنفيذية، القصيرة منها والشهرية.</p>
+            <ul id="seoIntroList">
+                <li>3 غرف نوم في كل شقة، واحدة منها ماستر، و3 حمامات.</li>
+                <li>مطبخ داخل كل شقة، وإنترنت واي فاي.</li>
+                <li>معظم الشقق فيها شرفتان، وشقة واحدة فيها شرفة واحدة.</li>
+                <li>خصم خاص للإقامة لأكثر من شهر.</li>
+            </ul>
+            <nav class="seo-links" aria-label="أدلة الإقامة" id="seoIntroLinks">
+                <a href="apartments-amman.html">شقق مفروشة في عمّان الشميساني</a>
+                <a href="apartments-jordan-hospital.html">شقق قرب مستشفى الأردن</a>
+                <a href="apartments-islamic-hospital.html">شقق قرب المستشفى الإسلامي</a>
+                <a href="apartments-medical-amman.html">شقق للإقامة الطبية</a>
+                <a href="apartments-monthly-amman.html">شقق مفروشة شهري</a>
+                <a href="faq.html">الأسئلة الشائعة</a>
+            </nav>
+        </section>
     </div>
 
     <div class="modal" id="detailsModal">
@@ -2627,10 +2679,10 @@
             ›
         </button>
     </div>
-    <div id="sharedFooter"></div>
+    <div id="sharedFooter"><nav class="static-site-links" aria-label="روابط الموقع" style="display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;padding:24px 16px;font-size:14px"><a href="/">الرئيسية</a><a href="apartments.html">الشقق</a><a href="booking.html">الحجز</a><a href="apartments-amman.html">شقق مفروشة في الشميساني</a><a href="apartments-jordan-hospital.html">شقق قرب مستشفى الأردن</a><a href="apartments-islamic-hospital.html">شقق قرب المستشفى الإسلامي</a><a href="apartments-medical-amman.html">شقق للإقامة الطبية</a><a href="apartments-monthly-amman.html">شقق مفروشة شهري</a><a href="faq.html">الأسئلة الشائعة</a><a href="reviews.html">آراء الضيوف</a><a href="about.html">من نحن</a></nav></div>
     <div id="sharedWhatsApp"></div>
 
-    <script src="js/main.js?v=7"></script>
+    <script src="js/main.js?v=8"></script>
     <script>
         const API_BASE = "https://api.hijazi-apartments.com";
 
@@ -2665,7 +2717,7 @@
             const lang = getCurrentLang();
 
             if (lang === "ar") {
-                document.getElementById("pageTitle").textContent = "HIJAZI Apartments";
+                document.getElementById("pageTitle").textContent = "شقق مفروشة للإيجار في الشميساني - عمّان";
                 document.getElementById("pageSubtitle").textContent = "اختر الشقة المناسبة حسب تاريخ الدخول والخروج";
                 document.getElementById("checkInLabel").textContent = "تاريخ الدخول";
                 document.getElementById("checkOutLabel").textContent = "تاريخ المغادرة صباحًا";
@@ -2680,7 +2732,7 @@
                 document.getElementById("bookNowBtn").textContent = "احجز الآن";
                 document.getElementById("mapTitle").textContent = "موقع الشقة على الخريطة";
             } else {
-                document.getElementById("pageTitle").textContent = "HIJAZI Apartments";
+                document.getElementById("pageTitle").textContent = "Furnished Apartments for Rent in Shmeisani, Amman";
                 document.getElementById("pageSubtitle").textContent = "Choose the right apartment based on your check-in and check-out dates";
                 document.getElementById("checkInLabel").textContent = "Check-in";
                 document.getElementById("checkOutLabel").textContent = "Check-out morning";
@@ -2694,6 +2746,10 @@
                 document.getElementById("roomsTitle").textContent = "Rooms & facilities";
                 document.getElementById("bookNowBtn").textContent = "Book now";
                 document.getElementById("mapTitle").textContent = "Apartment location on map";
+                document.getElementById("seoIntroTitle").textContent = "HIJAZI Apartments in Shmeisani";
+                document.getElementById("seoIntroText").textContent = "Fully furnished apartments in Shmeisani, Amman, close to Jordan Hospital, the Islamic Hospital and Abdali. Suitable for medical, family and business stays, short or monthly.";
+                document.getElementById("seoIntroList").innerHTML = "<li>3 bedrooms in every apartment, including one master, and 3 bathrooms.</li><li>A kitchen in every apartment, plus Wi-Fi.</li><li>Most apartments have two balconies; one apartment has one balcony.</li><li>A special discount for stays longer than one month.</li>";
+                document.getElementById("seoIntroLinks").innerHTML = '<a href="apartments-amman.html">Furnished apartments in Shmeisani</a><a href="apartments-jordan-hospital.html">Near Jordan Hospital</a><a href="apartments-islamic-hospital.html">Near the Islamic Hospital</a><a href="apartments-medical-amman.html">Medical stays</a><a href="apartments-monthly-amman.html">Monthly rentals</a><a href="faq.html">FAQ</a>';
             }
         }
 

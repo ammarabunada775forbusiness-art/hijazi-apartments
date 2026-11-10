@@ -47,23 +47,63 @@
     <script src="js/hijazi-datepicker.js?v=1"></script>
 
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "LodgingBusiness",
-      "name": "HIJAZI Apartments",
-      "url": "https://www.hijazi-apartments.com/",
-      "image": "https://www.hijazi-apartments.com/images/apartments/apt-1/living/1.webp",
-      "description": "شقق مفروشة في عمان الشميساني قريبة من مستشفى الأردن والمستشفى الإسلامي والعبدلي، مناسبة للإقامة الطبية والتنفيذية والعائلية.",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Amman",
-        "addressCountry": "JO",
-        "addressRegion": "Amman",
-        "streetAddress": "الشميساني"
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "LodgingBusiness",
+    "name": "HIJAZI Apartments",
+    "url": "https://www.hijazi-apartments.com/",
+    "image": "https://www.hijazi-apartments.com/images/apartments/apt-1/living/1.webp",
+    "description": "شقق مفروشة في عمان الشميساني قريبة من مستشفى الأردن والمستشفى الإسلامي والعبدلي، مناسبة للإقامة الطبية والتنفيذية والعائلية.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "عمّان",
+      "addressCountry": "JO",
+      "addressRegion": "Amman",
+      "streetAddress": "الشميساني"
+    },
+    "areaServed": "Amman",
+    "telephone": "+962789000444",
+    "@id": "https://www.hijazi-apartments.com/#business",
+    "alternateName": "شقق حجازي المفروشة",
+    "email": "info@hijazi-apartments.com",
+    "amenityFeature": [
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Wi-Fi",
+        "value": true
       },
-      "areaServed": "Amman",
-      "telephone": "+962789000444"
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Kitchen",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Balcony",
+        "value": true
+      }
+    ],
+    "knowsLanguage": [
+      "ar",
+      "en"
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "https://www.hijazi-apartments.com/#website",
+    "url": "https://www.hijazi-apartments.com/",
+    "name": "HIJAZI Apartments",
+    "inLanguage": [
+      "ar",
+      "en"
+    ],
+    "publisher": {
+      "@id": "https://www.hijazi-apartments.com/#business"
     }
+  }
+]
     </script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -976,10 +1016,10 @@
         </div>
     </section>
 
-    <div id="sharedFooter"></div>
+    <div id="sharedFooter"><nav class="static-site-links" aria-label="روابط الموقع" style="display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;padding:24px 16px;font-size:14px"><a href="/">الرئيسية</a><a href="apartments.html">الشقق</a><a href="booking.html">الحجز</a><a href="apartments-amman.html">شقق مفروشة في الشميساني</a><a href="apartments-jordan-hospital.html">شقق قرب مستشفى الأردن</a><a href="apartments-islamic-hospital.html">شقق قرب المستشفى الإسلامي</a><a href="apartments-medical-amman.html">شقق للإقامة الطبية</a><a href="apartments-monthly-amman.html">شقق مفروشة شهري</a><a href="faq.html">الأسئلة الشائعة</a><a href="reviews.html">آراء الضيوف</a><a href="about.html">من نحن</a></nav></div>
     <div id="sharedWhatsApp"></div>
 
-    <script src="js/main.js?v=7"></script>
+    <script src="js/main.js?v=8"></script>
     <script>
         const checkInEl = document.getElementById("checkIn");
         const checkOutEl = document.getElementById("checkOut");
