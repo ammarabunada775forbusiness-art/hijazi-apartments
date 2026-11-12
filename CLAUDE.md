@@ -49,11 +49,18 @@ Done (2026-11-12, pushed straight to `main`):
 - Per-apartment facts on cards, in the details modal and on the booking page; highlights section on the homepage.
 - FAQ grown to 26 questions; landing pages, `llms.txt` and homepage schema updated to the new facts.
 
+Done (2026-11-12, later, pushed straight to `main`):
+- English mode fully translated: homepage bottom sections (SEO cards, useful links now pointing to `-en` twins, FAQ) via `data-en` attributes in `index.html`; card/booking address and currency names/symbols.
+- API (`api.hijazi-apartments.com`) sends `X-Robots-Tag: noindex` and serves a disallow-all `robots.txt` (it was a Soft 404 in Search Console).
+- Photo viewer (apartments and booking): swipe/drag between photos, arrows only on desktop, cleaner layout. Files: `css/lightbox.css`, `js/lightbox-swipe.js`.
+
+Search Console findings (2026-11-12): 10 indexed, 8 not. 4 redirects and 2 alternate-canonical are normal; Soft 404 was the API; `faq.html` "crawled, not indexed" was last crawled 2026-06-16 (old version). Sitemap was last read 2026-11-05 with 11 URLs. On this domain property the sitemap must be submitted as the full URL `https://www.hijazi-apartments.com/sitemap.xml`.
+
 ## Next steps
 1. Booking form and API still accept 1–2 nights although the policy is a 3-night minimum. Enforce it only after the owner agrees (it changes the booking flow).
 2. Owner to send which apartments allow smoking and pets, and which have a toaster or a second parking space; fill them in `amenities-data.js`.
 3. Owner to send the building's Google Maps link and real walking/driving times to each hospital; add them to the landing pages and to the schema (`geo`, full address).
-4. Google Search Console: resubmit `sitemap.xml` and request indexing for the new pages (including the two amenities pages). Then review the "Why pages aren't indexed" reasons together.
+4. Google Search Console (owner): resubmit the sitemap by full URL; request indexing over two days (day 1: faq, both amenities pages, the 7 English landing pages; day 2: Arabic landing pages, about, reviews, apartments, after checking each is not already indexed); after a few days click "Validate fix" on Soft 404 and on the faq report. Then review the report again together.
 5. Reviews page: it uses Unsplash images; replace with real guest reviews (owner's decision).
 6. Optional: put the header in static HTML (it is JS-rendered and appears a moment late).
 7. Optional, bigger: English URLs for the main pages (booking is about 5000 lines; do it carefully).
