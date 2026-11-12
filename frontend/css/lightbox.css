@@ -1,0 +1,130 @@
+/* عارض الصور: تصميم هادئ وسحب باللمس */
+.image-lightbox.image-lightbox {
+    padding: 0;
+    background: rgba(8, 8, 8, .97);
+    touch-action: pan-y;
+    flex-direction: column;
+}
+.image-lightbox.dragging { cursor: grabbing; }
+
+.image-lightbox .image-lightbox-stage {
+    position: static;
+    width: 100%;
+    height: 100dvh;
+    padding: 64px 24px 72px;
+    box-sizing: border-box;
+}
+.image-lightbox .image-lightbox-stage img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 4px;
+    background: transparent;
+    box-shadow: none;
+    will-change: transform;
+    -webkit-user-drag: none;
+    pointer-events: none;
+}
+
+/* الشريط العلوي: العداد والإغلاق */
+.image-lightbox .image-lightbox-close {
+    top: max(14px, env(safe-area-inset-top));
+    right: 16px;
+    left: auto;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .08);
+    font-size: 26px;
+    font-weight: 300;
+    transition: background .2s;
+}
+.image-lightbox .image-lightbox-close:hover { background: rgba(255, 255, 255, .18); }
+
+.image-lightbox .image-lightbox-caption {
+    position: absolute;
+    top: max(14px, env(safe-area-inset-top));
+    bottom: auto;
+    left: 20px;
+    right: 72px;
+    min-height: 40px;
+    padding: 0;
+    align-items: center;
+    background: none;
+    border-radius: 0;
+    font-size: 14px;
+    letter-spacing: .2px;
+    color: rgba(255, 255, 255, .92);
+    pointer-events: none;
+}
+html[dir="rtl"] .image-lightbox .image-lightbox-caption { direction: rtl; }
+.image-lightbox #imageLightboxCounter {
+    font-variant-numeric: tabular-nums;
+    color: rgba(255, 255, 255, .55);
+    font-size: 13px;
+}
+
+/* شريط التقدم بالأسفل */
+.image-lightbox-progress {
+    position: absolute;
+    left: 50%;
+    bottom: max(28px, env(safe-area-inset-bottom));
+    width: min(220px, 50vw);
+    height: 2px;
+    transform: translateX(-50%);
+    border-radius: 2px;
+    background: rgba(255, 255, 255, .15);
+    overflow: hidden;
+    pointer-events: none;
+}
+.image-lightbox-progress span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: #c9a45c;
+    transition: width .3s ease;
+}
+html[dir="rtl"] .image-lightbox-progress span { margin-left: auto; }
+
+/* الأسهم: بس على اللابتوب والشاشات الكبيرة */
+.image-lightbox .image-lightbox-nav {
+    top: 50%;
+    bottom: auto;
+    width: 48px;
+    height: 48px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .08);
+    font-size: 30px;
+    font-weight: 300;
+    transform: translateY(-50%);
+    opacity: .7;
+    transition: opacity .2s, background .2s;
+}
+.image-lightbox .image-lightbox-nav:hover { opacity: 1; background: rgba(255, 255, 255, .18); }
+.image-lightbox .image-lightbox-prev { left: 20px; right: auto; }
+.image-lightbox .image-lightbox-next { right: 20px; left: auto; }
+html[dir="rtl"] .image-lightbox .image-lightbox-prev { right: 20px; left: auto; }
+html[dir="rtl"] .image-lightbox .image-lightbox-next { left: 20px; right: auto; }
+
+@media (min-width: 901px) and (hover: hover) and (pointer: fine) {
+    .image-lightbox .image-lightbox-stage { padding: 72px 96px 80px; }
+}
+
+/* الموبايل والتابلت (لمس): بدون أسهم، الصورة بعرض الشاشة */
+@media (hover: none), (pointer: coarse), (max-width: 900px) {
+    .image-lightbox .image-lightbox-nav { display: none !important; }
+    .image-lightbox .image-lightbox-stage { padding: 64px 0 64px; }
+    .image-lightbox .image-lightbox-stage img { border-radius: 0; }
+}
+
+/* تثبيت فوق أي ستايل قديم */
+html body .image-lightbox.image-lightbox { background: #0b0b0b; }
+html body .image-lightbox .image-lightbox-close { border: 0 !important; box-shadow: none !important; }
+html body .image-lightbox #imageLightboxCounter { direction: ltr; unicode-bidi: isolate; }
+@media (hover: none), (pointer: coarse), (max-width: 900px) {
+    html body .image-lightbox .image-lightbox-stage { width: 100% !important; padding: 64px 0 !important; }
+    html body .image-lightbox .image-lightbox-stage img { max-width: 100% !important; width: 100%; height: auto; max-height: 100% !important; object-fit: contain; }
+}
+html body .image-lightbox button:focus:not(:focus-visible) { outline: none; }
+html body .image-lightbox button:focus-visible { outline: 2px solid #c9a45c; outline-offset: 2px; }

@@ -45,6 +45,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css?v=8">
+    <link rel="stylesheet" href="css/lightbox.css?v=1">
     <link rel="stylesheet" href="css/amenities.css?v=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.8/index.global.min.css" />
 
@@ -3380,6 +3381,8 @@
             aria-label="Next image">
             ›
         </button>
+
+        <div class="image-lightbox-progress" aria-hidden="true"><span></span></div>
     </div>
     <div class="success-modal" id="successModal">
         <div class="success-content">
@@ -3402,6 +3405,7 @@
 
     <script src="js/amenities-data.js?v=1"></script>
     <script src="js/amenities-ui.js?v=1"></script>
+    <script src="js/lightbox-swipe.js?v=1"></script>
     <script src="js/main.js?v=10"></script>
     <script>
         const API_BASE = "https://api.hijazi-apartments.com";
@@ -4098,7 +4102,6 @@
                 });
             }
         }
-        let imageLightboxTouchStartX = 0;
 
         function updateImageLightbox() {
             const item = currentAlbumItems[currentAlbumIndex];
@@ -4203,43 +4206,21 @@
             ?.addEventListener("click", showNextLightboxImage);
 
         imageLightboxElement?.addEventListener("click", function (event) {
-            if (event.target === imageLightboxElement) {
+            if (event.target === imageLightboxElement || event.target.classList.contains("image-lightbox-stage")) {
                 closeImageLightbox();
             }
         });
 
-        imageLightboxElement?.addEventListener(
-            "touchstart",
-            function (event) {
-                imageLightboxTouchStartX = event.changedTouches[0].clientX;
-            },
-            { passive: true }
-        );
-
-        imageLightboxElement?.addEventListener(
-            "touchend",
-            function (event) {
-                const touchEndX = event.changedTouches[0].clientX;
-                const distance = touchEndX - imageLightboxTouchStartX;
-
-                if (Math.abs(distance) < 45) return;
-
-                const isRTL = getCurrentLang() === "ar";
-
-                if (distance < 0) {
-                    if (isRTL) {
-                        showPreviousLightboxImage();
-                    } else {
-                        showNextLightboxImage();
-                    }
-                } else if (isRTL) {
-                    showNextLightboxImage();
-                } else {
-                    showPreviousLightboxImage();
-                }
-            },
-            { passive: true }
-        );
+        HijaziLightboxSwipe.attach({
+            box: imageLightboxElement,
+            img: document.getElementById("imageLightboxImage"),
+            counter: document.getElementById("imageLightboxCounter"),
+            prevBtn: document.getElementById("imageLightboxPrev"),
+            nextBtn: document.getElementById("imageLightboxNext"),
+            next: showNextLightboxImage,
+            prev: showPreviousLightboxImage,
+            isRTL: () => getCurrentLang() === "ar"
+        });
 
         function openPhotoAlbum(index = 0) {
             const apt = getCurrentGalleryApartment();

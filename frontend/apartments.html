@@ -45,6 +45,7 @@
     <meta property="og:locale" content="ar_JO">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css?v=7" />
+    <link rel="stylesheet" href="css/lightbox.css?v=1">
     <link rel="stylesheet" href="css/amenities.css?v=1" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -2718,12 +2719,15 @@
             aria-label="Next image">
             ›
         </button>
+
+        <div class="image-lightbox-progress" aria-hidden="true"><span></span></div>
     </div>
     <div id="sharedFooter"><nav class="static-site-links" aria-label="روابط الموقع" style="display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;padding:24px 16px;font-size:14px"><a href="/">الرئيسية</a><a href="apartments.html">الشقق</a><a href="booking.html">الحجز</a><a href="amenities.html">المميزات والخدمات</a><a href="apartments-amman.html">شقق مفروشة في الشميساني</a><a href="apartments-abdali.html">شقق قرب العبدلي</a><a href="apartments-jordan-hospital.html">شقق قرب مستشفى الأردن</a><a href="apartments-specialty-hospital.html">شقق قرب المستشفى التخصصي</a><a href="apartments-islamic-hospital.html">شقق قرب المستشفى الإسلامي</a><a href="apartments-medical-amman.html">شقق للإقامة الطبية</a><a href="apartments-monthly-amman.html">شقق مفروشة شهري</a><a href="faq.html">الأسئلة الشائعة</a><a href="reviews.html">آراء الضيوف</a><a href="about.html">من نحن</a><a href="apartments-amman-en.html">English</a></nav></div>
     <div id="sharedWhatsApp"></div>
 
     <script src="js/amenities-data.js?v=1"></script>
     <script src="js/amenities-ui.js?v=1"></script>
+    <script src="js/lightbox-swipe.js?v=1"></script>
     <script src="js/main.js?v=10"></script>
     <script>
         const API_BASE = "https://api.hijazi-apartments.com";
@@ -3332,7 +3336,6 @@
             }
         }
 
-        let imageLightboxTouchStartX = 0;
 
         function updateImageLightbox() {
             const item = currentAlbumItems[currentAlbumIndex];
@@ -3437,43 +3440,21 @@
             ?.addEventListener("click", showNextLightboxImage);
 
         imageLightboxElement?.addEventListener("click", function (event) {
-            if (event.target === imageLightboxElement) {
+            if (event.target === imageLightboxElement || event.target.classList.contains("image-lightbox-stage")) {
                 closeImageLightbox();
             }
         });
 
-        imageLightboxElement?.addEventListener(
-            "touchstart",
-            function (event) {
-                imageLightboxTouchStartX = event.changedTouches[0].clientX;
-            },
-            { passive: true }
-        );
-
-        imageLightboxElement?.addEventListener(
-            "touchend",
-            function (event) {
-                const touchEndX = event.changedTouches[0].clientX;
-                const distance = touchEndX - imageLightboxTouchStartX;
-
-                if (Math.abs(distance) < 45) return;
-
-                const isRTL = getCurrentLang() === "ar";
-
-                if (distance < 0) {
-                    if (isRTL) {
-                        showPreviousLightboxImage();
-                    } else {
-                        showNextLightboxImage();
-                    }
-                } else if (isRTL) {
-                    showNextLightboxImage();
-                } else {
-                    showPreviousLightboxImage();
-                }
-            },
-            { passive: true }
-        );
+        HijaziLightboxSwipe.attach({
+            box: imageLightboxElement,
+            img: document.getElementById("imageLightboxImage"),
+            counter: document.getElementById("imageLightboxCounter"),
+            prevBtn: document.getElementById("imageLightboxPrev"),
+            nextBtn: document.getElementById("imageLightboxNext"),
+            next: showNextLightboxImage,
+            prev: showPreviousLightboxImage,
+            isRTL: () => getCurrentLang() === "ar"
+        });
 
         function openPhotoAlbum(index = 0) {
             const apt = getCurrentGalleryApartment();
