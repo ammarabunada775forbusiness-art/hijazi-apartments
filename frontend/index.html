@@ -74,20 +74,71 @@
     "amenityFeature": [
       {
         "@type": "LocationFeatureSpecification",
-        "name": "Wi-Fi",
+        "name": "Fiber internet (Wi-Fi)",
         "value": true
       },
       {
         "@type": "LocationFeatureSpecification",
-        "name": "Kitchen",
+        "name": "Central heating",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Air conditioning (5 units, cooling and heating)",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Dedicated indoor parking",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Free regular housekeeping",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Fully equipped kitchen",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Washing machine and laundry room",
         "value": true
       },
       {
         "@type": "LocationFeatureSpecification",
         "name": "Balcony",
         "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Elevator",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Wheelchair-accessible entrances",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "24-hour guest service",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "Smart TV",
+        "value": true
+      },
+      {
+        "@type": "LocationFeatureSpecification",
+        "name": "CCTV and security guard",
+        "value": true
       }
     ],
+    "checkoutTime": "12:00",
     "knowsLanguage": [
       "ar",
       "en"
@@ -112,6 +163,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css?v=7">
+    <link rel="stylesheet" href="css/amenities.css?v=1">
     <style>
         body {
             margin: 0;
@@ -907,6 +959,17 @@
         </div>
     </section>
 
+    <section class="am-home-section fade-in-section" aria-labelledby="amenitiesHomeTitle">
+        <h2 class="section-title" id="amenitiesHomeTitle">أهم مميزات الشقق</h2>
+        <p class="am-intro" id="amenitiesHomeIntro">كل شقة بمساحة 220 م² وتتسع لـ 7–8 أشخاص، ومجهزة بالكامل للإقامة العائلية القصيرة والطويلة.</p>
+        <!-- هذا الجزء يُولَّد من js/amenities-data.js عبر: node scripts/build-amenities.js -->
+        <div id="amenitiesHomeHighlights">
+        <!-- HIGHLIGHTS:START (generated – do not edit by hand) -->
+<div class="am-highlights"><div class="am-highlight"><span class="am-highlight-icon"><svg class="am-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 20h.01"/><path d="M2 8.82a15 15 0 0 1 20 0"/><path d="M5 12.86a10 10 0 0 1 14 0"/><path d="M8.5 16.43a5 5 0 0 1 7 0"/></svg></span><div><h3>إنترنت Fiber عالي السرعة</h3><p>شبكة Wi-Fi مستقلة لكل شقة، بتغطية كاملة في كل الغرف.</p></div></div><div class="am-highlight"><span class="am-highlight-icon"><svg class="am-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></span><div><h3>تدفئة مركزية</h3><p>تدفئة مركزية في جميع الشقق.</p></div></div><div class="am-highlight"><span class="am-highlight-icon"><svg class="am-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M2 12h20"/><path d="M12 2v20"/><path d="m20 16-4-4 4-4"/><path d="m4 8 4 4-4 4"/><path d="m16 4-4 4-4-4"/><path d="m8 20 4-4 4 4"/></svg></span><div><h3>5 مكيفات في كل شقة</h3><p>مكيفات حديثة تدعم التبريد والتدفئة.</p></div></div><div class="am-highlight"><span class="am-highlight-icon"><svg class="am-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span><div><h3>موقف سيارة مخصص</h3><p>موقف داخلي مؤمَّن لكل شقة على الأقل.</p></div></div><div class="am-highlight"><span class="am-highlight-icon"><svg class="am-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0l1.58 6.14a2 2 0 0 0 1.44 1.44l6.14 1.58a.5.5 0 0 1 0 .96l-6.14 1.58a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg></span><div><h3>تنظيف دوري مجاني</h3><p>خدمة تنظيف يومًا بعد يوم في المعتاد، دون رسوم.</p></div></div><div class="am-highlight"><span class="am-highlight-icon"><svg class="am-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg></span><div><h3>220 م² تتسع لـ 7–8 أشخاص</h3><p>3 غرف نوم و3 حمامات وصالة وغرفة ضيوف.</p></div></div></div><div class="am-highlights-more"><a class="am-btn" href="amenities.html">كل المميزات والخدمات</a></div>
+<!-- HIGHLIGHTS:END -->
+        </div>
+    </section>
+
     <section class="stats-section fade-in-section">
         <h2 class="section-title" id="statsTitle">أرقام تعكس جودة الإقامة</h2>
 
@@ -1023,10 +1086,12 @@
         </div>
     </section>
 
-    <div id="sharedFooter"><nav class="static-site-links" aria-label="روابط الموقع" style="display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;padding:24px 16px;font-size:14px"><a href="/">الرئيسية</a><a href="apartments.html">الشقق</a><a href="booking.html">الحجز</a><a href="apartments-amman.html">شقق مفروشة في الشميساني</a><a href="apartments-abdali.html">شقق قرب العبدلي</a><a href="apartments-jordan-hospital.html">شقق قرب مستشفى الأردن</a><a href="apartments-specialty-hospital.html">شقق قرب المستشفى التخصصي</a><a href="apartments-islamic-hospital.html">شقق قرب المستشفى الإسلامي</a><a href="apartments-medical-amman.html">شقق للإقامة الطبية</a><a href="apartments-monthly-amman.html">شقق مفروشة شهري</a><a href="faq.html">الأسئلة الشائعة</a><a href="reviews.html">آراء الضيوف</a><a href="about.html">من نحن</a><a href="apartments-amman-en.html">English</a></nav></div>
+    <div id="sharedFooter"><nav class="static-site-links" aria-label="روابط الموقع" style="display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;padding:24px 16px;font-size:14px"><a href="/">الرئيسية</a><a href="apartments.html">الشقق</a><a href="booking.html">الحجز</a><a href="amenities.html">المميزات والخدمات</a><a href="apartments-amman.html">شقق مفروشة في الشميساني</a><a href="apartments-abdali.html">شقق قرب العبدلي</a><a href="apartments-jordan-hospital.html">شقق قرب مستشفى الأردن</a><a href="apartments-specialty-hospital.html">شقق قرب المستشفى التخصصي</a><a href="apartments-islamic-hospital.html">شقق قرب المستشفى الإسلامي</a><a href="apartments-medical-amman.html">شقق للإقامة الطبية</a><a href="apartments-monthly-amman.html">شقق مفروشة شهري</a><a href="faq.html">الأسئلة الشائعة</a><a href="reviews.html">آراء الضيوف</a><a href="about.html">من نحن</a><a href="apartments-amman-en.html">English</a></nav></div>
     <div id="sharedWhatsApp"></div>
 
-    <script src="js/main.js?v=9"></script>
+    <script src="js/amenities-data.js?v=1"></script>
+    <script src="js/amenities-ui.js?v=1"></script>
+    <script src="js/main.js?v=10"></script>
     <script>
         const checkInEl = document.getElementById("checkIn");
         const checkOutEl = document.getElementById("checkOut");
@@ -1125,6 +1190,11 @@
                 document.getElementById("why3Title").textContent = "Residential apartments with 7-star styling";
                 document.getElementById("why3Text").textContent = "Elegant finishing and refined design that provide luxury and comfort in one of Amman’s finest districts.";
 
+                document.getElementById("amenitiesHomeTitle").textContent = "Key apartment highlights";
+                document.getElementById("amenitiesHomeIntro").textContent = "Every apartment is 220 m², sleeps 7–8 guests and is fully equipped for short and long family stays.";
+                if (window.HijaziAmenitiesUI) {
+                    document.getElementById("amenitiesHomeHighlights").innerHTML = HijaziAmenitiesUI.renderHighlights("en");
+                }
                 document.getElementById("statsTitle").textContent = "Numbers that reflect the quality of your stay";
                 document.getElementById("stat1Label").textContent = "Furnished apartments";
                 document.getElementById("stat2Label").textContent = "Areas near hospitals";

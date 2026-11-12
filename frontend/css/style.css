@@ -2713,3 +2713,31 @@ html[dir="ltr"] .image-lightbox-caption {
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     }
 }
+
+/* =========================================================
+   القائمة العلوية بسبعة روابط: تبقى على سطر واحد
+========================================================= */
+@media (min-width: 992px) {
+    .navbar-nav .nav-link {
+        white-space: nowrap;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .navbar-nav {
+        gap: 2px !important;
+    }
+
+    .navbar-nav .nav-link {
+        padding: 8px 9px !important;
+        font-size: 14px !important;
+    }
+
+    .lang-switcher-wrapper {
+        margin-inline-start: 8px !important;
+    }
+
+    .navbar-brand {
+        font-size: 1.05rem !important;
+    }
+}

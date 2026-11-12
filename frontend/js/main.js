@@ -189,15 +189,19 @@ const HIJAZI_APARTMENTS = {
 };
 
 /* =========================
-   توليد بيانات الشقق 2-8
+   توليد بيانات باقي الشقق
+   كل شقة مذكورة في APARTMENT_DISPLAY_NUMBERS تُنشأ تلقائيًا،
+   فإضافة شقة جديدة لا تحتاج تعديل هذه الحلقة.
 ========================= */
-for (let i = 2; i <= 8; i++) {
+Object.keys(APARTMENT_DISPLAY_NUMBERS).map(Number).forEach(i => {
+    if (i === 1) return;
+
     HIJAZI_APARTMENTS[i] = JSON.parse(JSON.stringify(HIJAZI_APARTMENTS[1]));
     HIJAZI_APARTMENTS[i].id = i;
     HIJAZI_APARTMENTS[i].nameAr = getApartmentDisplayName(i, "ar");
     HIJAZI_APARTMENTS[i].nameEn = getApartmentDisplayName(i, "en");
     HIJAZI_APARTMENTS[i].price = APARTMENT_PRICES[i];
-}
+});
 
 
 /* =========================================================
@@ -639,6 +643,19 @@ Object.keys(HIJAZI_APARTMENTS).forEach(id => {
         apt.featuresAr = apt.featuresAr.map(f => f === "شرفتان" ? "شرفة واحدة" : f);
         apt.featuresEn = apt.featuresEn.map(f => f === "2 Balconies" ? "1 Balcony" : f);
     }
+
+    /*
+      المواصفات الدقيقة لكل شقة (المساحة، عدد الأشخاص، الشرفات، التراس...)
+      مصدرها js/amenities-data.js. الصفحات التي تعرض الشقق تحمّل ذلك الملف
+      قبل main.js، وعندها تُستبدل القائمة العامة بمواصفات الشقة نفسها.
+    */
+    if (typeof HIJAZI_AMENITIES !== "undefined" && HIJAZI_AMENITIES.getApartment(aptId)) {
+        const facts = HIJAZI_AMENITIES.getApartment(aptId);
+
+        apt.bedrooms = facts.bedrooms;
+        apt.featuresAr = HIJAZI_AMENITIES.featureList(aptId, "ar");
+        apt.featuresEn = HIJAZI_AMENITIES.featureList(aptId, "en");
+    }
 });
 /* =========================
    النصوص المشتركة للترجمة
@@ -648,6 +665,7 @@ const SITE_TRANSLATIONS = {
         home: "الرئيسية",
         apartments: "الشقق",
         booking: "الحجز",
+        amenities: "المميزات",
         about: "من نحن",
         faq: "الأسئلة الشائعة",
         reviews: "التقييمات",
@@ -668,6 +686,7 @@ const SITE_TRANSLATIONS = {
         home: "Home",
         apartments: "Apartments",
         booking: "Booking",
+        amenities: "Amenities",
         about: "About Us",
         faq: "FAQ",
         reviews: "Reviews",
@@ -752,6 +771,9 @@ function renderSharedHeader(activePage, showAdminTrigger = false) {
                         </li>
                         <li class="nav-item">
                             <a class="nav-link ${activePage === "booking" ? "active" : ""}" href="booking.html">${t.booking}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link ${activePage === "amenities" ? "active" : ""}" href="${lang === "en" ? "amenities-en.html" : "amenities.html"}">${t.amenities}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link ${activePage === "about" ? "active" : ""}" href="about.html">${t.about}</a>

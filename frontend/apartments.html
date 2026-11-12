@@ -44,6 +44,7 @@
     <meta property="og:locale" content="ar_JO">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css?v=7" />
+    <link rel="stylesheet" href="css/amenities.css?v=1" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ar.js"></script>
@@ -2557,6 +2558,9 @@
         </div>
 
         <!-- Placeholder cards in the HTML so the page layout does not jump before the apartments load -->
+        <!-- فلتر نوع الشقة: يظهر تلقائيًا فقط عند وجود أكثر من نوع (غرفة / غرفتان / 3 غرف) -->
+        <div class="am-type-filter" id="typeFilter" hidden></div>
+
         <div class="grid" id="grid">
             <div class="skeleton-card" aria-hidden="true">
                 <div class="skeleton-image"></div>
@@ -2591,12 +2595,15 @@
             <h2 id="seoIntroTitle">شقق HIJAZI Apartments المفروشة في الشميساني</h2>
             <p id="seoIntroText">شقق مفروشة بالكامل في منطقة الشميساني في عمّان، قريبة من مستشفى الأردن والمستشفى الإسلامي والعبدلي، ومناسبة للإقامة الطبية والعائلية والتنفيذية، القصيرة منها والشهرية.</p>
             <ul id="seoIntroList">
-                <li>3 غرف نوم في كل شقة، واحدة منها ماستر، و3 حمامات.</li>
-                <li>مطبخ داخل كل شقة، وإنترنت واي فاي.</li>
-                <li>معظم الشقق فيها شرفتان، وشقة واحدة فيها شرفة واحدة.</li>
-                <li>خصم خاص للإقامة لأكثر من شهر.</li>
+                <li>3 غرف نوم في كل شقة، واحدة منها ماستر، و3 حمامات، بمساحة 220 م² تتسع لـ 7–8 أشخاص.</li>
+                <li>صالة معيشة مستقلة وغرفة ضيوف ومطبخ مجهز بالكامل وغرفة غسيل.</li>
+                <li>إنترنت Fiber عالي السرعة، وتدفئة مركزية، و5 مكيفات في كل شقة.</li>
+                <li>شرفة في كل شقة، وبعض الشقق فيها شرفتان، وشقة 204 فيها شرفة وتراس.</li>
+                <li>موقف سيارة مخصص لكل شقة، وخدمة تنظيف دورية مجانية.</li>
+                <li>الشقق مخصصة للعائلات، والحد الأدنى للإقامة 3 ليالٍ، مع خصم خاص للإقامة لأكثر من شهر.</li>
             </ul>
             <nav class="seo-links" aria-label="أدلة الإقامة" id="seoIntroLinks">
+                <a href="amenities.html">كل المميزات والخدمات</a>
                 <a href="apartments-amman.html">شقق مفروشة في عمّان الشميساني</a>
                 <a href="apartments-jordan-hospital.html">شقق قرب مستشفى الأردن</a>
                 <a href="apartments-islamic-hospital.html">شقق قرب المستشفى الإسلامي</a>
@@ -2642,6 +2649,7 @@
                         <p><strong id="datesStrong">الفترة:</strong> <span id="detailDates"></span></p>
 
                         <ul class="detail-features" id="detailFeatures"></ul>
+                        <div id="detailAmenities"></div>
 
                         <div style="margin-top:22px;">
                             <h4 id="roomsTitle">ترتيب الصور حسب الغرف</h4>
@@ -2710,10 +2718,12 @@
             ›
         </button>
     </div>
-    <div id="sharedFooter"><nav class="static-site-links" aria-label="روابط الموقع" style="display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;padding:24px 16px;font-size:14px"><a href="/">الرئيسية</a><a href="apartments.html">الشقق</a><a href="booking.html">الحجز</a><a href="apartments-amman.html">شقق مفروشة في الشميساني</a><a href="apartments-abdali.html">شقق قرب العبدلي</a><a href="apartments-jordan-hospital.html">شقق قرب مستشفى الأردن</a><a href="apartments-specialty-hospital.html">شقق قرب المستشفى التخصصي</a><a href="apartments-islamic-hospital.html">شقق قرب المستشفى الإسلامي</a><a href="apartments-medical-amman.html">شقق للإقامة الطبية</a><a href="apartments-monthly-amman.html">شقق مفروشة شهري</a><a href="faq.html">الأسئلة الشائعة</a><a href="reviews.html">آراء الضيوف</a><a href="about.html">من نحن</a><a href="apartments-amman-en.html">English</a></nav></div>
+    <div id="sharedFooter"><nav class="static-site-links" aria-label="روابط الموقع" style="display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;padding:24px 16px;font-size:14px"><a href="/">الرئيسية</a><a href="apartments.html">الشقق</a><a href="booking.html">الحجز</a><a href="amenities.html">المميزات والخدمات</a><a href="apartments-amman.html">شقق مفروشة في الشميساني</a><a href="apartments-abdali.html">شقق قرب العبدلي</a><a href="apartments-jordan-hospital.html">شقق قرب مستشفى الأردن</a><a href="apartments-specialty-hospital.html">شقق قرب المستشفى التخصصي</a><a href="apartments-islamic-hospital.html">شقق قرب المستشفى الإسلامي</a><a href="apartments-medical-amman.html">شقق للإقامة الطبية</a><a href="apartments-monthly-amman.html">شقق مفروشة شهري</a><a href="faq.html">الأسئلة الشائعة</a><a href="reviews.html">آراء الضيوف</a><a href="about.html">من نحن</a><a href="apartments-amman-en.html">English</a></nav></div>
     <div id="sharedWhatsApp"></div>
 
-    <script src="js/main.js?v=9"></script>
+    <script src="js/amenities-data.js?v=1"></script>
+    <script src="js/amenities-ui.js?v=1"></script>
+    <script src="js/main.js?v=10"></script>
     <script>
         const API_BASE = "https://api.hijazi-apartments.com";
 
@@ -2779,8 +2789,8 @@
                 document.getElementById("mapTitle").textContent = "Apartment location on map";
                 document.getElementById("seoIntroTitle").textContent = "HIJAZI Apartments in Shmeisani";
                 document.getElementById("seoIntroText").textContent = "Fully furnished apartments in Shmeisani, Amman, close to Jordan Hospital, the Islamic Hospital and Abdali. Suitable for medical, family and business stays, short or monthly.";
-                document.getElementById("seoIntroList").innerHTML = "<li>3 bedrooms in every apartment, including one master, and 3 bathrooms.</li><li>A kitchen in every apartment, plus Wi-Fi.</li><li>Most apartments have two balconies; one apartment has one balcony.</li><li>A special discount for stays longer than one month.</li>";
-                document.getElementById("seoIntroLinks").innerHTML = '<a href="apartments-amman-en.html">Furnished apartments in Shmeisani</a><a href="apartments-jordan-hospital-en.html">Near Jordan Hospital</a><a href="apartments-islamic-hospital-en.html">Near the Islamic Hospital</a><a href="apartments-medical-amman-en.html">Medical stays</a><a href="apartments-monthly-amman-en.html">Monthly rentals</a><a href="apartments-abdali-en.html">Near Abdali</a><a href="apartments-specialty-hospital-en.html">Near the Specialty Hospital</a><a href="faq.html">FAQ</a>';
+                document.getElementById("seoIntroList").innerHTML = "<li>3 bedrooms in every apartment, including one master, and 3 bathrooms, in 220 m² that sleeps 7–8 guests.</li><li>A separate living room, a guest room, a fully equipped kitchen and a laundry room.</li><li>High-speed fiber internet, central heating and 5 air conditioners in every apartment.</li><li>A balcony in every apartment; some have two, and apartment 204 has a balcony and a terrace.</li><li>A dedicated parking space for each apartment, and free regular housekeeping.</li><li>The apartments are for families, the minimum stay is 3 nights, and there is a special discount for stays longer than one month.</li>";
+                document.getElementById("seoIntroLinks").innerHTML = '<a href="amenities-en.html">All amenities &amp; services</a><a href="apartments-amman-en.html">Furnished apartments in Shmeisani</a><a href="apartments-jordan-hospital-en.html">Near Jordan Hospital</a><a href="apartments-islamic-hospital-en.html">Near the Islamic Hospital</a><a href="apartments-medical-amman-en.html">Medical stays</a><a href="apartments-monthly-amman-en.html">Monthly rentals</a><a href="apartments-abdali-en.html">Near Abdali</a><a href="apartments-specialty-hospital-en.html">Near the Specialty Hospital</a><a href="faq.html">FAQ</a>';
             }
         }
 
@@ -3649,6 +3659,13 @@
             const features = lang === "ar" ? apt.featuresAr : apt.featuresEn;
             featureList.innerHTML = features.map(f => `<li>${f}</li>`).join("");
 
+            const amenitiesHost = document.getElementById("detailAmenities");
+            if (amenitiesHost) {
+                amenitiesHost.innerHTML = window.HijaziAmenitiesUI
+                    ? HijaziAmenitiesUI.renderApartmentPanel(id, lang, { specs: false })
+                    : "";
+            }
+
             if (apt.video) {
                 videoBox.style.display = "block";
                 videoSource.src = apt.video;
@@ -3726,6 +3743,58 @@
             });
         }
 
+        /* =========================================================
+           فلتر نوع الشقة (عدد غرف النوم)
+           كل الشقق الحالية 3 غرف نوم، فلا يظهر الفلتر.
+           عند إضافة شقق بغرفة أو غرفتين في js/amenities-data.js يظهر تلقائيًا.
+        ========================================================= */
+        let selectedBedroomType = 0;
+
+        function getDisplayedApartmentIds() {
+            const ids = APARTMENT_DISPLAY_ORDER.filter(id => HIJAZI_APARTMENTS[id]);
+
+            if (!selectedBedroomType) return ids;
+
+            return ids.filter(id => Number(HIJAZI_APARTMENTS[id].bedrooms) === selectedBedroomType);
+        }
+
+        function renderTypeFilter() {
+            const host = document.getElementById("typeFilter");
+            if (!host || typeof HIJAZI_AMENITIES === "undefined") return;
+
+            const lang = getCurrentLang();
+            const types = HIJAZI_AMENITIES.bedroomTypesIn(APARTMENT_DISPLAY_ORDER);
+
+            if (types.length < 2) {
+                host.hidden = true;
+                host.innerHTML = "";
+                selectedBedroomType = 0;
+                return;
+            }
+
+            const options = [{ value: 0, label: lang === "ar" ? "كل الشقق" : "All apartments" }].concat(
+                types.map(type => ({
+                    value: type,
+                    label: lang === "ar"
+                        ? HIJAZI_AMENITIES.unitTypes[type].labelAr
+                        : HIJAZI_AMENITIES.unitTypes[type].labelEn
+                }))
+            );
+
+            host.hidden = false;
+            host.innerHTML = options.map(option => `
+                <button type="button" data-type="${option.value}" class="${option.value === selectedBedroomType ? "active" : ""}" aria-pressed="${option.value === selectedBedroomType}">${option.label}</button>
+            `).join("");
+
+            host.querySelectorAll("button").forEach(button => {
+                button.addEventListener("click", () => {
+                    selectedBedroomType = Number(button.dataset.type);
+                    renderTypeFilter();
+                    loadAvailability();
+                });
+            });
+        }
+
         async function loadAvailability() {
             const lang = getCurrentLang();
             const checkIn = checkInEl.value;
@@ -3734,9 +3803,7 @@
             renderLongStayNotice("longStayNotice", checkIn, checkOut);
 
             const err = validateDates(true);
-            const allApartmentIds = APARTMENT_DISPLAY_ORDER.filter(
-                id => HIJAZI_APARTMENTS[id]
-            );
+            const allApartmentIds = getDisplayedApartmentIds();
 
             if (!checkIn || !checkOut) {
                 statusEl.textContent = lang === "ar"
@@ -3819,6 +3886,7 @@
         renderSharedFooter();
         renderWhatsAppWidget();
         applyApartmentsTranslations();
+        renderTypeFilter();
         renderLongStayNotice("longStayNotice", checkInEl.value, checkOutEl.value);
         loadApartmentPricesFromPms().then(loadAvailability);
     </script>

@@ -1,0 +1,1060 @@
+/* =========================================================
+   HIJAZI Apartments – تنسيق المميزات والخدمات
+   يُستخدم في: amenities.html / amenities-en.html
+              apartments.html (نافذة التفاصيل)
+              booking.html و index.html
+   كل الأصناف تبدأ بـ am- حتى لا تتعارض مع تنسيق الموقع.
+========================================================= */
+
+.am-icon {
+    width: 22px;
+    height: 22px;
+    flex: 0 0 auto;
+}
+
+/* ---------- شريط التنقل داخل صفحة المميزات ---------- */
+.am-nav {
+    position: sticky;
+    top: 68px;
+    z-index: 900;
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid #eee;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+    margin: 0 -16px 28px;
+}
+
+.am-nav-inner {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 10px 16px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.am-nav-inner::-webkit-scrollbar {
+    display: none;
+}
+
+.am-nav a {
+    flex: 0 0 auto;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #fff5d8;
+    color: #8a6508;
+    font-weight: 700;
+    font-size: 14px;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.am-nav a:hover,
+.am-nav a:focus-visible {
+    background: #c89116;
+    color: #fff;
+}
+
+/* ---------- الأقسام ---------- */
+.am-section {
+    margin-bottom: 44px;
+    scroll-margin-top: 130px;
+}
+
+.am-section h2 {
+    font-size: 28px;
+    font-weight: 900;
+    color: #111;
+    margin: 0 0 8px;
+    padding-inline-start: 14px;
+    border-inline-start: 5px solid #c89116;
+    line-height: 1.5;
+}
+
+.am-intro {
+    color: #555;
+    font-size: 16px;
+    line-height: 1.9;
+    margin: 0 0 18px;
+}
+
+.am-subtitle {
+    font-size: 22px;
+    font-weight: 800;
+    color: #111;
+    margin: 30px 0 6px;
+    scroll-margin-top: 130px;
+}
+
+.am-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 18px;
+    align-items: start;
+}
+
+.am-card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+    scroll-margin-top: 130px;
+}
+
+.am-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 19px;
+    font-weight: 800;
+    color: #111;
+    margin: 0 0 14px;
+    line-height: 1.5;
+}
+
+.am-card-icon,
+.am-highlight-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #d4a017, #8a6508);
+    color: #fff;
+}
+
+.am-card-wide {
+    margin-top: 18px;
+}
+
+.am-card-wide .am-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    column-gap: 24px;
+}
+
+/* ---------- قوائم العناصر ---------- */
+.am-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.am-list li {
+    position: relative;
+    padding: 7px 0;
+    padding-inline-start: 26px;
+    color: #333;
+    font-size: 15.5px;
+    line-height: 1.75;
+    border-bottom: 1px dashed #f0f0f0;
+}
+
+.am-list li:last-child {
+    border-bottom: 0;
+}
+
+.am-list li::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    top: 12px;
+    width: 17px;
+    height: 17px;
+    background-color: #c89116;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.am-note {
+    margin: 14px 0 0;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: #fffaf0;
+    border: 1px solid #f1e2bd;
+    color: #6d5106;
+    font-size: 14.5px;
+    font-weight: 600;
+    line-height: 1.8;
+}
+
+/* ---------- الإشارات ---------- */
+.am-tag {
+    display: inline-block;
+    padding: 1px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.7;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.am-tag-some,
+.am-tag-varies {
+    background: #fff5d8;
+    color: #8a6508;
+    border: 1px solid #f1dfae;
+}
+
+.am-tag-free {
+    background: #e7f6ec;
+    color: #17703a;
+    border: 1px solid #c4e6cf;
+}
+
+.am-tag-paid {
+    background: #f1f1f1;
+    color: #333;
+    border: 1px solid #dcdcdc;
+}
+
+.am-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 36px;
+    color: #444;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.am-legend strong {
+    color: #111;
+}
+
+/* ---------- أهم المميزات ---------- */
+.am-highlights {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.am-highlight {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 18px;
+    padding: 18px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+    text-align: start;
+}
+
+.am-highlight h3 {
+    font-size: 17px;
+    font-weight: 800;
+    color: #111;
+    margin: 0 0 4px;
+    line-height: 1.6;
+}
+
+.am-highlight p {
+    margin: 0;
+    color: #555;
+    font-size: 14.5px;
+    line-height: 1.75;
+}
+
+.am-highlights-more {
+    text-align: center;
+    margin-top: 22px;
+}
+
+.am-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #d4a017, #8a6508);
+    color: #fff;
+    padding: 11px 22px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 15px;
+    text-decoration: none;
+    border: 2px solid transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.am-btn:hover,
+.am-btn:focus-visible {
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.16);
+}
+
+.am-btn-outline {
+    background: #fff;
+    color: #8a6508;
+    border-color: #c89116;
+}
+
+.am-btn-outline:hover,
+.am-btn-outline:focus-visible {
+    color: #8a6508;
+}
+
+/* ---------- الأرقام الأساسية ---------- */
+.am-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.am-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: linear-gradient(135deg, #111, #000);
+    color: #fff;
+    border-radius: 18px;
+    padding: 20px 10px;
+    text-align: center;
+}
+
+.am-stat .am-icon {
+    color: #d4a017;
+    width: 26px;
+    height: 26px;
+}
+
+.am-stat strong {
+    font-size: 26px;
+    font-weight: 900;
+    color: #d4a017;
+    line-height: 1.4;
+}
+
+.am-stat span {
+    font-size: 14.5px;
+    font-weight: 700;
+}
+
+/* ---------- بطاقات الشقق ---------- */
+.am-units {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+}
+
+.am-unit {
+    background: #fff;
+    border: 1px solid #eee;
+    border-top: 4px solid #c89116;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+}
+
+.am-unit h4 {
+    font-size: 19px;
+    font-weight: 900;
+    color: #111;
+    margin: 0 0 10px;
+}
+
+.am-unit-beds,
+.am-unit-facts,
+.am-chips,
+.am-policies {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.am-unit-beds li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    padding: 7px 0;
+    border-bottom: 1px dashed #eee;
+    font-size: 14.5px;
+    line-height: 1.7;
+}
+
+.am-unit-beds li span {
+    color: #666;
+}
+
+.am-unit-beds li strong {
+    color: #111;
+    font-weight: 800;
+    text-align: end;
+}
+
+.am-unit-facts {
+    margin-top: 12px;
+}
+
+.am-unit-facts li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    color: #444;
+    font-size: 14.5px;
+    font-weight: 600;
+    line-height: 1.7;
+}
+
+.am-unit-facts .am-icon,
+.am-chips .am-icon,
+.am-policies .am-icon {
+    color: #c89116;
+    width: 20px;
+    height: 20px;
+}
+
+/* ---------- صندوق "يختلف حسب الشقة" ---------- */
+.am-varies,
+.am-ask {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: #fffaf0;
+    border: 1px solid #f1e2bd;
+    border-inline-start: 5px solid #c89116;
+    border-radius: 16px;
+    padding: 18px;
+    margin-top: 22px;
+    text-align: start;
+}
+
+.am-varies > .am-icon,
+.am-ask > .am-icon {
+    color: #c89116;
+    width: 26px;
+    height: 26px;
+    margin-top: 2px;
+}
+
+.am-varies h3 {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 0 0 6px;
+    color: #111;
+}
+
+.am-varies p,
+.am-ask p {
+    margin: 0;
+    color: #5c4a1a;
+    font-size: 15px;
+    line-height: 1.85;
+}
+
+.am-varies-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 14px !important;
+}
+
+.am-ask {
+    padding: 14px;
+    margin: 14px 0;
+}
+
+.am-ask strong {
+    display: block;
+    color: #111;
+    font-size: 15px;
+}
+
+.am-ask p {
+    font-size: 14px;
+}
+
+.am-ask a {
+    display: inline-block;
+    margin-top: 6px;
+    color: #17703a;
+    font-weight: 800;
+    font-size: 14.5px;
+    text-decoration: underline;
+}
+
+/* ---------- قسم التنظيف (مميّز) ---------- */
+.am-section-featured {
+    background: linear-gradient(135deg, #141414, #000);
+    border-radius: 24px;
+    padding: 30px 24px;
+}
+
+.am-section-featured h2 {
+    color: #d4a017;
+}
+
+.am-section-featured .am-intro {
+    color: #f0f0f0;
+}
+
+/* ---------- الخدمات المجانية والمدفوعة ---------- */
+.am-card-included,
+.am-card-free {
+    border-top: 4px solid #2e9e5b;
+}
+
+.am-card-included .am-card-icon,
+.am-card-free .am-card-icon {
+    background: linear-gradient(135deg, #2e9e5b, #17703a);
+}
+
+.am-card-included .am-list li::before,
+.am-card-free .am-list li::before {
+    background-color: #2e9e5b;
+}
+
+.am-card-paid {
+    border-top: 4px solid #333;
+}
+
+.am-card-paid .am-card-icon {
+    background: linear-gradient(135deg, #444, #111);
+}
+
+.am-card-paid .am-list li::before {
+    background-color: #333;
+}
+
+/* ---------- سياسات الإقامة ---------- */
+.am-policies {
+    display: grid;
+    gap: 10px;
+}
+
+.am-policies li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 14px;
+    padding: 14px 16px;
+    color: #222;
+    font-size: 15.5px;
+    font-weight: 600;
+    line-height: 1.8;
+    text-align: start;
+}
+
+.am-policies li .am-icon {
+    margin-top: 4px;
+}
+
+.am-policies-compact {
+    gap: 6px;
+}
+
+.am-policies-compact li {
+    padding: 9px 12px;
+    font-size: 14px;
+    border-radius: 12px;
+}
+
+/* ---------- لوحة مميزات الشقة (النافذة + الحجز) ---------- */
+.am-panel {
+    margin: 18px 0;
+    text-align: start;
+}
+
+.am-panel h4,
+.am-panel h3 {
+    font-size: 17px;
+    font-weight: 900;
+    color: #111;
+    margin: 20px 0 10px;
+}
+
+.am-panel > h4:first-child,
+.am-panel > h3:first-child {
+    margin-top: 0;
+}
+
+.am-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.am-chips li {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: #fff8e6;
+    border: 1px solid #f1e2bd;
+    color: #2b2412;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.6;
+}
+
+.am-details-list {
+    display: grid;
+    gap: 8px;
+}
+
+.am-details {
+    background: #fff;
+    border: 1px solid #e9e9e9;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.am-details summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    min-height: 48px;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 15px;
+    color: #111;
+    list-style: none;
+}
+
+.am-details summary::-webkit-details-marker {
+    display: none;
+}
+
+.am-details summary .am-icon {
+    color: #c89116;
+}
+
+.am-details summary::after {
+    content: "+";
+    margin-inline-start: auto;
+    font-size: 20px;
+    font-weight: 700;
+    color: #8a6508;
+    line-height: 1;
+}
+
+.am-details[open] summary::after {
+    content: "−";
+}
+
+.am-details[open] summary {
+    border-bottom: 1px solid #f0f0f0;
+    background: #fffaf0;
+}
+
+.am-details .am-list {
+    padding: 6px 14px 10px;
+}
+
+.am-details .am-list li {
+    font-size: 14.5px;
+}
+
+.am-more-link {
+    display: inline-block;
+    margin-top: 16px;
+    color: #8a6508;
+    font-weight: 800;
+    font-size: 15px;
+    text-decoration: underline;
+}
+
+.am-more-link:hover {
+    color: #c89116;
+}
+
+/* ---------- فلتر نوع الشقة (يظهر عند وجود أكثر من نوع) ---------- */
+.am-type-filter {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 0 18px;
+}
+
+.am-type-filter[hidden] {
+    display: none;
+}
+
+.am-type-filter button {
+    min-height: 44px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: 1.5px solid #e2c877;
+    background: #fff;
+    color: #8a6508;
+    font-weight: 800;
+    font-size: 14.5px;
+    cursor: pointer;
+}
+
+.am-type-filter button.active {
+    background: linear-gradient(135deg, #d4a017, #8a6508);
+    border-color: transparent;
+    color: #fff;
+}
+
+/* ---------- قسم المميزات في الصفحة الرئيسية ---------- */
+.am-home-section {
+    max-width: 1150px;
+    margin: 0 auto;
+    padding: 50px 16px 10px;
+}
+
+.am-home-section .am-intro {
+    text-align: center;
+    max-width: 760px;
+    margin-inline: auto;
+}
+
+/* ---------- الاتجاه الإنجليزي ---------- */
+body.ltr-mode .am-section,
+body.ltr-mode .am-panel,
+body.ltr-mode .am-legend {
+    text-align: left;
+}
+
+/* ---------- الهواتف ---------- */
+@media (max-width: 991px) {
+    .am-highlights {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .am-nav {
+        top: 66px;
+        margin-bottom: 22px;
+    }
+
+    .am-section {
+        margin-bottom: 34px;
+    }
+
+    .am-section h2 {
+        font-size: 22px;
+    }
+
+    .am-subtitle {
+        font-size: 19px;
+    }
+
+    .am-intro {
+        font-size: 15px;
+    }
+
+    .am-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .am-card {
+        padding: 18px 16px;
+    }
+
+    .am-card h3 {
+        font-size: 17.5px;
+    }
+
+    .am-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .am-stat strong {
+        font-size: 22px;
+    }
+
+    .am-section-featured {
+        padding: 22px 14px;
+        border-radius: 20px;
+    }
+
+    .am-legend {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .am-home-section {
+        padding-top: 36px;
+    }
+}
+
+@media (max-width: 560px) {
+    .am-highlights {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .am-highlight {
+        padding: 14px;
+    }
+
+    .am-units {
+        grid-template-columns: 1fr;
+    }
+
+    .am-varies {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .am-varies-actions .am-btn {
+        flex: 1 1 100%;
+        text-align: center;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .am-btn,
+    .am-nav a {
+        transition: none;
+    }
+}
+
+/* =========================================================
+   هيكل صفحة المميزات (amenities.html / amenities-en.html)
+========================================================= */
+body.am-page {
+    background: #f8f8f8;
+    color: #111;
+    overflow-x: clip;
+}
+
+.am-page-hero {
+    background: linear-gradient(90deg, #c89116, #000);
+    color: #fff;
+    text-align: center;
+    padding: 120px 20px 56px;
+}
+
+.am-page-eyebrow {
+    margin: 0 0 8px;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.6px;
+    opacity: 0.92;
+}
+
+.am-page-hero h1 {
+    font-size: 40px;
+    font-weight: 900;
+    margin: 0 0 12px;
+    line-height: 1.45;
+}
+
+.am-page-hero p:last-child {
+    max-width: 900px;
+    margin: 0 auto;
+    font-size: 17.5px;
+    line-height: 1.95;
+}
+
+.am-page-content {
+    max-width: 1150px;
+    margin: 0 auto;
+    padding: 0 16px 60px;
+}
+
+.am-faq {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 14px;
+}
+
+.am-faq-item {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.05);
+}
+
+.am-faq-item h3 {
+    font-size: 17px;
+    font-weight: 800;
+    color: #111;
+    margin: 0 0 8px;
+    line-height: 1.7;
+}
+
+.am-faq-item p {
+    margin: 0;
+    color: #555;
+    font-size: 15px;
+    line-height: 1.9;
+}
+
+.am-contact {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+    margin-bottom: 20px;
+}
+
+.am-contact h2 {
+    font-size: 24px;
+    font-weight: 800;
+    margin: 0 0 10px;
+}
+
+.am-contact p {
+    margin: 0 0 6px;
+    color: #555;
+    line-height: 1.9;
+}
+
+.am-contact a {
+    color: #8a6508;
+    font-weight: 700;
+}
+
+.am-related {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.am-related a {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #fff5d8;
+    color: #8a6508;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.am-cta {
+    background: linear-gradient(90deg, #111, #000);
+    color: #fff;
+    border-radius: 20px;
+    padding: 28px;
+    text-align: center;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+.am-cta h2 {
+    margin: 0 0 12px;
+    color: #d4a017;
+    font-weight: 800;
+    font-size: 26px;
+}
+
+.am-cta p {
+    margin: 0 0 18px;
+    color: #f2f2f2;
+    line-height: 1.9;
+}
+
+@media (max-width: 768px) {
+    .am-page-hero {
+        padding: 104px 14px 38px;
+    }
+
+    .am-page-hero h1 {
+        font-size: 26px;
+    }
+
+    .am-page-hero p:last-child {
+        font-size: 15px;
+    }
+
+    .am-faq {
+        grid-template-columns: 1fr;
+    }
+
+    .am-contact,
+    .am-cta {
+        padding: 20px 16px;
+    }
+
+    .am-cta h2 {
+        font-size: 21px;
+    }
+}
+
+/* =========================================================
+   نافذة تفاصيل الشقة (خلفية داكنة)
+========================================================= */
+#detailsModal .am-ask {
+    background: rgba(212, 160, 23, 0.12);
+    border-color: rgba(212, 160, 23, 0.38);
+}
+
+#detailsModal .am-ask strong {
+    color: #ffd36a !important;
+}
+
+#detailsModal .am-ask p {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 600 !important;
+}
+
+#detailsModal .am-ask a {
+    color: #86e3a6;
+}
+
+#detailsModal .am-unit-beds li {
+    border-bottom-color: rgba(255, 255, 255, 0.16);
+}
+
+#detailsModal .am-unit-beds li span {
+    color: rgba(255, 255, 255, 0.72);
+}
+
+#detailsModal .am-chips li,
+#detailsModal .am-details,
+#detailsModal .am-policies li {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #fff;
+}
+
+#detailsModal .am-details summary {
+    color: #fff;
+}
+
+#detailsModal .am-details summary .am-icon,
+#detailsModal .am-details summary::after,
+#detailsModal .am-policies .am-icon,
+#detailsModal .am-chips .am-icon {
+    color: #ffd36a;
+}
+
+#detailsModal .am-details[open] summary {
+    background: rgba(212, 160, 23, 0.16);
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+
+#detailsModal .am-details .am-list li {
+    color: rgba(255, 255, 255, 0.92);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+#detailsModal .am-list li::before {
+    background-color: #ffd36a;
+}
+
+#detailsModal .am-tag-paid {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.24);
+    color: #fff;
+}
+
+#detailsModal .am-more-link {
+    color: #ffd36a;
+}

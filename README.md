@@ -604,3 +604,17 @@ npm test
 
 
 
+
+## المميزات والخدمات (Amenities)
+
+كل معلومات التجهيزات والخدمات وسياسات الإقامة ومواصفات كل شقة مكتوبة في ملف واحد:
+
+`frontend/js/amenities-data.js`
+
+بعد أي تعديل عليه شغّل من جذر المشروع:
+
+```bash
+node scripts/build-amenities.js
+```
+
+هذا الأمر يحدّث النص الثابت داخل `amenities.html` و`amenities-en.html` وقسم "أهم المميزات" في `index.html`، حتى يبقى المحتوى مقروءًا لمحركات البحث دون JavaScript. اختبار `npm test` يفشل إذا نُسي تشغيله.
