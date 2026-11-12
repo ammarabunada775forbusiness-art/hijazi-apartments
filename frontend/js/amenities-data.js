@@ -87,11 +87,11 @@
 
        balconies : عدد الشرفات
        terrace   : true إذا كان فيها تراس
-       parkingAtDoor : true إذا كان موقف السيارة عند باب الشقة
+       indoorGarage  : true إذا كان للشقة كراج داخلي خاص بها (شقة 204)
        smoking / pets / toaster / extraParking :
            true  = متوفر/مسموح في هذه الشقة
            false = غير متوفر/غير مسموح
-           null  = لم يُحدَّد بعد (يظهر "اسألنا قبل الحجز")
+           null  = لم يُحدَّد بعد (لا يظهر شيء عن هذه الميزة في صفحة الشقة)
     ----------------------------------------------------- */
     const STANDARD_BEDS = [
         { room: "master", bed: "queen" },
@@ -111,9 +111,9 @@
                 number: number,
                 bedrooms: 3,
                 beds: STANDARD_BEDS,
-                balconies: 2,
+                balconies: 1,
                 terrace: false,
-                parkingAtDoor: false,
+                indoorGarage: false,
                 smoking: null,
                 pets: null,
                 toaster: null,
@@ -126,12 +126,12 @@
     const apartments = {
         1: unit("104", { beds: KING_BEDS }),
         2: unit("106", { beds: KING_BEDS }),
-        3: unit("204", { balconies: 1, terrace: true, parkingAtDoor: true }),
+        3: unit("204", { terrace: true, indoorGarage: true }),
         4: unit("105"),
-        5: unit("207"),
-        6: unit("305", { balconies: 1 }),
+        5: unit("207", { balconies: 2 }),
+        6: unit("305", { balconies: 2 }),
         7: unit("107"),
-        8: unit("309")
+        8: unit("309", { balconies: 2 })
     };
 
     /* -----------------------------------------------------
@@ -198,7 +198,7 @@
         { ar: "مطبخ مجهز بالكامل", en: "Fully equipped kitchen" },
         { ar: "غرفة غسيل مستقلة في كل شقة", en: "Separate laundry room in every apartment" },
         { ar: "شرفة في جميع الشقق، وبعض الشقق فيها شرفتان", en: "A balcony in every apartment; some have two" },
-        { ar: "شقة 204 فيها شرفة وتراس", en: "Apartment 204 has a balcony and a terrace" },
+        { ar: "شقة 204 فيها شرفة وتراس وكراج داخلي", en: "Apartment 204 has a balcony, a terrace and an indoor garage" },
         { ar: "موقف سيارة مخصص لكل شقة في كراج العمارة", en: "A dedicated parking space for each apartment in the building garage" }
     ];
 
@@ -366,7 +366,6 @@
                         { ar: "تغطية Wi-Fi قوية وكاملة في جميع غرف الشقة", en: "Strong, full Wi-Fi coverage in every room" },
                         { ar: "شبكة Wi-Fi مستقلة لكل شقة", en: "A separate Wi-Fi network for each apartment" },
                         { ar: "كلمة مرور خاصة لكل شقة", en: "A private password for each apartment" },
-                        { ar: "تلفزيونات Smart TV تدعم Netflix و YouTube", en: "Smart TVs that support Netflix and YouTube" },
                         { ar: "قنوات فضائية", en: "Satellite channels" },
                         { ar: "قنوات رياضية", en: "Sports channels" },
                         { ar: "أجهزة استقبال (Receiver)", en: "Satellite receivers" }
@@ -551,7 +550,7 @@
        key: true = تظهر أيضًا في الملخص المختصر داخل تفاصيل الشقة والحجز
     ----------------------------------------------------- */
     const policies = [
-        { icon: "users", key: true, ar: "الشقق مخصصة للعائلات فقط.", en: "The apartments are for families only." },
+        { icon: "users", key: true, ar: "سياسة عائلية: لا يُسمح بإقامة غير المتزوجين معًا.", en: "Family policy: unmarried couples are not permitted to stay together." },
         { icon: "calendar", key: true, ar: "الحد الأدنى للإقامة 3 ليالٍ.", en: "Minimum stay is 3 nights." },
         { icon: "key", ar: "تسجيل الدخول متاح بالتنسيق المسبق.", en: "Check-in is available by prior arrangement." },
         { icon: "clock", key: true, ar: "موعد المغادرة الأساسي الساعة 12 ظهرًا.", en: "Standard check-out is at 12:00 noon." },
@@ -635,10 +634,10 @@
             aEn: "Yes. All buildings have elevators and wheelchair-friendly entrances."
         },
         {
-            qAr: "هل الشقق مخصصة للعائلات؟",
-            aAr: "نعم، الشقق مخصصة للعائلات فقط.",
-            qEn: "Are the apartments for families?",
-            aEn: "Yes, the apartments are for families only."
+            qAr: "هل يُسمح بإقامة غير المتزوجين؟",
+            aAr: "لا. سياستنا عائلية، ولا يُسمح بإقامة غير المتزوجين معًا. الشقق مناسبة للعائلات ورجال الأعمال والإقامة الطبية.",
+            qEn: "Can unmarried couples stay?",
+            aEn: "No. We have a family policy, and unmarried couples are not permitted to stay together. The apartments suit families, business travellers and medical stays."
         }
     ];
 
@@ -731,8 +730,8 @@
     function parkingLabel(facts, lang) {
         if (!facts) return "";
 
-        if (facts.parkingAtDoor) {
-            return lang === "en" ? "Parking space at the apartment door" : "موقف السيارة عند باب الشقة";
+        if (facts.indoorGarage) {
+            return lang === "en" ? "Indoor garage" : "كراج داخلي";
         }
 
         return lang === "en" ? "Dedicated space in the building garage" : "موقف مخصص في كراج العمارة";
@@ -757,8 +756,8 @@
             en ? "Fiber internet" : "إنترنت Fiber",
             en ? "Central heating" : "تدفئة مركزية",
             en ? "5 air conditioners" : "5 مكيفات",
-            facts.parkingAtDoor
-                ? (en ? "Parking at the apartment door" : "موقف عند باب الشقة")
+            facts.indoorGarage
+                ? (en ? "Indoor garage" : "كراج داخلي")
                 : (en ? "Dedicated parking" : "موقف سيارة مخصص"),
             en ? "Free housekeeping" : "تنظيف دوري مجاني"
         ];

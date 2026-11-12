@@ -268,17 +268,6 @@ Object.values(HIJAZI_APARTMENTS).forEach(apartment => {
     apartment.mapEmbed = HIJAZI_SHARED_MAP_EMBED;
 });
 /* =========================================================
-   الشقة 6 تحتوي على شرفة واحدة فقط
-========================================================= */
-if (HIJAZI_APARTMENTS[6]) {
-    HIJAZI_APARTMENTS[6].oneBalcony = true;
-    const balconies = HIJAZI_APARTMENTS[6].rooms.find(r => r.key === "balconies");
-    if (balconies) {
-        balconies.noteAr = "تحتوي هذه الشقة على شرفة واحدة.";
-        balconies.noteEn = "This apartment includes one balcony.";
-    }
-}
-/* =========================================================
    نظام صور محلية مرتبة لكل شقة مثل Airbnb
    بدون أي صور خارجية من الإنترنت
 
@@ -634,6 +623,11 @@ Object.keys(HIJAZI_APARTMENTS).forEach(id => {
     const aptId = Number(id);
 
     if (!apt) return;
+
+    /* عدد الشرفات لكل شقة مصدره js/amenities-data.js */
+    if (typeof HIJAZI_AMENITIES !== "undefined" && HIJAZI_AMENITIES.getApartment(aptId)) {
+        apt.oneBalcony = HIJAZI_AMENITIES.getApartment(aptId).balconies === 1;
+    }
 
     apt.rooms = buildApartmentRooms(aptId, apt.oneBalcony);
     apt.images = [];

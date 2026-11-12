@@ -4,7 +4,11 @@ This file is read automatically at the start of every Claude Code session. Keep 
 
 ## Who and what
 - HIJAZI Apartments (شقق حجازي المفروشة) is the owner's own furnished-apartment rental business in Shmeisani, Amman, next to Abdali. Treat it as a real commercial business.
-- Every apartment: 3 bedrooms (one master), 3 bathrooms, kitchen, Wi-Fi; most have two balconies, one has one. Special discount for stays longer than one month. These are the only property facts published so far.
+- Every listed apartment: 220 m², 3 bedrooms (one master), 3 bathrooms, living room, guest room, equipped kitchen, laundry room, sleeps 7–8. Fiber internet, central heating, 5 air conditioners, dedicated indoor parking, free housekeeping (usually every other day). Special discount for stays longer than one month.
+- Balconies: 104, 105, 106, 107 have one; 207, 305, 309 have two; 204 has a balcony, a terrace and an indoor garage.
+- Policies: minimum stay 3 nights, check-out 12:00, smoking and pets in selected apartments only. "Family policy" means unmarried couples may not stay together; business travellers are welcome, so do not write "families only".
+- The owner also has 1- and 2-bedroom apartments that are not published yet.
+- All amenity, service and policy facts live in `frontend/js/amenities-data.js`. Publish nothing that is not there or confirmed by the owner. Do not mention Netflix or YouTube.
 - Contact: +962 78 900 0444 (phone/WhatsApp), info@hijazi-apartments.com.
 
 ## How the owner wants to work
@@ -18,27 +22,39 @@ This file is read automatically at the start of every Claude Code session. Keep 
 - Domains: `hijazi-apartments.com` → 308 → `www.hijazi-apartments.com` (production). Canonicals use `https://www.hijazi-apartments.com/`.
 - `backend/`: Node/Express + MongoDB Atlas on Render at `https://api.hijazi-apartments.com`. Apartments, availability and bookings come from the API.
 - `frontend/admin.html` is the PMS (noindex). Do not touch it for SEO work.
-- Tests: `cd backend && npm ci && npm test` (50 tests; some check frontend security files).
-- Workflow used so far: branch → PR → wait for the Vercel status → squash merge to `main`.
+- Tests: `cd backend && npm ci && npm test` (54 tests; some check frontend files, including that the amenities pages match the data file).
+- Workflow: earlier work went branch → PR → Vercel status → squash merge to `main`. On 2026-11-12 the owner chose a direct push to `main` without a PR; ask which they want each time, and never open a PR unless asked.
 
 ## Conventions
-- `js/main.js` renders the shared header, footer and WhatsApp widget, and handles language (`localStorage.siteLang`). When `main.js` changes, bump `js/main.js?v=N` on every page (currently `v=9`).
+- `js/main.js` renders the shared header, footer and WhatsApp widget, and handles language (`localStorage.siteLang`). When `main.js` changes, bump `js/main.js?v=N` on every page (currently `v=10`).
 - Main pages (index, apartments, booking, faq, about, reviews) are bilingual on one URL via JS; the Arabic content is the static HTML.
 - Landing pages exist as Arabic/English twins: `apartments-<topic>.html` and `apartments-<topic>-en.html`. Topics: amman, abdali, jordan-hospital, specialty-hospital, islamic-hospital, medical-amman, monthly-amman. They set `window.HIJAZI_PAGE_LANG` and `window.HIJAZI_ALT_PAGES` so the header language and the language switch work. Keep both twins in sync when editing.
 - Every public page has static fallback links inside `#sharedFooter` (crawlable before JS); the JS footer replaces them. Add new pages there, in `sitemap.xml` (with hreflang for twins) and in `llms.txt`.
 - The FAQ answers in `faq.html` are static HTML plus FAQPage JSON-LD; English swaps in via JS.
 - `apartments.html` has static skeleton cards in `#grid` to avoid layout jumps, and a static SEO intro (`#seoIntro`).
+- Amenities: `js/amenities-data.js` is the single source (categories, per-apartment facts, services, policies, FAQ, icons, unit types). `js/amenities-ui.js` renders it. After editing the data file run `node scripts/build-amenities.js` from the repo root; it rewrites the generated blocks (between `<!-- NAME:START -->` and `<!-- NAME:END -->`) in `amenities.html`, `amenities-en.html` and `index.html`. Never edit those blocks by hand.
+- Pages that show apartments (index, apartments, booking) load `amenities-data.js` and `amenities-ui.js` before `main.js`; `main.js` then takes each apartment's features and balcony count from the data file. Styles are in `css/amenities.css` (classes start with `am-`).
+- Item tags in the data file: none = all apartments, `some` = some apartments, `free` = free on request, `paid` = extra charge, `unit` = one named apartment. Per-apartment `smoking`/`pets`/`toaster`/`extraParking` are `null` until the owner gives the list; `null` shows nothing.
+- The amenities FAQ entries are also copied by hand into `faq.html` (three places: JSON-LD, static HTML, JS arrays). Keep them in sync.
+- To add 1- or 2-bedroom apartments: fill the unit type in `amenities-data.js` and set `published: true`, add the apartment there, then add its number, price and order in `main.js`. The type filter on `apartments.html` appears by itself once two types exist.
 
-## Current status (2026-11-11)
+## Current status (2026-11-12)
 Done (PRs #13, #14, #15):
-- Crawlable FAQ and links, descriptive H1s, structured data, sitemap with 20 URLs.
+- Crawlable FAQ and links, descriptive H1s, structured data, sitemap.
 - Unique landing pages, 2 new pages and English twins, `llms.txt`.
 - Removed the placeholder text from the reviews page; fixed the layout jump on the apartments page.
 
+Done (2026-11-12, pushed straight to `main`):
+- Amenities and services page in Arabic and English (`amenities.html`, `amenities-en.html`) with structured data, linked from the header and footers; sitemap now has 22 URLs.
+- Per-apartment facts on cards, in the details modal and on the booking page; highlights section on the homepage.
+- FAQ grown to 26 questions; landing pages, `llms.txt` and homepage schema updated to the new facts.
+
 ## Next steps
-1. Owner to send the building's Google Maps link and real walking/driving times to each hospital; add them to the landing pages and to the schema (`geo`, full address).
-2. Google Search Console: resubmit `sitemap.xml` and request indexing for the new pages. Then review the "Why pages aren't indexed" reasons together.
-3. Reviews page: it uses Unsplash images; replace with real guest reviews (owner's decision).
-4. Optional: put the header in static HTML (it is JS-rendered and appears a moment late).
-5. Optional, bigger: English URLs for the main pages (booking is about 5000 lines; do it carefully).
-6. Off-site: a Google Business Profile with real photos and reviews, and listings on Booking/Airbnb. These matter most for SEO and AI answers.
+1. Booking form and API still accept 1–2 nights although the policy is a 3-night minimum. Enforce it only after the owner agrees (it changes the booking flow).
+2. Owner to send which apartments allow smoking and pets, and which have a toaster or a second parking space; fill them in `amenities-data.js`.
+3. Owner to send the building's Google Maps link and real walking/driving times to each hospital; add them to the landing pages and to the schema (`geo`, full address).
+4. Google Search Console: resubmit `sitemap.xml` and request indexing for the new pages (including the two amenities pages). Then review the "Why pages aren't indexed" reasons together.
+5. Reviews page: it uses Unsplash images; replace with real guest reviews (owner's decision).
+6. Optional: put the header in static HTML (it is JS-rendered and appears a moment late).
+7. Optional, bigger: English URLs for the main pages (booking is about 5000 lines; do it carefully).
+8. Off-site: a Google Business Profile with real photos and reviews, and listings on Booking/Airbnb. These matter most for SEO and AI answers.

@@ -62,24 +62,15 @@
             askGeneralMessage: "مرحبا HIJAZI Apartments، عندي استفسار عن مميزات الشقق.",
             panelSpecs: "مواصفات",
             panelBeds: "توزيع الأسرّة",
-            panelAskTitle: "يختلف حسب الشقة",
-            panelAskLead: "اسألنا عن هذه الشقة قبل الحجز بخصوص:",
-            panelAskButton: "اسأل عن هذه الشقة",
-            panelAskMessage: "مرحبا HIJAZI Apartments، عندي استفسار عن شقة {n} بخصوص: {topics}.",
             panelAllTitle: "متوفر في جميع الشقق",
             panelPolicies: "سياسات مهمة",
             panelMore: "كل المميزات والخدمات والسياسات",
-            askSmoking: "التدخين",
-            askPets: "الحيوانات الأليفة",
-            askToaster: "محمصة الخبز",
-            askExtraParking: "موقف سيارة إضافي",
             smokingYes: "التدخين مسموح",
             smokingNo: "التدخين غير مسموح",
             petsYes: "الحيوانات الأليفة مسموحة",
             petsNo: "الحيوانات الأليفة غير مسموحة",
             toasterYes: "محمصة خبز",
-            extraParkingYes: "أكثر من موقف سيارة",
-            listSeparator: "، "
+            extraParkingYes: "أكثر من موقف سيارة"
         },
         en: {
             tagSome: "Some apartments",
@@ -124,24 +115,15 @@
             askGeneralMessage: "Hello HIJAZI Apartments, I have a question about the apartment amenities.",
             panelSpecs: "Specifications",
             panelBeds: "Bed layout",
-            panelAskTitle: "Varies by apartment",
-            panelAskLead: "Ask us about this apartment before booking regarding:",
-            panelAskButton: "Ask about this apartment",
-            panelAskMessage: "Hello HIJAZI Apartments, I have a question about apartment {n} regarding: {topics}.",
             panelAllTitle: "Available in every apartment",
             panelPolicies: "Key policies",
             panelMore: "All amenities, services & policies",
-            askSmoking: "smoking",
-            askPets: "pets",
-            askToaster: "a toaster",
-            askExtraParking: "an additional parking space",
             smokingYes: "Smoking allowed",
             smokingNo: "No smoking",
             petsYes: "Pets allowed",
             petsNo: "No pets",
             toasterYes: "Toaster",
-            extraParkingYes: "More than one parking space",
-            listSeparator: ", "
+            extraParkingYes: "More than one parking space"
         }
     };
 
@@ -376,22 +358,15 @@
             { icon: "car", label: DATA.parkingLabel(facts, lang) }
         ];
 
-        /* مميزات اختيارية معروفة لهذه الشقة تُعرض صراحة، وغير المحددة تذهب لصندوق "اسألنا" */
-        const askTopics = [];
-
+        /* المميزات الاختيارية تُعرض فقط إذا كانت محددة لهذه الشقة في ملف البيانات */
         if (facts.smoking === true) chips.push({ icon: "smoking", label: t.smokingYes });
         else if (facts.smoking === false) chips.push({ icon: "smoking", label: t.smokingNo });
-        else askTopics.push(t.askSmoking);
 
         if (facts.pets === true) chips.push({ icon: "paw", label: t.petsYes });
         else if (facts.pets === false) chips.push({ icon: "paw", label: t.petsNo });
-        else askTopics.push(t.askPets);
 
         if (facts.toaster === true) chips.push({ icon: "plug", label: t.toasterYes });
-        else if (facts.toaster == null) askTopics.push(t.askToaster);
-
         if (facts.extraParking === true) chips.push({ icon: "car", label: t.extraParkingYes });
-        else if (facts.extraParking == null) askTopics.push(t.askExtraParking);
 
         const visibleChips = chips.filter(function (chip) { return chip.label; });
 
@@ -405,18 +380,6 @@
         const bedsHtml = '<ul class="am-unit-beds">' + bedRows(facts, lang).map(function (row) {
             return "<li><span>" + esc(row.room) + "</span><strong>" + esc(row.bed) + "</strong></li>";
         }).join("") + "</ul>";
-
-        let askHtml = "";
-
-        if (askTopics.length) {
-            const topicsText = askTopics.join(t.listSeparator);
-            const message = t.panelAskMessage.replace("{n}", facts.number).replace("{topics}", topicsText);
-
-            askHtml = '<div class="am-ask">' + icon("info") +
-                "<div><strong>" + esc(t.panelAskTitle) + "</strong>" +
-                "<p>" + esc(t.panelAskLead + " " + topicsText) + ".</p>" +
-                '<a href="' + esc(whatsappUrl(message)) + '" target="_blank" rel="noopener noreferrer">' + esc(t.panelAskButton) + "</a></div></div>";
-        }
 
         const commonGroups = [];
 
@@ -449,7 +412,6 @@
             chipsHtml +
             "<" + heading + ">" + esc(t.panelBeds) + "</" + heading + ">" +
             bedsHtml +
-            askHtml +
             "<" + heading + ">" + esc(t.panelAllTitle) + "</" + heading + ">" +
             '<div class="am-details-list">' + commonGroups.join("") + "</div>" +
             "<" + heading + ">" + esc(t.panelPolicies) + "</" + heading + ">" +
