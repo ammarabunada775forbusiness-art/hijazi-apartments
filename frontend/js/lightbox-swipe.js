@@ -80,3 +80,33 @@
     }
     window.HijaziLightboxSwipe = { attach: attach };
 })();
+
+/* تلميح شفاف أول ما ينفتح العارض: اسحب للتنقل */
+(function () {
+    const box = document.getElementById("imageLightbox");
+    if (!box) return;
+    const hint = document.createElement("div");
+    hint.className = "image-lightbox-hint";
+    hint.setAttribute("aria-hidden", "true");
+    hint.innerHTML =
+        '<div class="hint-hand"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10"/><path d="M12 10V8.5a1.5 1.5 0 0 1 3 0V11"/><path d="M15 11v-1a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1-6 6h-1.2a5 5 0 0 1-4-2l-2.6-3.6a1.5 1.5 0 0 1 2.3-1.9L9 15"/></svg></div>' +
+        '<div class="hint-arrows"><span>‹</span><span>›</span></div><div class="hint-text"></div>';
+    box.appendChild(hint);
+    let timer;
+    function show() {
+        const ar = (document.documentElement.lang || "ar").startsWith("ar") && document.documentElement.dir !== "ltr";
+        hint.querySelector(".hint-text").textContent = ar ? "اسحب يمين أو يسار للتنقل بين الصور" : "Swipe left or right to browse photos";
+        hint.classList.remove("show"); void hint.offsetWidth; hint.classList.add("show");
+        clearTimeout(timer);
+        timer = setTimeout(function () { hint.classList.remove("show"); }, 1600);
+    }
+    let wasOpen = false;
+    new MutationObserver(function () {
+        const open = box.classList.contains("open");
+        if (open && !wasOpen) show();
+        if (!open) hint.classList.remove("show");
+        wasOpen = open;
+    }).observe(box, { attributes: true, attributeFilter: ["class"] });
+    box.addEventListener("pointerdown", function () { hint.classList.remove("show"); });
+})();
