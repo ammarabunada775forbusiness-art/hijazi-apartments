@@ -93,6 +93,15 @@ const publicBookingLimiter = createRateLimiter({
 /* إضافة Security Headers */
 app.use(securityHeaders);
 
+/* الـ API مش صفحات للبحث: نمنع جوجل من فهرسته */
+app.use((req, res, next) => {
+    res.setHeader("X-Robots-Tag", "noindex, nofollow");
+    next();
+});
+app.get("/robots.txt", (req, res) => {
+    res.type("text/plain").send("User-agent: *\nDisallow: /\n");
+});
+
 /* رفض Origin غير المعتمد داخل الخادم أيضًا، قبل أي تعديل للبيانات. */
 app.use((req, res, next) => {
     if (!isAllowedOrigin(req.get("Origin"))) {

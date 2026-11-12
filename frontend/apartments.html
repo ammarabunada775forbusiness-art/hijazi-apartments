@@ -18,6 +18,7 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KG0M4GYNCV"></script>
     <script>
+        const HIJAZI_LOCATION_EN = "HIJAZI Apartments - Yousef Bin Tashfin Street, Shmeisani, Amman";
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
@@ -2970,7 +2971,7 @@
                 <h3>${aptName}</h3>
                 <div class="muted">${desc}</div>
 
-                <div class="location-line">📍 ${locationLabel}: ${apt.location}</div>
+                <div class="location-line">📍 ${locationLabel}: ${lang === "ar" ? apt.location : HIJAZI_LOCATION_EN}</div>
 
                 <ul class="features">
                     ${features.slice(0, 4).map(f => `<li>${f}</li>`).join("")}
@@ -3641,7 +3642,7 @@
             document.getElementById("modalTitle").textContent = lang === "ar" ? `تفاصيل ${apt.nameAr}` : `${apt.nameEn} details`;
             document.getElementById("detailName").textContent = lang === "ar" ? apt.nameAr : apt.nameEn;
             document.getElementById("detailDesc").textContent = lang === "ar" ? apt.descAr : apt.descEn;
-            document.getElementById("detailLocation").textContent = apt.location;
+            document.getElementById("detailLocation").textContent = getCurrentLang() === "ar" ? apt.location : HIJAZI_LOCATION_EN;
             document.getElementById("detailNightPrice").textContent = `${apt.price} ${lang === "ar" ? "دينار" : "JOD"}`;
             document.getElementById("detailNights").textContent = nights || (lang === "ar" ? "غير محدد" : "Not selected");
             document.getElementById("detailTotal").textContent = nights ? `${total} ${lang === "ar" ? "دينار" : "JOD"}` : (lang === "ar" ? "اختر التاريخ" : "Select dates");

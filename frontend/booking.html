@@ -3426,7 +3426,9 @@
         backBtn.href = `apartments.html?checkIn=${encodeURIComponent(qCheckIn || "")}&checkOut=${encodeURIComponent(qCheckOut || "")}`;
 
         const currencyRates = { JOD: 1, USD: 0.71, SAR: 2.66 };
-        const currencySymbols = { JOD: "دينار", USD: "$", SAR: "ر.س" };
+        const currencySymbolsAr = { JOD: "دينار", USD: "$", SAR: "ر.س" };
+        const currencySymbolsEn = { JOD: "JOD", USD: "$", SAR: "SAR" };
+        const currencySymbols = new Proxy({}, { get: (_, k) => (getCurrentLang() === "ar" ? currencySymbolsAr : currencySymbolsEn)[k] });
 
         const currencySelect = document.getElementById("currencySelect");
         const totalPriceEl = document.getElementById("totalPrice");
@@ -3486,6 +3488,15 @@
                 document.getElementById("pageTitle").textContent = "احجز شقة مفروشة في الشميساني - عمّان";
                 document.getElementById("pageSubtitle").textContent = "أكمل بيانات الحجز لشقتك المختارة في الشميساني - عمّان";
                 document.getElementById("currencyLabel").textContent = "اختر العملة:";
+                (function () {
+                    const sel = document.getElementById("currencySelect");
+                    const names = ["دينار أردني", "دولار أمريكي", "ريال سعودي"];
+                    if (sel) {
+                        Array.from(sel.options).forEach((o, i) => { if (names[i]) o.textContent = names[i]; });
+                        setTimeout(() => sel.dispatchEvent(new Event("change", { bubbles: true })), 60);
+                    }
+                })();
+
                 document.getElementById("backBtn").textContent = "→ الرجوع إلى الشقق";
                 document.getElementById("videoTitle").textContent = "فيديو الشقة";
                 document.getElementById("availablePill").textContent = "متاح للحجز ✅";
@@ -3537,6 +3548,15 @@
                 document.getElementById("pageTitle").textContent = "Book a Furnished Apartment in Shmeisani, Amman";
                 document.getElementById("pageSubtitle").textContent = "Complete your booking details for your selected apartment in Shmeisani, Amman";
                 document.getElementById("currencyLabel").textContent = "Choose currency:";
+                (function () {
+                    const sel = document.getElementById("currencySelect");
+                    const names = ["Jordanian Dinar", "US Dollar", "Saudi Riyal"];
+                    if (sel) {
+                        Array.from(sel.options).forEach((o, i) => { if (names[i]) o.textContent = names[i]; });
+                        setTimeout(() => sel.dispatchEvent(new Event("change", { bubbles: true })), 60);
+                    }
+                })();
+
                 document.getElementById("backBtn").textContent = "← Back to apartments";
                 document.getElementById("videoTitle").textContent = "Apartment video";
                 document.getElementById("availablePill").textContent = "Available for booking ✅";
@@ -4381,7 +4401,7 @@
             currentSlide = 0;
             aptNameEl.textContent = lang === "ar" ? apt.nameAr : apt.nameEn;
             aptDescEl.textContent = lang === "ar" ? apt.descAr : apt.descEn;
-            aptLocationEl.textContent = `📍 ${apt.location}`;
+            aptLocationEl.textContent = `📍 ${getCurrentLang() === "ar" ? apt.location : "HIJAZI Apartments - Yousef Bin Tashfin Street, Shmeisani, Amman"}`;
             summaryAptIdEl.textContent = getApartmentDisplayNumber(id);
             featuresEl.innerHTML = (lang === "ar" ? apt.featuresAr : apt.featuresEn).map(f => `<li>${f}</li>`).join("");
 
