@@ -490,6 +490,121 @@ function normalizeSingleLine(value, maxLength) {
 }
 
 /* =========================================================
+   بيانات جواز النزيل القادمة من لوحة الإدارة
+   يرجع { value } أو { error }؛ value = null يعني لا توجد بيانات
+========================================================= */
+const GUEST_DOCUMENT_TEXT_LIMITS = Object.freeze({
+    nationality: 60,
+    passportNumber: 30,
+    placeOfBirth: 100,
+    address: 200
+});
+
+const GUEST_DOCUMENT_DATE_LABELS = Object.freeze({
+    dateOfBirth: "تاريخ الميلاد",
+    passportIssueDate: "تاريخ إصدار الجواز",
+    passportExpiryDate: "تاريخ انتهاء الجواز"
+});
+
+const GUEST_GENDERS = new Set(["", "M", "F", "X"]);
+
+function parseGuestDocument(input) {
+    if (input === undefined) return { value: undefined };
+    if (input === null) return { value: null };
+
+    const invalid = { error: "بيانات الجواز غير صحيحة." };
+    if (typeof input !== "object" || Array.isArray(input)) return invalid;
+
+    const value = {};
+
+    for (const [key, maxLength] of Object.entries(GUEST_DOCUMENT_TEXT_LIMITS)) {
+        const raw = input[key];
+        if (raw !== undefined && raw !== null && typeof raw !== "string") return invalid;
+        value[key] = normalizeSingleLine(raw, maxLength);
+    }
+
+    value.passportNumber = value.passportNumber.toUpperCase();
+
+    for (const [key, label] of Object.entries(GUEST_DOCUMENT_DATE_LABELS)) {
+        const raw = input[key];
+
+        if (raw === undefined || raw === null || raw === "") {
+            value[key] = "";
+            continue;
+        }
+
+        if (typeof raw !== "string" || !parseDateOnly(raw)) {
+            return { error: `${label} غير صحيح.` };
+        }
+
+        value[key] = raw;
+    }
+
+    if (value.dateOfBirth && value.dateOfBirth > formatDate(new Date())) {
+        return { error: "تاريخ الميلاد لا يمكن أن يكون في المستقبل." };
+    }
+
+    if (
+        value.passportIssueDate &&
+        value.passportExpiryDate &&
+        value.passportIssueDate >= value.passportExpiryDate
+    ) {
+        return { error: "تاريخ إصدار الجواز لازم يكون قبل تاريخ الانتهاء." };
+    }
+
+    const gender = input.gender === undefined || input.gender === null
+        ? ""
+        : String(input.gender).toUpperCase();
+
+    if (!GUEST_GENDERS.has(gender)) return { error: "الجنس غير صحيح." };
+    value.gender = gender;
+
+    return { value: Object.values(value).some(Boolean) ? value : null };
+}
+
+/* =========================================================
+   بيانات الدفع لنموذج الحجز (سعر الليلة، التأمين، المدفوع، الطريقة)
+========================================================= */
+const PAYMENT_METHODS = Object.freeze(["CASH", "CLIQ", "BANK_TRANSFER", "CARD"]);
+const MAX_PAYMENT_AMOUNT = 1000000;
+
+function parseAmount(raw, nullable) {
+    if (raw === undefined) return { skip: true };
+    if (raw === null || raw === "") return nullable ? { value: null } : { error: true };
+    if (typeof raw === "boolean" || typeof raw === "object") return { error: true };
+
+    const amount = Number(raw);
+    if (!Number.isFinite(amount) || amount < 0 || amount > MAX_PAYMENT_AMOUNT) {
+        return { error: true };
+    }
+
+    return { value: Math.round(amount * 100) / 100 };
+}
+
+function parsePaymentFields(body) {
+    const value = {};
+    const fields = [
+        ["nightlyRate", true, "سعر الليلة غير صحيح."],
+        ["securityDeposit", true, "مبلغ التأمين غير صحيح."],
+        ["amountPaid", true, "المبلغ المدفوع غير صحيح."]
+    ];
+
+    for (const [key, nullable, message] of fields) {
+        const parsed = parseAmount(body[key], nullable);
+        if (parsed.error) return { error: message };
+        if (!parsed.skip) value[key] = parsed.value;
+    }
+
+    if (body.paymentMethod !== undefined) {
+        const method = String(body.paymentMethod || "").toUpperCase();
+        if (!PAYMENT_METHODS.includes(method)) return { error: "طريقة الدفع غير صحيحة." };
+        value.paymentMethod = method;
+    }
+
+    return { value };
+}
+
+/* =========================================================
    أسعار التحويل المعتمدة داخل السيرفر
 ========================================================= */
 const PUBLIC_CURRENCY_RATES = Object.freeze({
@@ -2146,6 +2261,16 @@ app.post("/admin/bookings", requireAdmin, async (req, res) => {
             return res.status(400).json({ success: false, message: "تاريخ الخروج يجب أن يكون بعد تاريخ الدخول." });
         }
 
+        const guestDocument = parseGuestDocument(req.body.guestDocument);
+        if (guestDocument.error) {
+            return res.status(400).json({ success: false, message: guestDocument.error });
+        }
+
+        const payment = parsePaymentFields(req.body);
+        if (payment.error) {
+            return res.status(400).json({ success: false, message: payment.error });
+        }
+
         const apartment = await Apartment.findOne({ apartmentId, active: true });
         if (!apartment) {
             return res.status(400).json({ success: false, message: "الشقة غير موجودة أو غير فعالة." });
@@ -2182,9 +2307,12 @@ app.post("/admin/bookings", requireAdmin, async (req, res) => {
             stayType: calculateNights(checkInDate, checkOutDate) >= 30 ? "long" : "normal",
             source,
             status: req.body.status === "pending" ? "pending" : "confirmed",
-            sourceReference: String(req.body.sourceReference || "").trim().slice(0, 250)
+            sourceReference: String(req.body.sourceReference || "").trim().slice(0, 250),
+            ...payment.value,
+            ...(guestDocument.value ? { guestDocument: guestDocument.value } : {})
         });
 
+        // السجل لا يحتوي بيانات الجواز نفسها، فقط إنها موجودة
         await recordAdminActivity(req, {
             category: "booking",
             action: "booking.created",
@@ -2198,7 +2326,8 @@ app.post("/admin/bookings", requireAdmin, async (req, res) => {
                 checkOut: booking.checkOut,
                 status: booking.status,
                 totalPrice: booking.totalPrice,
-                currency: booking.currency
+                currency: booking.currency,
+                hasGuestDocument: Boolean(guestDocument.value)
             }
         });
 
@@ -2229,18 +2358,57 @@ app.get("/admin/bookings", requireAdmin, async (req, res) => {
 });
 
 /* =========================================================
+   API: حجز واحد مع بيانات الجواز (لنافذة التعديل والطباعة فقط)
+   قائمة الحجوزات لا ترجع بيانات الجواز أبدًا.
+========================================================= */
+const BOOKING_ID_PATTERN = /^[a-f0-9]{24}$/i;
+
+app.get("/admin/bookings/:id", requireAdmin, async (req, res) => {
+    try {
+        if (!BOOKING_ID_PATTERN.test(req.params.id)) {
+            return res.status(404).json({ success: false, message: "الحجز غير موجود." });
+        }
+
+        const booking = await Booking.findById(req.params.id).select("+guestDocument");
+
+        if (!booking) {
+            return res.status(404).json({ success: false, message: "الحجز غير موجود." });
+        }
+
+        res.json({ success: true, booking });
+    } catch (error) {
+        console.log("ADMIN GET BOOKING ERROR:", error.name || "Error");
+        res.status(500).json({ success: false, message: "تعذر جلب الحجز." });
+    }
+});
+
+/* =========================================================
    API: تعديل بيانات حجز من لوحة الإدارة
    الحجز المستورد من منصة يبقى مقفولًا في الشقة والتواريخ والحالة
 ========================================================= */
 app.put("/admin/bookings/:id", requireAdmin, async (req, res) => {
     try {
-        const booking = await Booking.findById(req.params.id);
+        if (!BOOKING_ID_PATTERN.test(req.params.id)) {
+            return res.status(404).json({ success: false, message: "الحجز غير موجود." });
+        }
+
+        const booking = await Booking.findById(req.params.id).select("+guestDocument");
 
         if (!booking) {
             return res.status(404).json({
                 success: false,
                 message: "الحجز غير موجود."
             });
+        }
+
+        const guestDocument = parseGuestDocument(req.body.guestDocument);
+        if (guestDocument.error) {
+            return res.status(400).json({ success: false, message: guestDocument.error });
+        }
+
+        const payment = parsePaymentFields(req.body);
+        if (payment.error) {
+            return res.status(400).json({ success: false, message: payment.error });
         }
 
         const isImportedPlatformBooking =
@@ -2400,6 +2568,12 @@ app.put("/admin/bookings/:id", requireAdmin, async (req, res) => {
                 .slice(0, 250);
         }
 
+        Object.assign(booking, payment.value);
+
+        if (guestDocument.value !== undefined) {
+            booking.guestDocument = guestDocument.value || undefined;
+        }
+
         await booking.save();
 
         await recordAdminActivity(req, {
@@ -2412,6 +2586,7 @@ app.put("/admin/bookings/:id", requireAdmin, async (req, res) => {
             description: `تم تعديل حجز ${defaultApartmentLabel(booking.apartmentId, booking.apartmentLabel)}.`,
             details: {
                 platformFieldsLocked: isImportedPlatformBooking,
+                guestDocumentUpdated: guestDocument.value !== undefined,
                 before: previousBooking,
                 after: {
                     apartmentId: booking.apartmentId,

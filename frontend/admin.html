@@ -4621,9 +4621,316 @@
         .calendar-section .admin-calendar-shell {
             margin-top: 0;
         }
+
+        /* =========================================================
+           إدخال حجز سريع من صورة الجواز
+        ========================================================= */
+        .quick-booking-form {
+            display: grid;
+            gap: 16px;
+        }
+
+        .entry-group {
+            min-width: 0;
+            margin: 0;
+            padding: 16px;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: #fcfcfd;
+        }
+
+        .entry-group legend {
+            padding: 0 8px;
+            color: #8b6207;
+            font-size: 15px;
+            font-weight: 900;
+        }
+
+        .entry-group-note {
+            margin: 0 0 12px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .entry-group[disabled] {
+            opacity: .6;
+        }
+
+        .passport-scan {
+            position: relative;
+            display: grid;
+            gap: 12px;
+            padding: 16px;
+            border: 2px dashed #e0c27a;
+            border-radius: 16px;
+            background: #fffbf0;
+        }
+
+        .passport-scan[data-state="ok"] {
+            border-style: solid;
+            border-color: #75e0a7;
+            background: #f6fef9;
+        }
+
+        .passport-scan[data-state="warn"] {
+            border-style: solid;
+            border-color: #fdb022;
+            background: #fffaeb;
+        }
+
+        .passport-scan[data-state="error"] {
+            border-style: solid;
+            border-color: #fda29b;
+            background: #fef3f2;
+        }
+
+        .passport-scan-main {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .passport-scan-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 52px;
+            padding: 12px 20px;
+            font-size: 16px;
+        }
+
+        .passport-scan.is-busy .passport-scan-button {
+            opacity: .55;
+            cursor: wait;
+        }
+
+        .passport-scan-input {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .passport-scan-text {
+            display: grid;
+            gap: 3px;
+            flex: 1 1 260px;
+            min-width: 0;
+            line-height: 1.6;
+        }
+
+        .passport-scan-text strong {
+            font-size: 14px;
+        }
+
+        .passport-scan-text span {
+            color: var(--muted);
+            font-size: 12.5px;
+        }
+
+        .passport-scan-progress {
+            height: 6px;
+            overflow: hidden;
+            border-radius: 99px;
+            background: #f2e6c4;
+        }
+
+        .passport-scan-progress span {
+            display: block;
+            width: 0;
+            height: 100%;
+            border-radius: inherit;
+            background: var(--gold);
+            transition: width .2s;
+        }
+
+        .passport-scan-preview {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .passport-scan-preview[hidden],
+        .passport-scan-progress[hidden] {
+            display: none;
+        }
+
+        .passport-scan-preview img {
+            max-width: min(100%, 520px);
+            max-height: 340px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            object-fit: contain;
+            background: #fff;
+            cursor: zoom-in;
+        }
+
+        .passport-scan-preview img.is-zoomed {
+            max-width: 100%;
+            max-height: none;
+            cursor: zoom-out;
+        }
+
+        /* !important لأن ستايل الخانات العام في الصفحة مكتوب بـ !important */
+        .field.field-verify input,
+        .field.field-verify select,
+        .field.field-verify .hijazi-select-trigger {
+            border-color: #fdb022 !important;
+            background-color: #fffaeb !important;
+        }
+
+        .field.field-missing input,
+        .field.field-missing select,
+        .field.field-missing .hijazi-select-trigger {
+            border-color: #f97066 !important;
+            background-color: #fff6f5 !important;
+        }
+
+        .field.field-verify label::after,
+        .field.field-missing label::after {
+            margin-inline-start: 6px;
+            padding: 1px 7px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .field.field-verify label::after {
+            content: "تحقق";
+            color: #93370d;
+            background: #fef0c7;
+        }
+
+        .field.field-missing label::after {
+            content: "ناقص";
+            color: #b42318;
+            background: #fee4e2;
+        }
+
+        .field.span-3 {
+            grid-column: span 3;
+        }
+
+        @media (max-width: 1050px) {
+            .field.span-3 {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .field.span-3 {
+                grid-column: span 1;
+            }
+        }
+
+        .quick-booking-actions {
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .quick-booking-actions p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .edit-booking-extra {
+            margin-top: 16px;
+        }
+
+        .row-actions .btn-form {
+            border: 1px solid #e0c27a;
+            color: #6b4c05;
+            background: #fffbf0;
+        }
+
+        /* =========================================================
+           نافذة نموذج الحجز (معاينة + طباعة + إرسال)
+        ========================================================= */
+        .reservation-form-dialog {
+            width: min(1000px, calc(100% - 24px));
+        }
+
+        .reservation-form-status {
+            margin: 0 0 12px;
+            color: var(--muted);
+            font-weight: 700;
+        }
+
+        .reservation-form-status.error {
+            padding: 12px;
+            border: 1px solid #fecdca;
+            border-radius: 10px;
+            color: #b42318;
+            background: #fef3f2;
+        }
+
+        .reservation-form-preview {
+            display: block;
+            width: 100%;
+            height: auto;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .reservation-form-preview[hidden] {
+            display: none;
+        }
+
+        #reservationPrintArea {
+            display: none;
+        }
+
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 8mm;
+            }
+
+            body.printing-reservation-form {
+                background: #fff !important;
+            }
+
+            body.printing-reservation-form>*:not(#reservationPrintArea) {
+                display: none !important;
+            }
+
+            body.printing-reservation-form #reservationPrintArea {
+                display: block !important;
+            }
+
+            body.printing-reservation-form #reservationPrintArea img {
+                display: block;
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .entry-group {
+                padding: 12px;
+            }
+
+            .passport-scan-button {
+                width: 100%;
+            }
+
+            .quick-booking-actions .btn {
+                width: 100%;
+            }
+        }
     </style>
     <script src="js/export-security.js"></script>
     <script src="js/admin-booking-groups.js?v=1"></script>
+    <script src="js/passport-mrz.js?v=1"></script>
+    <script src="js/passport-scan.js?v=1"></script>
+    <script src="js/reservation-form.js?v=1"></script>
 </head>
 
 <body>
@@ -4699,50 +5006,128 @@
                 <div class="reminders-list" id="bookingRemindersList" aria-live="polite"></div>
             </section>
 
-            <section class="card section-card">
+            <section class="card section-card" id="quickBookingSection">
                 <div class="section-head">
                     <div>
                         <h2>إضافة حجز</h2>
-                        <p>للحجز الهاتفي أو الشخصي، ويمكن أيضًا تسجيل حجز Airbnb أو Booking يدويًا، حتى لو كان تاريخ
-                            الإقامة قد مضى.</p>
+                        <p>ارفع صورة جواز النزيل أو هويته فتتعبّى بياناته لحالها، كمّل الشقة والتواريخ والسعر، وبعد
+                            الحفظ يطلع نموذج الحجز جاهز للطباعة أو الإرسال. يصلح أيضًا للحجز الهاتفي ولتسجيل حجز Airbnb
+                            أو Booking يدويًا، حتى لو كان تاريخ الإقامة قد مضى.</p>
                     </div>
                 </div>
-                <form id="manualBookingForm" class="form-grid">
-                    <div class="field"><label for="manualApartment">الشقة *</label><select id="manualApartment"
-                            required></select></div>
-                    <div class="field"><label for="manualSource">المصدر *</label><select id="manualSource">
-                            <option value="manual">حجز يدوي / هاتفي</option>
-                            <option value="airbnb">Airbnb</option>
-                            <option value="booking">Booking.com</option>
-                        </select></div>
-                    <div class="field"><label for="manualCheckIn">الدخول *</label><input id="manualCheckIn" type="date"
-                            placeholder="اختر تاريخ الدخول" required></div>
-                    <div class="field"><label for="manualCheckOut">الخروج صباحًا * — لا يُحسب هذا اليوم
-                            ليلة</label><input id="manualCheckOut" type="date" placeholder="اختر تاريخ الخروج" required>
+                <form id="manualBookingForm" class="quick-booking-form">
+                    <div class="passport-scan" id="manualPassportScan">
+                        <div class="passport-scan-main">
+                            <label class="btn btn-dark passport-scan-button" for="manualPassportFile"><span
+                                    aria-hidden="true">📷</span> صورة الجواز أو الهوية</label>
+                            <input class="passport-scan-input" id="manualPassportFile" type="file" accept="image/*">
+                            <div class="passport-scan-text">
+                                <strong data-scan-status>اختياري: بتعبّي بيانات النزيل لحالها من السطرين اللي تحت
+                                    الجواز (&lt;&lt;&lt;).</strong>
+                                <span>الصورة بتنقرا جوّا جهازك، ما بتنرفع على أي سيرفر وما بتنحفظ.</span>
+                            </div>
+                        </div>
+                        <div class="passport-scan-progress" hidden><span></span></div>
+                        <div class="passport-scan-preview" hidden>
+                            <img alt="صورة الجواز للمقارنة مع البيانات">
+                            <button class="btn btn-light btn-small" type="button" data-scan-clear>إزالة الصورة</button>
+                        </div>
                     </div>
-                    <div class="field"><label for="manualName">اسم العميل</label><input id="manualName"
-                            placeholder="مثال: أحمد محمد"></div>
-                    <div class="field"><label for="manualPhone">الهاتف</label><input id="manualPhone" type="tel"
-                            placeholder="07xxxxxxxx"></div>
-                    <div class="field"><label for="manualEmail">البريد</label><input id="manualEmail" type="email"
-                            placeholder="name@example.com"></div>
-                    <div class="field"><label for="manualReference">رقم الحجز في المنصة</label><input
-                            id="manualReference" placeholder="اختياري"></div>
-                    <div class="field"><label for="manualAdults">البالغون</label><input id="manualAdults" type="number"
-                            min="0" value="1"></div>
-                    <div class="field"><label for="manualChildren">الأطفال</label><input id="manualChildren"
-                            type="number" min="0" value="0"></div>
-                    <div class="field"><label for="manualPrice">السعر الإجمالي (JOD) — يُحسب تلقائيًا ويمكن
-                            تعديله</label><input id="manualPrice" type="number" min="0" step="0.01" value="0"></div>
-                    <div class="field"><label for="manualStatus">الحالة</label><select
-                            class="status-select status-confirmed" id="manualStatus">
-                            <option value="confirmed">مؤكد</option>
-                            <option value="pending">بانتظار التأكيد</option>
-                        </select></div>
-                    <div class="field span-4"><label for="manualNotes">ملاحظات</label><textarea id="manualNotes"
-                            placeholder="أي تفاصيل مهمة عن الحجز..."></textarea></div>
-                    <div class="form-actions field span-4"><button class="btn btn-primary" id="addBookingBtn"
-                            type="submit">إضافة الحجز وإغلاق التواريخ</button></div>
+
+                    <fieldset class="entry-group">
+                        <legend>معلومات النزيل</legend>
+                        <div class="form-grid">
+                            <div class="field span-2"><label for="manualName">الاسم الكامل</label><input id="manualName" dir="auto"
+                                    autocomplete="off" placeholder="كما هو في الجواز"></div>
+                            <div class="field"><label for="manualNationality">الجنسية</label><input
+                                    id="manualNationality" dir="auto" autocomplete="off" placeholder="مثال: JORDANIAN"></div>
+                            <div class="field"><label for="manualPassportNumber">رقم الجواز / الهوية</label><input
+                                    id="manualPassportNumber" autocomplete="off" dir="ltr"></div>
+                            <div class="field"><label for="manualBirthDate">تاريخ الميلاد</label><input
+                                    id="manualBirthDate" class="doc-date" inputmode="numeric" autocomplete="off"
+                                    placeholder="يوم/شهر/سنة" dir="ltr"></div>
+                            <div class="field"><label for="manualGender">الجنس</label><select id="manualGender">
+                                    <option value="">—</option>
+                                    <option value="M">ذكر (MALE)</option>
+                                    <option value="F">أنثى (FEMALE)</option>
+                                </select></div>
+                            <div class="field"><label for="manualPassportIssue">تاريخ إصدار الجواز</label><input
+                                    id="manualPassportIssue" class="doc-date" inputmode="numeric" autocomplete="off"
+                                    placeholder="يوم/شهر/سنة" dir="ltr"></div>
+                            <div class="field"><label for="manualPassportExpiry">تاريخ انتهاء الجواز</label><input
+                                    id="manualPassportExpiry" class="doc-date" inputmode="numeric" autocomplete="off"
+                                    placeholder="يوم/شهر/سنة" dir="ltr"></div>
+                            <div class="field"><label for="manualBirthPlace">مكان الميلاد</label><input
+                                    id="manualBirthPlace" dir="auto" autocomplete="off"></div>
+                            <div class="field"><label for="manualAddress">العنوان</label><input id="manualAddress" dir="auto"
+                                    autocomplete="off"></div>
+                            <div class="field"><label for="manualPhone">الهاتف</label><input id="manualPhone" type="tel"
+                                    placeholder="07xxxxxxxx"></div>
+                            <div class="field"><label for="manualEmail">البريد</label><input id="manualEmail"
+                                    type="email" placeholder="name@example.com"></div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="entry-group">
+                        <legend>معلومات الحجز</legend>
+                        <div class="form-grid">
+                            <div class="field"><label for="manualApartment">الشقة *</label><select id="manualApartment"
+                                    required></select></div>
+                            <div class="field"><label for="manualCheckIn">الدخول *</label><input id="manualCheckIn"
+                                    type="date" placeholder="اختر تاريخ الدخول" required></div>
+                            <div class="field"><label for="manualCheckOut">الخروج صباحًا * — لا يُحسب هذا اليوم
+                                    ليلة</label><input id="manualCheckOut" type="date" placeholder="اختر تاريخ الخروج"
+                                    required></div>
+                            <div class="field"><label for="manualStatus">الحالة</label><select
+                                    class="status-select status-confirmed" id="manualStatus">
+                                    <option value="confirmed">مؤكد</option>
+                                    <option value="pending">بانتظار التأكيد</option>
+                                </select></div>
+                            <div class="field"><label for="manualAdults">البالغون</label><input id="manualAdults"
+                                    type="number" min="0" value="1"></div>
+                            <div class="field"><label for="manualChildren">الأطفال</label><input id="manualChildren"
+                                    type="number" min="0" value="0"></div>
+                            <div class="field"><label for="manualSource">المصدر *</label><select id="manualSource">
+                                    <option value="manual">حجز يدوي / هاتفي</option>
+                                    <option value="airbnb">Airbnb</option>
+                                    <option value="booking">Booking.com</option>
+                                </select></div>
+                            <div class="field"><label for="manualReference">رقم الحجز في المنصة</label><input
+                                    id="manualReference" placeholder="اختياري"></div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="entry-group">
+                        <legend>الدفع</legend>
+                        <div class="form-grid">
+                            <div class="field"><label for="manualNightlyRate">سعر الليلة (JOD) — من سعر الشقة ويمكن
+                                    تعديله</label><input id="manualNightlyRate" type="number" min="0" step="0.01"
+                                    inputmode="decimal"></div>
+                            <div class="field"><label for="manualPrice">إجمالي الإيجار (JOD) — يُحسب تلقائيًا ويمكن
+                                    تعديله</label><input id="manualPrice" type="number" min="0" step="0.01" value="0">
+                            </div>
+                            <div class="field"><label for="manualDeposit">مبلغ التأمين (JOD)</label><input
+                                    id="manualDeposit" type="number" min="0" step="0.01" value="200"
+                                    inputmode="decimal"></div>
+                            <div class="field"><label for="manualPaid">المبلغ الإجمالي المدفوع (JOD)</label><input
+                                    id="manualPaid" type="number" min="0" step="0.01" inputmode="decimal"
+                                    placeholder="تلقائي: الإيجار + التأمين"></div>
+                            <div class="field"><label for="manualPayment">طريقة الدفع</label><select id="manualPayment">
+                                    <option value="CASH">نقدًا (CASH)</option>
+                                    <option value="CLIQ">كليك (CliQ)</option>
+                                    <option value="BANK_TRANSFER">تحويل بنكي</option>
+                                    <option value="CARD">بطاقة</option>
+                                </select></div>
+                            <div class="field span-3"><label for="manualNotes">ملاحظات</label><textarea id="manualNotes"
+                                    placeholder="أي تفاصيل مهمة عن الحجز..."></textarea></div>
+                        </div>
+                    </fieldset>
+
+                    <div class="form-actions quick-booking-actions">
+                        <p>بعد الحفظ يطلعلك نموذج الحجز جاهز للطباعة أو الإرسال للعميل.</p>
+                        <button class="btn btn-primary" id="addBookingBtn" type="submit">إضافة الحجز وإغلاق
+                            التواريخ</button>
+                    </div>
                 </form>
             </section>
 
@@ -5041,6 +5426,10 @@
                     <strong id="calendarDetailExternalData">—</strong>
                 </div>
             </div>
+
+            <div class="edit-booking-actions">
+                <button class="btn btn-primary" id="calendarDetailFormBtn" type="button">نموذج الحجز</button>
+            </div>
         </div>
     </dialog>
 
@@ -5089,7 +5478,7 @@
 
                 <div class="field">
                     <label for="editBookingName">اسم العميل</label>
-                    <input id="editBookingName">
+                    <input id="editBookingName" dir="auto">
                 </div>
 
                 <div class="field">
@@ -5143,10 +5532,84 @@
                 </div>
             </div>
 
+            <div class="quick-booking-form edit-booking-extra">
+                <div class="passport-scan" id="editPassportScan">
+                    <div class="passport-scan-main">
+                        <label class="btn btn-dark passport-scan-button" for="editPassportFile"><span
+                                aria-hidden="true">📷</span> صورة الجواز أو الهوية</label>
+                        <input class="passport-scan-input" id="editPassportFile" type="file" accept="image/*">
+                        <div class="passport-scan-text">
+                            <strong data-scan-status>تعبّي بيانات الجواز تحت لحالها.</strong>
+                            <span>الصورة بتنقرا جوّا جهازك، ما بتنرفع على أي سيرفر وما بتنحفظ.</span>
+                        </div>
+                    </div>
+                    <div class="passport-scan-progress" hidden><span></span></div>
+                    <div class="passport-scan-preview" hidden>
+                        <img alt="صورة الجواز للمقارنة مع البيانات">
+                        <button class="btn btn-light btn-small" type="button" data-scan-clear>إزالة الصورة</button>
+                    </div>
+                </div>
+
+                <fieldset class="entry-group" id="editGuestDocumentGroup">
+                    <legend>بيانات الجواز (لنموذج الحجز)</legend>
+                    <p class="entry-group-note" id="editGuestDocumentNote" hidden></p>
+                    <div class="form-grid">
+                        <div class="field"><label for="editBookingNationality">الجنسية</label><input
+                                id="editBookingNationality" dir="auto" autocomplete="off"></div>
+                        <div class="field"><label for="editBookingPassportNumber">رقم الجواز / الهوية</label><input
+                                id="editBookingPassportNumber" autocomplete="off" dir="ltr"></div>
+                        <div class="field"><label for="editBookingBirthDate">تاريخ الميلاد</label><input
+                                id="editBookingBirthDate" class="doc-date" inputmode="numeric" autocomplete="off"
+                                placeholder="يوم/شهر/سنة" dir="ltr"></div>
+                        <div class="field"><label for="editBookingGender">الجنس</label><select id="editBookingGender">
+                                <option value="">—</option>
+                                <option value="M">ذكر (MALE)</option>
+                                <option value="F">أنثى (FEMALE)</option>
+                            </select></div>
+                        <div class="field"><label for="editBookingPassportIssue">تاريخ إصدار الجواز</label><input
+                                id="editBookingPassportIssue" class="doc-date" inputmode="numeric" autocomplete="off"
+                                placeholder="يوم/شهر/سنة" dir="ltr"></div>
+                        <div class="field"><label for="editBookingPassportExpiry">تاريخ انتهاء الجواز</label><input
+                                id="editBookingPassportExpiry" class="doc-date" inputmode="numeric"
+                                autocomplete="off" placeholder="يوم/شهر/سنة" dir="ltr"></div>
+                        <div class="field"><label for="editBookingBirthPlace">مكان الميلاد</label><input
+                                id="editBookingBirthPlace" dir="auto" autocomplete="off"></div>
+                        <div class="field"><label for="editBookingAddress">العنوان</label><input
+                                id="editBookingAddress" dir="auto" autocomplete="off"></div>
+                    </div>
+                </fieldset>
+
+                <fieldset class="entry-group">
+                    <legend>الدفع (لنموذج الحجز)</legend>
+                    <div class="form-grid">
+                        <div class="field"><label for="editBookingNightlyRate">سعر الليلة</label><input
+                                id="editBookingNightlyRate" type="number" min="0" step="0.01" inputmode="decimal"
+                                placeholder="تلقائي"></div>
+                        <div class="field"><label for="editBookingDeposit">مبلغ التأمين</label><input
+                                id="editBookingDeposit" type="number" min="0" step="0.01" inputmode="decimal"
+                                placeholder="200"></div>
+                        <div class="field"><label for="editBookingPaid">المبلغ الإجمالي المدفوع</label><input
+                                id="editBookingPaid" type="number" min="0" step="0.01" inputmode="decimal"
+                                placeholder="تلقائي: الإيجار + التأمين"></div>
+                        <div class="field"><label for="editBookingPayment">طريقة الدفع</label><select
+                                id="editBookingPayment">
+                                <option value="CASH">نقدًا (CASH)</option>
+                                <option value="CLIQ">كليك (CliQ)</option>
+                                <option value="BANK_TRANSFER">تحويل بنكي</option>
+                                <option value="CARD">بطاقة</option>
+                            </select></div>
+                    </div>
+                </fieldset>
+            </div>
+
             <p class="edit-booking-error" id="editBookingError" role="alert" hidden></p>
             <div class="edit-booking-actions">
                 <button class="btn btn-light" id="cancelEditBookingBtn" type="button">
                     إلغاء
+                </button>
+
+                <button class="btn btn-dark" id="saveAndShowFormBtn" type="submit">
+                    حفظ وعرض نموذج الحجز
                 </button>
 
                 <button class="btn btn-primary" id="saveEditBookingBtn" type="submit">
@@ -5154,6 +5617,30 @@
                 </button>
             </div>
         </form>
+    </dialog>
+
+    <!-- =========================================================
+         نافذة نموذج الحجز: معاينة، طباعة، إرسال للعميل
+    ========================================================== -->
+    <dialog class="booking-details-dialog booking-edit-dialog reservation-form-dialog" id="reservationFormDialog">
+        <div class="booking-dialog-head">
+            <h3>نموذج الحجز</h3>
+            <button class="booking-dialog-close" id="closeReservationFormBtn" type="button" aria-label="إغلاق">×</button>
+        </div>
+
+        <div class="booking-dialog-body">
+            <p class="reservation-form-status" id="reservationFormStatus" role="status">جاري تجهيز النموذج...</p>
+            <img class="reservation-form-preview" id="reservationFormPreview" alt="معاينة نموذج الحجز" hidden>
+
+            <div class="edit-booking-actions">
+                <button class="btn btn-light" id="reservationFormEditBtn" type="button">تعديل البيانات</button>
+                <button class="btn btn-light" id="reservationFormDownloadBtn" type="button" disabled>تنزيل
+                    الصورة</button>
+                <button class="btn btn-dark" id="reservationFormShareBtn" type="button" disabled>إرسال للعميل
+                    (واتساب…)</button>
+                <button class="btn btn-primary" id="reservationFormPrintBtn" type="button" disabled>طباعة</button>
+            </div>
+        </div>
     </dialog>
 
     <script>
@@ -5438,7 +5925,15 @@
             );
             showNotice(`تم تصدير ${activities.length} عملية.`);
         }
-        function updateManualPrice() {
+        /* =========================================================
+           السعر: سعر الليلة من الشقة (ويمكن تعديله) × عدد الليالي
+           fromApartment = المالك غيّر الشقة، فنرجع سعر الليلة لسعر الشقة الجديدة
+        ========================================================= */
+        function roundMoney(value) {
+            return Math.round(Number(value) * 100) / 100;
+        }
+
+        function updateManualPrice(options = {}) {
             const apartmentId = Number(
                 document.getElementById("manualApartment").value
             );
@@ -5449,6 +5944,9 @@
             const checkOut =
                 document.getElementById("manualCheckOut").value;
 
+            const rateInput =
+                document.getElementById("manualNightlyRate");
+
             const priceInput =
                 document.getElementById("manualPrice");
 
@@ -5456,26 +5954,379 @@
                 item => Number(item.apartmentId) === apartmentId
             );
 
-            const nightlyPrice = Number(
+            const apartmentRate = Number(
                 apartment?.nightlyPriceJod
             );
 
-            if (
-                !Number.isFinite(nightlyPrice) ||
-                nightlyPrice < 0 ||
-                !checkIn ||
-                !checkOut
-            ) {
-                priceInput.value = "0";
-                return;
+            if (options.fromApartment || (rateInput.value === "" && !options.keepRate)) {
+                rateInput.value =
+                    apartment && Number.isFinite(apartmentRate) && apartmentRate >= 0
+                        ? String(apartmentRate)
+                        : "";
             }
 
-            const nights = nightsBetween(checkIn, checkOut);
+            const nightlyPrice = Number(rateInput.value);
+            const nights = checkIn && checkOut ? nightsBetween(checkIn, checkOut) : 0;
 
             priceInput.value =
+                rateInput.value !== "" &&
+                Number.isFinite(nightlyPrice) &&
+                nightlyPrice >= 0 &&
                 nights > 0
-                    ? String(nightlyPrice * nights)
+                    ? String(roundMoney(nightlyPrice * nights))
                     : "0";
+
+            updatePaidPlaceholder("manual");
+        }
+
+        /* المدفوع الفاضي = الإيجار + التأمين؛ نعرض الرقم المتوقع داخل الخانة */
+        function updatePaidPlaceholder(prefix) {
+            const priceInput = document.getElementById(prefix === "manual" ? "manualPrice" : "editBookingPrice");
+            const depositInput = document.getElementById(prefix === "manual" ? "manualDeposit" : "editBookingDeposit");
+            const paidInput = document.getElementById(prefix === "manual" ? "manualPaid" : "editBookingPaid");
+            const deposit = depositInput.value === ""
+                ? window.HijaziReservationForm.DEFAULT_SECURITY_DEPOSIT
+                : Number(depositInput.value) || 0;
+            const total = roundMoney((Number(priceInput.value) || 0) + deposit);
+
+            paidInput.placeholder = `تلقائي: ${total}`;
+
+            // سعر الليلة الفاضي بالتعديل = الإجمالي ÷ الليالي عند الطباعة
+            if (prefix !== "manual") {
+                const nights = nightsBetween(
+                    document.getElementById("editBookingCheckIn").value,
+                    document.getElementById("editBookingCheckOut").value
+                );
+                const price = Number(priceInput.value) || 0;
+                document.getElementById("editBookingNightlyRate").placeholder =
+                    nights > 0 && price > 0 ? `تلقائي: ${roundMoney(price / nights)}` : "تلقائي";
+            }
+        }
+
+        function amountOrNull(input) {
+            const value = String(input.value || "").trim();
+            return value === "" ? null : Number(value);
+        }
+
+        /* =========================================================
+           بيانات الجواز في الأدمن (حجز جديد ونافذة التعديل)
+        ========================================================= */
+        const GUEST_DOCUMENT_INPUTS = Object.freeze({
+            nationality: "Nationality",
+            passportNumber: "PassportNumber",
+            dateOfBirth: "BirthDate",
+            gender: "Gender",
+            passportIssueDate: "PassportIssue",
+            passportExpiryDate: "PassportExpiry",
+            placeOfBirth: "BirthPlace",
+            address: "Address"
+        });
+
+        const GUEST_DOCUMENT_DATE_LABELS = Object.freeze({
+            dateOfBirth: "تاريخ الميلاد",
+            passportIssueDate: "تاريخ إصدار الجواز",
+            passportExpiryDate: "تاريخ انتهاء الجواز"
+        });
+
+        function guestDocumentInput(prefix, key) {
+            return document.getElementById(`${prefix}${GUEST_DOCUMENT_INPUTS[key]}`);
+        }
+
+        /* 2017-01-11 ← 11/01/2017 */
+        function isoToDisplayDate(value) {
+            const key = dateOnly(value);
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(key)) return "";
+            const [year, month, day] = key.split("-");
+            return `${day}/${month}/${year}`;
+        }
+
+        /* يقبل 11/01/2017 أو 11-01-2017 أو 11.01.2017؛ يرجع "" للفاضي وnull للغلط */
+        function displayDateToIso(value) {
+            const text = String(value || "").trim();
+            if (!text) return "";
+
+            let match = text.match(/^(\d{1,2})[/.\-\s](\d{1,2})[/.\-\s](\d{4})$/);
+            let year, month, day;
+
+            if (match) {
+                [day, month, year] = [Number(match[1]), Number(match[2]), Number(match[3])];
+            } else if ((match = text.match(/^(\d{4})-(\d{2})-(\d{2})$/))) {
+                [year, month, day] = [Number(match[1]), Number(match[2]), Number(match[3])];
+            } else {
+                return null;
+            }
+
+            const date = new Date(Date.UTC(year, month - 1, day));
+            if (
+                year < 1900 ||
+                date.getUTCFullYear() !== year ||
+                date.getUTCMonth() !== month - 1 ||
+                date.getUTCDate() !== day
+            ) {
+                return null;
+            }
+
+            return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+        }
+
+        /* تكتب الأرقام بس والشرطات / تنحط لحالها: 11012017 ← 11/01/2017 */
+        function maskDateTyping(input) {
+            const digits = input.value.replace(/\D/g, "").slice(0, 8);
+            let output = digits.slice(0, 2);
+            if (digits.length > 2) output += `/${digits.slice(2, 4)}`;
+            if (digits.length > 4) output += `/${digits.slice(4, 8)}`;
+            input.value = output;
+        }
+
+        function readGuestDocument(prefix) {
+            const result = {};
+
+            Object.keys(GUEST_DOCUMENT_INPUTS).forEach(key => {
+                const input = guestDocumentInput(prefix, key);
+                const value = input.value.trim();
+
+                if (GUEST_DOCUMENT_DATE_LABELS[key]) {
+                    const iso = displayDateToIso(value);
+
+                    if (iso === null) {
+                        input.focus();
+                        throw new Error(`${GUEST_DOCUMENT_DATE_LABELS[key]} غير صحيح. اكتبه يوم/شهر/سنة مثل 13/09/1980.`);
+                    }
+
+                    result[key] = iso;
+                } else {
+                    result[key] = key === "gender" ? value : value.toUpperCase();
+                }
+            });
+
+            return result;
+        }
+
+        function fillGuestDocument(prefix, guestDocument) {
+            Object.keys(GUEST_DOCUMENT_INPUTS).forEach(key => {
+                const input = guestDocumentInput(prefix, key);
+                const value = guestDocument?.[key] || "";
+                input.value = GUEST_DOCUMENT_DATE_LABELS[key] ? isoToDisplayDate(value) : value;
+            });
+        }
+
+        function markField(input, kind) {
+            input?.closest(".field")?.classList.add(kind === "verify" ? "field-verify" : "field-missing");
+        }
+
+        function clearFieldMarks(root) {
+            root.querySelectorAll(".field-verify, .field-missing").forEach(field => {
+                field.classList.remove("field-verify", "field-missing");
+            });
+        }
+
+        /*
+           نعبّي الخانات من نتيجة قراءة الجواز. لا نمسح قيمة موجودة بقيمة فاضية.
+           نعلّم "تحقق" على ما لم يتأكد برقم التحقق، و"ناقص" على ما لازم يتعبّى باليد.
+        */
+        function applyPassportScan(prefix, nameInputId, guest) {
+            const nameInput = document.getElementById(nameInputId);
+            const scanned = {
+                nationality: guest.nationality,
+                passportNumber: guest.passportNumber,
+                dateOfBirth: guest.dateOfBirth,
+                gender: guest.gender === "M" || guest.gender === "F" ? guest.gender : "",
+                passportIssueDate: guest.passportIssueDate,
+                passportExpiryDate: guest.passportExpiryDate,
+                address: guest.address
+            };
+
+            if (guest.fullName) nameInput.value = guest.fullName;
+
+            Object.entries(scanned).forEach(([key, value]) => {
+                if (!value) return;
+                guestDocumentInput(prefix, key).value =
+                    GUEST_DOCUMENT_DATE_LABELS[key] ? isoToDisplayDate(value) : value;
+            });
+
+            const verify = [];
+            if (guest.nameMaybeTruncated) verify.push(nameInput);
+            if (!guest.verified.passportNumber) verify.push(guestDocumentInput(prefix, "passportNumber"));
+            if (!guest.verified.dateOfBirth) verify.push(guestDocumentInput(prefix, "dateOfBirth"));
+            if (!guest.verified.passportExpiryDate) verify.push(guestDocumentInput(prefix, "passportExpiryDate"));
+            if (!guest.verified.nationality) verify.push(guestDocumentInput(prefix, "nationality"));
+            // تاريخ الإصدار ينقرأ من الصفحة المطبوعة؛ نثق فيه فقط إذا تاريخ الانتهاء متأكد منه
+            if (guest.passportIssueDate && !guest.verified.passportExpiryDate) {
+                verify.push(guestDocumentInput(prefix, "passportIssueDate"));
+            }
+
+            const missing = [nameInput, ...Object.keys(GUEST_DOCUMENT_INPUTS).map(key => guestDocumentInput(prefix, key))]
+                .filter(input => !String(input.value || "").trim());
+            const toVerify = verify.filter(input => String(input.value || "").trim());
+
+            toVerify.forEach(input => markField(input, "verify"));
+            missing.forEach(input => markField(input, "missing"));
+            refreshHijaziSelects();
+
+            return { verify: toVerify.length, missing };
+        }
+
+        /* صندوق "صورة الجواز": اختيار الصورة، القراءة، المعاينة، الإزالة */
+        function setupPassportScan({ boxId, prefix, nameInputId, formRoot, afterScan }) {
+            const box = document.getElementById(boxId);
+            const fileInput = box.querySelector(".passport-scan-input");
+            const button = box.querySelector(".passport-scan-button");
+            const status = box.querySelector("[data-scan-status]");
+            const progress = box.querySelector(".passport-scan-progress");
+            const bar = progress.querySelector("span");
+            const preview = box.querySelector(".passport-scan-preview");
+            const image = preview.querySelector("img");
+            const defaultText = status.textContent.trim();
+            let previewUrl = "";
+
+            function setStatus(text, state = "") {
+                status.textContent = text;
+                if (state) box.dataset.state = state;
+                else delete box.dataset.state;
+            }
+
+            function clearPreview() {
+                if (previewUrl) URL.revokeObjectURL(previewUrl);
+                previewUrl = "";
+                image.removeAttribute("src");
+                image.classList.remove("is-zoomed");
+                preview.hidden = true;
+            }
+
+            function reset() {
+                clearPreview();
+                setStatus(defaultText);
+                progress.hidden = true;
+            }
+
+            button.addEventListener("click", () => window.HijaziPassportScan?.preload());
+            image.addEventListener("click", () => image.classList.toggle("is-zoomed"));
+
+            box.querySelector("[data-scan-clear]").addEventListener("click", () => {
+                reset();
+                clearFieldMarks(formRoot);
+            });
+
+            fileInput.addEventListener("change", async () => {
+                const file = fileInput.files?.[0];
+                fileInput.value = "";
+                if (!file) return;
+
+                if (!window.HijaziPassportScan) {
+                    setStatus("أداة قراءة الجواز ما تحمّلت. حدّث الصفحة وجرّب مرة ثانية.", "error");
+                    return;
+                }
+
+                clearPreview();
+                clearFieldMarks(formRoot);
+                previewUrl = URL.createObjectURL(file);
+                image.src = previewUrl;
+                preview.hidden = false;
+                box.classList.add("is-busy");
+                fileInput.disabled = true;
+                progress.hidden = false;
+                bar.style.width = "0%";
+                setStatus("جاري تجهيز أداة القراءة...");
+
+                try {
+                    const guest = await window.HijaziPassportScan.read(file, {
+                        onProgress: ({ stage, progress: value }) => {
+                            bar.style.width = `${Math.round(Math.max(0, Math.min(1, value)) * 100)}%`;
+                            setStatus(stage === "loading"
+                                ? "جاري تحميل أداة القراءة (أول مرة بس، بعدها أسرع)..."
+                                : "جاري قراءة الجواز...");
+                        }
+                    });
+
+                    const result = applyPassportScan(prefix, nameInputId, guest);
+                    const notes = ["✓ تمت القراءة."];
+                    if (result.verify) notes.push("قارن الخانات المعلّمة «تحقق» مع الجواز.");
+                    if (result.missing.length) notes.push("عبّي الخانات المعلّمة «ناقص».");
+                    if (guest.nameMaybeTruncated) notes.push("الاسم ممكن يكون مقطوع، كمّله من الجواز.");
+                    setStatus(notes.join(" "), result.verify || guest.nameMaybeTruncated ? "warn" : "ok");
+
+                    if (typeof afterScan === "function") afterScan(result);
+                } catch (error) {
+                    setStatus(error.message || "تعذرت قراءة الجواز. جرّب صورة أوضح.", "error");
+                } finally {
+                    box.classList.remove("is-busy");
+                    fileInput.disabled = false;
+                    progress.hidden = true;
+                }
+            });
+
+            return { reset };
+        }
+
+        /* =========================================================
+           نموذج الحجز: معاينة، طباعة، إرسال للعميل
+        ========================================================= */
+        let reservationFormState = null;
+
+        function reservationReference(booking) {
+            return window.HijaziReservationForm
+                ? window.HijaziReservationForm.referenceFor(booking, apartmentDisplayNumber(booking.apartmentId))
+                : "";
+        }
+
+        function setReservationFormButtons(enabled) {
+            ["reservationFormDownloadBtn", "reservationFormShareBtn", "reservationFormPrintBtn"].forEach(id => {
+                document.getElementById(id).disabled = !enabled;
+            });
+        }
+
+        function releaseReservationForm() {
+            if (reservationFormState?.form) {
+                window.HijaziReservationForm.release(reservationFormState.form);
+            }
+            reservationFormState = null;
+        }
+
+        /* source: الحجز نفسه (إذا فيه بيانات الجواز) أو رقمه فنجيبه من السيرفر */
+        async function openReservationForm(source) {
+            const dialog = document.getElementById("reservationFormDialog");
+            const status = document.getElementById("reservationFormStatus");
+            const preview = document.getElementById("reservationFormPreview");
+            const bookingId = typeof source === "string" ? source : source?._id;
+            const token = {};
+
+            releaseReservationForm();
+            reservationFormState = { token, bookingId, form: null };
+            status.textContent = "جاري تجهيز النموذج...";
+            status.classList.remove("error");
+            preview.hidden = true;
+            preview.removeAttribute("src");
+            setReservationFormButtons(false);
+
+            if (!dialog.open) dialog.showModal();
+
+            try {
+                if (!window.HijaziReservationForm) throw new Error("ملف نموذج الحجز ما تحمّل. حدّث الصفحة.");
+
+                const booking = source && typeof source === "object" && source.guestDocument !== undefined
+                    ? source
+                    : (await api(`/admin/bookings/${encodeURIComponent(bookingId)}`)).booking;
+
+                const form = await window.HijaziReservationForm.create(booking, {
+                    apartmentNumber: apartmentDisplayNumber(booking.apartmentId)
+                });
+
+                if (reservationFormState?.token !== token) {
+                    window.HijaziReservationForm.release(form);
+                    return;
+                }
+
+                reservationFormState.form = form;
+                window.HijaziReservationForm.preparePrint(form);
+                preview.src = form.url;
+                preview.hidden = false;
+                status.textContent = `رقم الحجز: ${form.fields.reference || "—"}`;
+                setReservationFormButtons(true);
+            } catch (error) {
+                if (reservationFormState?.token !== token) return;
+                status.textContent = error.message || "تعذر تجهيز النموذج.";
+                status.classList.add("error");
+            }
         }
         function setButtonLoading(
             button,
@@ -5505,8 +6356,26 @@
 
         function populateApartmentSelects() {
             const options = apartments.filter(a => a.active).map(a => `<option value="${a.apartmentId}">${escapeHtml(a.label)}</option>`).join("");
-            document.getElementById("manualApartment").innerHTML = options || '<option value="">لا توجد شقق فعالة</option>';
-            document.getElementById("apartmentFilter").innerHTML = `<option value="">كل الشقق</option>${options}`;
+            const manualApartment = document.getElementById("manualApartment");
+            const apartmentFilter = document.getElementById("apartmentFilter");
+            const selectedApartment = manualApartment.value;
+            const selectedFilter = apartmentFilter.value;
+
+            manualApartment.innerHTML = options || '<option value="">لا توجد شقق فعالة</option>';
+            apartmentFilter.innerHTML = `<option value="">كل الشقق</option>${options}`;
+
+            // تحديث البيانات ما يمسح الشقة اللي كان المالك مختارها وهو بعبّي الحجز
+            if ([...manualApartment.options].some(option => option.value === selectedApartment)) {
+                manualApartment.value = selectedApartment;
+            }
+
+            if ([...apartmentFilter.options].some(option => option.value === selectedFilter)) {
+                apartmentFilter.value = selectedFilter;
+            }
+
+            if (!document.getElementById("manualNightlyRate").value) {
+                updateManualPrice();
+            }
         }
 
         function updateStats() {
@@ -5672,7 +6541,8 @@
                     booking.fullName,
                     booking.phone,
                     booking.email,
-                    booking.sourceReference
+                    booking.sourceReference,
+                    reservationReference(booking)
                 ]
                     .join(" ")
                     .toLowerCase();
@@ -5848,6 +6718,15 @@
 
                         <td data-label="الإجراءات">
                             <div class="row-actions">
+                                ${["cancelled", "blocked"].includes(status) ? "" : `
+                                <button
+                                    class="btn btn-small btn-form"
+                                    data-reservation-form="${booking._id}"
+                                    type="button"
+                                >
+                                    النموذج
+                                </button>`}
+
                                 <button
                                     class="btn btn-light btn-small"
                                     data-edit-booking="${booking._id}"
@@ -6086,6 +6965,37 @@
             }
         }
 
+        /*
+           بيانات الجواز لا تأتي مع قائمة الحجوزات؛ نجيبها لهذا الحجز فقط عند فتح التعديل.
+           إذا فشل التحميل لا نرسلها عند الحفظ حتى لا تنمسح بالغلط.
+        */
+        let editGuestDocumentLoaded = false;
+
+        async function loadEditGuestDocument(bookingId) {
+            const group = document.getElementById("editGuestDocumentGroup");
+            const note = document.getElementById("editGuestDocumentNote");
+
+            editGuestDocumentLoaded = false;
+            fillGuestDocument("editBooking", {});
+            group.disabled = true;
+            note.hidden = false;
+            note.textContent = "جاري تحميل بيانات الجواز...";
+
+            try {
+                const data = await api(`/admin/bookings/${encodeURIComponent(bookingId)}`);
+                if (editingBookingId !== bookingId) return;
+
+                fillGuestDocument("editBooking", data.booking?.guestDocument);
+                editGuestDocumentLoaded = true;
+                group.disabled = false;
+                note.hidden = true;
+                refreshHijaziSelects(group);
+            } catch (error) {
+                if (editingBookingId !== bookingId) return;
+                note.textContent = "تعذر تحميل بيانات الجواز؛ ما رح تتغير عند الحفظ. سكّر النافذة وافتحها مرة ثانية.";
+            }
+        }
+
         function openEditBookingDialog(booking) {
             if (!booking) return;
 
@@ -6174,6 +7084,20 @@
             document.getElementById("editBookingNotes").value =
                 booking.notes || "";
 
+            document.getElementById("editBookingNightlyRate").value =
+                booking.nightlyRate ?? "";
+            document.getElementById("editBookingDeposit").value =
+                booking.securityDeposit ?? "";
+            document.getElementById("editBookingPaid").value =
+                booking.amountPaid ?? "";
+            document.getElementById("editBookingPayment").value =
+                booking.paymentMethod || "CASH";
+            updatePaidPlaceholder("editBooking");
+
+            editPassportScan.reset();
+            clearFieldMarks(document.getElementById("editBookingForm"));
+            loadEditGuestDocument(booking._id);
+
             const externalDataField =
                 document.getElementById("editBookingExternalDataField");
 
@@ -6243,7 +7167,8 @@
                     booking.externalDescription,
                     booking.externalLocation,
                     booking.apartmentLabel,
-                    booking.apartmentId
+                    booking.apartmentId,
+                    reservationReference(booking)
                 ].join(" ").toLowerCase();
 
                 return (
@@ -6374,6 +7299,10 @@
                     externalCalendarDetails(booking)
                 );
             }
+
+            const formButton = document.getElementById("calendarDetailFormBtn");
+            formButton.dataset.bookingId = booking._id || "";
+            formButton.hidden = !booking._id || ["cancelled", "blocked"].includes(status);
 
             const dialog = document.getElementById("bookingDetailsDialog");
 
@@ -7279,15 +8208,23 @@ ${connections}
                     totalPrice: Number(document.getElementById("manualPrice").value || 0),
                     currency: "JOD",
                     status: document.getElementById("manualStatus").value,
-                    notes: document.getElementById("manualNotes").value
+                    notes: document.getElementById("manualNotes").value,
+                    guestDocument: readGuestDocument("manual"),
+                    nightlyRate: amountOrNull(document.getElementById("manualNightlyRate")),
+                    securityDeposit: amountOrNull(document.getElementById("manualDeposit")),
+                    amountPaid: amountOrNull(document.getElementById("manualPaid")),
+                    paymentMethod: document.getElementById("manualPayment").value
                 };
 
-                await api("/admin/bookings", {
+                const data = await api("/admin/bookings", {
                     method: "POST",
                     body: JSON.stringify(payload)
                 });
 
                 form.reset();
+                manualPassportScan.reset();
+                clearFieldMarks(form);
+                document.getElementById("manualDeposit").value = String(window.HijaziReservationForm.DEFAULT_SECURITY_DEPOSIT);
 
                 const manualCheckInInput =
                     document.getElementById("manualCheckIn");
@@ -7311,6 +8248,7 @@ ${connections}
 
                 await loadAll();
                 showNotice("✅ تم إضافة الحجز وإغلاق التواريخ بنجاح.");
+                openReservationForm(data.booking);
             } catch (error) {
                 showNotice(error.message, "error");
             } finally {
@@ -7369,6 +8307,13 @@ ${connections}
                     document.querySelectorAll(
                         `#bookingsBody tr[data-booking-group="${groupKey}"]`
                     ).forEach(row => { row.hidden = !expanded; });
+                    return;
+                }
+
+                const formId = button.dataset.reservationForm;
+
+                if (formId) {
+                    openReservationForm(formId);
                     return;
                 }
 
@@ -7552,8 +8497,10 @@ ${connections}
 
                 if (!editingBookingId) return;
 
+                const showFormAfterSave =
+                    event.submitter?.id === "saveAndShowFormBtn";
                 const button =
-                    document.getElementById("saveEditBookingBtn");
+                    document.getElementById(showFormAfterSave ? "saveAndShowFormBtn" : "saveEditBookingBtn");
                 const errorMessage = document.getElementById("editBookingError");
                 errorMessage.hidden = true;
 
@@ -7632,8 +8579,18 @@ ${connections}
                         notes:
                             document.getElementById(
                                 "editBookingNotes"
-                            ).value
+                            ).value,
+
+                        nightlyRate: amountOrNull(document.getElementById("editBookingNightlyRate")),
+                        securityDeposit: amountOrNull(document.getElementById("editBookingDeposit")),
+                        amountPaid: amountOrNull(document.getElementById("editBookingPaid")),
+                        paymentMethod: document.getElementById("editBookingPayment").value
                     };
+
+                    // نرسل بيانات الجواز فقط إذا تحمّلت فعلًا، حتى ما نمسحها بالغلط
+                    if (editGuestDocumentLoaded) {
+                        payload.guestDocument = readGuestDocument("editBooking");
+                    }
 
                     const data = await api(
                         `/admin/bookings/${editingBookingId}`,
@@ -7646,6 +8603,10 @@ ${connections}
                     closeEditBookingDialog();
                     await loadAll();
                     showNotice(data.message || "✅ تم حفظ التعديلات.");
+
+                    if (showFormAfterSave) {
+                        openReservationForm(data.booking);
+                    }
                 } catch (error) {
                     if (document.getElementById("editBookingDialog").open) {
                         errorMessage.textContent = error.message;
@@ -8002,8 +8963,148 @@ ${connections}
             updateManualPrice();
         });
 
-        ["manualApartment", "manualCheckOut"].forEach(id => {
-            document.getElementById(id).addEventListener("change", updateManualPrice);
+        document.getElementById("manualApartment").addEventListener("change", () => {
+            updateManualPrice({ fromApartment: true });
+        });
+
+        document.getElementById("manualCheckOut").addEventListener("change", () => {
+            updateManualPrice();
+        });
+
+        document.getElementById("manualNightlyRate").addEventListener("input", () => {
+            updateManualPrice({ keepRate: true });
+        });
+
+        ["manualPrice", "manualDeposit"].forEach(id => {
+            document.getElementById(id).addEventListener("input", () => updatePaidPlaceholder("manual"));
+        });
+
+        /* نافذة التعديل: تغيير سعر الليلة يحسب الإجمالي من جديد */
+        function updateEditPriceFromRate() {
+            const rate = document.getElementById("editBookingNightlyRate").value;
+            const nights = nightsBetween(
+                document.getElementById("editBookingCheckIn").value,
+                document.getElementById("editBookingCheckOut").value
+            );
+
+            if (rate !== "" && Number(rate) >= 0 && nights > 0) {
+                document.getElementById("editBookingPrice").value = String(roundMoney(Number(rate) * nights));
+            }
+
+            updatePaidPlaceholder("editBooking");
+        }
+
+        document.getElementById("editBookingNightlyRate").addEventListener("input", updateEditPriceFromRate);
+
+        ["editBookingCheckIn", "editBookingCheckOut"].forEach(id => {
+            document.getElementById(id).addEventListener("change", () => {
+                if (document.getElementById("editBookingNightlyRate").value !== "") updateEditPriceFromRate();
+                else updatePaidPlaceholder("editBooking");
+            });
+        });
+
+        ["editBookingPrice", "editBookingDeposit"].forEach(id => {
+            document.getElementById(id).addEventListener("input", () => updatePaidPlaceholder("editBooking"));
+        });
+
+        /* =========================================================
+           صورة الجواز: تعبئة تلقائية + تواريخ الجواز بصيغة يوم/شهر/سنة
+        ========================================================= */
+        const manualPassportScan = setupPassportScan({
+            boxId: "manualPassportScan",
+            prefix: "manual",
+            nameInputId: "manualName",
+            formRoot: document.getElementById("manualBookingForm"),
+            afterScan(result) {
+                // ننقل المالك لأول خانة لازم يعبّيها بإيده
+                const checkIn = document.getElementById("manualCheckIn");
+                const target = result.missing[0] || (!checkIn.value ? checkIn : null);
+
+                if (target) {
+                    target.scrollIntoView({ block: "center", behavior: "smooth" });
+                    target.focus({ preventScroll: true });
+                }
+            }
+        });
+
+        const editPassportScan = setupPassportScan({
+            boxId: "editPassportScan",
+            prefix: "editBooking",
+            nameInputId: "editBookingName",
+            formRoot: document.getElementById("editBookingForm"),
+            afterScan(result) {
+                result.missing[0]?.focus();
+            }
+        });
+
+        document.querySelectorAll(".doc-date").forEach(input => {
+            input.addEventListener("input", () => maskDateTyping(input));
+        });
+
+        ["manualBookingForm", "editBookingForm"].forEach(id => {
+            const form = document.getElementById(id);
+
+            ["input", "change"].forEach(type => form.addEventListener(type, event => {
+                event.target.closest?.(".field")?.classList.remove("field-verify", "field-missing");
+            }));
+        });
+
+        /* =========================================================
+           نافذة نموذج الحجز
+        ========================================================= */
+        const reservationFormDialog = document.getElementById("reservationFormDialog");
+
+        function setReservationStatusNote(text) {
+            const reference = reservationFormState?.form?.fields.reference || "—";
+            document.getElementById("reservationFormStatus").textContent =
+                `رقم الحجز: ${reference}${text ? ` — ${text}` : ""}`;
+        }
+
+        document.getElementById("closeReservationFormBtn").addEventListener("click", () => {
+            reservationFormDialog.close();
+        });
+
+        reservationFormDialog.addEventListener("close", releaseReservationForm);
+
+        reservationFormDialog.addEventListener("click", event => {
+            const bounds = event.currentTarget.getBoundingClientRect();
+            const outside = event.clientX < bounds.left || event.clientX > bounds.right ||
+                event.clientY < bounds.top || event.clientY > bounds.bottom;
+            if (event.target === event.currentTarget && outside) reservationFormDialog.close();
+        });
+
+        document.getElementById("reservationFormPrintBtn").addEventListener("click", () => {
+            if (reservationFormState?.form) window.HijaziReservationForm.print(reservationFormState.form);
+        });
+
+        document.getElementById("reservationFormShareBtn").addEventListener("click", () => {
+            const form = reservationFormState?.form;
+            if (!form) return;
+
+            window.HijaziReservationForm.share(form)
+                .then(result => {
+                    if (result === "downloaded") {
+                        setReservationStatusNote("نزلت الصورة على الجهاز؛ أرسلها للعميل من واتساب.");
+                    }
+                })
+                .catch(() => setReservationStatusNote("تعذر فتح المشاركة؛ استعمل «تنزيل الصورة»."));
+        });
+
+        document.getElementById("reservationFormDownloadBtn").addEventListener("click", () => {
+            if (reservationFormState?.form) window.HijaziReservationForm.download(reservationFormState.form);
+        });
+
+        document.getElementById("reservationFormEditBtn").addEventListener("click", () => {
+            const booking = allBookings.find(item => item._id === reservationFormState?.bookingId);
+            reservationFormDialog.close();
+            if (booking) openEditBookingDialog(booking);
+        });
+
+        document.getElementById("calendarDetailFormBtn").addEventListener("click", event => {
+            const bookingId = event.currentTarget.dataset.bookingId;
+            if (!bookingId) return;
+            document.getElementById("bookingDetailsDialog").close();
+            openReservationForm(bookingId);
         });
 
         document

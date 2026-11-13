@@ -1,5 +1,26 @@
 const mongoose = require("mongoose");
 
+const DATE_OR_EMPTY = /^$|^\d{4}-\d{2}-\d{2}$/;
+
+/* =========================================================
+   بيانات جواز أو هوية النزيل (لنموذج الحجز المطبوع)
+   صورة الجواز نفسها لا تُحفظ أبدًا؛ هذه نصوص فقط.
+   التواريخ نصوص YYYY-MM-DD حتى لا تتغير بسبب فرق التوقيت.
+========================================================= */
+const guestDocumentSchema = new mongoose.Schema(
+    {
+        nationality: { type: String, default: "", trim: true, maxlength: 60 },
+        passportNumber: { type: String, default: "", trim: true, maxlength: 30 },
+        dateOfBirth: { type: String, default: "", match: DATE_OR_EMPTY },
+        gender: { type: String, enum: ["", "M", "F", "X"], default: "" },
+        passportIssueDate: { type: String, default: "", match: DATE_OR_EMPTY },
+        passportExpiryDate: { type: String, default: "", match: DATE_OR_EMPTY },
+        placeOfBirth: { type: String, default: "", trim: true, maxlength: 100 },
+        address: { type: String, default: "", trim: true, maxlength: 200 }
+    },
+    { _id: false }
+);
+
 /* =========================================================
    نموذج الحجز
    هذا الملف يحدد شكل بيانات الحجز داخل MongoDB
@@ -41,6 +62,23 @@ const bookingSchema = new mongoose.Schema(
 
         // السعر النصي النهائي
         totalPriceText: { type: String },
+
+        // بيانات الدفع لنموذج الحجز؛ null يعني يُحسب تلقائيًا عند الطباعة
+        nightlyRate: { type: Number, default: null, min: 0 },
+        securityDeposit: { type: Number, default: null, min: 0 },
+        amountPaid: { type: Number, default: null, min: 0 },
+        paymentMethod: {
+            type: String,
+            enum: ["", "CASH", "CLIQ", "BANK_TRANSFER", "CARD"],
+            default: ""
+        },
+
+        // بيانات الجواز: مخفية من كل الاستعلامات إلا إذا طُلبت صراحة (+guestDocument)
+        guestDocument: {
+            type: guestDocumentSchema,
+            default: undefined,
+            select: false
+        },
 
         // ملاحظات أو أسئلة إضافية من العميل - اختياري
         notes: { type: String, default: "", trim: true, maxlength: 1000 },
