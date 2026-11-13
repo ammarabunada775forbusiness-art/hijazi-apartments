@@ -1000,20 +1000,61 @@ function renderScrollTopButton() {
     const existing = document.getElementById("scrollTopBtn");
     if (existing) return;
 
+    // حلقة حوالين الزر بتتعبى مع النزول بالصفحة، وبتكمل لما توصل آخرها
+    if (!document.getElementById("scrollTopRingStyle")) {
+        const style = document.createElement("style");
+        style.id = "scrollTopRingStyle";
+        style.textContent = `
+            .scroll-top-btn { overflow: visible; }
+            .scroll-top-btn .scroll-top-ring {
+                position: absolute; inset: -6px;
+                width: calc(100% + 12px); height: calc(100% + 12px);
+                transform: rotate(-90deg); pointer-events: none;
+            }
+            .scroll-top-ring .ring-track { stroke: rgba(184, 134, 11, .18); }
+            .scroll-top-ring .ring-bar { stroke: #b8860b; transition: stroke-dashoffset .12s linear; }
+            .scroll-top-btn.is-done .ring-bar { stroke: #8a6508; }
+            .scroll-top-btn .scroll-top-arrow { position: relative; }
+        `;
+        document.head.appendChild(style);
+    }
+
     const btn = document.createElement("button");
     btn.id = "scrollTopBtn";
     btn.className = "scroll-top-btn";
-    btn.innerHTML = "↑";
     btn.setAttribute("aria-label", "Scroll to top");
+    btn.innerHTML =
+        '<svg class="scroll-top-ring" viewBox="0 0 66 66" aria-hidden="true">' +
+        '<circle class="ring-track" cx="33" cy="33" r="30" fill="none" stroke-width="3"></circle>' +
+        '<circle class="ring-bar" cx="33" cy="33" r="30" fill="none" stroke-width="3" stroke-linecap="round"></circle>' +
+        "</svg>" +
+        '<span class="scroll-top-arrow">↑</span>';
     document.body.appendChild(btn);
+
+    const bar = btn.querySelector(".ring-bar");
+    const length = 2 * Math.PI * 30;
+    bar.style.strokeDasharray = String(length);
+    bar.style.strokeDashoffset = String(length);
 
     btn.addEventListener("click", () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
-    window.addEventListener("scroll", () => {
+    let ticking = false;
+    function update() {
+        ticking = false;
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+        bar.style.strokeDashoffset = String(length * (1 - progress));
+        btn.classList.toggle("is-done", progress >= 0.995);
         btn.style.display = window.scrollY > 250 ? "block" : "none";
-    });
+    }
+
+    window.addEventListener("scroll", () => {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    window.addEventListener("resize", update);
+    update();
 }
 
 /* =========================
