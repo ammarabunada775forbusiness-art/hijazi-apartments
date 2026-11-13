@@ -52,7 +52,7 @@ Done (2026-11-12, pushed straight to `main`):
 Done (2026-11-12, later, pushed straight to `main`):
 - English mode fully translated: homepage bottom sections (SEO cards, useful links now pointing to `-en` twins, FAQ) via `data-en` attributes in `index.html`; card/booking address and currency names/symbols.
 - API (`api.hijazi-apartments.com`) sends `X-Robots-Tag: noindex` and serves a disallow-all `robots.txt` (it was a Soft 404 in Search Console).
-- Photo viewer (apartments and booking): swipe/drag between photos, arrows only on desktop, cleaner layout. Files: `css/lightbox.css`, `js/lightbox-swipe.js`.
+- Photo viewer (apartments and booking), iPhone Photos style: no arrow buttons; continuous swipe where the neighbouring photos move with the finger (mouse drag and keyboard arrows on desktop), thumbnail strip at the bottom (tap or scrub it), swipe down to close, a transparent swipe hint for ~1.5 s on open. Files: `css/lightbox.css`, `js/lightbox-swipe.js` (both at `?v=3`); the pages pass `getItems`/`getIndex`/`goTo` to `HijaziLightboxSwipe.attach`. The old `#imageLightboxImage` is hidden but still updated by the page code.
 
 Search Console findings (2026-11-12): 10 indexed, 8 not. 4 redirects and 2 alternate-canonical are normal; Soft 404 was the API; `faq.html` "crawled, not indexed" was last crawled 2026-06-16 (old version). Sitemap was last read 2026-11-05 with 11 URLs. On this domain property the sitemap must be submitted as the full URL `https://www.hijazi-apartments.com/sitemap.xml`.
 
@@ -61,7 +61,8 @@ Search Console findings (2026-11-12): 10 indexed, 8 not. 4 redirects and 2 alter
 2. Owner to send which apartments allow smoking and pets, and which have a toaster or a second parking space; fill them in `amenities-data.js`.
 3. Owner to send the building's Google Maps link and real walking/driving times to each hospital; add them to the landing pages and to the schema (`geo`, full address).
 4. Google Search Console (owner): resubmit the sitemap by full URL; request indexing over two days (day 1: faq, both amenities pages, the 7 English landing pages; day 2: Arabic landing pages, about, reviews, apartments, after checking each is not already indexed); after a few days click "Validate fix" on Soft 404 and on the faq report. Then review the report again together.
-5. Reviews page: it uses Unsplash images; replace with real guest reviews (owner's decision).
-6. Optional: put the header in static HTML (it is JS-rendered and appears a moment late).
-7. Optional, bigger: English URLs for the main pages (booking is about 5000 lines; do it carefully).
-8. Off-site: a Google Business Profile with real photos and reviews, and listings on Booking/Airbnb. These matter most for SEO and AI answers.
+5. Admin: passport scan to fill a booking (owner wants this; build in a new session after the owner confirms the details). Plan: owner uploads a passport photo plus check-in/check-out dates; the page reads the passport's MRZ lines for free in the browser (no upload to a third party) and pre-fills name, nationality, passport number and birth date; the owner reviews and saves. Fallback for unreadable photos or ID cards: Claude API vision (rough cost per image: Haiku 5.5 well under $0.001, Sonnet 5.5 about $0.006; needs an Anthropic API key with credit). Before building, decide with the owner where images are stored, who can see them and how long they are kept (sensitive personal data; the owner should check Jordanian data-protection duties), and make sure the admin login is solid.
+6. Reviews page: it uses Unsplash images; replace with real guest reviews (owner's decision).
+7. Optional: put the header in static HTML (it is JS-rendered and appears a moment late).
+8. Optional, bigger: English URLs for the main pages (booking is about 5000 lines; do it carefully).
+9. Off-site: a Google Business Profile with real photos and reviews, and listings on Booking/Airbnb. These matter most for SEO and AI answers.
