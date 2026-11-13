@@ -38,7 +38,7 @@ This file is read automatically at the start of every Claude Code session. Keep 
 - The amenities FAQ entries are also copied by hand into `faq.html` (three places: JSON-LD, static HTML, JS arrays). Keep them in sync.
 - To add 1- or 2-bedroom apartments: fill the unit type in `amenities-data.js` and set `published: true`, add the apartment there, then add its number, price and order in `main.js`. The type filter on `apartments.html` appears by itself once two types exist.
 
-## Current status (2026-11-12)
+## Current status (2026-11-13)
 Done (PRs #13, #14, #15):
 - Crawlable FAQ and links, descriptive H1s, structured data, sitemap.
 - Unique landing pages, 2 new pages and English twins, `llms.txt`.
@@ -53,6 +53,8 @@ Done (2026-11-12, later, pushed straight to `main`):
 - English mode fully translated: homepage bottom sections (SEO cards, useful links now pointing to `-en` twins, FAQ) via `data-en` attributes in `index.html`; card/booking address and currency names/symbols.
 - API (`api.hijazi-apartments.com`) sends `X-Robots-Tag: noindex` and serves a disallow-all `robots.txt` (it was a Soft 404 in Search Console).
 - Photo viewer (apartments and booking), iPhone Photos style: no arrow buttons; continuous swipe where the neighbouring photos move with the finger (mouse drag and keyboard arrows on desktop), thumbnail strip at the bottom (tap or scrub it), swipe down to close, a transparent swipe hint for ~1.5 s on open. Files: `css/lightbox.css`, `js/lightbox-swipe.js` (both at `?v=3`); the pages pass `getItems`/`getIndex`/`goTo` to `HijaziLightboxSwipe.attach`. The old `#imageLightboxImage` is hidden but still updated by the page code.
+
+- Apartments page intro (`#seoIntro`) restyled (CSS only, same text): gold top line, facts as two-column tiles with gold check marks (one column on mobile), guide links as pill buttons. The English text is still swapped in by JS.
 
 Search Console findings (2026-11-12): 10 indexed, 8 not. 4 redirects and 2 alternate-canonical are normal; Soft 404 was the API; `faq.html` "crawled, not indexed" was last crawled 2026-06-16 (old version). Sitemap was last read 2026-11-05 with 11 URLs. On this domain property the sitemap must be submitted as the full URL `https://www.hijazi-apartments.com/sitemap.xml`.
 
