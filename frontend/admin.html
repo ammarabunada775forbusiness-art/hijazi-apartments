@@ -4844,16 +4844,53 @@
         }
 
         .row-actions .btn-form {
-            border: 1px solid #e0c27a;
-            color: #6b4c05;
-            background: #fffbf0;
+            border: 1px solid #e0c27a !important;
+            color: #6b4c05 !important;
+            background: #fffbf0 !important;
         }
 
         /* =========================================================
            نافذة نموذج الحجز (معاينة + طباعة + إرسال)
         ========================================================= */
+        /* النوافذ الطويلة: تمرير داخل النافذة بدل ما ينقص آخرها تحت الشاشة */
+        .booking-edit-dialog {
+            max-height: calc(100dvh - 24px);
+            overflow-y: auto !important;
+            overscroll-behavior: contain;
+        }
+
         .reservation-form-dialog {
             width: min(1000px, calc(100% - 24px));
+        }
+
+        /* النموذج يصغر ليوسع الشاشة والأزرار تضل ظاهرة تحت */
+        .reservation-form-dialog .reservation-form-preview {
+            width: auto;
+            max-width: 100%;
+            max-height: calc(100dvh - 250px);
+            margin: 0 auto;
+            object-fit: contain;
+        }
+
+        .reservation-form-dialog .edit-booking-actions {
+            position: sticky;
+            bottom: 0;
+            margin: 12px -20px -20px;
+            padding: 12px 20px;
+            background: #fff;
+            border-top: 1px solid var(--line);
+        }
+
+        @media (max-width: 650px) {
+            .reservation-form-dialog .reservation-form-preview {
+                max-height: none;
+                width: 100%;
+            }
+
+            .reservation-form-dialog .edit-booking-actions {
+                margin: 12px -13px -13px;
+                padding: 10px 13px;
+            }
         }
 
         .reservation-form-status {
