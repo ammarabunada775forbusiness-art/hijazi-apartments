@@ -684,12 +684,24 @@
             z-index: 0;
             pointer-events: none;
             overflow: hidden;
+            background: #ffffff;
+        }
+
+        /* طبقة التدرّج الأساسية: تتحرك بـ transform (على كرت الشاشة) بدل background-position */
+        .booking-cosmic-base {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            width: 230%;
+            height: 100%;
             background:
                 radial-gradient(circle at 12% 20%, rgba(212, 160, 23, 0.30), transparent 25%),
                 radial-gradient(circle at 88% 32%, rgba(0, 0, 0, 0.18), transparent 27%),
                 radial-gradient(circle at 52% 86%, rgba(255, 255, 255, 0.95), transparent 30%),
                 linear-gradient(135deg, #ffffff 0%, #ffffff 45%, #ffffff 72%, #ffffff 100%);
-            background-size: 230% 230%;
+            background-size: 100% 230%;
+            background-position: 0 50%;
             animation: bookingCosmicBaseMove 16s ease-in-out infinite;
         }
 
@@ -750,6 +762,8 @@
         }
 
         .booking-dust-1 {
+            top: -160px;
+            left: -230px;
             opacity: 0.70;
             background-image:
                 radial-gradient(rgba(212, 160, 23, 0.75) 1.4px, transparent 1.4px),
@@ -761,6 +775,8 @@
         }
 
         .booking-dust-2 {
+            top: -110px;
+            right: -310px;
             opacity: 0.72;
             background-image:
                 radial-gradient(rgba(0, 0, 0, 0.62) 1.4px, transparent 1.4px),
@@ -828,15 +844,15 @@
 
         @keyframes bookingCosmicBaseMove {
             0% {
-                background-position: 0% 50%;
+                transform: translateX(0);
             }
 
             50% {
-                background-position: 100% 50%;
+                transform: translateX(-56.5217%);
             }
 
             100% {
-                background-position: 0% 50%;
+                transform: translateX(0);
             }
         }
 
@@ -852,7 +868,7 @@
 
         @keyframes bookingCosmicShineMove {
             0% {
-                left: -65%;
+                transform: translateX(0) rotate(18deg);
                 opacity: 0;
             }
 
@@ -861,33 +877,33 @@
             }
 
             65% {
-                left: 125%;
+                transform: translateX(190vw) rotate(18deg);
                 opacity: 0;
             }
 
             100% {
-                left: 125%;
+                transform: translateX(190vw) rotate(18deg);
                 opacity: 0;
             }
         }
 
         @keyframes bookingCosmicDustMoveOne {
             from {
-                background-position: 0 0, 22px 28px, 70px 90px;
+                transform: translate(0, 0);
             }
 
             to {
-                background-position: 190px 130px, 250px 185px, 310px 230px;
+                transform: translate(225px, 155px);
             }
         }
 
         @keyframes bookingCosmicDustMoveTwo {
             from {
-                background-position: 18px 12px, 60px 80px, 110px 140px;
+                transform: translate(0, 0);
             }
 
             to {
-                background-position: -175px 120px, -240px 180px, -260px 220px;
+                transform: translate(-300px, 100px);
             }
         }
 
@@ -3153,6 +3169,7 @@
 <body>
 
     <div class="booking-page-bg" aria-hidden="true">
+        <span class="booking-cosmic-base"></span>
         <span class="booking-gold-orb booking-orb-1"></span>
         <span class="booking-gold-orb booking-orb-2"></span>
         <span class="booking-gold-orb booking-orb-3"></span>
