@@ -4853,10 +4853,16 @@
            نافذة نموذج الحجز (معاينة + طباعة + إرسال)
         ========================================================= */
         /* النوافذ الطويلة: تمرير داخل النافذة بدل ما ينقص آخرها تحت الشاشة */
+        .booking-details-dialog,
         .booking-edit-dialog {
             max-height: calc(100dvh - 24px);
             overflow-y: auto !important;
             overscroll-behavior: contain;
+        }
+
+        .login-card {
+            max-height: calc(100dvh - 24px);
+            overflow-y: auto;
         }
 
         .reservation-form-dialog {
